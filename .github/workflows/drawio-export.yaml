@@ -21,6 +21,10 @@ jobs:
         with:
           fetch-depth: 0
 
+       # Agregar el directorio de trabajo como seguro en Git para evitar advertencias
+      - name: Agregar directorio seguro para Git
+        run: git config --global --add safe.directory /github/workspace
+      
       # Exportar a PNG
       - name: Exportar draw.io a PNG
         uses: rlespinasse/drawio-export-action@v2
@@ -41,17 +45,18 @@ jobs:
           output: export
           action-mode: all
 
-      # Renombrar archivos exportados (verifica el nombre exacto, por ejemplo usando %23 en vez de #)
-      - name: Renombrar archivos exportados
-        run: |
-          mv "modelos/export/IC-4301-Proyecto#1-modelo-conceptual.png" modelos/conceptual.png || echo "No se encontró el PNG conceptual"
-          mv "modelos/export/IC-4301-Proyecto#1-modelo-logico.png" modelos/logico.png || echo "No se encontró el PNG lógico"
-          mv "modelos/export/IC-4301-Proyecto#1-modelo-conceptual.pdf" modelos/conceptual.pdf || echo "No se encontró el PDF conceptual"
-          mv "modelos/export/IC-4301-Proyecto#1-modelo-logico.pdf" modelos/logico.pdf || echo "No se encontró el PDF lógico"
+     
 
-      # Subir la carpeta 'modelos' como artifact para verificar que se guardó correctamente
-      - name: Subir artifact de modelos
+      # Commit de la carpeta export
+      - name: Commit de la carpeta export
+        run: |
+          git add modelos/export
+          git commit -m "Actualizar export de draw.io" || echo "No hay cambios para commit"
+          git push origin ${{ github.ref }}
+
+      # Subir la carpeta export como artifact
+      - name: Subir artifact de export
         uses: actions/upload-artifact@v4
         with:
-          name: modelos
-          path: modelos
+          name: export
+          path: modelos/export
