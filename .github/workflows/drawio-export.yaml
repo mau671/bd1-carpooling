@@ -44,6 +44,7 @@ jobs:
           transparent: false
           output: export
           action-mode: all
+          quality: 100
 
       # Export to PDF
       - name: Export draw.io to PDF
@@ -55,6 +56,7 @@ jobs:
           output: export
           action-mode: all
           crop: true
+          quality: 100
 
       # Commit the export folder
       - name: Commit export folder
