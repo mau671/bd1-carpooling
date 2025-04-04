@@ -1,0 +1,55 @@
+name: Keep draw.io export synchronized
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.drawio"
+      - .github/workflows/drawio-export.yaml
+
+concurrency:
+  group: drawio-export-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  drawio-export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Exportar a PNG
+      - name: Exportar draw.io a PNG
+        uses: rlespinasse/drawio-export-action@v2
+        with:
+          path: modelos/IC-4301-Proyecto#1.drawio
+          format: png
+          transparent: true
+          output: modelos
+
+      # Exportar a PDF
+      - name: Exportar draw.io a PDF
+        uses: rlespinasse/drawio-export-action@v2
+        with:
+          path: modelos/IC-4301-Proyecto#1.drawio
+          format: pdf
+          transparent: true
+          output: modelos
+
+      # Renombrar archivos exportados (verifica el nombre exacto, por ejemplo usando %23 en vez de #)
+      - name: Renombrar archivos exportados
+        run: |
+          mv "modelos/IC-4301-Proyecto%231-modelo-conceptual.png" modelos/conceptual.png || echo "No se encontró el PNG conceptual"
+          mv "modelos/IC-4301-Proyecto%231-modelo-logico.png" modelos/logico.png || echo "No se encontró el PNG lógico"
+          mv "modelos/IC-4301-Proyecto%231-modelo-conceptual.pdf" modelos/conceptual.pdf || echo "No se encontró el PDF conceptual"
+          mv "modelos/IC-4301-Proyecto%231-modelo-logico.pdf" modelos/logico.pdf || echo "No se encontró el PDF lógico"
+
+      # Subir la carpeta 'modelos' como artifact para verificar que se guardó correctamente
+      - name: Subir artifact de modelos
+        uses: actions/upload-artifact@v3
+        with:
+          name: modelos
+          path: modelos
