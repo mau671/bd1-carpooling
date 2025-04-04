@@ -49,7 +49,7 @@ jobs:
 
       # Subir la carpeta 'modelos' como artifact para verificar que se guardó correctamente
       - name: Subir artifact de modelos
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: modelos
           path: modelos
