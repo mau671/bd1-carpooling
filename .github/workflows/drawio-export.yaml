@@ -8,6 +8,10 @@ on:
       - "**.drawio"
       - .github/workflows/drawio-export.yaml
 
+# Enable write permissions to push changes
+permissions:
+  contents: write
+
 concurrency:
   group: drawio-export-${{ github.ref }}
   cancel-in-progress: true
@@ -16,17 +20,23 @@ jobs:
   drawio-export:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del repositorio
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          persist-credentials: true
 
-       # Agregar el directorio de trabajo como seguro en Git para evitar advertencias
-      - name: Agregar directorio seguro para Git
+      - name: Configure Git identity
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      # Add the workspace directory as safe for Git
+      - name: Add safe directory for Git
         run: git config --global --add safe.directory /github/workspace
-      
-      # Exportar a PNG
-      - name: Exportar draw.io a PNG
+
+      # Export to PNG
+      - name: Export draw.io to PNG
         uses: rlespinasse/drawio-export-action@v2
         with:
           path: modelos/IC-4301-Proyecto#1.drawio
@@ -35,8 +45,8 @@ jobs:
           output: export
           action-mode: all
 
-      # Exportar a PDF
-      - name: Exportar draw.io a PDF
+      # Export to PDF
+      - name: Export draw.io to PDF
         uses: rlespinasse/drawio-export-action@v2
         with:
           path: modelos/IC-4301-Proyecto#1.drawio
@@ -45,17 +55,15 @@ jobs:
           output: export
           action-mode: all
 
-     
-
-      # Commit de la carpeta export
-      - name: Commit de la carpeta export
+      # Commit the export folder
+      - name: Commit export folder
         run: |
           git add modelos/export
-          git commit -m "Actualizar export de draw.io" || echo "No hay cambios para commit"
+          git commit -m "Update draw.io export" || echo "No changes to commit"
           git push origin ${{ github.ref }}
 
-      # Subir la carpeta export como artifact
-      - name: Subir artifact de export
+      # Upload the export folder as an artifact
+      - name: Upload export artifact
         uses: actions/upload-artifact@v4
         with:
           name: export
