@@ -28,7 +28,7 @@ jobs:
           path: modelos/IC-4301-Proyecto#1.drawio
           format: png
           transparent: true
-          output: modelos
+          output: export
 
       # Exportar a PDF
       - name: Exportar draw.io a PDF
@@ -37,15 +37,15 @@ jobs:
           path: modelos/IC-4301-Proyecto#1.drawio
           format: pdf
           transparent: true
-          output: modelos
+          output: export
 
       # Renombrar archivos exportados (verifica el nombre exacto, por ejemplo usando %23 en vez de #)
       - name: Renombrar archivos exportados
         run: |
-          mv "modelos/IC-4301-Proyecto%231-modelo-conceptual.png" modelos/conceptual.png || echo "No se encontró el PNG conceptual"
-          mv "modelos/IC-4301-Proyecto%231-modelo-logico.png" modelos/logico.png || echo "No se encontró el PNG lógico"
-          mv "modelos/IC-4301-Proyecto%231-modelo-conceptual.pdf" modelos/conceptual.pdf || echo "No se encontró el PDF conceptual"
-          mv "modelos/IC-4301-Proyecto%231-modelo-logico.pdf" modelos/logico.pdf || echo "No se encontró el PDF lógico"
+          mv "modelos/export/IC-4301-Proyecto#1-modelo-conceptual.png" modelos/conceptual.png || echo "No se encontró el PNG conceptual"
+          mv "modelos/export/IC-4301-Proyecto#1-modelo-logico.png" modelos/logico.png || echo "No se encontró el PNG lógico"
+          mv "modelos/export/IC-4301-Proyecto#1-modelo-conceptual.pdf" modelos/conceptual.pdf || echo "No se encontró el PDF conceptual"
+          mv "modelos/export/IC-4301-Proyecto#1-modelo-logico.pdf" modelos/logico.pdf || echo "No se encontró el PDF lógico"
 
       # Subir la carpeta 'modelos' como artifact para verificar que se guardó correctamente
       - name: Subir artifact de modelos
