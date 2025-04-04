@@ -29,6 +29,7 @@ jobs:
           format: png
           transparent: true
           output: export
+          action-mode: all
 
       # Exportar a PDF
       - name: Exportar draw.io a PDF
@@ -38,6 +39,7 @@ jobs:
           format: pdf
           transparent: true
           output: export
+          action-mode: all
 
       # Renombrar archivos exportados (verifica el nombre exacto, por ejemplo usando %23 en vez de #)
       - name: Renombrar archivos exportados
