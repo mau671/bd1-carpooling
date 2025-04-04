@@ -54,6 +54,7 @@ jobs:
           transparent: true
           output: export
           action-mode: all
+          crop: true
 
       # Commit the export folder
       - name: Commit export folder
