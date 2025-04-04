@@ -41,7 +41,7 @@ jobs:
         with:
           path: modelos/IC-4301-Proyecto#1.drawio
           format: png
-          transparent: true
+          transparent: false
           output: export
           action-mode: all
 
