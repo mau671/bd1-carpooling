@@ -1,0 +1,52 @@
+name: Exportar diagramas draw.io
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Ejecuta todos los días a medianoche UTC
+  workflow_dispatch:
+
+jobs:
+  drawio-export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Exportación a PNG
+      - name: Exportar draw.io a PNG
+        uses: rlespinasse/drawio-export-action@v2
+        with:
+          path: modelos/IC-4301-Proyecto#1.drawio
+          format: png
+          transparent: true
+          output: modelos
+
+      # Exportación a PDF
+      - name: Exportar draw.io a PDF
+        uses: rlespinasse/drawio-export-action@v2
+        with:
+          path: modelos/IC-4301-Proyecto#1.drawio
+          format: pdf
+          transparent: true
+          output: modelos
+
+      # Renombrar archivos PNG exportados
+      - name: Renombrar archivos PNG
+        run: |
+          mv modelos/IC-4301-Proyecto#1-modelo-conceptual.png modelos/conceptual.png
+          mv modelos/IC-4301-Proyecto#1-modelo-logico.png modelos/logico.png
+
+      # Renombrar archivos PDF exportados
+      - name: Renombrar archivos PDF
+        run: |
+          mv modelos/IC-4301-Proyecto#1-modelo-conceptual.pdf modelos/conceptual.pdf
+          mv modelos/IC-4301-Proyecto#1-modelo-logico.pdf modelos/logico.pdf
+
+      - name: Commit de archivos actualizados
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "docs: Actualización automática de diagramas draw.io"
+          commit_user_name: github-actions
+          commit_user_email: github-actions@github.com
