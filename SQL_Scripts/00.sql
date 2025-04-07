@@ -29,6 +29,18 @@ GRANT CONNECT to GE;
 GRANT CREATE SESSION to GE;
 GRANT CREATE TABLE to GE;
 
+-- Crear el esquema ADM (Hay que crear tablespaces??)
+CREATE USER ADM 
+    IDENTIFIED BY adm
+    DEFAULT TABLESPACE GE_Data
+    QUOTA 10M ON GE_Data
+    TEMPORARY TABLESPACE temp
+    QUOTA 5M ON SYSTEM
+    QUOTA 10M ON GE_Index;
+GRANT CONNECT to ADM;
+GRANT CREATE SESSION to ADM;
+GRANT CREATE TABLE to ADM;
+
 -- ============================================
 -- Crear las tablas
 -- ============================================
