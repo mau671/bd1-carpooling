@@ -37,9 +37,10 @@ public class Component_Formatter {
      * @param button
      * @param entered_color the color the button will have when the mouse hovers over it
      * @param exited_color the color the button will have when inactive
-     * @param text_color the color of the text displayed on the button
+     * @param text_color the default color of the text displayed on the button
+     * @param hover_text_color the color of text when mouse hovers over the button
      */
-    public static void format_button(JButton button, Color entered_color, Color exited_color, Color text_color) {
+    public static void format_button(JButton button, Color entered_color, Color exited_color, Color text_color, Color hover_text_color) {
         button.setBackground(exited_color);
         button.setForeground(text_color);
         button.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
@@ -49,19 +50,21 @@ public class Component_Formatter {
         button.setFocusable(false);
 
         // Adds a listener to the button when the mouse hovers over it.
-        // When the event is triggered, the button changes color.
+        // When the event is triggered, the button changes background and text color.
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(entered_color);             
+                button.setBackground(entered_color);
+                button.setForeground(hover_text_color);             
             }
         });
         
-        // Listener to change the button color when the mouse is no longer over it.
+        // Listener to change the button background and text color when the mouse is no longer over it.
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(exited_color);             
+                button.setBackground(exited_color);
+                button.setForeground(text_color);             
             }
         });
     }

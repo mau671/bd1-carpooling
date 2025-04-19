@@ -34,7 +34,11 @@ public class SignUp extends javax.swing.JPanel {
         message_label.setVisible(false);
         Component_Formatter.format_text_field(jTextFieldRegisterName, 20);
         Component_Formatter.format_text_field(jTextFieldRegisterSurname, 30);
-        Component_Formatter.format_button(register_button, new Color(102, 51, 255), new Color(102, 0, 255), Color.WHITE);
+        Component_Formatter.format_button(register_button,
+                new Color(0xf5ebff), 
+                new Color(0xf8f1ff),
+                new Color(0x656176),
+                new Color(0x656176));
     }
 
     /**
