@@ -151,13 +151,13 @@ public class Home extends javax.swing.JPanel {
     private void jButtonLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogInActionPerformed
         
         // Mostrar la ventana de inicio de sesión
-        JPanel loginPanel = new Login();
+        JPanel loginPanel = new LogIn();
         Main.render_panel(loginPanel);
     }//GEN-LAST:event_jButtonLogInActionPerformed
 
     private void jButtonSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSignUpActionPerformed
                // Mostrar la ventana de inicio de sesión
-        JPanel signupPanel = new Register();
+        JPanel signupPanel = new SignUp();
         Main.render_panel(signupPanel);
     }//GEN-LAST:event_jButtonSignUpActionPerformed
 
