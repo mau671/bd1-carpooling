@@ -4,7 +4,10 @@
  */
 package View;
 
+import Connection.ConnectDB;
 import java.awt.BorderLayout;
+import java.sql.Date;
+import java.sql.SQLException;
 import javax.swing.JPanel;
 
 /**
@@ -86,7 +89,7 @@ public class Main extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -109,7 +112,7 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        //ConnectDB.insertPhoneType(1, "Casa", "c.hidalgo", Date.valueOf("2025-04-19"), "", null);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
