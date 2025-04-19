@@ -33,22 +33,23 @@ public class Component_Formatter {
     }
     
     /**
-     * Este método recibe un botón y le aplica un formato deseado.
+     * This method receives a button and applies a desired format.
      * @param button
-     * @param entered_color es el color que tendrá el botón cuando el mouse pase por encima de este.
-     * @param exited_color es el color que tendrá el botón esté desactivado.
+     * @param entered_color the color the button will have when the mouse hovers over it
+     * @param exited_color the color the button will have when inactive
+     * @param text_color the color of the text displayed on the button
      */
-    public static void format_button(JButton button, Color entered_color, Color exited_color) {
+    public static void format_button(JButton button, Color entered_color, Color exited_color, Color text_color) {
         button.setBackground(exited_color);
-        button.setForeground(Color.white);
+        button.setForeground(text_color);
         button.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
         button.setBorder(null);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
         button.setFocusable(false);
 
-        // Se agrega un listener al botón cuando el mouse pase por encima de este.
-        // Cuando el evento se activa, el botón cambia de color.
+        // Adds a listener to the button when the mouse hovers over it.
+        // When the event is triggered, the button changes color.
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -56,7 +57,7 @@ public class Component_Formatter {
             }
         });
         
-        // Listener para que el botón cambie de color cuando el mouse ya no este encima de este.
+        // Listener to change the button color when the mouse is no longer over it.
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {

@@ -33,8 +33,8 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         this.setTitle("Demo de proyecto");
-        JPanel register_panel = new Register();
-        render_panel(register_panel);
+        JPanel Home_panel = new Home();
+        render_panel(Home_panel);
     }
 
     /**

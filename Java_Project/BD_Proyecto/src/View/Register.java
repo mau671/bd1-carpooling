@@ -34,8 +34,8 @@ public class Register extends javax.swing.JPanel {
         message_label.setVisible(false);
         Component_Formatter.format_text_field(jTextFieldRegisterName, 20);
         Component_Formatter.format_text_field(jTextFieldRegisterSurname, 30);
-        Component_Formatter.format_button(register_button, new Color(102, 51, 255), new Color(102, 0, 255));
-        Component_Formatter.format_button(query_button, new Color(102, 51, 255), new Color(102, 0, 255));
+        Component_Formatter.format_button(register_button, new Color(102, 51, 255), new Color(102, 0, 255), Color.WHITE);
+        Component_Formatter.format_button(query_button, new Color(102, 51, 255), new Color(102, 0, 255), Color.WHITE);
     }
 
     /**
@@ -115,7 +115,7 @@ public class Register extends javax.swing.JPanel {
                             .addComponent(jTextFieldRegisterSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lastname_label)
                             .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,7 +140,7 @@ public class Register extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(register_button, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(query_button, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(190, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
