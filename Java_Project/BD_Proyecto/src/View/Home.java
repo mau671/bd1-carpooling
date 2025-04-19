@@ -25,7 +25,7 @@ public class Home extends javax.swing.JPanel {
     public Home() {
         initComponents();
         Component_Formatter.format_button(jButtonLogIn, new Color(102, 51, 255), new Color(102, 0, 255), Color.WHITE);
-        Component_Formatter.format_button(jButtonSignUp, new Color(102, 51, 255), new Color(34, 197, 94), Color.WHITE);
+        Component_Formatter.format_button(jButtonSignUp, new Color(102, 51, 255), new Color(27, 153, 139), Color.WHITE);
         Component_Formatter.format_button(jButtonAboutUs, new Color(102, 51, 255), new Color(102, 0, 255), Color.WHITE);
     }
     
