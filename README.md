@@ -10,11 +10,10 @@ Escuela de Ingeniería en Computación
 
 ## Descripción del proyecto
 
-
 ## Integrantes
 - **Mauricio González Prendas** (carné: 2024143009)
 - **Carmen Hidalgo Paz** (carné: 2020030538)
-- **Dylan** (carné: 000000000)
+- **Dylan Meza Marin** (carné: 2021577352)
 
 ## Recursos
 
@@ -24,3 +23,17 @@ Escuela de Ingeniería en Computación
 ## Ejecución del proyecto
 
 Instrucciones para ejecutar el sistema:
+
+---
+
+## Paleta de colores:
+
+### Botones blancos:
+- Color de fondo (reposo): #F8F1FF
+- Color de fondo (hover): #F5EBFF
+- Color de texto: #26252D
+
+### Botones de color verde:
+- Color de fondo (reposo): #1b998b
+- Color de fondo (hover): #188b7d
+- Color de texto: #F8F1FF

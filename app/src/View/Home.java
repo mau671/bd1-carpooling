@@ -24,9 +24,21 @@ public class Home extends javax.swing.JPanel {
     
     public Home() {
         initComponents();
-        Component_Formatter.format_button(jButtonLogIn, new Color(102, 51, 255), new Color(102, 0, 255), Color.WHITE);
-        Component_Formatter.format_button(jButtonSignUp, new Color(102, 51, 255), new Color(27, 153, 139), Color.WHITE);
-        Component_Formatter.format_button(jButtonAboutUs, new Color(102, 51, 255), new Color(102, 0, 255), Color.WHITE);
+        Component_Formatter.format_button(jButtonLogIn,
+                new Color(0xf5ebff), 
+                new Color(0xf8f1ff),
+                new Color(0x26252d),
+                new Color(0x26252d));
+        Component_Formatter.format_button(jButtonSignUp,
+                new Color(0x188b7d), 
+                new Color(0x1b998b), 
+                new Color(0xf8f1ff),
+                new Color(0xf8f1ff));
+        Component_Formatter.format_button(jButtonAboutUs,
+                new Color(0xf5ebff), 
+                new Color(0xf8f1ff),
+                new Color(0x26252d),
+                new Color(0x26252d));
     }
     
     /** NOTA!!!!: CAMBIAR ESTO PARA CARGAR LA IMAGEN DESDE LA BASE DE DATOS
@@ -111,7 +123,7 @@ public class Home extends javax.swing.JPanel {
             }
         });
 
-        jLabelHomeImage.setText("jLabel1");
+        jLabelHomeImage.setText("IMAGEN AQUI");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

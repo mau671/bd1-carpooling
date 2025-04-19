@@ -91,7 +91,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelHomeImage">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel1"/>
+        <Property name="text" type="java.lang.String" value="IMAGEN AQUI"/>
       </Properties>
     </Component>
   </SubComponents>
