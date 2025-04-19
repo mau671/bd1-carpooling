@@ -14,6 +14,7 @@ import java.io.File;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Home extends javax.swing.JPanel {
 
@@ -95,10 +96,20 @@ public class Home extends javax.swing.JPanel {
         jButtonLogIn.setBackground(new java.awt.Color(255, 255, 255));
         jButtonLogIn.setForeground(new java.awt.Color(0, 0, 0));
         jButtonLogIn.setText("Iniciar sesión");
+        jButtonLogIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLogInActionPerformed(evt);
+            }
+        });
 
         jButtonSignUp.setBackground(new java.awt.Color(34, 197, 94));
         jButtonSignUp.setForeground(new java.awt.Color(255, 255, 255));
         jButtonSignUp.setText("Registrarse");
+        jButtonSignUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSignUpActionPerformed(evt);
+            }
+        });
 
         jLabelHomeImage.setText("jLabel1");
 
@@ -136,6 +147,19 @@ public class Home extends javax.swing.JPanel {
                 .addGap(55, 55, 55))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogInActionPerformed
+        
+        // Mostrar la ventana de inicio de sesión
+        JPanel loginPanel = new Login();
+        Main.render_panel(loginPanel);
+    }//GEN-LAST:event_jButtonLogInActionPerformed
+
+    private void jButtonSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSignUpActionPerformed
+               // Mostrar la ventana de inicio de sesión
+        JPanel signupPanel = new Register();
+        Main.render_panel(signupPanel);
+    }//GEN-LAST:event_jButtonSignUpActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

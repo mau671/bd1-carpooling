@@ -71,6 +71,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Iniciar sesi&#xf3;n"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLogInActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonSignUp">
       <Properties>
@@ -82,6 +85,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Registrarse"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSignUpActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelHomeImage">
       <Properties>

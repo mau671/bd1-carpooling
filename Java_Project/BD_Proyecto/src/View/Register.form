@@ -17,17 +17,12 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="message_label" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="register_button" min="-2" pref="150" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="query_button" min="-2" pref="150" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="138" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="register_button" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -83,10 +78,7 @@
               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               <Component id="message_label" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="register_button" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                  <Component id="query_button" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-              </Group>
+              <Component id="register_button" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace pref="190" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -136,14 +128,6 @@
           <Dimension value="[85, 23]"/>
         </Property>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="query_button">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Consultar"/>
-      </Properties>
-      <Events>
-        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="query_buttonMousePressed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
     </Component>
