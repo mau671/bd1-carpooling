@@ -19,6 +19,7 @@ Escuela de Ingeniería en Computación
 ## Recursos
 
 - [Modelo conceptual](https://drive.google.com/file/d/1uyTsUURT3e6UffrTEOqjyDYny3rHm0PH/view?usp=sharing)
+- [Paleta de colores](https://coolors.co/1b998b-f8f1ff-decdf5-656176-534d56)
 
 ## Ejecución del proyecto
 
