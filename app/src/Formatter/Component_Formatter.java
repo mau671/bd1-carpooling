@@ -44,7 +44,7 @@ public class Component_Formatter {
         button.setBackground(exited_color);
         button.setForeground(text_color);
         button.setFont(new Font("Yu Gothic UI Semilight", 1, 14));
-        button.setBorder(null);
+        //button.setBorder(null);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
         button.setFocusable(false);
