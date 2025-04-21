@@ -1,0 +1,43 @@
+
+-- Crear los tablespaces PU_Data y Pu_Index
+CREATE TABLESPACE PU_Data
+    DATAFILE 'C:\app\hidal\oradata\LIGHTNING\Proyecto-1\pudata01.dbf'
+    SIZE 10M
+    REUSE
+    AUTOEXTEND ON
+    NEXT 512k
+    MAXSIZE 200M;
+
+CREATE TABLESPACE PU_Index
+    DATAFILE 'C:\app\hidal\oradata\LIGHTNING\Proyecto-1\puindex01.dbf'
+    SIZE 10M
+    REUSE
+    AUTOEXTEND ON
+    NEXT 512k
+    MAXSIZE 200M;
+
+-- 2. Crear el esquema GE
+CREATE USER PU 
+    IDENTIFIED BY pu
+    DEFAULT TABLESPACE PU_Data
+    QUOTA 10M ON PU_Data
+    TEMPORARY TABLESPACE temp
+    QUOTA 5M ON SYSTEM
+    QUOTA 10M ON PU_Index;
+
+GRANT CONNECT to PU;
+GRANT CREATE SESSION to PU;
+GRANT CREATE TABLE to PU;
+GRANT CREATE PROCEDURE TO PU;
+
+-- Crear el esquema ADM (Hay que crear tablespaces??)
+CREATE USER ADM 
+    IDENTIFIED BY adm
+    DEFAULT TABLESPACE GE_Data
+    QUOTA 10M ON GE_Data
+    TEMPORARY TABLESPACE temp
+    QUOTA 5M ON SYSTEM
+    QUOTA 10M ON GE_Index;
+GRANT CONNECT to ADM;
+GRANT CREATE SESSION to ADM;
+GRANT CREATE TABLE to ADM;
