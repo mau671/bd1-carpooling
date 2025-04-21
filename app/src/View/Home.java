@@ -30,7 +30,7 @@ public class Home extends javax.swing.JPanel {
                 new Color(0x26252d),
                 new Color(0x26252d));
         Component_Formatter.format_button(jButtonSignUp,
-                new Color(0x188b7d), 
+                new Color(0x15796e), 
                 new Color(0x1b998b), 
                 new Color(0xf8f1ff),
                 new Color(0xf8f1ff));
