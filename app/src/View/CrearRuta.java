@@ -4,6 +4,7 @@
  */
 package View;
 
+import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 import java.awt.Component;
+import javax.swing.JToolBar;
 
 
 
@@ -32,11 +34,20 @@ public class CrearRuta extends javax.swing.JFrame {
      */
     public CrearRuta() {
         initComponents();
+        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
+        toolBar.add(new JButton("Perfil de Usuario"));
+        toolBar.add(new JButton("Agregar Vehículo"));
+        toolBar.add(new JButton("Agregar Ruta"));
+        toolBar.add(new JButton("Agendar Viaje"));
+        getContentPane().add(toolBar, BorderLayout.WEST);
+        
         scrollPanelLista.setPreferredSize(new Dimension(200, 200));
         scrollPanelLista.setMaximumSize(new Dimension (200, Integer.MAX_VALUE));
+        
         panelParadas.setLayout(new BoxLayout(panelParadas, BoxLayout.Y_AXIS));
         panelParadas.setMaximumSize(new Dimension (200, Integer.MAX_VALUE));
         panelParadas.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
@@ -109,80 +120,85 @@ public class CrearRuta extends javax.swing.JFrame {
         panelCrearViaje.setLayout(new java.awt.GridBagLayout());
 
         labelCrearViaje.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 40)); // NOI18N
-        labelCrearViaje.setText("CREAR VIAJE");
+        labelCrearViaje.setText("CREAR RUTA");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.insets = new java.awt.Insets(18, 14, 0, 0);
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 400, 0, 0);
         panelCrearViaje.add(labelCrearViaje, gridBagConstraints);
 
         labelPartida.setText("Agregar punto de partida:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(18, 14, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(50, 200, 0, 0);
         panelCrearViaje.add(labelPartida, gridBagConstraints);
 
         labelPartidaProv.setText("Provincia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(10, 34, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 210, 0, 0);
         panelCrearViaje.add(labelPartidaProv, gridBagConstraints);
 
         labelPartidaCan.setText("Cantón:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(21, 34, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(21, 210, 0, 0);
         panelCrearViaje.add(labelPartidaCan, gridBagConstraints);
 
         labelProvinciaDis.setText("Distrito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(9, 35, 0, 0);
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(9, 210, 0, 0);
         panelCrearViaje.add(labelProvinciaDis, gridBagConstraints);
 
         labelDestino.setText("Agregar punto de destino:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.insets = new java.awt.Insets(12, 14, 0, 0);
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(50, 200, 30, 0);
         panelCrearViaje.add(labelDestino, gridBagConstraints);
 
         labelDestinoProv.setText("Provincia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(9, 34, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(9, 210, 0, 0);
         panelCrearViaje.add(labelDestinoProv, gridBagConstraints);
 
         labelDestinoCan.setText("Cantón:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.insets = new java.awt.Insets(15, 34, 0, 0);
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.insets = new java.awt.Insets(15, 210, 0, 0);
         panelCrearViaje.add(labelDestinoCan, gridBagConstraints);
 
         labelDestinoDis.setText("Distrito:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.insets = new java.awt.Insets(12, 35, 0, 0);
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.insets = new java.awt.Insets(12, 210, 0, 0);
         panelCrearViaje.add(labelDestinoDis, gridBagConstraints);
 
         boxPartidaProv.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.gridheight = 2;
@@ -191,8 +207,8 @@ public class CrearRuta extends javax.swing.JFrame {
 
         boxPartidaCan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -201,27 +217,27 @@ public class CrearRuta extends javax.swing.JFrame {
 
         boxPartidaDis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(6, 12, 0, 0);
         panelCrearViaje.add(boxPartidaDis, gridBagConstraints);
 
         boxDestinoDis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(9, 12, 0, 0);
         panelCrearViaje.add(boxDestinoDis, gridBagConstraints);
 
         boxDestinoCan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 0, 0);
@@ -229,8 +245,8 @@ public class CrearRuta extends javax.swing.JFrame {
 
         boxDestinoProv.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 6;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(6, 12, 0, 0);
@@ -241,7 +257,7 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 25;
-        gridBagConstraints.insets = new java.awt.Insets(18, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(50, 150, 30, 0);
         panelCrearViaje.add(labelParada, gridBagConstraints);
 
         labelLat.setText("Latitud:");
@@ -249,7 +265,7 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 11;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 90, 0, 0);
         panelCrearViaje.add(labelLat, gridBagConstraints);
 
         labelLon.setText("Longitud:");
@@ -257,7 +273,7 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.insets = new java.awt.Insets(9, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(9, 90, 0, 0);
         panelCrearViaje.add(labelLon, gridBagConstraints);
 
         textLat.setPreferredSize(new java.awt.Dimension(80, 25));
@@ -273,7 +289,7 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.ipadx = 16;
         gridBagConstraints.ipady = 3;
-        gridBagConstraints.insets = new java.awt.Insets(6, 7, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
         panelCrearViaje.add(textLat, gridBagConstraints);
 
         textLon.setPreferredSize(new java.awt.Dimension(80, 25));
@@ -297,7 +313,8 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.insets = new java.awt.Insets(12, 11, 6, 0);
+        gridBagConstraints.weighty = 5.0;
+        gridBagConstraints.insets = new java.awt.Insets(50, 250, 6, 0);
         panelCrearViaje.add(botonAgregarViaje, gridBagConstraints);
 
         botonParada.setText("Agregar Parada");
@@ -311,7 +328,7 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 13;
         gridBagConstraints.gridheight = 6;
-        gridBagConstraints.insets = new java.awt.Insets(6, 16, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(6, 120, 0, 0);
         panelCrearViaje.add(botonParada, gridBagConstraints);
 
         scrollPanelLista.setPreferredSize(new java.awt.Dimension(200, 200));
@@ -329,7 +346,6 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.ipady = 130;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 12, 0, 0);
         panelCrearViaje.add(scrollPanelLista, gridBagConstraints);
 
         getContentPane().add(panelCrearViaje, java.awt.BorderLayout.CENTER);

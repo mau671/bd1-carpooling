@@ -5,6 +5,9 @@
 package View;
 
 import javax.swing.JFrame;
+import javax.swing.JToolBar;
+import javax.swing.JButton;
+import java.awt.BorderLayout;
 
 /**
  *
@@ -17,6 +20,13 @@ public class AgregarVehiculo extends javax.swing.JFrame {
      */
     public AgregarVehiculo() {
         initComponents();
+        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
+        toolBar.add(new JButton("Perfil de Usuario"));
+        toolBar.add(new JButton("Agregar Vehículo"));
+        toolBar.add(new JButton("Agregar Ruta"));
+        toolBar.add(new JButton("Agendar Viaje"));
+        getContentPane().add(toolBar, BorderLayout.WEST);
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
@@ -30,87 +40,90 @@ public class AgregarVehiculo extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        panelAgregarVehiculo = new javax.swing.JPanel();
+        labelTituloAgregarVehiculo = new javax.swing.JLabel();
+        labelPlaca = new javax.swing.JLabel();
+        textPlaca = new javax.swing.JTextField();
+        labelCapacidad = new javax.swing.JLabel();
+        boxCapacidad = new javax.swing.JComboBox<>();
+        botonAgregarVehiculo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 51));
         setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
 
-        jPanel1.setBackground(new java.awt.Color(207, 227, 248));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        panelAgregarVehiculo.setBackground(new java.awt.Color(207, 227, 248));
+        panelAgregarVehiculo.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 40)); // NOI18N
-        jLabel1.setText("AGREGAR VEHÍCULO");
+        labelTituloAgregarVehiculo.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 30)); // NOI18N
+        labelTituloAgregarVehiculo.setText("AGREGAR VEHÍCULO");
+        labelTituloAgregarVehiculo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        labelTituloAgregarVehiculo.setPreferredSize(new java.awt.Dimension(289, 41));
+        labelTituloAgregarVehiculo.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.ipady = -4;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 130);
-        jPanel1.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 0, 0);
+        panelAgregarVehiculo.add(labelTituloAgregarVehiculo, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Ingrese el número de la placa:");
+        labelPlaca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelPlaca.setText("Ingrese el número de la placa:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.insets = new java.awt.Insets(18, 28, 0, 0);
-        jPanel1.add(jLabel2, gridBagConstraints);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(18, 0, 0, 95);
+        panelAgregarVehiculo.add(labelPlaca, gridBagConstraints);
 
-        jTextField1.setText("Ingrese aquí");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        textPlaca.setPreferredSize(new java.awt.Dimension(55, 30));
+        textPlaca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                textPlacaActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 59;
-        gridBagConstraints.insets = new java.awt.Insets(6, 28, 0, 0);
-        jPanel1.add(jTextField1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        panelAgregarVehiculo.add(textPlaca, gridBagConstraints);
 
-        jLabel3.setText("Capacidad Máxima:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(26, 28, 0, 0);
-        jPanel1.add(jLabel3, gridBagConstraints);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(6, 28, 0, 0);
-        jPanel1.add(jComboBox1, gridBagConstraints);
-
-        jButton1.setBackground(new java.awt.Color(153, 255, 153));
-        jButton1.setText("Agregar Vehículo");
+        labelCapacidad.setText("Capacidad Máxima:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipady = 11;
-        gridBagConstraints.insets = new java.awt.Insets(31, 16, 103, 0);
-        jPanel1.add(jButton1, gridBagConstraints);
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(26, 0, 0, 34);
+        panelAgregarVehiculo.add(labelCapacidad, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        boxCapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        panelAgregarVehiculo.add(boxCapacidad, gridBagConstraints);
+
+        botonAgregarVehiculo.setBackground(new java.awt.Color(153, 255, 153));
+        botonAgregarVehiculo.setText("Agregar Vehículo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.weighty = 0.1;
+        panelAgregarVehiculo.add(botonAgregarVehiculo, gridBagConstraints);
+
+        getContentPane().add(panelAgregarVehiculo, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void textPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPlacaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_textPlacaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,12 +161,12 @@ public class AgregarVehiculo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton botonAgregarVehiculo;
+    private javax.swing.JComboBox<String> boxCapacidad;
+    private javax.swing.JLabel labelCapacidad;
+    private javax.swing.JLabel labelPlaca;
+    private javax.swing.JLabel labelTituloAgregarVehiculo;
+    private javax.swing.JPanel panelAgregarVehiculo;
+    private javax.swing.JTextField textPlaca;
     // End of variables declaration//GEN-END:variables
 }
