@@ -91,7 +91,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Yu Gothic UI Semilight" size="40" style="0"/>
+          <Font name="Yu Gothic UI Semilight" size="40" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Registro"/>
       </Properties>

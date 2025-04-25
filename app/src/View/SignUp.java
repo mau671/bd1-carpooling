@@ -64,7 +64,7 @@ public class SignUp extends javax.swing.JPanel {
 
         jTextFieldRegisterSurname.setText("jTextField2");
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 40)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 40)); // NOI18N
         jLabel1.setText("Registro");
 
         name_label.setText("Nombre");
