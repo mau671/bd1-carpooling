@@ -1,7 +1,7 @@
 
 -- Crear los tablespaces PU_Data y Pu_Index
 CREATE TABLESPACE PU_Data
-    DATAFILE 'C:\app\hidal\oradata\LIGHTNING\Proyecto-1\pudata01.dbf'
+    DATAFILE 'C:\app\dilan\oradata\DBProyecto\pudata01.dbf'
     SIZE 10M
     REUSE
     AUTOEXTEND ON
@@ -9,7 +9,7 @@ CREATE TABLESPACE PU_Data
     MAXSIZE 200M;
 
 CREATE TABLESPACE PU_Index
-    DATAFILE 'C:\app\hidal\oradata\LIGHTNING\Proyecto-1\puindex01.dbf'
+    DATAFILE 'C:\app\dilan\oradata\DBProyecto\puindex01.dbf'
     SIZE 10M
     REUSE
     AUTOEXTEND ON
@@ -29,19 +29,41 @@ GRANT CONNECT to PU;
 GRANT CREATE SESSION to PU;
 GRANT CREATE TABLE to PU;
 GRANT CREATE PROCEDURE TO PU;
+GRANT CREATE TRIGGER TO PU;
+GRANT CREATE SEQUENCE TO PU;
 
--- Crear el esquema ADM (Hay que crear tablespaces??)
+-- Crear los tablespace de ADM
+CREATE TABLESPACE ADM_Data
+    DATAFILE 'C:\app\dilan\oradata\DBProyecto\admdata01.dbf'
+    SIZE 10M
+    REUSE
+    AUTOEXTEND ON
+    NEXT 512k
+    MAXSIZE 200M;
+
+CREATE TABLESPACE ADM_Index
+    DATAFILE 'C:\app\dilan\oradata\DBProyecto\admindex01.dbf'
+    SIZE 10M
+    REUSE
+    AUTOEXTEND ON
+    NEXT 512k
+    MAXSIZE 200M;
+
+-- Crear el esquema ADM
 CREATE USER ADM 
     IDENTIFIED BY adm
-    DEFAULT TABLESPACE GE_Data
-    QUOTA 10M ON GE_Data
+    DEFAULT TABLESPACE ADM_Data
+    QUOTA 10M ON ADM_Data
     TEMPORARY TABLESPACE temp
     QUOTA 5M ON SYSTEM
-    QUOTA 10M ON GE_Index;
+    QUOTA 10M ON ADM_Index;
+    
 GRANT CONNECT to ADM;
 GRANT CREATE SESSION to ADM;
 GRANT CREATE TABLE to ADM;
-
--- ============================================
--- Crear las tablas
--- ============================================
+GRANT CREATE SEQUENCE TO ADM;
+GRANT CONNECT to ADM;
+GRANT CREATE SESSION to ADM;
+GRANT CREATE TABLE to ADM;
+GRANT CREATE PROCEDURE TO ADM;
+GRANT CREATE TRIGGER TO ADM;
