@@ -8,6 +8,7 @@ import Connection.ConnectDB;
 import java.awt.BorderLayout;
 import java.sql.Date;
 import java.sql.SQLException;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -34,10 +35,8 @@ public class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Main() {
-        initComponents();
-        this.setTitle("Carpooling");
-        JPanel Home_panel = new Home();
-        render_panel(Home_panel);
+    initComponents();
+    this.setTitle("Carpooling");
     }
 
     /**
@@ -85,7 +84,6 @@ public class Main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     /**
      * @param args the command line arguments
      */
@@ -116,7 +114,9 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main().setVisible(true);
+                HomePage homeFrame = new HomePage();  // Home is now a JFrame
+                homeFrame.setVisible(true);   // Show the new Home window
+
             }
         });
     }

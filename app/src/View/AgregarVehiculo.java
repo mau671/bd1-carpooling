@@ -21,13 +21,105 @@ public class AgregarVehiculo extends javax.swing.JFrame {
     public AgregarVehiculo() {
         initComponents();
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
-        toolBar.add(new JButton("Perfil de Usuario"));
-        toolBar.add(new JButton("Agregar Vehículo"));
-        toolBar.add(new JButton("Agregar Ruta"));
-        toolBar.add(new JButton("Agendar Viaje"));
-        getContentPane().add(toolBar, BorderLayout.WEST);
+        JButton perfilButton = new JButton("User Profile");
+        JButton vehiculoInfoButton = new JButton("Your Vehicle Information");
+        JButton agregarVehiculoButton = new JButton("Add a Vehicle");
+        JButton agendarViajeButton = new JButton("Schedule a Trip");
+        JButton buscarViajesButton = new JButton("Search for Trips");
+        JButton historialButton = new JButton("Activity Log");
+        JButton adminConsultasButton = new JButton("Queries");
+        JButton salirButton = new JButton("Log Out");
         
+
+        // Add to toolbar
+        toolBar.add(perfilButton);
+        toolBar.add(vehiculoInfoButton);
+        toolBar.add(agregarVehiculoButton);
+        toolBar.add(agendarViajeButton);
+        toolBar.add(buscarViajesButton);
+        toolBar.add(historialButton);
+        toolBar.add(adminConsultasButton);
+        toolBar.add(salirButton);
+        getContentPane().add(toolBar, BorderLayout.WEST);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        perfilButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                InfoUsuario profile = new InfoUsuario();
+                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                profile.setVisible(true);
+
+                this.dispose();
+            });
+        });
+
+        /*vehiculoInfoButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+
+        agregarVehiculoButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                AgregarVehiculo vehicle = new AgregarVehiculo();
+                vehicle.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                vehicle.setVisible(true);
+
+                this.dispose();
+            });
+        });
+
+        /*agendarViajeButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+
+        /*buscarViajesButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+
+        /*historialButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+        adminConsultasButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ConsultasAdmi queries = new ConsultasAdmi();
+                queries.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                queries.setVisible(true);
+
+                this.dispose();
+            });
+        });
+        salirButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                HomePage home = new HomePage();
+                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                home.setVisible(true);
+
+                this.dispose();
+            });
+        });
     }
 
     /**
@@ -42,21 +134,22 @@ public class AgregarVehiculo extends javax.swing.JFrame {
 
         panelAgregarVehiculo = new javax.swing.JPanel();
         labelTituloAgregarVehiculo = new javax.swing.JLabel();
+        botonAgregarVehiculo = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         labelPlaca = new javax.swing.JLabel();
         textPlaca = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         labelCapacidad = new javax.swing.JLabel();
         boxCapacidad = new javax.swing.JComboBox<>();
-        botonAgregarVehiculo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 51));
         setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
 
-        panelAgregarVehiculo.setBackground(new java.awt.Color(207, 227, 248));
         panelAgregarVehiculo.setLayout(new java.awt.GridBagLayout());
 
         labelTituloAgregarVehiculo.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 30)); // NOI18N
-        labelTituloAgregarVehiculo.setText("AGREGAR VEHÍCULO");
+        labelTituloAgregarVehiculo.setText("ADD VEHICLE");
         labelTituloAgregarVehiculo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         labelTituloAgregarVehiculo.setPreferredSize(new java.awt.Dimension(289, 41));
         labelTituloAgregarVehiculo.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
@@ -67,17 +160,29 @@ public class AgregarVehiculo extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(7, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(7, 100, 0, 0);
         panelAgregarVehiculo.add(labelTituloAgregarVehiculo, gridBagConstraints);
 
-        labelPlaca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        labelPlaca.setText("Ingrese el número de la placa:");
+        botonAgregarVehiculo.setBackground(new java.awt.Color(153, 255, 153));
+        botonAgregarVehiculo.setText("Agregar Vehículo");
+        botonAgregarVehiculo.setPreferredSize(new java.awt.Dimension(123, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 83, 0, 0);
+        panelAgregarVehiculo.add(botonAgregarVehiculo, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        labelPlaca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelPlaca.setText("Add the number of your plate:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(18, 0, 0, 95);
-        panelAgregarVehiculo.add(labelPlaca, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(18, 0, 0, 15);
+        jPanel1.add(labelPlaca, gridBagConstraints);
 
         textPlaca.setPreferredSize(new java.awt.Dimension(55, 30));
         textPlaca.addActionListener(new java.awt.event.ActionListener() {
@@ -86,35 +191,44 @@ public class AgregarVehiculo extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 59;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
-        panelAgregarVehiculo.add(textPlaca, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(18, 0, 0, 0);
+        jPanel1.add(textPlaca, gridBagConstraints);
 
-        labelCapacidad.setText("Capacidad Máxima:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+        panelAgregarVehiculo.add(jPanel1, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        labelCapacidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        labelCapacidad.setText("Maximum capacity of Vehicle:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(26, 0, 0, 34);
-        panelAgregarVehiculo.add(labelCapacidad, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(26, 0, 0, 20);
+        jPanel2.add(labelCapacidad, gridBagConstraints);
 
         boxCapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
-        panelAgregarVehiculo.add(boxCapacidad, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(26, 0, 0, 0);
+        jPanel2.add(boxCapacidad, gridBagConstraints);
 
-        botonAgregarVehiculo.setBackground(new java.awt.Color(153, 255, 153));
-        botonAgregarVehiculo.setText("Agregar Vehículo");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.weighty = 0.1;
-        panelAgregarVehiculo.add(botonAgregarVehiculo, gridBagConstraints);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+        panelAgregarVehiculo.add(jPanel2, gridBagConstraints);
 
         getContentPane().add(panelAgregarVehiculo, java.awt.BorderLayout.CENTER);
 
@@ -163,6 +277,8 @@ public class AgregarVehiculo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAgregarVehiculo;
     private javax.swing.JComboBox<String> boxCapacidad;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel labelCapacidad;
     private javax.swing.JLabel labelPlaca;
     private javax.swing.JLabel labelTituloAgregarVehiculo;
