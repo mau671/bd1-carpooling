@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -41,6 +43,15 @@ public class AgregarVehiculo extends javax.swing.JFrame {
         toolBar.add(adminConsultasButton);
         toolBar.add(salirButton);
         getContentPane().add(toolBar, BorderLayout.WEST);
+        
+        // Load the image
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/carro.png"));
+
+        // Scale it to fit the label
+        Image scaledImage = icon.getImage().getScaledInstance(labelImagen.getWidth(), labelImagen.getHeight(), Image.SCALE_SMOOTH);
+
+        // Set the scaled image as icon
+        labelImagen.setIcon(new ImageIcon(scaledImage));
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         perfilButton.addActionListener(e -> {
@@ -133,111 +144,16 @@ public class AgregarVehiculo extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         panelAgregarVehiculo = new javax.swing.JPanel();
-        labelTituloAgregarVehiculo = new javax.swing.JLabel();
-        botonAgregarVehiculo = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        labelPlaca = new javax.swing.JLabel();
-        textPlaca = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        labelCapacidad = new javax.swing.JLabel();
-        boxCapacidad = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 51));
         setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
 
         panelAgregarVehiculo.setLayout(new java.awt.GridBagLayout());
-
-        labelTituloAgregarVehiculo.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 30)); // NOI18N
-        labelTituloAgregarVehiculo.setText("ADD VEHICLE");
-        labelTituloAgregarVehiculo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        labelTituloAgregarVehiculo.setPreferredSize(new java.awt.Dimension(289, 41));
-        labelTituloAgregarVehiculo.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(7, 100, 0, 0);
-        panelAgregarVehiculo.add(labelTituloAgregarVehiculo, gridBagConstraints);
-
-        botonAgregarVehiculo.setBackground(new java.awt.Color(153, 255, 153));
-        botonAgregarVehiculo.setText("Agregar Vehículo");
-        botonAgregarVehiculo.setPreferredSize(new java.awt.Dimension(123, 40));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 83, 0, 0);
-        panelAgregarVehiculo.add(botonAgregarVehiculo, gridBagConstraints);
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        labelPlaca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        labelPlaca.setText("Add the number of your plate:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(18, 0, 0, 15);
-        jPanel1.add(labelPlaca, gridBagConstraints);
-
-        textPlaca.setPreferredSize(new java.awt.Dimension(55, 30));
-        textPlaca.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textPlacaActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 59;
-        gridBagConstraints.insets = new java.awt.Insets(18, 0, 0, 0);
-        jPanel1.add(textPlaca, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-        panelAgregarVehiculo.add(jPanel1, gridBagConstraints);
-
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-
-        labelCapacidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        labelCapacidad.setText("Maximum capacity of Vehicle:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.weighty = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(26, 0, 0, 20);
-        jPanel2.add(labelCapacidad, gridBagConstraints);
-
-        boxCapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(26, 0, 0, 0);
-        jPanel2.add(boxCapacidad, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-        panelAgregarVehiculo.add(jPanel2, gridBagConstraints);
-
         getContentPane().add(panelAgregarVehiculo, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void textPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPlacaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textPlacaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -275,14 +191,6 @@ public class AgregarVehiculo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonAgregarVehiculo;
-    private javax.swing.JComboBox<String> boxCapacidad;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel labelCapacidad;
-    private javax.swing.JLabel labelPlaca;
-    private javax.swing.JLabel labelTituloAgregarVehiculo;
     private javax.swing.JPanel panelAgregarVehiculo;
-    private javax.swing.JTextField textPlaca;
     // End of variables declaration//GEN-END:variables
 }
