@@ -38,9 +38,15 @@
     <!-- 5)  LIMPIEZA OPCIONAL (borra conf. en 'clean')                     -->
     <!-- ================================================================== -->
     <target name="-post-clean">
-        <delete includeemptydirs="true">
-            <fileset dir="${build.classes.dir}/config" includes="**/*"/>
-            <fileset dir="${dist.dir}/config"   includes="**/*"/>
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${build.classes.dir}/config"
+                    includes="**/*"
+                    erroronmissingdir="false"/>
+            <fileset dir="${dist.dir}/config"
+                    includes="**/*"
+                    erroronmissingdir="false"/>
         </delete>
     </target>
+
+
 </project>
