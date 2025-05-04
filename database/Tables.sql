@@ -443,6 +443,19 @@ COMMENT ON COLUMN ADM.PAYMENTMETHOD.creation_date IS 'Record creation date';
 COMMENT ON COLUMN ADM.PAYMENTMETHOD.modifier IS 'User who modified the record';
 COMMENT ON COLUMN ADM.PAYMENTMETHOD.modification_date IS 'Record modification date';
 
+GRANT SELECT, REFERENCES ON ADM.GENDER              TO PU;
+GRANT SELECT, REFERENCES ON ADM.TYPE_IDENTIFICATION TO PU;
+GRANT SELECT, REFERENCES ON ADM.TYPE_PHONE          TO PU;
+GRANT SELECT, REFERENCES ON ADM.COUNTRY             TO PU;
+GRANT SELECT, REFERENCES ON ADM.PROVINCE            TO PU;
+GRANT SELECT, REFERENCES ON ADM.CANTON              TO PU;
+GRANT SELECT, REFERENCES ON ADM.DISTRICT            TO PU;
+GRANT SELECT, REFERENCES ON ADM.STATUS              TO PU;
+GRANT SELECT, REFERENCES ON ADM.MAXCAPACITY         TO PU;
+GRANT SELECT, REFERENCES ON ADM.PERSON              TO PU;
+GRANT SELECT, REFERENCES ON ADM.PAYMENTMETHOD       TO PU;
+
+
 -- ============================================
 -- PU Tables Creation
 -- ============================================
@@ -608,6 +621,9 @@ COMMENT ON COLUMN ADM.DOMAIN.creation_date IS 'Record creation date';
 COMMENT ON COLUMN ADM.DOMAIN.modifier IS 'User who modified the record';
 COMMENT ON COLUMN ADM.DOMAIN.modification_date IS 'Record modification date';
 
+GRANT SELECT, REFERENCES ON ADM.INSTITUTION         TO PU;
+GRANT SELECT, REFERENCES ON ADM.DOMAIN              TO PU;
+
 -- ============================================
 -- 20. VEHICLE Table
 -- ============================================
@@ -770,6 +786,8 @@ COMMENT ON COLUMN ADM.INSTITUTION_DOMAIN.creation_date IS 'Record creation date'
 COMMENT ON COLUMN ADM.INSTITUTION_DOMAIN.modifier IS 'User who modified the record';
 COMMENT ON COLUMN ADM.INSTITUTION_DOMAIN.modification_date IS 'Record modification date';
 
+GRANT SELECT             ON ADM.INSTITUTION_DOMAIN  TO PU;
+
 -- ============================================
 -- 25. PERSONUSER Table (renamed from USER)
 -- ============================================
@@ -878,6 +896,8 @@ COMMENT ON COLUMN PU.VEHICLEXROUTE.creator IS 'User who created the record';
 COMMENT ON COLUMN PU.VEHICLEXROUTE.creation_date IS 'Record creation date';
 COMMENT ON COLUMN PU.VEHICLEXROUTE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.VEHICLEXROUTE.modification_date IS 'Record modification date';
+
+GRANT REFERENCES ON PU.VEHICLEXROUTE TO ADM;
 
 --------------------------------------------------------------------------------
 --  F)  Trips and statuses
@@ -1240,19 +1260,4 @@ COMMENT ON COLUMN ADM.CHOSENCAPACITY.modification_date IS 'Record modification d
 --------------------------------------------------------------------------------
 --  K)  Granting privileges
 --------------------------------------------------------------------------------
-GRANT SELECT, REFERENCES ON ADM.GENDER              TO PU;
-GRANT SELECT, REFERENCES ON ADM.TYPE_IDENTIFICATION TO PU;
-GRANT SELECT, REFERENCES ON ADM.TYPE_PHONE          TO PU;
-GRANT SELECT, REFERENCES ON ADM.COUNTRY             TO PU;
-GRANT SELECT, REFERENCES ON ADM.PROVINCE            TO PU;
-GRANT SELECT, REFERENCES ON ADM.CANTON              TO PU;
-GRANT SELECT, REFERENCES ON ADM.DISTRICT            TO PU;
-GRANT SELECT, REFERENCES ON ADM.STATUS              TO PU;
-GRANT SELECT, REFERENCES ON ADM.MAXCAPACITY         TO PU;
-GRANT SELECT, REFERENCES ON ADM.PERSON              TO PU;
-GRANT SELECT, REFERENCES ON ADM.PAYMENTMETHOD     TO PU;
-GRANT SELECT, REFERENCES ON ADM.INSTITUTION         TO PU;
-GRANT SELECT, REFERENCES ON ADM.DOMAIN              TO PU;
-GRANT SELECT           ON ADM.INSTITUTION_DOMAIN  TO PU;
 
-GRANT REFERENCES ON PU.VEHICLEXROUTE TO ADM;
