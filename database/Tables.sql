@@ -454,8 +454,6 @@ GRANT SELECT, REFERENCES ON ADM.STATUS              TO PU;
 GRANT SELECT, REFERENCES ON ADM.MAXCAPACITY         TO PU;
 GRANT SELECT, REFERENCES ON ADM.PERSON              TO PU;
 GRANT SELECT, REFERENCES ON ADM.PAYMENTMETHOD       TO PU;
-GRANT SELECT, REFERENCES ON ADM.PERSON              TO PU;
-
 
 -- ============================================
 -- PU Tables Creation
@@ -1257,8 +1255,3 @@ COMMENT ON COLUMN ADM.CHOSENCAPACITY.creator IS 'User who created the record';
 COMMENT ON COLUMN ADM.CHOSENCAPACITY.creation_date IS 'Record creation date';
 COMMENT ON COLUMN ADM.CHOSENCAPACITY.modifier IS 'User who modified the record';
 COMMENT ON COLUMN ADM.CHOSENCAPACITY.modification_date IS 'Record modification date';
-
---------------------------------------------------------------------------------
---  K)  Granting privileges
---------------------------------------------------------------------------------
-
