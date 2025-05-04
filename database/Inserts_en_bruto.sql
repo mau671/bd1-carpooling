@@ -287,920 +287,1502 @@ VALUES (CANTON_SEQ.NEXTVAL, 7, 'Guacimo');
 -- Insertar en la tabla DISTRICT
 -- ==============================
 
--- San Jose Province Cantons (2-20)
--- San Jose (2)
+-- San Jose Province Cantons (1-18)
+-- San Jose (1)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Carmen');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Carmen');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Merced');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Merced');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Hospital');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Hospital');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Catedral');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Catedral');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Zapote');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Zapote');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'San Francisco de Dos Rios');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'San Francisco de Dos Rios');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Uruca');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Uruca');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Mata Redonda');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Mata Redonda');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Pavas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Pavas');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Hatillo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'Hatillo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'San Sebastian');
+VALUES (DISTRICT_SEQ.NEXTVAL, 1, 'San Sebastian');
 
---Escazu(3)
+--Escazu(2)
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Escazu');
+VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'Escazu');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'San Antonio');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 2, 'San Rafael');
+
+--Desamparados (3)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Desamparados');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'San Miguel');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'San Juan de Dios');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'San Rafael Arriba');
 
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'San Antonio');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'San Rafael');
-
---Desamparados (4)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Desamparados');
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Frailes');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Miguel');
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Patarra');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Juan de Dios');
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'San Cristobal');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Rafael Arriba');
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Rosario');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Damas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'San Rafael Abajo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Gravilias');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 3, 'Los Guido');
+
+--Puriscal (4)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Santiago');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Mercedes Sur');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Barbacoas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Grifo Alto');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Rafeal');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Candelaria');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Desamparaditos');
 
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Antonio');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Frailes');
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Chires');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Patarra');
+VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Marcos');
 
+-- Canton Tarrazu (5)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Cristobal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'San Marcos');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Rosario');
+VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'San Lorenzo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Damas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'San Carlos');
 
+-- Canton Aserri (6)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'San Rafael Abajo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'Aserrí');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Gravilias');
+VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'Tarbaca o Praga');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 4, 'Los Guido');
+VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'Vuelta de Jorco');
 
---Puriscal (5)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'Santiago');
+VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'San Gabriel');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'Mercedes Sur');
+VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'La Legua');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'Barbacoas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'Monterrey');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'Grifo Alto');
+VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'Salitrillos');
 
+-- Canton Mora (7)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'San Rafeal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Colón');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'Candelaria');
+VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Guayabo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'Desamparaditos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Tabarcia');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'San Antonio');
+VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Piedras Negras');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 5, 'Chires');
+VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Picagres');
 
+-- Canton Goicoechea (8)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'San Marcos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Guadalupe');
 
--- Canton Tarrazu (6)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'San Marcos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'San Francisco');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'San Lorenzo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Calle Blancos');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 6, 'San Carlos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Mata de Plátano');
 
--- Canton Aserri (7)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Aserrí');
+VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Ipís');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Tarbaca o Praga');
+VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Rancho Redondo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Vuelta de Jorco');
+VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Purnal');
 
+-- Canton Santa Ana (9)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'San Gabriel');
+VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Santa Ana');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'La Legua');
+VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Saltiral');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Monterrey');
+VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Pozos o Concepción');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 7, 'Salitrillos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Uruca o San Joaquín');
 
--- Canton Mora (8)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Colón');
+VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Piedades');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Guayabo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Brasil');
 
+-- Canton Alajuelita (10)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Tabarcia');
+VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Alajuelita');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Piedras Negras');
+VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'San Josecito');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 8, 'Picagres');
+VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'San Antonio');
 
--- Canton Goicoechea (9)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Guadalupe');
+VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Concepción');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'San Francisco');
+VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'San Felipe');
 
+-- Canton Coronado (11)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Calle Blancos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Mata de Plátano');
+VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'San Rafael');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Ipís');
+VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'Dulce Nombre o Jesús');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Rancho Redondo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'Patallilo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 9, 'Purnal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'Cascajal');
 
--- Canton Santa Ana (10)
+-- Canton Acosta (12)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Santa Ana');
+VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'San Ignacio');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Saltiral');
+VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'Guaitil');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Pozos o Concepción');
+VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'Palmichal');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Uruca o San Joaquín');
+VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'Cangrejal');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Piedades');
+VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'Sabanillas');
 
+-- Canton Tibas (13)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 10, 'Brasil');
+VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'San Juan');
 
--- Canton Alajuelita (11)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'Alajuelita');
+VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'Cinco Esquinas');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'San Josecito');
+VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'Anselmo Llorente');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'San Antonio');
+VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'León XIII');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'Concepción');
+VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'Colima');
 
+-- Canton Moravia (14)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 11, 'San Felipe');
+VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'San Vicente');
 
--- Canton Coronado (12)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'San Isidro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'San Jerónimo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'San Rafael');
+VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'La Trinidad');
 
+-- Canton Montes de Oca (15)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'Dulce Nombre o Jesús');
+VALUES (DISTRICT_SEQ.NEXTVAL, 15, 'San Pedro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'Patallilo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 15, 'Sabanilla');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 12, 'Cascajal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 15, 'Mercedes o Betania');
 
--- Canton Acosta (13)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'San Ignacio');
+VALUES (DISTRICT_SEQ.NEXTVAL, 15, 'San Rafael');
 
+-- Canton Turrubares (16)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'Guaitil');
+VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'San Pablo');
 
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'Palmichal');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'Cangrejal');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 13, 'Sabanillas');
-
--- Canton Tibas (14)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'San Juan');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'Cinco Esquinas');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'Anselmo Llorente');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'León XIII');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 14, 'Colima');
-
--- Canton Moravia (15)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 15, 'San Vicente');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 15, 'San Jerónimo');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 15, 'La Trinidad');
-
--- Canton Montes de Oca (16)
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'San Pedro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'Sabanilla');
+VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'San Juan de Mata');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'Mercedes o Betania');
+VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'San Luis');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'San Rafael');
+VALUES (DISTRICT_SEQ.NEXTVAL, 16, 'Carara');
 
--- Canton Turrubares (17)
+-- Canton Dota (17)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'San Pablo');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'San Pedro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'Santa María');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'San Juan de Mata');
+VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'Jardín');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'San Luis');
+VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'Copey');
+
+-- Canton Perez Zeledon (18)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 17, 'Carara');
-
--- Canton Dota (18)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Santa María');
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'General');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Jardín');
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Daniel Flores');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Copey');
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Rivas');
 
--- Canton Perez Zeledon (19)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'San Pedro');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Platanares');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Pejibaye');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Cajón o Carmen');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Bard');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Río Nuevo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 18, 'Páramo');
+
+-- Canton Leon Cortes (19)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'San Pablo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'San Andrés');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Llano Bonito');
+
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'General');
+VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Santa Cruz');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Daniel Flores');
+VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'San Antonio');
+
+-- Alajuela Province Cantons (20-33)
+-- Canton Alajuela (20)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Alajuela');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Rivas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'San José');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'San Pedro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Carrizal');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Platanares');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'San Antonio');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Pejibaye');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Cajón o Carmen');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Bard');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Río Nuevo');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 19, 'Páramo');
-
--- Canton Leon Cortes (20)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'San Pablo');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'San Andrés');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Llano Bonito');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Guácima');
 
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Santa Cruz');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Sabanilla');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'San Antonio');
-
--- Alajuela Province Cantons (21-35)
--- Canton Alajuela (21)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Alajuela');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'San Rafael');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San José');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Río Segundo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Carrizal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Desamparados');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San Antonio');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Turrucares');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Guácima');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Tambor');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San Isidro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'La Garita');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Sabanilla');
+VALUES (DISTRICT_SEQ.NEXTVAL, 20, 'Sarapiquí');
+
+-- Canton San Ramon (21)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San Ramón');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Santiago');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San Juan');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Piedades Norte');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Piedades Sur');
 
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San Rafael');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Río Segundo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Desamparados');
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Angeles');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Turrucares');
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Alfaro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Tambor');
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Volio');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'La Garita');
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Concepción');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Sarapiquí');
-
--- Canton San Ramon (22)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'San Ramón');
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'Zapotal');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Santiago');
+VALUES (DISTRICT_SEQ.NEXTVAL, 21, 'San Isidro de Peñas Blancas');
 
+-- Canton Grecia (22)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'San Juan');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Piedades Norte');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Piedades Sur');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'San Rafael');
+VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Grecia');
 
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Angeles');
+VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'San José');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Alfaro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'San Roque');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Volio');
+VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Tacares');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Concepción');
+VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Río Cuarto');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Zapotal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Puente Piedra');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'San Isidro de Peñas Blancas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 22, 'Bolívar');
 
--- Canton Grecia (23)
+-- Canton San Mateo (23)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'Grecia');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'San Isidro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'San Mateo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'San José');
+VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'Desmonte');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'San Roque');
+VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'Jesús María');
+
+-- Canton Atenas (24)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Atenas');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'Tacares');
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Jesús');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'Río Cuarto');
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Mercedes');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'Puente Piedra');
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 23, 'Bolívar');
-
--- Canton San Mateo (24)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'San Mateo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Concepción');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Desmonte');
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'San José');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Jesús María');
-
--- Canton Atenas (25)
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Atenas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Santa Eulalia');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Jesús');
+VALUES (DISTRICT_SEQ.NEXTVAL, 24, 'Escobal');
+
+-- Canton Naranjo (25)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Naranjo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Mercedes');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'San Isidro');
-
-INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Concepción');
+VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'San Miguel');
 
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'San José');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Santa Eulalia');
+VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Cirrí Sur');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Escobal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'San Jerónimo');
 
--- Canton Naranjo (26)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Naranjo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'San Juan');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'San Miguel');
+VALUES (DISTRICT_SEQ.NEXTVAL, 25, 'Rosario');
 
+-- Canton Palmares (26)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'San José');
+VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Palmares');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Cirrí Sur');
+VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Zaragoza');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'San Jerónimo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Buenos Aires');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'San Juan');
+VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Santiago');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Rosario');
+VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Candelaria');
 
--- Canton Palmares (27)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Palmares');
+VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'Esquipulas');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Zaragoza');
+VALUES (DISTRICT_SEQ.NEXTVAL, 26, 'La Granja');
 
+-- Canton Poas (27)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Buenos Aires');
+VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'San Pedro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Santiago');
+VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'San Juan');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Candelaria');
+VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'San Rafael');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Esquipulas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Carrillos');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'La Granja');
+VALUES (DISTRICT_SEQ.NEXTVAL, 27, 'Sabana Redonda');
 
--- Canton Poas (28)
+-- Canton Orotina (28)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'San Pedro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'Orotina');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'San Juan');
+VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'Mastate');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'San Rafael');
+VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'Hacienda Vieja');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'Carrillos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'Coyolar');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'Sabana Redonda');
+VALUES (DISTRICT_SEQ.NEXTVAL, 28, 'Ceiba');
 
--- Canton Orotina (29)
+-- Canton San Carlos (29)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Orotina');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Quesada');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Mastate');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Florencia');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Hacienda Vieja');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Buenavista');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Coyolar');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Aguas Zarcas');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Ceiba');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Venecia');
 
--- Canton San Carlos (30)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Quesada');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Pital');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Florencia');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Fortuna');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Buenavista');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Tigra');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Aguas Zarcas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Palmera');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Venecia');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Venado');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Pital');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Cutris');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Fortuna');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Monterrey');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Tigra');
+VALUES (DISTRICT_SEQ.NEXTVAL, 29, 'Pocosol');
 
+-- Canton Alfaro Ruiz (30)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Palmera');
+VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Zarcero');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Venado');
+VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Laguna');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Cutris');
+VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Tapezco');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Monterrey');
+VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Guadalupe');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Pocosol');
+VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Palmira');
 
--- Canton Alfaro Ruiz (31)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Zarcero');
+VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Zapote');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Laguna');
+VALUES (DISTRICT_SEQ.NEXTVAL, 30, 'Brisas');
 
+-- Canton Valverde Vega (31)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Tapezco');
+VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Sarchí Norte');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Guadalupe');
+VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Sarchí Sur');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Palmira');
+VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Toro Amarillo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Zapote');
+VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'San Pedro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Brisas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 31, 'Rodríguez');
 
--- Canton Valverde Vega (32)
+-- Canton Upala (32)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Sarchí Norte');
+VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Upala');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Sarchí Sur');
+VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Aguas Claras');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Toro Amarillo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'San José o Pizote');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'San Pedro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Bijagua');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Rodríguez');
+VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Delicias');
 
--- Canton Upala (33)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Upala');
+VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Dos Ríos');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Aguas Claras');
+VALUES (DISTRICT_SEQ.NEXTVAL, 32, 'Yollilal');
 
+-- Canton Los Chiles (33)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'San José o Pizote');
+VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Los Chiles');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Bijagua');
+VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Caño Negro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Delicias');
+VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Amparo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Dos Ríos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'San Jorge');
 
+-- Canton Guatuso (34)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 33, 'Yollilal');
+VALUES (DISTRICT_SEQ.NEXTVAL, 34, 'San Rafael');
 
--- Canton Los Chiles (34)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 34, 'Los Chiles');
+VALUES (DISTRICT_SEQ.NEXTVAL, 34, 'Buenavista');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 34, 'Caño Negro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 34, 'Cote');
 
+-- Cartago Province Cantons (35-42)
+-- Canton Cartago (35)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 34, 'Amparo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Oriental');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 34, 'San Jorge');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Occidental');
 
--- Canton Guatuso (35)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'San Rafael');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Carmen');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Buenavista');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'San Nicolás');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Cote');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Aguacaliente (San Francisco)');
 
--- Cartago Province Cantons (36-43)
--- Canton Cartago (36)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Oriental');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Guadalupe (Arenilla)');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Occidental');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Corralillo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Carmen');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Tierra Blanca');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'San Nicolás');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Dulce Nombre');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Aguacaliente (San Francisco)');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Llano Grande');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Guadalupe (Arenilla)');
+VALUES (DISTRICT_SEQ.NEXTVAL, 35, 'Quebradilla');
 
+-- Canton Paraiso (36)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Corralillo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Paraíso');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Tierra Blanca');
+VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Santiago');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Dulce Nombre');
+VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Orosi');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Llano Grande');
+VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Cachí');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Quebradilla');
+VALUES (DISTRICT_SEQ.NEXTVAL, 36, 'Llanos de Sta Lucia');
 
--- Canton Paraiso (37)
+-- Canton La Union (37)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Paraíso');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Tres Ríos');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Santiago');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'San Diego');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Orosi');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'San Juan');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Cachí');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'San Rafael');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Llanos de Sta Lucia');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Concepción');
 
--- Canton La Union (38)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'Tres Ríos');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Dulce Nombre');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'San Diego');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'San Ramón');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'San Juan');
+VALUES (DISTRICT_SEQ.NEXTVAL, 37, 'Río Azul');
 
+-- Canton Jimenez (38)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'San Rafael');
+VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'Juan Viñas');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'Concepción');
+VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'Tucurrique');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'Dulce Nombre');
+VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'Pejibaye');
 
+-- Canton Turrialba (39)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'San Ramón');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Turrialba');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 38, 'Río Azul');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'La Suiza');
 
--- Canton Jimenez (39)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Juan Viñas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Peralta');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Tucurrique');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Santa Cruz');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Pejibaye');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Santa Teresita');
 
--- Canton Turrialba (40)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Turrialba');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Pavones');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'La Suiza');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Tuis');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Peralta');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Tayutic');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Santa Cruz');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Santa Rosa');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Santa Teresita');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Tres Equis');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Pavones');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'La Isabel');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Tuis');
+VALUES (DISTRICT_SEQ.NEXTVAL, 39, 'Chirripo');
 
+-- Canton Alvarado (40)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Tayutic');
+VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Pacayas');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Santa Rosa');
+VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Cervantes');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Tres Equis');
+VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Capellades');
 
+-- Canton Oreamuno (41)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'La Isabel');
+VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'San Rafael');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 40, 'Chirripo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'Cot');
 
--- Canton Alvarado (41)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'Pacayas');
+VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'Potrero Cerrado');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'Cervantes');
+VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'Cipreses');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'Capellades');
+VALUES (DISTRICT_SEQ.NEXTVAL, 41, 'Santa Rosa');
 
--- Canton Oreamuno (42)
+-- Canton El Guarco (42)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'San Rafael');
+VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'El Tejar');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'Cot');
+VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'San Isidro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'Potrero Cerrado');
+VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'Tobosi');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'Cipreses');
+VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'Patio de Agua');
 
+-- Heredia Province Cantons (43-52)
+-- Canton Heredia (43)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 42, 'Santa Rosa');
+VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'Heredia');
 
--- Canton El Guarco (43)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'El Tejar');
+VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'Mercedes');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'San Isidro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'San Francisco');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'Tobosi');
+VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'Ulloa');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'Patio de Agua');
+VALUES (DISTRICT_SEQ.NEXTVAL, 43, 'Vara Blanca');
 
--- Heredia Province Cantons (44-53)
--- Canton Heredia (44)
+-- Canton Barva (44)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'Heredia');
+VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'Barva');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'Mercedes');
+VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'San Pedro');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'San Francisco');
+VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'San Pablo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'Ulloa');
+VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'San Roque');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'Vara Blanca');
+VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'Santa Lucía');
 
--- Canton Barva (45)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Barva');
+VALUES (DISTRICT_SEQ.NEXTVAL, 44, 'San Jose de la Montaña');
 
+-- Canton Santo Domingo (45)
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'San Pedro');
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Santo Domingo');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'San Pablo');
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'San Vicente');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'San Roque');
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'San Miguel');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Santa Lucía');
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Paracito');
 
 INSERT INTO DISTRICT (id, canton_id, name)
-VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'San Jose de la Montaña');
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Santo Tomás');
 
--- Faltan los cantones de Santo Domingo para abajo
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Santa Rosa');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Tures');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 45, 'Pará');
+
+-- Canton Santa Bárbara (46)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 46, 'Santa Bárbara');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 46, 'San Pedro');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 46, 'San Juan');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 46, 'Jesús');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 46, 'Santo Domingo del Roble');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 46, 'Puraba');
+
+-- Canton San Rafael (47)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 47, 'San Rafael');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 47, 'San Josecito');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 47, 'Santiago');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 47, 'Angeles');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 47, 'Concepción');
+
+-- Canton San Isidro (48)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 48, 'San Isidro');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 48, 'San José');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 48, 'Concepción');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 48, 'San Francisco');
+
+-- Canton Belén (49)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 49, 'San Antonio');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 49, 'La Ribera');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 49, 'Asunción');
+
+-- Canton Flores (50)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 50, 'San Joaquín');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 50, 'Barrantes');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 50, 'Llorente');
+
+-- Canton San Pablo (51)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 51, 'San Pablo');
+
+-- Canton Sarapiquí (52)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 52, 'Puerto Viejo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 52, 'La Virgen');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 52, 'Horquetas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 52, 'Llanuras del Gaspar');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 52, 'Cureña');
+
+-- =============================================
+-- Guanacaste province cantons (53-63)
+-- =============================================
+
+-- Canton Liberia (53)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 53, 'Liberia');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 53, 'Cañas Dulces');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 53, 'Mayorga');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 53, 'Nacascolo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 53, 'Curubande');
+
+-- Canton Nicoya (54)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 54, 'Nicoya');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 54, 'Mansión');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 54, 'San Antonio');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 54, 'Quebrada Honda');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 54, 'Sámara');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 54, 'Nosara');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 54, 'Belén de Nosarita');
+
+-- Canton Santa Cruz (55)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Santa Cruz');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Bolsón');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Veintisiete de Abril');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Tempate');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Cartagena');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Cuajiniquil');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Diriá');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Cabo Velas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 55, 'Tamarindo');
+
+-- Canton Bagaces (56)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 56, 'Bagaces');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 56, 'Fortuna');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 56, 'Mogote');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 56, 'Río Naranjo');
+
+-- Canton Carrillo (57)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 57, 'Filadelfia');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 57, 'Palmira');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 57, 'Sardinal');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 57, 'Belén');
+
+-- Canton Cañas (58)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 58, 'Cañas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 58, 'Palmira');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 58, 'San Miguel');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 58, 'Bebedero');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 58, 'Porozal');
+
+-- Canton Abangares (59)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 59, 'Juntas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 59, 'Sierra');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 59, 'San Juan');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 59, 'Colorado');
+
+-- Canton Tilarán (60)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 60, 'Tilarán');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 60, 'Quebrada Grande');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 60, 'Tronadora');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 60, 'Santa Rosa');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 60, 'Líbano');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 60, 'Tierras Morenas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 60, 'Arenal');
+
+-- Canton Nandayure (61)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 61, 'Carmona');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 61, 'Santa Rita');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 61, 'Zapotal');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 61, 'San Pablo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 61, 'Porvenir');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 61, 'Bejuco');
+
+-- Canton La Cruz (62)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 62, 'La Cruz');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 62, 'Santa Cecilia');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 62, 'Garita');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 62, 'Santa Elena');
+
+-- Canton Hojancha (63)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 63, 'Hojancha');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 63, 'Monte Romo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 63, 'Puerto Carrillo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 63, 'Huacas');
+
+-- Puntarenas province cantons (64-74)
+-- Canton Puntarenas (64)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Puntarenas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Pitahaya');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Chomes');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Lepanto');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Paquera');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Manzanillo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Guacimal');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Barranca');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Monte Verde');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Isla del Coco');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Cóbano');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Chacarita');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Chira (Isla)');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Acapulco');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'El Roble');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 64, 'Arancibia');
+
+-- Canton Esparza (65)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 65, 'Espíritu Santo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 65, 'San Juan Grande');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 65, 'Macacona');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 65, 'San Rafael');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 65, 'San Jerónimo');
+
+-- Canton Buenos Aires (66)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Buenos Aires');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Volcán');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Potrero Grande');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Boruca');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Pilas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Colinas o Bajo de Maíz');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Chánguena');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Bioley');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 66, 'Brunka');
+
+-- Canton Montes de Oro (67)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 67, 'Miramar');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 67, 'Unión');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 67, 'San Isidro');
+
+-- Canton Osa (68)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 68, 'Puerto Cortés');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 68, 'Palmar');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 68, 'Sierpe');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 68, 'Bahía Ballena');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 68, 'Piedras Blancas');
+
+-- Canton Aguirre (69)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 69, 'Quepos');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 69, 'Savegre');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 69, 'Naranjito');
+
+-- Canton Golfito (70)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 70, 'Golfito');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 70, 'Puerto Jiménez');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 70, 'Guaycará');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 70, 'Pavones o Villa Conte');
+
+-- Canton Coto Brus (71)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 71, 'San Vito');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 71, 'Sabalito');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 71, 'Agua Buena');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 71, 'Limoncito');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 71, 'Pittier');
+
+-- Canton Parrita (72)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 72, 'Parrita');
+
+-- Canton Corredores (73)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 73, 'Corredores');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 73, 'La Cuesta');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 73, 'Paso Canoas');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 73, 'Laurel');
+
+-- Canton Garabito (74)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 74, 'Jacó');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 74, 'Tárcoles');
+
+-- =============================================
+-- Distritos faltantes para Limón (cantones 75-80)
+-- =============================================
+
+-- Canton Limón (75)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 75, 'Limón');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 75, 'Valle La Estrella');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 75, 'Río Blanco');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 75, 'Matama');
+
+-- Canton Pococí (76)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 76, 'Guápiles');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 76, 'Jiménez');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 76, 'Rita');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 76, 'Roxana');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 76, 'Cariari');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 76, 'Colorado');
+
+-- Canton Siquirres (77)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 77, 'Siquirres');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 77, 'Pacuare');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 77, 'Florida');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 77, 'Germania');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 77, 'Cairo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 77, 'Alegría');
+
+-- Canton Talamanca (78)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 78, 'Bratsi');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 78, 'Sixaola');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 78, 'Cahuita');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 78, 'Telire');
+
+-- Canton Matina (79)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 79, 'Matina');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 79, 'Batán');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 79, 'Carrandi');
+
+-- Canton Guácimo (80)
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 80, 'Guácimo');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 80, 'Mercedes');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 80, 'Pocora');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 80, 'Río Jiménez');
+
+INSERT INTO DISTRICT (id, canton_id, name)
+VALUES (DISTRICT_SEQ.NEXTVAL, 80, 'Duacari');
+
+
 -- ==============================
 -- ver las tablas
 -- ==============================
