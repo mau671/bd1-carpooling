@@ -1,0 +1,17 @@
+#
+# Oracle Database Connection Properties
+#
+# This file contains the configuration settings for establishing a connection to an Oracle database.
+#
+# Properties:
+# - db.url: JDBC connection URL for the Oracle database in the format
+#           jdbc:oracle:thin:@<host>:<port>:<SID>
+# - db.user: Username for database authentication
+# - db.password: Password for database authentication
+#
+# Note: In production environments, consider using a secure method for storing credentials.
+#
+#   config/db.properties
+db.url      = jdbc:oracle:thin:@localhost:1521:LIGHTNING
+db.user     = system
+db.password = passwordHere

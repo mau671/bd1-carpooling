@@ -111,6 +111,10 @@ public class Main extends javax.swing.JFrame {
         }
         //</editor-fold>
         //ConnectDB.insertPhoneType(1, "Casa", "c.hidalgo", Date.valueOf("2025-04-19"), "", null);
+        
+         System.out.println(ConnectDB.ping()
+            ? "✅  DB connection OK"
+            : "❌  DB connection FAILED");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
