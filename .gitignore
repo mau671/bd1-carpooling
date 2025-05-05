@@ -3,3 +3,4 @@
 /app/dist/
 /app/config/db.properties
 /database/data
+/app/src/com/tec/carpooling/config/db.properties

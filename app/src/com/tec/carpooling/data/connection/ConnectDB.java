@@ -1,4 +1,4 @@
-package Connection;
+package com.tec.carpooling.data.connection;
 
 import java.io.FileInputStream;
 import java.io.IOException;

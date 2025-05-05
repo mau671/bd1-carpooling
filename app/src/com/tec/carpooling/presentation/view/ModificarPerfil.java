@@ -2,22 +2,125 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package View;
+package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.presentation.view.HomePage;
+import java.awt.BorderLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JToolBar;
 
 /**
  *
  * @author hidal
  */
-public class UserSignUp extends javax.swing.JFrame {
+public class ModificarPerfil extends javax.swing.JFrame {
 
     /**
-     * Creates new form UserSignUp
+     * Creates new form ModificarPerfil
      */
-    public UserSignUp() {
+    public ModificarPerfil() {
         initComponents();
+        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
+        JButton perfilButton = new JButton("User Profile");
+        JButton vehiculoInfoButton = new JButton("Your Vehicle Information");
+        JButton agregarVehiculoButton = new JButton("Add a Vehicle");
+        JButton agendarViajeButton = new JButton("Schedule a Trip");
+        JButton buscarViajesButton = new JButton("Search for Trips");
+        JButton historialButton = new JButton("Activity Log");
+        JButton adminConsultasButton = new JButton("Queries");
+        JButton salirButton = new JButton("Log Out");
+        
+
+        // Add to toolbar
+        toolBar.add(perfilButton);
+        toolBar.add(vehiculoInfoButton);
+        toolBar.add(agregarVehiculoButton);
+        toolBar.add(agendarViajeButton);
+        toolBar.add(buscarViajesButton);
+        toolBar.add(historialButton);
+        toolBar.add(adminConsultasButton);
+        toolBar.add(salirButton);
+        getContentPane().add(toolBar, BorderLayout.WEST);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        perfilButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                InfoUsuario profile = new InfoUsuario();
+                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                profile.setVisible(true);
+
+                this.dispose();
+            });
+        });
+
+        /*vehiculoInfoButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+
+        agregarVehiculoButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                AgregarVehiculo vehicle = new AgregarVehiculo();
+                vehicle.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                vehicle.setVisible(true);
+
+                this.dispose();
+            });
+        });
+
+        /*agendarViajeButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+
+        /*buscarViajesButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+
+        /*historialButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ModificarPerfil modify = new ModificarPerfil();
+                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                modify.setVisible(true);
+
+                this.dispose();
+            });
+        });*/
+        adminConsultasButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                ConsultasAdmi queries = new ConsultasAdmi();
+                queries.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                queries.setVisible(true);
+
+                this.dispose();
+            });
+        });
+        salirButton.addActionListener(e -> {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                HomePage home = new HomePage();
+                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                home.setVisible(true);
+
+                this.dispose();
+            });
+        });
     }
 
     /**
@@ -31,8 +134,8 @@ public class UserSignUp extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        botonRegistro = new javax.swing.JButton();
-        labelIngresar = new javax.swing.JLabel();
+        botonModificado = new javax.swing.JButton();
+        labelProfile = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
@@ -94,16 +197,16 @@ public class UserSignUp extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        botonRegistro.setBackground(new java.awt.Color(246, 172, 30));
-        botonRegistro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botonRegistro.setForeground(new java.awt.Color(255, 255, 255));
-        botonRegistro.setText("Register");
-        botonRegistro.setMaximumSize(new java.awt.Dimension(85, 23));
-        botonRegistro.setMinimumSize(new java.awt.Dimension(85, 23));
-        botonRegistro.setPreferredSize(new java.awt.Dimension(90, 40));
-        botonRegistro.addActionListener(new java.awt.event.ActionListener() {
+        botonModificado.setBackground(new java.awt.Color(246, 172, 30));
+        botonModificado.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        botonModificado.setForeground(new java.awt.Color(255, 255, 255));
+        botonModificado.setText("Save Chnages");
+        botonModificado.setMaximumSize(new java.awt.Dimension(85, 23));
+        botonModificado.setMinimumSize(new java.awt.Dimension(85, 23));
+        botonModificado.setPreferredSize(new java.awt.Dimension(90, 40));
+        botonModificado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonRegistroActionPerformed(evt);
+                botonModificadoActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -114,20 +217,24 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipady = 27;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 120, 31, 0);
-        jPanel1.add(botonRegistro, gridBagConstraints);
+        jPanel1.add(botonModificado, gridBagConstraints);
 
-        labelIngresar.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
-        labelIngresar.setForeground(new java.awt.Color(18, 102, 160));
-        labelIngresar.setText("REGISTER");
+        labelProfile.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
+        labelProfile.setForeground(new java.awt.Color(18, 102, 160));
+        labelProfile.setText("MODIFY USER PROFILE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(60, 0, 60, 0);
-        jPanel1.add(labelIngresar, gridBagConstraints);
+        jPanel1.add(labelProfile, gridBagConstraints);
 
-        jButton1.setText("Add Photo");
+        jButton1.setBackground(new java.awt.Color(18, 102, 160));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Change Photo");
+        jButton1.setPreferredSize(new java.awt.Dimension(107, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -665,20 +772,20 @@ public class UserSignUp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void botonModificadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificadoActionPerformed
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            InfoUsuario profile = new InfoUsuario();
+            profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            profile.setVisible(true);
+
+            this.dispose();
+        });
+    }//GEN-LAST:event_botonModificadoActionPerformed
+
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
-    private void botonRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistroActionPerformed
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            HomePage home = new HomePage();
-            home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            home.setVisible(true);
-
-            this.dispose();
-        });
-    }//GEN-LAST:event_botonRegistroActionPerformed
- 
     /**
      * @param args the command line arguments
      */
@@ -696,26 +803,26 @@ public class UserSignUp extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UserSignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UserSignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UserSignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UserSignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UserSignUp().setVisible(true);
+                new ModificarPerfil().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonRegistro;
+    private javax.swing.JButton botonModificado;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -760,7 +867,7 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldRegisterName7;
     private javax.swing.JTextField jTextFieldRegisterName8;
     private javax.swing.JTextField jTextFieldRegisterName9;
-    private javax.swing.JLabel labelIngresar;
+    private javax.swing.JLabel labelProfile;
     private javax.swing.JLabel name_label;
     private javax.swing.JLabel name_label10;
     private javax.swing.JLabel name_label11;

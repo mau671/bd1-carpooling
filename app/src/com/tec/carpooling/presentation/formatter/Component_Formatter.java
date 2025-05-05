@@ -1,4 +1,4 @@
-package Formatter;
+package com.tec.carpooling.presentation.formatter;
 
 import java.awt.Color;
 import java.awt.Cursor;

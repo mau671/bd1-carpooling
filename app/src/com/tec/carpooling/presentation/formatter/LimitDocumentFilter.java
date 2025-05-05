@@ -1,4 +1,4 @@
-package Formatter;
+package com.tec.carpooling.presentation.formatter;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

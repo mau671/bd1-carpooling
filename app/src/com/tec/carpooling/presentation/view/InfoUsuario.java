@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package View;
+package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.presentation.view.HomePage;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -442,7 +443,6 @@ public class InfoUsuario extends javax.swing.JFrame {
                 "Phone Type", "Phone Number"
             }
         ));
-        jTable1.setCellSelectionEnabled(false);
         jScrollPane2.setViewportView(jTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

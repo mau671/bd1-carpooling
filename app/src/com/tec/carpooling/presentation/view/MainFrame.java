@@ -2,41 +2,49 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package View;
+package com.tec.carpooling.presentation.view;
 
-import Connection.ConnectDB;
 import java.awt.BorderLayout;
-import java.sql.Date;
-import java.sql.SQLException;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
  *
  * @author mauricio
  */
-public class Main extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame {
 
-     /**
-     * Esta función recibe un objecto JPanel y lo despliega
-     * en la ventana de la aplicación.
-     * @param panel 
+    /**
+     * Creates new form MainFrame
      */
-    public static void render_panel(JPanel panel){
-        panel.setSize(900,500);
-        panel.setLocation(0,0);
-        content_panel.removeAll();                             
-        content_panel.add(panel, BorderLayout.CENTER); 
+    public MainFrame() {
+        initComponents(); 
+        this.setTitle("Carpooling TEC"); // Change to obtain from db
+        this.setLocationRelativeTo(null); // Centrar la ventana
+    }
+
+    /**
+     * Esta función recibe un objeto JPanel y lo despliega
+     * en el panel de contenido principal de esta ventana (JFrame).
+     * @param panel El JPanel a mostrar.
+     */
+    public void render_panel(JPanel panel) {
+        if (panel == null) {
+            System.err.println("Intento de renderizar un panel nulo.");
+            return;
+        }
+        // Es buena idea establecer el layout del content_panel explícitamente aquí o en initComponents
+        // si no lo has hecho en el diseñador gráfico. BorderLayout es común para esto.
+        if (!(content_panel.getLayout() instanceof BorderLayout)) {
+            content_panel.setLayout(new BorderLayout());
+        }
+
+        panel.setSize(content_panel.getSize()); // Ajusta el tamaño del panel al contenedor
+        panel.setLocation(0, 0);
+
+        content_panel.removeAll();
+        content_panel.add(panel, BorderLayout.CENTER);
         content_panel.revalidate();
         content_panel.repaint();
-    }
-    
-    /**
-     * Creates new form Main
-     */
-    public Main() {
-    initComponents();
-    this.setTitle("Carpooling");
     }
 
     /**
@@ -51,7 +59,6 @@ public class Main extends javax.swing.JFrame {
         content_panel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(900, 500));
         setResizable(false);
 
         content_panel.setBackground(new java.awt.Color(255, 255, 255));
@@ -87,7 +94,7 @@ public class Main extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws SQLException {
+    public static void main(String args[])  {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -101,20 +108,15 @@ public class Main extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //ConnectDB.insertPhoneType(1, "Casa", "c.hidalgo", Date.valueOf("2025-04-19"), "", null);
-        
-         System.out.println(ConnectDB.ping()
-            ? "✅  DB connection OK"
-            : "❌  DB connection FAILED");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
