@@ -1,48 +1,43 @@
 package com.tec.carpooling;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.tec.carpooling.presentation.view.HomePage;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import java.awt.Font;
 
 /**
  * Main class containing the entry point for the Carpooling application.
+ * Configures FlatLaf Look and Feel with Roboto font.
  */
 public class MainApp {
 
+    private static final int DEFAULT_FONT_SIZE = 13;
+
     /**
      * Main application entry point.
-     * @param args command line arguments
+     * @param args command line arguments (not used)
      */
     public static void main(String[] args) {
-        setupLookAndFeel();
+        setupLookAndFeelAndFont();
         initializeApplication();
         launchUserInterface();
     }
 
     /**
-     * Configures the graphical user interface Look and Feel.
-     * Tries to use Nimbus, and falls back to the system L&F if unavailable.
+     * Configures the FlatLaf Look and Feel and sets Roboto as the default font.
      */
-    private static void setupLookAndFeel() {
+    private static void setupLookAndFeelAndFont() {
         try {
-            boolean nimbusFound = false;
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    nimbusFound = true;
-                    break; // Nimbus found, no need to continue
-                }
-            }
-            // If Nimbus not found, use system default
-            if (!nimbusFound) {
-                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            }
+            FlatRobotoFont.install();
+            UIManager.setLookAndFeel(new FlatLightLaf());
+            UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, DEFAULT_FONT_SIZE));
+            System.out.println("FlatLaf Look and Feel with Roboto font initialized successfully.");
         } catch (Exception ex) {
-            // Print a more informative error message
-            System.err.println("Failed to initialize Look and Feel: " + ex.getMessage());
-            // Optionally print stack trace for debugging
-            // ex.printStackTrace();
+            System.err.println("Failed to initialize FlatLaf Look and Feel: " + ex.getMessage());
         }
     }
 
@@ -50,27 +45,21 @@ public class MainApp {
      * Performs necessary application initializations.
      */
     private static void initializeApplication() {
-        System.out.println("Starting Carpooling TEC...");
-        // Add any other necessary initialization here
+        System.out.println("Starting Carpooling Application...");
     }
 
     /**
      * Launches the main user interface of the application.
-     * Now loads HomePage directly.
+     * Creates and configures the HomePage window on the Event Dispatch Thread.
      */
     private static void launchUserInterface() {
-        // Ensures GUI creation happens on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
-            // Create and directly display the HomePage window
-            // Assuming HomePage extends JFrame or is a JFrame
             HomePage homePageFrame = new HomePage();
-
-            // Set essential properties for the main window
-            homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ensures application terminates when window is closed
-            homePageFrame.setTitle("Carpooling TEC"); // Set a meaningful title
-            // homePageFrame.pack(); // Adjust size to fit components (use if needed)
-            homePageFrame.setLocationRelativeTo(null); // Center window on screen
-            homePageFrame.setVisible(true); // Make window visible
+            homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            homePageFrame.setTitle("Carpooling TEC"); // Change to obtain the name from database
+            homePageFrame.pack();
+            homePageFrame.setLocationRelativeTo(null);
+            homePageFrame.setVisible(true);
         });
     }
 }
