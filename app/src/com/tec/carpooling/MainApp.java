@@ -1,53 +1,76 @@
 package com.tec.carpooling;
 
 import com.tec.carpooling.presentation.view.HomePage;
-import com.tec.carpooling.presentation.view.MainFrame;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
- * Main class that contains the entry point for the Carpooling application.
+ * Main class containing the entry point for the Carpooling application.
  */
 public class MainApp {
 
     /**
-     * Main entry point of the application.
-     * @param args the command line arguments
+     * Main application entry point.
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         setupLookAndFeel();
         initializeApplication();
         launchUserInterface();
     }
-    
+
+    /**
+     * Configures the graphical user interface Look and Feel.
+     * Tries to use Nimbus, and falls back to the system L&F if unavailable.
+     */
     private static void setupLookAndFeel() {
         try {
+            boolean nimbusFound = false;
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
-                    return;
+                    nimbusFound = true;
+                    break; // Nimbus found, no need to continue
                 }
             }
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            // If Nimbus not found, use system default
+            if (!nimbusFound) {
+                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
         } catch (Exception ex) {
-            System.err.println("Failed to initialize Look and Feel");
+            // Print a more informative error message
+            System.err.println("Failed to initialize Look and Feel: " + ex.getMessage());
+            // Optionally print stack trace for debugging
+            // ex.printStackTrace();
         }
     }
-    
+
+    /**
+     * Performs necessary application initializations.
+     */
     private static void initializeApplication() {
         System.out.println("Starting Carpooling TEC...");
+        // Add any other necessary initialization here
     }
-    
+
+    /**
+     * Launches the main user interface of the application.
+     * Now loads HomePage directly.
+     */
     private static void launchUserInterface() {
+        // Ensures GUI creation happens on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame();
-            JFrame initialPanel = new HomePage();
-            
-            // CAMBIAR HomePage para que sea un JPanel
-            //mainFrame.render_panel(initialPanel);
-            //mainFrame.setVisible(true);
+            // Create and directly display the HomePage window
+            // Assuming HomePage extends JFrame or is a JFrame
+            HomePage homePageFrame = new HomePage();
+
+            // Set essential properties for the main window
+            homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ensures application terminates when window is closed
+            homePageFrame.setTitle("Carpooling TEC"); // Set a meaningful title
+            // homePageFrame.pack(); // Adjust size to fit components (use if needed)
+            homePageFrame.setLocationRelativeTo(null); // Center window on screen
+            homePageFrame.setVisible(true); // Make window visible
         });
     }
 }
