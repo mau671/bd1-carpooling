@@ -797,8 +797,8 @@ CREATE TABLE PU.PERSONUSER (
                              INITIAL 10K NEXT 10K MINEXTENTS 1 
                              MAXEXTENTS UNLIMITED PCTINCREASE 0
                          ),
-    username          VARCHAR2(50) NOT NULL,
-    password          VARCHAR2(50) NOT NULL,
+    username          VARCHAR2(50) CONSTRAINT user_username_nn NOT NULL CONSTRAINT user_username_uk UNIQUE,
+    password          VARCHAR2(50) CONSTRAINT user_password_nn NOT NULL, -- SHA-256 base64
     creator           VARCHAR2(50),
     creation_date     DATE,
     modifier          VARCHAR2(50),
