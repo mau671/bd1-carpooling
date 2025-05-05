@@ -2,11 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-<<<<<<< Updated upstream:app/src/com/tec/carpooling/presentation/view/HomePage.java
 package com.tec.carpooling.presentation.view;
-=======
-package View;
->>>>>>> Stashed changes:app/src/View/HomePage.java
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
