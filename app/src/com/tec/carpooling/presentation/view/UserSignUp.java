@@ -4,7 +4,15 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import com.github.lgooddatepicker.components.TimePickerSettings;
 import com.tec.carpooling.presentation.view.HomePage;
+import java.awt.Image;
+import java.net.URL;
+import java.util.Locale;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 /**
@@ -18,9 +26,35 @@ public class UserSignUp extends javax.swing.JFrame {
      */
     public UserSignUp() {
         initComponents();
+        customizeDatePicker();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+    
+    /**
+     * Customizes the date picker component with a specific icon and locale settings.
+     * Sets up the visual appearance and behavior of the date picker.
+     */
+    private void customizeDatePicker() {
+        URL dateImageURL = getClass().getResource("/Assets/datePickerIcon.png");
+        if (dateImageURL != null) {
+            Image dateImage = getToolkit().getImage(dateImageURL);
+            ImageIcon dateIcon = new ImageIcon(dateImage);
 
+            // Disable text field editing
+            dateOfBIrthPicker.getComponentDateTextField().setEditable(false);
+            dateOfBIrthPicker.getComponentDateTextField().setEnabled(false);
+            dateOfBIrthPicker.setDateToToday();
+            dateOfBIrthPicker.setLocale(Locale.ENGLISH);
+
+            // Set icon on button
+            JButton datePickerButton = dateOfBIrthPicker.getComponentToggleCalendarButton();
+            datePickerButton.setText("");
+            datePickerButton.setIcon(dateIcon); 
+        } else {
+            System.err.println("Image for date picker button not found.");
+        }
+    }
+      
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,7 +85,7 @@ public class UserSignUp extends javax.swing.JFrame {
         jTextFieldRegisterName4 = new javax.swing.JTextField();
         jPanel24 = new javax.swing.JPanel();
         name_label5 = new javax.swing.JLabel();
-        jTextFieldRegisterName5 = new javax.swing.JTextField();
+        dateOfBIrthPicker = new com.github.lgooddatepicker.components.DatePicker();
         jPanel2 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         name_label = new javax.swing.JLabel();
@@ -275,18 +309,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel24.add(name_label5, gridBagConstraints);
-
-        jTextFieldRegisterName5.setText("jTextField1");
-        jTextFieldRegisterName5.setPreferredSize(new java.awt.Dimension(150, 40));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 7;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
-        jPanel24.add(jTextFieldRegisterName5, gridBagConstraints);
+        jPanel24.add(dateOfBIrthPicker, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -717,6 +740,7 @@ public class UserSignUp extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonRegistro;
+    private com.github.lgooddatepicker.components.DatePicker dateOfBIrthPicker;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -757,7 +781,6 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldRegisterName2;
     private javax.swing.JTextField jTextFieldRegisterName3;
     private javax.swing.JTextField jTextFieldRegisterName4;
-    private javax.swing.JTextField jTextFieldRegisterName5;
     private javax.swing.JTextField jTextFieldRegisterName7;
     private javax.swing.JTextField jTextFieldRegisterName8;
     private javax.swing.JTextField jTextFieldRegisterName9;
