@@ -41,6 +41,18 @@ public class AgregarVehiculo extends javax.swing.JFrame {
         toolBar.add(adminConsultasButton);
         toolBar.add(salirButton);
         getContentPane().add(toolBar, BorderLayout.WEST);
+<<<<<<< HEAD
+=======
+        
+        // Load the image
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/carro.png"));
+
+        // Scale it to fit the label
+        Image scaledImage = icon.getImage().getScaledInstance(labelImagen.getWidth(), labelImagen.getHeight(), Image.SCALE_SMOOTH);
+
+        // Set the scaled image as icon
+        labelImagen.setIcon(new ImageIcon(scaledImage));
+>>>>>>> parent of b43a5ce (Intentando agregar un mapa a agregar ruta)
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         perfilButton.addActionListener(e -> {
