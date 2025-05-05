@@ -38,6 +38,7 @@ public class DatabaseConfig {
      * @return the database connection URL
      */
     public static String getDbUrl() {
+        System.out.println("Database URL: " + properties.getProperty("db.url"));
         return properties.getProperty("db.url");
     }
 
@@ -47,6 +48,7 @@ public class DatabaseConfig {
      * @return the database username
      */
     public static String getDbUsername() {
+        System.out.println("Database Username: " + properties.getProperty("db.username"));
         return properties.getProperty("db.username");
     }
 
@@ -56,6 +58,7 @@ public class DatabaseConfig {
      * @return the database password
      */
     public static String getDbPassword() {
+        System.out.println("Database Password: " + properties.getProperty("db.password"));
         return properties.getProperty("db.password");
     }
 
