@@ -2,9 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+<<<<<<< Updated upstream:app/src/com/tec/carpooling/presentation/view/UserSignUp.java
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.presentation.view.HomePage;
+=======
+package View;
+
+>>>>>>> Stashed changes:app/src/View/UserSignUp.java
 import javax.swing.JFrame;
 
 /**

@@ -5,6 +5,12 @@
 package com.tec.carpooling.presentation.view;
 
 import java.awt.BorderLayout;
+<<<<<<< Updated upstream:app/src/com/tec/carpooling/presentation/view/MainFrame.java
+=======
+import java.sql.Date;
+import java.sql.SQLException;
+import javax.swing.JFrame;
+>>>>>>> Stashed changes:app/src/View/Main.java
 import javax.swing.JPanel;
 
 /**
@@ -46,6 +52,17 @@ public class MainFrame extends javax.swing.JFrame {
         content_panel.revalidate();
         content_panel.repaint();
     }
+<<<<<<< Updated upstream:app/src/com/tec/carpooling/presentation/view/MainFrame.java
+=======
+    
+    /**
+     * Creates new form Main
+     */
+    public Main() {
+    initComponents();
+    this.setTitle("Carpooling");
+    }
+>>>>>>> Stashed changes:app/src/View/Main.java
 
     /**
      * This method is called from within the constructor to initialize the form.
