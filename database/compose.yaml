@@ -1,0 +1,42 @@
+# This docker-compose file defines the configuration for Oracle DB 11g R2 and specifies 
+# the volumes and networks needed for its operation.
+#
+# Service: oracle-db
+# - Image: gvenzl/oracle-xe:11 (Oracle Express Edition 11g)
+# - Container name: oracle-db-carpooling
+# - Restarts "unless-stopped"; the container will restart unless explicitly stopped.
+# - Runs under user "1000:1000".
+# - Environment variable:
+#   - ORACLE_PASSWORD: Sets the database password to "carpooling".
+# - Ports:
+#   - Maps local port 1521 to container port 1521, allowing connections to Oracle.
+# - Volume:
+#   - Mounts "./data/" to /u01/app/oracle/oradata for data persistence.
+# - Networks:
+#   - Associated with the "db-carpooling" network with static IP 172.99.0.2.
+#
+#
+# Networks:
+# - db-carpooling: Custom network with bridge driver.
+#   - IPAM (IP Address Management) configured with:
+#     - Subnet: 172.99.0.0/16, allowing static IP assignments for containers.
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:11
+    container_name: oracle-db-carpooling
+    restart: unless-stopped
+    user: "1000:1000"
+    environment:
+      ORACLE_PASSWORD: "carpooling"
+    volumes:
+      - ./data/:/u01/app/oracle/oradata
+    networks:
+      db-carpooling:
+        ipv4_address: 172.99.0.2
+
+networks:
+  db-carpooling:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.99.0.0/16
