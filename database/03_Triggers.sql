@@ -423,6 +423,9 @@ BEGIN
 END;
 /
 
+GRANT INSERT ON ADM.LOGS TO PU;
+GRANT UPDATE ON ADM.LOGS TO PU;
+GRANT SELECT ON ADM.LOGS TO PU;
 
 -- ============================================
 -- Creation of PU triggers
