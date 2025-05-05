@@ -547,6 +547,10 @@ CREATE TABLE PU.EMAIL (
     person_id         NUMBER NOT NULL,
     CONSTRAINT fk_EMAIL_PERSON
        FOREIGN KEY (person_id) REFERENCES ADM.PERSON(id)
+
+    domain_id        NUMBER NOT NULL, 
+    CONSTRAINT fk_EMAIL_DOMAIN
+       FOREIGN KEY (domain_id) REFERENCES ADM.DOMAIN(id)
 )
 TABLESPACE PU_Data
 STORAGE (
@@ -561,6 +565,7 @@ COMMENT ON COLUMN PU.EMAIL.creation_date IS 'Record creation date';
 COMMENT ON COLUMN PU.EMAIL.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.EMAIL.modification_date IS 'Record modification date';
 COMMENT ON COLUMN PU.EMAIL.person_id IS 'Foreign key to PERSON table';
+COMMENT ON COLUMN PU.EMAIL.domain_id IS 'Foreign key to DOMAIN table';
 
 -- ============================================
 -- 18. INSTITUTION Table (Master)
