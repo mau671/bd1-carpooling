@@ -1,8 +1,9 @@
 package com.tec.carpooling.business.service;
 
 import com.tec.carpooling.dto.LoginData;
+import com.tec.carpooling.dto.LoginResultDTO;
 import com.tec.carpooling.dto.UserRegistrationData;
-import com.tec.carpooling.data.dao.UserRegistrationException;
+import com.tec.carpooling.exception.UserRegistrationException;
 
 /**
  * Service interface for user-related operations.
@@ -21,13 +22,13 @@ public interface UserService {
     boolean registerUser(UserRegistrationData registrationData) throws UserRegistrationException, Exception;
 
     /**
-     * Validates user login credentials.
-     * 
-     * @param loginData Login credentials (username, plainPassword)
-     * @return true if credentials are valid, false otherwise
-     * @throws Exception If an error occurs during validation
+     * Valida las credenciales de inicio de sesión y determina los roles del usuario.
+     * @param loginData Datos de login (username, plainPassword).
+     * @return Un LoginResultDTO que contiene el User y sus roles si el login es exitoso,
+     *         o un DTO indicando fallo (user=null) si las credenciales son inválidas.
+     * @throws Exception Si ocurre un error durante la validación (ej: error de BD).
      */
-    boolean validateLogin(LoginData loginData) throws Exception;
+    LoginResultDTO validateLoginAndGetRoles(LoginData loginData) throws Exception;
 
     // Other user-related business methods...
 }

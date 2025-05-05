@@ -1,6 +1,8 @@
 package com.tec.carpooling.data.dao;
 
+import com.tec.carpooling.domain.entity.Gender;
 import java.sql.SQLException;
+import java.util.List;
 // Podrías añadir métodos findById, findAll, etc., más adelante
 // import com.tec.carpooling.domain.entity.Gender;
 // import java.util.List;
@@ -15,6 +17,8 @@ public interface GenderDAO {
      * @throws CatalogRegistrationException Si el nombre está vacío o el género ya existe (mapeado desde errores PL/SQL 20201, 20202).
      */
     void registerGender(String name) throws SQLException, CatalogRegistrationException;
+    
+    List<Gender> findAll() throws SQLException;
 
     // List<Gender> findAll() throws SQLException; // Ejemplo para el futuro
 }
