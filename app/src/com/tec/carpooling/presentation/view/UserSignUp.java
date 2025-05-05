@@ -6,7 +6,6 @@ package com.tec.carpooling.presentation.view;
 
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.TimePickerSettings;
-import com.tec.carpooling.presentation.view.HomePage;
 import java.awt.Image;
 import java.net.URL;
 import java.util.Locale;

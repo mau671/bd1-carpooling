@@ -4,7 +4,6 @@
  */
 package com.tec.carpooling.presentation.view;
 
-import com.tec.carpooling.presentation.view.HomePage;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
