@@ -12,6 +12,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.BoxLayout;
+import javax.swing.JToolBar;
+
 import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.Insets;
@@ -19,7 +21,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 import java.awt.Component;
-import javax.swing.JToolBar;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import java.util.function.BiConsumer;
+
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
 
 
@@ -34,6 +44,7 @@ public class CrearRuta extends javax.swing.JFrame {
      */
     public CrearRuta() {
         initComponents();
+        
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
         JButton perfilButton = new JButton("User Profile");
         JButton vehiculoInfoButton = new JButton("Your Vehicle Information");
@@ -63,6 +74,8 @@ public class CrearRuta extends javax.swing.JFrame {
         panelParadas.setLayout(new BoxLayout(panelParadas, BoxLayout.Y_AXIS));
         panelParadas.setMaximumSize(new Dimension (200, Integer.MAX_VALUE));
         panelParadas.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        cargarMapa();     // Llamas aquí o desde algún botón
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
@@ -145,32 +158,57 @@ public class CrearRuta extends javax.swing.JFrame {
         });
     }
     
-    private void agregarParadaVisual(String lat, String lon) {
-    JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-    fila.setBackground(new Color(240, 240, 240));
-    fila.setOpaque(true);
-    
-    JLabel lbl = new JLabel("Lat: " + lat + ", Lon: " + lon);
-    JButton btnX = new JButton("X");
-    
-    btnX.setMargin(new Insets(2, 5, 2, 5));
-    btnX.setForeground(Color.RED);
-    btnX.setBorder(BorderFactory.createEmptyBorder());
-    btnX.setContentAreaFilled(false);
+    private void cargarMapa() {
+        panelMapa.removeAll(); // Limpiar si ya había algo
 
-    btnX.addActionListener(e -> {
-        panelParadas.remove(fila);
+        JMapViewer map = new JMapViewer();
+        map.setDisplayPosition(new Coordinate(9.9281, -84.0907), 12);
+
+        map.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (javax.swing.SwingUtilities.isLeftMouseButton(e)) {
+                    ICoordinate coord = map.getPosition(e.getPoint());
+                    double lat = coord.getLat();
+                    double lon = coord.getLon();
+
+                    System.out.println("📍 Click en: " + lat + ", " + lon);
+                    agregarParadaVisual(String.format("%.5f", lat), String.format("%.5f", lon));
+                }
+            }
+        });
+
+        panelMapa.setLayout(new BorderLayout());
+        panelMapa.add(map, BorderLayout.CENTER);
+        panelMapa.revalidate();
+        panelMapa.repaint();
+    }
+    
+    private void agregarParadaVisual(String lat, String lon) {
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        fila.setBackground(new Color(240, 240, 240));
+        fila.setOpaque(true);
+
+        JLabel lbl = new JLabel("Lat: " + lat + ", Lon: " + lon);
+        JButton btnX = new JButton("X");
+
+        btnX.setMargin(new Insets(2, 5, 2, 5));
+        btnX.setForeground(Color.RED);
+        btnX.setBorder(BorderFactory.createEmptyBorder());
+        btnX.setContentAreaFilled(false);
+
+        btnX.addActionListener(e -> {
+            panelParadas.remove(fila);
+            panelParadas.revalidate();
+            panelParadas.repaint();
+        });
+
+        fila.add(btnX);
+        fila.add(lbl);
+        panelParadas.add(fila);
         panelParadas.revalidate();
         panelParadas.repaint();
-    });
-
-    fila.add(btnX);
-    fila.add(lbl);
-
-    panelParadas.add(fila);
-    panelParadas.revalidate();
-    panelParadas.repaint();
     }
 
     /**
@@ -210,15 +248,10 @@ public class CrearRuta extends javax.swing.JFrame {
         labelDestinoCan = new javax.swing.JLabel();
         boxDestinoCan = new javax.swing.JComboBox<>();
         labelDestino = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
+        panelMapa = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        labelLat = new javax.swing.JLabel();
-        textLat = new javax.swing.JTextField();
         labelParada = new javax.swing.JLabel();
-        jPanel10 = new javax.swing.JPanel();
-        labelLon = new javax.swing.JLabel();
-        textLon = new javax.swing.JTextField();
+        jPanel12 = new javax.swing.JPanel();
         botonParada = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
         boxPasajeros = new javax.swing.JComboBox<>();
@@ -250,8 +283,7 @@ public class CrearRuta extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 19;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.weighty = 5.0;
+        gridBagConstraints.gridy = 33;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 140);
         panelCrearViaje.add(botonAgregarViaje, gridBagConstraints);
 
@@ -263,9 +295,10 @@ public class CrearRuta extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 17;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 26;
         gridBagConstraints.gridwidth = 14;
-        gridBagConstraints.gridheight = 9;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 40);
@@ -444,40 +477,17 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 7;
         panelCrearViaje.add(jPanel8, gridBagConstraints);
 
-        jPanel12.setLayout(new java.awt.GridBagLayout());
+        panelMapa.setPreferredSize(new java.awt.Dimension(500, 400));
+        panelMapa.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 19;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
+        panelCrearViaje.add(panelMapa, gridBagConstraints);
 
         jPanel11.setLayout(new java.awt.GridBagLayout());
-
-        jPanel9.setLayout(new java.awt.GridBagLayout());
-
-        labelLat.setText("Latitud:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 210, 0, 5);
-        jPanel9.add(labelLat, gridBagConstraints);
-
-        textLat.setPreferredSize(new java.awt.Dimension(80, 25));
-        textLat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textLatActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 16;
-        gridBagConstraints.ipady = 3;
-        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
-        jPanel9.add(textLat, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
-        jPanel11.add(jPanel9, gridBagConstraints);
 
         labelParada.setText("Add stop points:");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -487,37 +497,15 @@ public class CrearRuta extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(50, 260, 8, 0);
         jPanel11.add(labelParada, gridBagConstraints);
 
-        jPanel10.setLayout(new java.awt.GridBagLayout());
-
-        labelLon.setText("Longitud:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 202, 0, 3);
-        jPanel10.add(labelLon, gridBagConstraints);
-
-        textLon.setPreferredSize(new java.awt.Dimension(80, 25));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 16;
-        gridBagConstraints.ipady = 3;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 4, 0);
-        jPanel10.add(textLon, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 17;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
-        jPanel11.add(jPanel10, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        panelCrearViaje.add(jPanel11, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 4;
-        jPanel12.add(jPanel11, gridBagConstraints);
+        jPanel12.setPreferredSize(new java.awt.Dimension(100, 46));
+        jPanel12.setLayout(new java.awt.GridBagLayout());
 
         botonParada.setBackground(new java.awt.Color(255, 255, 153));
         botonParada.setText("Agregar Parada");
@@ -536,9 +524,10 @@ public class CrearRuta extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 17;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 22;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 11;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 120);
         panelCrearViaje.add(jPanel12, gridBagConstraints);
 
         jPanel13.setLayout(new java.awt.GridBagLayout());
@@ -573,21 +562,8 @@ public class CrearRuta extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAgregarViajeActionPerformed
  
     private void botonParadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonParadaActionPerformed
-        String lat = textLat.getText().trim();
-        String lon = textLon.getText().trim();
 
-        if(!lat.isEmpty() && !lon.isEmpty()){
-        agregarParadaVisual(lat, lon);
-        textLat.setText("");
-        textLon.setText("");
-        } else{
-            JOptionPane.showMessageDialog(this, "Ingrese latitud y longitud.");
-        }
     }//GEN-LAST:event_botonParadaActionPerformed
-
-    private void textLatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textLatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textLatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -615,7 +591,7 @@ public class CrearRuta extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(CrearRuta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CarpoolingApp/1.0");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -635,7 +611,6 @@ public class CrearRuta extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxPartidaProv;
     private javax.swing.JComboBox<String> boxPasajeros;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
@@ -646,14 +621,11 @@ public class CrearRuta extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JLabel labelCrearViaje;
     private javax.swing.JLabel labelDestino;
     private javax.swing.JLabel labelDestinoCan;
     private javax.swing.JLabel labelDestinoDis;
     private javax.swing.JLabel labelDestinoProv;
-    private javax.swing.JLabel labelLat;
-    private javax.swing.JLabel labelLon;
     private javax.swing.JLabel labelParada;
     private javax.swing.JLabel labelPartida;
     private javax.swing.JLabel labelPartidaCan;
@@ -661,9 +633,8 @@ public class CrearRuta extends javax.swing.JFrame {
     private javax.swing.JLabel labelPasajeros;
     private javax.swing.JLabel labelProvinciaDis;
     private javax.swing.JPanel panelCrearViaje;
+    private javax.swing.JPanel panelMapa;
     private javax.swing.JPanel panelParadas;
     private javax.swing.JScrollPane scrollPanelLista;
-    private javax.swing.JTextField textLat;
-    private javax.swing.JTextField textLon;
     // End of variables declaration//GEN-END:variables
 }

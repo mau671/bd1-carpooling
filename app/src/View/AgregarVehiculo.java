@@ -48,10 +48,10 @@ public class AgregarVehiculo extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/carro.png"));
 
         // Scale it to fit the label
-        Image scaledImage = icon.getImage().getScaledInstance(labelImagen.getWidth(), labelImagen.getHeight(), Image.SCALE_SMOOTH);
+        //Image scaledImage = icon.getImage().getScaledInstance(labelImagen.getWidth(), labelImagen.getHeight(), Image.SCALE_SMOOTH);
 
         // Set the scaled image as icon
-        labelImagen.setIcon(new ImageIcon(scaledImage));
+        //labelImagen.setIcon(new ImageIcon(scaledImage));
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         perfilButton.addActionListener(e -> {
