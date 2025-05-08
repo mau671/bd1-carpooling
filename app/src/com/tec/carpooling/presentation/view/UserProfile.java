@@ -4,7 +4,7 @@
  */
 package com.tec.carpooling.presentation.view;
 
-import com.tec.carpooling.presentation.view.HomePage;
+import com.tec.carpooling.presentation.view.InitialPage;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,113 +14,15 @@ import javax.swing.JToolBar;
  *
  * @author hidal
  */
-public class InfoUsuario extends javax.swing.JFrame {
-
+public class UserProfile extends javax.swing.JFrame {
+    private String userRole;
     /**
      * Creates new form InfoUsuario
      */
-    public InfoUsuario() {
+    public UserProfile(String role) {
+        this.userRole = role;
         initComponents();
-        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
-        JButton perfilButton = new JButton("User Profile");
-        JButton vehiculoInfoButton = new JButton("Your Vehicle Information");
-        JButton agregarVehiculoButton = new JButton("Add a Vehicle");
-        JButton agendarViajeButton = new JButton("Schedule a Trip");
-        JButton buscarViajesButton = new JButton("Search for Trips");
-        JButton historialButton = new JButton("Activity Log");
-        JButton adminConsultasButton = new JButton("Queries");
-        JButton salirButton = new JButton("Log Out");
-        
-
-        // Add to toolbar
-        toolBar.add(perfilButton);
-        toolBar.add(vehiculoInfoButton);
-        toolBar.add(agregarVehiculoButton);
-        toolBar.add(agendarViajeButton);
-        toolBar.add(buscarViajesButton);
-        toolBar.add(historialButton);
-        toolBar.add(adminConsultasButton);
-        toolBar.add(salirButton);
-        getContentPane().add(toolBar, BorderLayout.WEST);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        perfilButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                InfoUsuario profile = new InfoUsuario();
-                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                profile.setVisible(true);
-
-                this.dispose();
-            });
-        });
-
-        /*vehiculoInfoButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        agregarVehiculoButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                AgregarVehiculo vehicle = new AgregarVehiculo();
-                vehicle.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                vehicle.setVisible(true);
-
-                this.dispose();
-            });
-        });
-
-        /*agendarViajeButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        /*buscarViajesButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        /*historialButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-        adminConsultasButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ConsultasAdmi queries = new ConsultasAdmi();
-                queries.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                queries.setVisible(true);
-
-                this.dispose();
-            });
-        });
-        salirButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                HomePage home = new HomePage();
-                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                home.setVisible(true);
-
-                this.dispose();
-            });
-        });
+        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
     }
 
     /**
@@ -197,16 +99,12 @@ public class InfoUsuario extends javax.swing.JFrame {
         jPanel22 = new javax.swing.JPanel();
         name_label4 = new javax.swing.JLabel();
         jPanel28 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        name_label6 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList<>();
         jLabel9 = new javax.swing.JLabel();
         jPanel29 = new javax.swing.JPanel();
-        botonAgregarNumero = new javax.swing.JButton();
-        botonAgregarCorreo = new javax.swing.JButton();
+        buttonAddNumber = new javax.swing.JButton();
+        buttonAddEmail = new javax.swing.JButton();
         jPanel34 = new javax.swing.JPanel();
-        botonModificar = new javax.swing.JButton();
+        buttonModifyProfile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -739,42 +637,6 @@ public class InfoUsuario extends javax.swing.JFrame {
         jPanel1.add(jPanel25, gridBagConstraints);
 
         jPanel28.setLayout(new java.awt.GridBagLayout());
-
-        jPanel6.setLayout(new java.awt.GridBagLayout());
-
-        name_label6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        name_label6.setText("Type of User:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        jPanel6.add(name_label6, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        jPanel28.add(jPanel6, gridBagConstraints);
-
-        jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane4.setViewportView(jList3);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 30;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        jPanel28.add(jScrollPane4, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 5;
@@ -795,16 +657,16 @@ public class InfoUsuario extends javax.swing.JFrame {
 
         jPanel29.setLayout(new java.awt.GridBagLayout());
 
-        botonAgregarNumero.setBackground(new java.awt.Color(18, 102, 160));
-        botonAgregarNumero.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botonAgregarNumero.setForeground(new java.awt.Color(255, 255, 255));
-        botonAgregarNumero.setText("Add Phone Number");
-        botonAgregarNumero.setMaximumSize(new java.awt.Dimension(85, 23));
-        botonAgregarNumero.setMinimumSize(new java.awt.Dimension(85, 23));
-        botonAgregarNumero.setPreferredSize(new java.awt.Dimension(140, 40));
-        botonAgregarNumero.addActionListener(new java.awt.event.ActionListener() {
+        buttonAddNumber.setBackground(new java.awt.Color(18, 102, 160));
+        buttonAddNumber.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonAddNumber.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAddNumber.setText("Add Phone Number");
+        buttonAddNumber.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonAddNumber.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonAddNumber.setPreferredSize(new java.awt.Dimension(140, 40));
+        buttonAddNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonAgregarNumeroActionPerformed(evt);
+                buttonAddNumberActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -815,18 +677,18 @@ public class InfoUsuario extends javax.swing.JFrame {
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel29.add(botonAgregarNumero, gridBagConstraints);
+        jPanel29.add(buttonAddNumber, gridBagConstraints);
 
-        botonAgregarCorreo.setBackground(new java.awt.Color(18, 102, 160));
-        botonAgregarCorreo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botonAgregarCorreo.setForeground(new java.awt.Color(255, 255, 255));
-        botonAgregarCorreo.setText("Add Email");
-        botonAgregarCorreo.setMaximumSize(new java.awt.Dimension(85, 23));
-        botonAgregarCorreo.setMinimumSize(new java.awt.Dimension(85, 23));
-        botonAgregarCorreo.setPreferredSize(new java.awt.Dimension(90, 40));
-        botonAgregarCorreo.addActionListener(new java.awt.event.ActionListener() {
+        buttonAddEmail.setBackground(new java.awt.Color(18, 102, 160));
+        buttonAddEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonAddEmail.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAddEmail.setText("Add Email");
+        buttonAddEmail.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonAddEmail.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonAddEmail.setPreferredSize(new java.awt.Dimension(90, 40));
+        buttonAddEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonAgregarCorreoActionPerformed(evt);
+                buttonAddEmailActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -837,7 +699,7 @@ public class InfoUsuario extends javax.swing.JFrame {
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel29.add(botonAgregarCorreo, gridBagConstraints);
+        jPanel29.add(buttonAddEmail, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -848,16 +710,16 @@ public class InfoUsuario extends javax.swing.JFrame {
 
         jPanel34.setLayout(new java.awt.GridBagLayout());
 
-        botonModificar.setBackground(new java.awt.Color(246, 172, 30));
-        botonModificar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botonModificar.setForeground(new java.awt.Color(255, 255, 255));
-        botonModificar.setText("Modify Profile");
-        botonModificar.setMaximumSize(new java.awt.Dimension(85, 23));
-        botonModificar.setMinimumSize(new java.awt.Dimension(85, 23));
-        botonModificar.setPreferredSize(new java.awt.Dimension(90, 40));
-        botonModificar.addActionListener(new java.awt.event.ActionListener() {
+        buttonModifyProfile.setBackground(new java.awt.Color(246, 172, 30));
+        buttonModifyProfile.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonModifyProfile.setForeground(new java.awt.Color(255, 255, 255));
+        buttonModifyProfile.setText("Modify Profile");
+        buttonModifyProfile.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonModifyProfile.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonModifyProfile.setPreferredSize(new java.awt.Dimension(90, 40));
+        buttonModifyProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonModificarActionPerformed(evt);
+                buttonModifyProfileActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -867,7 +729,7 @@ public class InfoUsuario extends javax.swing.JFrame {
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 0);
-        jPanel34.add(botonModificar, gridBagConstraints);
+        jPanel34.add(buttonModifyProfile, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -881,35 +743,35 @@ public class InfoUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonAgregarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCorreoActionPerformed
+    private void buttonAddEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddEmailActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            HomePage home = new HomePage();
+            InitialPage home = new InitialPage();
             home.setExtendedState(JFrame.MAXIMIZED_BOTH);
             home.setVisible(true);
 
             this.dispose();
         });
-    }//GEN-LAST:event_botonAgregarCorreoActionPerformed
+    }//GEN-LAST:event_buttonAddEmailActionPerformed
 
-    private void botonAgregarNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarNumeroActionPerformed
+    private void buttonAddNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddNumberActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            HomePage home = new HomePage();
+            InitialPage home = new InitialPage();
             home.setExtendedState(JFrame.MAXIMIZED_BOTH);
             home.setVisible(true);
 
             this.dispose();
         });
-    }//GEN-LAST:event_botonAgregarNumeroActionPerformed
+    }//GEN-LAST:event_buttonAddNumberActionPerformed
 
-    private void botonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificarActionPerformed
+    private void buttonModifyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyProfileActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            ModificarPerfil modify = new ModificarPerfil();
+            ModifyProfile modify = new ModifyProfile(userRole);
             modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
             modify.setVisible(true);
 
-            this.dispose();
+            UserProfile.this.dispose();
         });
-    }//GEN-LAST:event_botonModificarActionPerformed
+    }//GEN-LAST:event_buttonModifyProfileActionPerformed
 
     /**
      * @param args the command line arguments
@@ -928,35 +790,31 @@ public class InfoUsuario extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InfoUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InfoUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InfoUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InfoUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            private String userRole;
             public void run() {
-                new InfoUsuario().setVisible(true);
+                userRole = "Driver";
+                new UserProfile(userRole).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonAgregarCorreo;
-    private javax.swing.JButton botonAgregarNumero;
-    private javax.swing.JButton botonModificar;
+    private javax.swing.JButton buttonAddEmail;
+    private javax.swing.JButton buttonAddNumber;
+    private javax.swing.JButton buttonModifyProfile;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -972,7 +830,6 @@ public class InfoUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1006,14 +863,12 @@ public class InfoUsuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel labelProfile;
     private javax.swing.JLabel name_label;
@@ -1024,7 +879,6 @@ public class InfoUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel name_label3;
     private javax.swing.JLabel name_label4;
     private javax.swing.JLabel name_label5;
-    private javax.swing.JLabel name_label6;
     private javax.swing.JLabel name_label7;
     private javax.swing.JLabel name_label8;
     private javax.swing.JLabel name_label9;

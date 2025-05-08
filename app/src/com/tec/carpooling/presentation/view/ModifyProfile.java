@@ -13,113 +13,15 @@ import javax.swing.JToolBar;
  *
  * @author hidal
  */
-public class ModificarPerfil extends javax.swing.JFrame {
-
+public class ModifyProfile extends javax.swing.JFrame {
+    private String userRole;
     /**
      * Creates new form ModificarPerfil
      */
-    public ModificarPerfil() {
+    public ModifyProfile(String role) {
+        this.userRole = role;
         initComponents();
-        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
-        JButton perfilButton = new JButton("User Profile");
-        JButton vehiculoInfoButton = new JButton("Your Vehicle Information");
-        JButton agregarVehiculoButton = new JButton("Add a Vehicle");
-        JButton agendarViajeButton = new JButton("Schedule a Trip");
-        JButton buscarViajesButton = new JButton("Search for Trips");
-        JButton historialButton = new JButton("Activity Log");
-        JButton adminConsultasButton = new JButton("Queries");
-        JButton salirButton = new JButton("Log Out");
-        
-
-        // Add to toolbar
-        toolBar.add(perfilButton);
-        toolBar.add(vehiculoInfoButton);
-        toolBar.add(agregarVehiculoButton);
-        toolBar.add(agendarViajeButton);
-        toolBar.add(buscarViajesButton);
-        toolBar.add(historialButton);
-        toolBar.add(adminConsultasButton);
-        toolBar.add(salirButton);
-        getContentPane().add(toolBar, BorderLayout.WEST);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        perfilButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                InfoUsuario profile = new InfoUsuario();
-                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                profile.setVisible(true);
-
-                this.dispose();
-            });
-        });
-
-        /*vehiculoInfoButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        agregarVehiculoButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                AgregarVehiculo vehicle = new AgregarVehiculo();
-                vehicle.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                vehicle.setVisible(true);
-
-                this.dispose();
-            });
-        });
-
-        /*agendarViajeButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        /*buscarViajesButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        /*historialButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-        adminConsultasButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ConsultasAdmi queries = new ConsultasAdmi();
-                queries.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                queries.setVisible(true);
-
-                this.dispose();
-            });
-        });
-        salirButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                HomePage home = new HomePage();
-                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                home.setVisible(true);
-
-                this.dispose();
-            });
-        });
+        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
     }
 
     /**
@@ -187,10 +89,6 @@ public class ModificarPerfil extends javax.swing.JFrame {
         jPanel40 = new javax.swing.JPanel();
         name_label13 = new javax.swing.JLabel();
         jTextFieldRegisterName10 = new javax.swing.JTextField();
-        jPanel6 = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        name_label6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -237,6 +135,7 @@ public class ModificarPerfil extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipady = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jButton1, gridBagConstraints);
@@ -727,45 +626,6 @@ public class ModificarPerfil extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 160, 0, 0);
         jPanel1.add(jPanel40, gridBagConstraints);
 
-        jPanel6.setLayout(new java.awt.GridBagLayout());
-
-        jCheckBox1.setText("Passenger");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel6.add(jCheckBox1, gridBagConstraints);
-
-        jCheckBox2.setText("Driver");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel6.add(jCheckBox2, gridBagConstraints);
-
-        name_label6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        name_label6.setText("Type of User:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
-        jPanel6.add(name_label6, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
-        jPanel1.add(jPanel6, gridBagConstraints);
-
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -773,17 +633,13 @@ public class ModificarPerfil extends javax.swing.JFrame {
 
     private void botonModificadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonModificadoActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            InfoUsuario profile = new InfoUsuario();
+            UserProfile profile = new UserProfile(userRole);
             profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
             profile.setVisible(true);
 
-            this.dispose();
+            ModifyProfile.this.dispose();
         });
     }//GEN-LAST:event_botonModificadoActionPerformed
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -802,20 +658,23 @@ public class ModificarPerfil extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ModificarPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyProfile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            private String userRole;
             public void run() {
-                new ModificarPerfil().setVisible(true);
+                userRole = "Driver";
+                new ModifyProfile(userRole).setVisible(true);
             }
         });
     }
@@ -827,8 +686,6 @@ public class ModificarPerfil extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JComboBox<String> jComboBox7;
@@ -856,7 +713,6 @@ public class ModificarPerfil extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JTextField jTextFieldRegisterName10;
     private javax.swing.JTextField jTextFieldRegisterName2;
@@ -876,7 +732,6 @@ public class ModificarPerfil extends javax.swing.JFrame {
     private javax.swing.JLabel name_label3;
     private javax.swing.JLabel name_label4;
     private javax.swing.JLabel name_label5;
-    private javax.swing.JLabel name_label6;
     private javax.swing.JLabel name_label7;
     private javax.swing.JLabel name_label8;
     private javax.swing.JLabel name_label9;

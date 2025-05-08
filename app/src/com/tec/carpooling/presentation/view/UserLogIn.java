@@ -187,11 +187,11 @@ public class UserLogIn extends javax.swing.JFrame {
 
     private void botonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIngresarActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            InfoUsuario profile = new InfoUsuario();
-            profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            profile.setVisible(true);
+            UserType type = new UserType();
+            type.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            type.setVisible(true);
 
-            this.dispose();
+            UserLogIn.this.dispose();
         });
     }//GEN-LAST:event_botonIngresarActionPerformed
     

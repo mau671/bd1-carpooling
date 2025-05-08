@@ -16,34 +16,13 @@ import javax.swing.JToolBar;
  *
  * @author hidal
  */
-public class ConsultasAdmi extends javax.swing.JFrame {
+public class QueriesAdmi extends javax.swing.JFrame {
 
     /**
      * Creates new form ConsultasAdmi
      */
-    public ConsultasAdmi() {
+    public QueriesAdmi() {
         initComponents();
-        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
-        JButton perfilButton = new JButton("User Profile");
-        JButton vehiculoInfoButton = new JButton("Your Vehicle Information");
-        JButton agregarVehiculoButton = new JButton("Add a Vehicle");
-        JButton agendarViajeButton = new JButton("Schedule a Trip");
-        JButton buscarViajesButton = new JButton("Search for Trips");
-        JButton historialButton = new JButton("Activity Log");
-        JButton adminConsultasButton = new JButton("Queries");
-        JButton salirButton = new JButton("Log Out");
-        
-
-        // Add to toolbar
-        toolBar.add(perfilButton);
-        toolBar.add(vehiculoInfoButton);
-        toolBar.add(agregarVehiculoButton);
-        toolBar.add(agendarViajeButton);
-        toolBar.add(buscarViajesButton);
-        toolBar.add(historialButton);
-        toolBar.add(adminConsultasButton);
-        toolBar.add(salirButton);
-        getContentPane().add(toolBar, BorderLayout.WEST);
         
         // Para el panel con card layout
         cardPanel.add(scrollConductores, "Top 5 drivers with the most trips done");
@@ -53,85 +32,6 @@ public class ConsultasAdmi extends javax.swing.JFrame {
         cardPanel.add(montoCobrado, "Average amount of charged by drivers");
         cardPanel.add(cantidadUsuarios, "Amount of new users in the last 3 months");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        perfilButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                InfoUsuario profile = new InfoUsuario();
-                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                profile.setVisible(true);
-
-                this.dispose();
-            });
-        });
-
-        /*vehiculoInfoButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        agregarVehiculoButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                AgregarVehiculo vehicle = new AgregarVehiculo();
-                vehicle.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                vehicle.setVisible(true);
-
-                this.dispose();
-            });
-        });
-
-        /*agendarViajeButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        /*buscarViajesButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-
-        /*historialButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModificarPerfil modify = new ModificarPerfil();
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
-
-                this.dispose();
-            });
-        });*/
-        adminConsultasButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ConsultasAdmi queries = new ConsultasAdmi();
-                queries.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                queries.setVisible(true);
-
-                this.dispose();
-            });
-        });
-        
-        salirButton.addActionListener(e -> {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                HomePage home = new HomePage();
-                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                home.setVisible(true);
-
-                this.dispose();
-            });
-        });
     }
 
     /**
@@ -333,20 +233,21 @@ public class ConsultasAdmi extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultasAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultasAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultasAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultasAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultasAdmi().setVisible(true);
+                new QueriesAdmi().setVisible(true);
             }
         });
     }
