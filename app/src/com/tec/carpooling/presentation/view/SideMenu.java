@@ -16,7 +16,7 @@ public class SideMenu {
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
 
         JButton profileButton = new JButton("User Profile");
-        JButton vehicleInfoButton = new JButton("Your Vehicle Information");
+        JButton vehicleInfoButton = new JButton("Registered Vehicles");
         JButton scheduleTripButton = new JButton("Schedule a Trip");
         JButton searchTripButton = new JButton("Search for Trips");
         JButton logButton = new JButton("Activity Log");
@@ -56,10 +56,13 @@ public class SideMenu {
             parentFrame.dispose();
         });
 
-        /*vehicleInfoButton.addActionListener(e -> {
-            new VehiculoInfo(userRole).setVisible(true);
+        vehicleInfoButton.addActionListener(e -> {
+            RegisteredVehicle vehicle = new RegisteredVehicle(userRole);
+            vehicle.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            vehicle.setVisible(true);
+            
             parentFrame.dispose();
-        });*/
+        });
 
         /*scheduleTripButton.addActionListener(e -> {
             new AgendarViaje(userRole).setVisible(true);
@@ -72,7 +75,10 @@ public class SideMenu {
         });*/
 
         logoutButton.addActionListener(e -> {
-            new InitialPage().setVisible(true);
+            InitialPage home = new InitialPage();
+            home.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            home.setVisible(true);
+            
             parentFrame.dispose();
         });
 

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.tec.carpooling.presentation.view;
+package com.tec.carpooling.presentation.view.admin;
 
 import java.awt.BorderLayout;
 import javax.swing.JComboBox;
@@ -16,12 +16,12 @@ import javax.swing.JToolBar;
  *
  * @author hidal
  */
-public class QueriesAdmi extends javax.swing.JFrame {
+public class Queries extends javax.swing.JFrame {
 
     /**
      * Creates new form ConsultasAdmi
      */
-    public QueriesAdmi() {
+    public Queries() {
         initComponents();
         
         // Para el panel con card layout
@@ -233,21 +233,23 @@ public class QueriesAdmi extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(QueriesAdmi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new QueriesAdmi().setVisible(true);
+                new Queries().setVisible(true);
             }
         });
     }
