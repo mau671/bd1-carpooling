@@ -47,17 +47,18 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
+
 /**
  *
  * @author hidal
  */
-public class CreateRoute extends javax.swing.JFrame {
+public class ModifyRoute extends javax.swing.JFrame {
     private String userRole;
     private JMapViewer map;
     /**
      * Creates new form CrearRuta
      */
-    public CreateRoute(String role) {
+    public ModifyRoute(String role) {
         this.userRole = role;
         System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CarpoolingApp/1.0");
         initComponents();
@@ -257,7 +258,6 @@ public class CreateRoute extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al buscar la ubicación.");
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -268,12 +268,12 @@ public class CreateRoute extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        panelAddRoute = new javax.swing.JPanel();
-        labelCreateRoute = new javax.swing.JLabel();
+        panelModifyRoute = new javax.swing.JPanel();
+        labelModifyRoute = new javax.swing.JLabel();
         labelStop = new javax.swing.JLabel();
         panelMapStops = new javax.swing.JPanel();
         panelMap = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
+        panelList = new javax.swing.JPanel();
         scrollPanelList = new javax.swing.JScrollPane();
         panelStops = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
@@ -308,15 +308,15 @@ public class CreateRoute extends javax.swing.JFrame {
         panelPassengers = new javax.swing.JPanel();
         boxPassengers = new javax.swing.JComboBox<>();
         labelPassengers = new javax.swing.JLabel();
-        buttonAddTrip = new javax.swing.JButton();
+        buttonModifyTrip = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        panelAddRoute.setLayout(new java.awt.GridBagLayout());
+        panelModifyRoute.setLayout(new java.awt.GridBagLayout());
 
-        labelCreateRoute.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
-        labelCreateRoute.setForeground(new java.awt.Color(18, 102, 160));
-        labelCreateRoute.setText("CREATE ROUTE");
+        labelModifyRoute.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
+        labelModifyRoute.setForeground(new java.awt.Color(18, 102, 160));
+        labelModifyRoute.setText("MODIFY ROUTE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -325,7 +325,7 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 330, 0, 0);
-        panelAddRoute.add(labelCreateRoute, gridBagConstraints);
+        panelModifyRoute.add(labelModifyRoute, gridBagConstraints);
 
         labelStop.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelStop.setText("<html>Add Stop Points: <span style='color:red'>*</span></html>");
@@ -334,7 +334,7 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 80;
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 10, 30);
-        panelAddRoute.add(labelStop, gridBagConstraints);
+        panelModifyRoute.add(labelStop, gridBagConstraints);
 
         panelMapStops.setMinimumSize(new java.awt.Dimension(500, 500));
         panelMapStops.setLayout(new javax.swing.BoxLayout(panelMapStops, javax.swing.BoxLayout.Y_AXIS));
@@ -344,7 +344,7 @@ public class CreateRoute extends javax.swing.JFrame {
         panelMap.setLayout(new java.awt.BorderLayout());
         panelMapStops.add(panelMap);
 
-        jPanel11.setLayout(new java.awt.BorderLayout());
+        panelList.setLayout(new java.awt.BorderLayout());
 
         scrollPanelList.setAlignmentX(0.0F);
         scrollPanelList.setAlignmentY(0.1F);
@@ -359,25 +359,25 @@ public class CreateRoute extends javax.swing.JFrame {
         panelStops.setLayout(new javax.swing.BoxLayout(panelStops, javax.swing.BoxLayout.Y_AXIS));
         scrollPanelList.setViewportView(panelStops);
 
-        jPanel11.add(scrollPanelList, java.awt.BorderLayout.CENTER);
+        panelList.add(scrollPanelList, java.awt.BorderLayout.CENTER);
 
-        panelMapStops.add(jPanel11);
+        panelMapStops.add(panelList);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
-        panelAddRoute.add(panelMapStops, gridBagConstraints);
+        panelModifyRoute.add(panelMapStops, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 23;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.weightx = 0.1;
-        panelAddRoute.add(filler1, gridBagConstraints);
+        panelModifyRoute.add(filler1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 18;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.weightx = 0.1;
-        panelAddRoute.add(filler2, gridBagConstraints);
+        panelModifyRoute.add(filler2, gridBagConstraints);
 
         panelSearch.setLayout(new java.awt.GridBagLayout());
 
@@ -405,7 +405,7 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 20);
-        panelAddRoute.add(panelSearch, gridBagConstraints);
+        panelModifyRoute.add(panelSearch, gridBagConstraints);
 
         panelInfo.setLayout(new java.awt.GridBagLayout());
 
@@ -632,14 +632,14 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 0);
         panelInfo.add(panelTimes, gridBagConstraints);
 
-        buttonAddTrip.setBackground(new java.awt.Color(246, 172, 30));
-        buttonAddTrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonAddTrip.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAddTrip.setText("Add Trip");
-        buttonAddTrip.setPreferredSize(new java.awt.Dimension(110, 40));
-        buttonAddTrip.addActionListener(new java.awt.event.ActionListener() {
+        buttonModifyTrip.setText("Save Chnages");
+        buttonModifyTrip.setBackground(new java.awt.Color(246, 172, 30));
+        buttonModifyTrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonModifyTrip.setForeground(new java.awt.Color(255, 255, 255));
+        buttonModifyTrip.setPreferredSize(new java.awt.Dimension(110, 40));
+        buttonModifyTrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddTripActionPerformed(evt);
+                buttonModifyTripActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -648,7 +648,7 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.ipady = 20;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 0);
-        panelInfo.add(buttonAddTrip, gridBagConstraints);
+        panelInfo.add(buttonModifyTrip, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -656,29 +656,12 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 23;
         gridBagConstraints.ipadx = 50;
-        panelAddRoute.add(panelInfo, gridBagConstraints);
+        panelModifyRoute.add(panelInfo, gridBagConstraints);
 
-        getContentPane().add(panelAddRoute, java.awt.BorderLayout.CENTER);
+        getContentPane().add(panelModifyRoute, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void buttonAddTripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddTripActionPerformed
-        // Check if at least one stop was added
-        if (panelStops.getComponentCount() == 0) {
-            JOptionPane.showMessageDialog(null, "Please add at least one stop.");
-            return;
-        }
-        JOptionPane.showMessageDialog(null, "Trip scheduled successfully!");
-        // Go back to vehicle registration screen
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            ViewTrip trip = new ViewTrip(userRole);
-            trip.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            trip.setVisible(true);
-
-            CreateRoute.this.dispose();
-        });
-    }//GEN-LAST:event_buttonAddTripActionPerformed
 
     private void textSearchPlaceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSearchPlaceKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -688,7 +671,24 @@ public class CreateRoute extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_textSearchPlaceKeyPressed
- 
+
+    private void buttonModifyTripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyTripActionPerformed
+        // Check if at least one stop was added
+        if (panelStops.getComponentCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Please add at least one stop.");
+            return;
+        }
+        JOptionPane.showMessageDialog(null, "Trip modified successfully!");
+        // Go back to View Trip window
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            ViewTrip trip = new ViewTrip(userRole);
+            trip.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            trip.setVisible(true);
+
+            ModifyRoute.this.dispose();
+        });
+    }//GEN-LAST:event_buttonModifyTripActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -706,21 +706,22 @@ public class CreateRoute extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CreateRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CreateRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CreateRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CreateRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
             public void run() {
                 userRole = "Driver";
-                new CreateRoute(userRole).setVisible(true);
+                new ModifyRoute(userRole).setVisible(true);
             }
         });
     }
@@ -733,15 +734,14 @@ public class CreateRoute extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxStartC;
     private javax.swing.JComboBox<String> boxStartD;
     private javax.swing.JComboBox<String> boxStartP;
-    private javax.swing.JButton buttonAddTrip;
+    private javax.swing.JButton buttonModifyTrip;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JLabel labelCreateRoute;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelEndC;
     private javax.swing.JLabel labelEndD;
     private javax.swing.JLabel labelEndP;
+    private javax.swing.JLabel labelModifyRoute;
     private javax.swing.JLabel labelPassengers;
     private javax.swing.JLabel labelSearch;
     private javax.swing.JLabel labelStart;
@@ -749,14 +749,15 @@ public class CreateRoute extends javax.swing.JFrame {
     private javax.swing.JLabel labelStartD;
     private javax.swing.JLabel labelStartP;
     private javax.swing.JLabel labelStop;
-    private javax.swing.JPanel panelAddRoute;
     private javax.swing.JPanel panelEnd;
     private javax.swing.JPanel panelEndC;
     private javax.swing.JPanel panelEndD;
     private javax.swing.JPanel panelEndP;
     private javax.swing.JPanel panelInfo;
+    private javax.swing.JPanel panelList;
     private javax.swing.JPanel panelMap;
     private javax.swing.JPanel panelMapStops;
+    private javax.swing.JPanel panelModifyRoute;
     private javax.swing.JPanel panelPassengers;
     private javax.swing.JPanel panelSearch;
     private javax.swing.JPanel panelStart;

@@ -695,6 +695,7 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 65;
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -745,21 +746,17 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void buttonAddEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddEmailActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            InitialPage home = new InitialPage();
-            home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            home.setVisible(true);
-
-            this.dispose();
+            AddEmail email = new AddEmail();
+            email.setVisible(true);
+            email.setLocationRelativeTo(null); // center on screen
         });
     }//GEN-LAST:event_buttonAddEmailActionPerformed
 
     private void buttonAddNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddNumberActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            InitialPage home = new InitialPage();
-            home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            home.setVisible(true);
-
-            this.dispose();
+            AddPhone phone = new AddPhone();
+            phone.setVisible(true);
+            phone.setLocationRelativeTo(null); // center on screen
         });
     }//GEN-LAST:event_buttonAddNumberActionPerformed
 

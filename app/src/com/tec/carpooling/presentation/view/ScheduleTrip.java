@@ -8,12 +8,17 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import java.net.URL;
 import java.util.Locale;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -29,16 +34,62 @@ public class ScheduleTrip extends javax.swing.JFrame {
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
         customizeDatePicker();
-        
+        textPrice.setToolTipText("Write 0 for no charge.");
         textPrice.addKeyListener(new KeyAdapter() {
-            @Override
+             @Override
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
-                if (!Character.isDigit(c)) {
-                    e.consume(); // block the input
+
+                // Allow digits and one dot
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                    return;
+                }
+
+                // Prevent more than one dot
+                if (c == '.' && textPrice.getText().contains(".")) {
+                    e.consume();
                 }
             }
         });
+        textPrice.getDocument().addDocumentListener(new DocumentListener() {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            checkPriceField();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            checkPriceField();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            checkPriceField();
+        }
+
+        private void checkPriceField() {
+            String text = textPrice.getText().trim();
+            if (text.isEmpty()) {
+                // Optional: disable if empty
+                boxCurrency.setEnabled(false);
+                boxMethod.setEnabled(false);
+                return;
+            }
+
+            try {
+                double price = Double.parseDouble(text);
+                boolean isFree = price == 0.0;
+
+                boxCurrency.setEnabled(!isFree);
+                boxMethod.setEnabled(!isFree);
+            } catch (NumberFormatException ex) {
+                // Optional: disable if invalid input
+                boxCurrency.setEnabled(false);
+                boxMethod.setEnabled(false);
+            }
+        }
+    });
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
@@ -90,7 +141,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         labelCurrency = new javax.swing.JLabel();
         boxCurrency = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        buttonAddRoute = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel7 = new javax.swing.JPanel();
@@ -100,21 +151,22 @@ public class ScheduleTrip extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         labelEndTime = new javax.swing.JLabel();
         boxEndTime = new javax.swing.JComboBox<>();
+        jPanel8 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
+        labelAddTrip.setText("SCHEDULE TRIP");
         labelAddTrip.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
         labelAddTrip.setForeground(new java.awt.Color(18, 102, 160));
-        labelAddTrip.setText("ADD TRIP");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 22;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 360, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 300, 0, 0);
         jPanel1.add(labelAddTrip, gridBagConstraints);
 
         panelDate.setLayout(new java.awt.GridBagLayout());
@@ -182,7 +234,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         jPanel4.add(boxMethod, gridBagConstraints);
 
         labelMethod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelMethod.setText("Payment Method:");
+        labelMethod.setText("<html>Payment Method: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -199,7 +251,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         labelSeats.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelSeats.setText("Seat Availability:");
+        labelSeats.setText("<html>Seat Availability: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.ipadx = 10;
@@ -221,7 +273,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         labelCurrency.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelCurrency.setText("Currency:");
+        labelCurrency.setText("<html>Currency: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.ipadx = 10;
@@ -240,13 +292,13 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         jPanel1.add(jPanel6, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(18, 102, 160));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Add Route");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonAddRoute.setText("Add Route");
+        buttonAddRoute.setBackground(new java.awt.Color(18, 102, 160));
+        buttonAddRoute.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonAddRoute.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAddRoute.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonAddRouteActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -254,7 +306,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.gridy = 8;
         gridBagConstraints.ipady = 30;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 40, 0);
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(buttonAddRoute, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 18;
         gridBagConstraints.gridy = 9;
@@ -272,7 +324,12 @@ public class ScheduleTrip extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        boxStartTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxStartTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "05:00AM", "05:30AM", "06:00AM", "06:30AM", "07:00AM", "07:30AM", "08:00AM", "08:30AM", "09:00AM", "09:30AM", "10:00AM", "10:30AM", "11:00AM", "11:30AM", "12:00PM", "12:30PM", "01:00PM", "01:30PM", "02:00PM", "02:30PM", "03:00PM", "03:30PM", "04:00PM", "04:30PM", "05:00PM", "05:30PM", "06:00PM", "06:30PM", "07:00PM", "07:30PM", "08:00PM", "08:30PM", "09:00PM", "09:30PM", "10:00PM", "10:30PM", "11:00PM", "11:30PM" }));
+        boxStartTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxStartTimeActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -280,7 +337,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         jPanel3.add(boxStartTime, gridBagConstraints);
 
         labelStartTime.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelStartTime.setText("Start Time:");
+        labelStartTime.setText("<html>Start Time: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -297,7 +354,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         labelEndTime.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelEndTime.setText("End Time:");
+        labelEndTime.setText("<html>End Time: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -305,7 +362,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 7);
         jPanel2.add(labelEndTime, gridBagConstraints);
 
-        boxEndTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxEndTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "05:30AM", "06:00AM", "06:30AM", "07:00AM", "07:30AM", "08:00AM", "08:30AM", "09:00AM", "09:30AM", "10:00AM", "10:30AM", "11:00AM", "11:30AM", "12:00PM", "12:30PM", "01:00PM", "01:30PM", "02:00PM", "02:30PM", "03:00PM", "03:30PM", "04:00PM", "04:30PM", "05:00PM", "05:30PM", "06:00PM", "06:30PM", "07:00PM", "07:30PM", "08:00PM", "08:30PM", "09:00PM", "09:30PM", "10:00PM", "10:30PM", "11:00PM", "11:30PM" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -324,12 +381,23 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 100, 30, 0);
         jPanel1.add(jPanel7, gridBagConstraints);
 
+        jPanel8.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel8.setMinimumSize(new java.awt.Dimension(2, 10));
+        jPanel8.setPreferredSize(new java.awt.Dimension(2, 10));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
+        jPanel1.add(jPanel8, gridBagConstraints);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void buttonAddRouteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddRouteActionPerformed
         String price = textPrice.getText().trim();
 
         // Check if any field is empty
@@ -344,7 +412,20 @@ public class ScheduleTrip extends javax.swing.JFrame {
 
             ScheduleTrip.this.dispose();
         });
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_buttonAddRouteActionPerformed
+
+    private void boxStartTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxStartTimeActionPerformed
+        int startIndex = boxStartTime.getSelectedIndex();
+
+        // Get all available times from that index onward
+        DefaultComboBoxModel<String> newEndModel = new DefaultComboBoxModel<>();
+
+        for (int i = startIndex+1; i < boxStartTime.getItemCount(); i++) {
+            newEndModel.addElement(boxStartTime.getItemAt(i));
+        }
+
+        boxEndTime.setModel(newEndModel);
+    }//GEN-LAST:event_boxStartTimeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -396,10 +477,10 @@ public class ScheduleTrip extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxMethod;
     private javax.swing.JComboBox<String> boxSeats;
     private javax.swing.JComboBox<String> boxStartTime;
+    private javax.swing.JButton buttonAddRoute;
     private com.github.lgooddatepicker.components.DatePicker datePicker;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -407,6 +488,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel labelAddTrip;
     private javax.swing.JLabel labelCurrency;
     private javax.swing.JLabel labelDate;

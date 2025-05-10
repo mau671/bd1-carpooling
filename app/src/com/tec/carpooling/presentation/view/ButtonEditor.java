@@ -51,9 +51,9 @@ public class ButtonEditor extends DefaultCellEditor {
                 String name = nameObj.toString();
                 String time = timeObj.toString();
 
-                JOptionPane.showMessageDialog(button,
-                    "Trip: " + name + "\nTime: " + time,
-                    "More Info", JOptionPane.INFORMATION_MESSAGE);
+                TripInfo tripInfoFrame = new TripInfo();
+                tripInfoFrame.setVisible(true);
+                tripInfoFrame.setLocationRelativeTo(null); // center on screen
             } else {
                 JOptionPane.showMessageDialog(button,
                     "This row has incomplete data.",

@@ -58,7 +58,7 @@ public class SearchTrip extends javax.swing.JFrame {
             btnPin.addActionListener(e -> {
                 new MapViewer(lat, lon).setVisible(true);
             });
-
+            btnPin.setFont(new Font("Dialog", Font.PLAIN, 12)); // Windows
             fila.add(btnPin);
             fila.add(lbl);
             panelList.add(fila);
