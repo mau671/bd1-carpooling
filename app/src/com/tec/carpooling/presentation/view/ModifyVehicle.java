@@ -4,24 +4,24 @@
  */
 package com.tec.carpooling.presentation.view;
 
-import javax.swing.JFrame;
-import javax.swing.JToolBar;
-import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 /**
  *
  * @author hidal
  */
-public class AddVehicle extends javax.swing.JFrame {
+public class ModifyVehicle extends javax.swing.JFrame {
     private String userRole;
     /**
-     * Creates new form AgregarVehiculo
+     * Creates new form AddVehicle
      */
-    public AddVehicle(String role) {
+    public ModifyVehicle(String role) {
         this.userRole = role;
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
@@ -33,7 +33,6 @@ public class AddVehicle extends javax.swing.JFrame {
 
         // Set the scaled image as icon
         labelImage.setIcon(new ImageIcon(scaledImage));
-        
     }
 
     /**
@@ -46,10 +45,10 @@ public class AddVehicle extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        panelAddVehicle = new javax.swing.JPanel();
+        panelModifyVehicle = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        labelAddVehicle = new javax.swing.JLabel();
-        buttonAdd = new javax.swing.JButton();
+        labelModifyVehicle = new javax.swing.JLabel();
+        buttonModify = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel5 = new javax.swing.JPanel();
@@ -63,16 +62,14 @@ public class AddVehicle extends javax.swing.JFrame {
         labelImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(204, 255, 51));
-        setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
 
-        panelAddVehicle.setLayout(new java.awt.GridLayout(1, 2, 2, 0));
+        panelModifyVehicle.setLayout(new java.awt.GridLayout(1, 2, 2, 0));
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        labelAddVehicle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
-        labelAddVehicle.setForeground(new java.awt.Color(18, 102, 160));
-        labelAddVehicle.setText("ADD VEHICLE");
+        labelModifyVehicle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
+        labelModifyVehicle.setForeground(new java.awt.Color(18, 102, 160));
+        labelModifyVehicle.setText("MODIFY VEHICLE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -80,16 +77,16 @@ public class AddVehicle extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(30, 150, 0, 0);
-        jPanel1.add(labelAddVehicle, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(30, 100, 0, 0);
+        jPanel1.add(labelModifyVehicle, gridBagConstraints);
 
-        buttonAdd.setBackground(new java.awt.Color(246, 172, 30));
-        buttonAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonAdd.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAdd.setText("Add Vehicle");
-        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
+        buttonModify.setBackground(new java.awt.Color(246, 172, 30));
+        buttonModify.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonModify.setForeground(new java.awt.Color(255, 255, 255));
+        buttonModify.setText("Modify Vehicle");
+        buttonModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddActionPerformed(evt);
+                buttonModifyActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -97,7 +94,7 @@ public class AddVehicle extends javax.swing.JFrame {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.ipady = 30;
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 0);
-        jPanel1.add(buttonAdd, gridBagConstraints);
+        jPanel1.add(buttonModify, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -123,7 +120,7 @@ public class AddVehicle extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.ipadx = 70;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         jPanel3.add(labelPlate, gridBagConstraints);
@@ -178,7 +175,7 @@ public class AddVehicle extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(100, 50, 0, 0);
         jPanel1.add(jPanel5, gridBagConstraints);
 
-        panelAddVehicle.add(jPanel1);
+        panelModifyVehicle.add(jPanel1);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -188,14 +185,14 @@ public class AddVehicle extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 300, 0);
         jPanel2.add(labelImage, gridBagConstraints);
 
-        panelAddVehicle.add(jPanel2);
+        panelModifyVehicle.add(jPanel2);
 
-        getContentPane().add(panelAddVehicle, java.awt.BorderLayout.CENTER);
+        getContentPane().add(panelModifyVehicle, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
+    private void buttonModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyActionPerformed
         String plate = textPlate.getText().trim();
 
         // Check if any field is empty
@@ -210,9 +207,9 @@ public class AddVehicle extends javax.swing.JFrame {
             registry.setExtendedState(JFrame.MAXIMIZED_BOTH);
             registry.setVisible(true);
 
-            AddVehicle.this.dispose();
+            ModifyVehicle.this.dispose();
         });
-    }//GEN-LAST:event_buttonAddActionPerformed
+    }//GEN-LAST:event_buttonModifyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -231,14 +228,16 @@ public class AddVehicle extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyVehicle.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -247,14 +246,14 @@ public class AddVehicle extends javax.swing.JFrame {
             private String userRole;
             public void run() {
                 userRole = "Driver";
-                new AddVehicle(userRole).setVisible(true);
+                new ModifyVehicle(userRole).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxCapacity;
-    private javax.swing.JButton buttonAdd;
+    private javax.swing.JButton buttonModify;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JPanel jPanel1;
@@ -262,11 +261,11 @@ public class AddVehicle extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JLabel labelAddVehicle;
     private javax.swing.JLabel labelCapacity;
     private javax.swing.JLabel labelImage;
+    private javax.swing.JLabel labelModifyVehicle;
     private javax.swing.JLabel labelPlate;
-    private javax.swing.JPanel panelAddVehicle;
+    private javax.swing.JPanel panelModifyVehicle;
     private javax.swing.JTextField textPlate;
     // End of variables declaration//GEN-END:variables
 }

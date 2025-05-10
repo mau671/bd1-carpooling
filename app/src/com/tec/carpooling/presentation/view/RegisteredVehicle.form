@@ -75,8 +75,6 @@
                         <Column editable="true" title="Trips Made" type="java.lang.Object"/>
                       </Table>
                     </Property>
-                    <Property name="cellSelectionEnabled" type="boolean" value="false"/>
-                    <Property name="rowSelectionAllowed" type="boolean" value="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -148,7 +146,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="MODIFY VEHICLE"/>
+                <Property name="text" type="java.lang.String" value="Modify Vehicle"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonModifyActionPerformed"/>
@@ -170,7 +168,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="ADD A VEHICLE"/>
+                <Property name="text" type="java.lang.String" value="Add a Vehicle"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonAddActionPerformed"/>

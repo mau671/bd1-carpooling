@@ -77,8 +77,6 @@ public class RegisteredVehicle extends javax.swing.JFrame {
                 "Plate Number", "Maximum Capacity", "Trips Made"
             }
         ));
-        tableVehicles.setCellSelectionEnabled(false);
-        tableVehicles.setRowSelectionAllowed(true);
         scrollVehicles.setViewportView(tableVehicles);
 
         jPanel2.add(scrollVehicles, java.awt.BorderLayout.CENTER);
@@ -111,7 +109,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         buttonModify.setBackground(new java.awt.Color(18, 102, 160));
         buttonModify.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonModify.setForeground(new java.awt.Color(255, 255, 255));
-        buttonModify.setText("MODIFY VEHICLE");
+        buttonModify.setText("Modify Vehicle");
         buttonModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonModifyActionPerformed(evt);
@@ -126,7 +124,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         buttonAdd.setBackground(new java.awt.Color(246, 172, 30));
         buttonAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonAdd.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAdd.setText("ADD A VEHICLE");
+        buttonAdd.setText("Add a Vehicle");
         buttonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonAddActionPerformed(evt);
@@ -149,7 +147,13 @@ public class RegisteredVehicle extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
-        // TODO add your handling code here:
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            AddVehicle add = new AddVehicle(userRole);
+            add.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            add.setVisible(true);
+
+            RegisteredVehicle.this.dispose();
+        });
     }//GEN-LAST:event_buttonAddActionPerformed
 
     private void buttonModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyActionPerformed
@@ -157,7 +161,13 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         if (row != -1) {
             Object valorColumna1 = tableVehicles.getValueAt(row, 0); // Columna 0
             Object valorColumna2 = tableVehicles.getValueAt(row, 1); // Columna 1
-            System.out.println("Fila seleccionada: " + valorColumna1 + ", " + valorColumna2);
+            javax.swing.SwingUtilities.invokeLater(() -> {
+            ModifyVehicle modify = new ModifyVehicle(userRole);
+            modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            modify.setVisible(true);
+
+            RegisteredVehicle.this.dispose();
+        });
         } else {
             JOptionPane.showMessageDialog(this, "A row must be selected.");
         }

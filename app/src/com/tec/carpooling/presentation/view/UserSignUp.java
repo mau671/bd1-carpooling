@@ -628,7 +628,7 @@ public class UserSignUp extends javax.swing.JFrame {
 
         jPanel38.setLayout(new java.awt.GridBagLayout());
 
-        name_label12.setText("<html>Name: <span style='color:red'>*</span></html>");
+        name_label12.setText("<html>First Name: <span style='color:red'>*</span></html>");
         name_label12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

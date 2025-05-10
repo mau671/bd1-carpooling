@@ -64,10 +64,13 @@ public class SideMenu {
             parentFrame.dispose();
         });
 
-        /*scheduleTripButton.addActionListener(e -> {
-            new AgendarViaje(userRole).setVisible(true);
+        scheduleTripButton.addActionListener(e -> {
+            ScheduleTrip schedule = new ScheduleTrip(userRole);
+            schedule.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            schedule.setVisible(true);
+            
             parentFrame.dispose();
-        });*/
+        });
 
         /*logButton.addActionListener(e -> {
             new Historial(userRole).setVisible(true);

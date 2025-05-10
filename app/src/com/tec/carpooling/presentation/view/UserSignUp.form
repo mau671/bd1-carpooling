@@ -655,7 +655,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="name_label12">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Name: &lt;span style=&apos;color:red&apos;&gt;*&lt;/span&gt;&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;First Name: &lt;span style=&apos;color:red&apos;&gt;*&lt;/span&gt;&lt;/html&gt;"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="1"/>
                 </Property>

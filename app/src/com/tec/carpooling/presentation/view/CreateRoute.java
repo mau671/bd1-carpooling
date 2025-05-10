@@ -26,10 +26,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.Cursor;
 
+import java.net.URI;
+import java.net.URL;
+import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+import java.net.HttpURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -55,6 +59,7 @@ public class CreateRoute extends javax.swing.JFrame {
      */
     public CreateRoute(String role) {
         this.userRole = role;
+        System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CarpoolingApp/1.0");
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
         
@@ -148,44 +153,50 @@ public class CreateRoute extends javax.swing.JFrame {
     }
     
     private void searchPlace(String lugar, JMapViewer map) {
-        try {
-            String urlStr = "https://nominatim.openstreetmap.org/search?format=json&q=" + URLEncoder.encode(lugar, StandardCharsets.UTF_8);
-            URL url = new URL(urlStr);
+    try {
+        String urlStr = "https://nominatim.openstreetmap.org/search?format=json&q=" + URLEncoder.encode(lugar, StandardCharsets.UTF_8);
 
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        URI uri = new URI(urlStr);                     // ✅ Use URI
+        URL url = uri.toURL();                         // ✅ Convert to URL
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-            // Parsear el JSON (puedes usar librerías como org.json o hacerlo simple)
-            JSONArray results = new JSONArray(response.toString());
-            if (results.length() > 0) {
-                JSONObject result = results.getJSONObject(0);
-                double lat = result.getDouble("lat");
-                double lon = result.getDouble("lon");
-
-                // Centrar el mapa y poner un pin
-                map.setDisplayPosition(new Coordinate(lat, lon), 15);
-                map.removeAllMapMarkers(); // Si quieres limpiar anteriores
-                map.addMapMarker(new MapMarkerDot(lat, lon));
-
-                // Agregar visualmente
-                addVisualStop(String.format("%.5f", lat), String.format("%.5f", lon));
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró la ubicación.");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al buscar la ubicación.");
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
         }
+        in.close();
+
+        // Parse JSON response
+        JSONArray results = new JSONArray(response.toString());
+        if (results.length() > 0) {
+            JSONObject result = results.getJSONObject(0);
+            double lat = result.getDouble("lat");
+            double lon = result.getDouble("lon");
+
+            map.setDisplayPosition(new Coordinate(lat, lon), 15);
+            map.removeAllMapMarkers();
+            map.addMapMarker(new MapMarkerDot(lat, lon));
+
+            addVisualStop(String.format("%.5f", lat), String.format("%.5f", lon));
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró la ubicación.");
+        }
+
+    } catch (URISyntaxException | MalformedURLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "URL inválida.");
+    } catch (IOException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error de conexión.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al buscar la ubicación.");
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -236,7 +247,7 @@ public class CreateRoute extends javax.swing.JFrame {
         jPanel13 = new javax.swing.JPanel();
         boxPasajeros = new javax.swing.JComboBox<>();
         labelPasajeros = new javax.swing.JLabel();
-        botonAgregarViaje = new javax.swing.JButton();
+        buttonAddTrip = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -535,14 +546,14 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 0);
         jPanel10.add(jPanel15, gridBagConstraints);
 
-        botonAgregarViaje.setBackground(new java.awt.Color(246, 172, 30));
-        botonAgregarViaje.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botonAgregarViaje.setForeground(new java.awt.Color(255, 255, 255));
-        botonAgregarViaje.setText("Add Trip");
-        botonAgregarViaje.setPreferredSize(new java.awt.Dimension(110, 40));
-        botonAgregarViaje.addActionListener(new java.awt.event.ActionListener() {
+        buttonAddTrip.setBackground(new java.awt.Color(246, 172, 30));
+        buttonAddTrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonAddTrip.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAddTrip.setText("Add Trip");
+        buttonAddTrip.setPreferredSize(new java.awt.Dimension(110, 40));
+        buttonAddTrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonAgregarViajeActionPerformed(evt);
+                buttonAddTripActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -551,7 +562,7 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.ipady = 20;
         gridBagConstraints.insets = new java.awt.Insets(50, 50, 0, 0);
-        jPanel10.add(botonAgregarViaje, gridBagConstraints);
+        jPanel10.add(buttonAddTrip, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -566,9 +577,24 @@ public class CreateRoute extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonAgregarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarViajeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonAgregarViajeActionPerformed
+    private void buttonAddTripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddTripActionPerformed
+        /*String plate = textPlate.getText().trim();
+
+        // Check if any field is empty
+        if (plate.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
+            return;
+        }*/
+        JOptionPane.showMessageDialog(null, "Trip scheduled successfully!");
+        // Go back to vehicle registration screen
+        /*javax.swing.SwingUtilities.invokeLater(() -> {
+            TripView trip = new TripView(userRole);
+            trip.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            trip.setVisible(true);
+
+            CreateRoute.this.dispose();
+        });*/
+    }//GEN-LAST:event_buttonAddTripActionPerformed
 
     private void textSearchPlaceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSearchPlaceKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -605,7 +631,6 @@ public class CreateRoute extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(CreateRoute.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CarpoolingApp/1.0");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
@@ -617,7 +642,6 @@ public class CreateRoute extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonAgregarViaje;
     private javax.swing.JComboBox<String> boxDestinoCan;
     private javax.swing.JComboBox<String> boxDestinoDis;
     private javax.swing.JComboBox<String> boxDestinoProv;
@@ -625,6 +649,7 @@ public class CreateRoute extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxPartidaDis;
     private javax.swing.JComboBox<String> boxPartidaProv;
     private javax.swing.JComboBox<String> boxPasajeros;
+    private javax.swing.JButton buttonAddTrip;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
