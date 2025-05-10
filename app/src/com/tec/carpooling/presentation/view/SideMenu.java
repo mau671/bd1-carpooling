@@ -17,7 +17,7 @@ public class SideMenu {
 
         JButton profileButton = new JButton("User Profile");
         JButton vehicleInfoButton = new JButton("Registered Vehicles");
-        JButton scheduleTripButton = new JButton("Schedule a Trip");
+        JButton tripButton = new JButton("Trips Created");
         JButton searchTripButton = new JButton("Search for Trips");
         JButton logButton = new JButton("Activity Log");
         JButton switchRoleButton = new JButton();
@@ -31,7 +31,7 @@ public class SideMenu {
             switchRoleButton.setText("Switch to Driver");
         } else if (userRole.equals("Driver")) {
             toolBar.add(vehicleInfoButton);
-            toolBar.add(scheduleTripButton);
+            toolBar.add(tripButton);
             toolBar.add(logButton);
             switchRoleButton.setText("Switch to Passenger");
         }
@@ -64,10 +64,10 @@ public class SideMenu {
             parentFrame.dispose();
         });
 
-        scheduleTripButton.addActionListener(e -> {
-            ScheduleTrip schedule = new ScheduleTrip(userRole);
-            schedule.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            schedule.setVisible(true);
+        tripButton.addActionListener(e -> {
+            ViewTrip trips = new ViewTrip(userRole);
+            trips.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            trips.setVisible(true);
             
             parentFrame.dispose();
         });

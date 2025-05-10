@@ -5,6 +5,13 @@
 package com.tec.carpooling.presentation.view;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.util.Locale;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -21,8 +28,39 @@ public class ScheduleTrip extends javax.swing.JFrame {
         this.userRole = role;
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        customizeDatePicker();
         
+        textPrice.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume(); // block the input
+                }
+            }
+        });
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void customizeDatePicker() {
+        URL dateImageURL = getClass().getResource("/Assets/datePickerIcon.png");
+        if (dateImageURL != null) {
+            Image dateImage = getToolkit().getImage(dateImageURL);
+            ImageIcon dateIcon = new ImageIcon(dateImage);
+
+            // Disable text field editing
+            datePicker.getComponentDateTextField().setEditable(false);
+            datePicker.getComponentDateTextField().setEnabled(false);
+            datePicker.setDateToToday();
+            datePicker.setLocale(Locale.ENGLISH);
+
+            // Set icon on button
+            JButton datePickerButton = datePicker.getComponentToggleCalendarButton();
+            datePickerButton.setText("");
+            datePickerButton.setIcon(dateIcon); 
+        } else {
+            System.err.println("Image for date picker button not found.");
+        }
     }
 
     /**
@@ -115,7 +153,6 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelPrice.add(labelPrice, gridBagConstraints);
 
-        textPrice.setText("jTextField1");
         textPrice.setPreferredSize(new java.awt.Dimension(150, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -334,6 +371,12 @@ public class ScheduleTrip extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ScheduleTrip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

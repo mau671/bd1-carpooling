@@ -587,13 +587,13 @@ public class CreateRoute extends javax.swing.JFrame {
         }*/
         JOptionPane.showMessageDialog(null, "Trip scheduled successfully!");
         // Go back to vehicle registration screen
-        /*javax.swing.SwingUtilities.invokeLater(() -> {
-            TripView trip = new TripView(userRole);
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            ViewTrip trip = new ViewTrip(userRole);
             trip.setExtendedState(JFrame.MAXIMIZED_BOTH);
             trip.setVisible(true);
 
             CreateRoute.this.dispose();
-        });*/
+        });
     }//GEN-LAST:event_buttonAddTripActionPerformed
 
     private void textSearchPlaceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSearchPlaceKeyPressed
