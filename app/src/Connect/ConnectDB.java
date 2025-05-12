@@ -4,6 +4,7 @@
  */
 package Connect;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -17,8 +18,8 @@ import java.util.Properties;
 public class ConnectDB {
     public static Connection getConnection() {
         Properties props = new Properties();
-
-        try (InputStream input = new FileInputStream("app/config/db.properties")) {
+        String path = System.getProperty("user.dir") + File.separator + "config" + File.separator + "db.properties";
+        try (InputStream input = new FileInputStream(path)) {
             props.load(input);
 
             String url = props.getProperty("db.url");
