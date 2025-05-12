@@ -9,8 +9,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Image;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -42,6 +45,22 @@ public class UserLogIn extends javax.swing.JFrame {
                 }
             }
         });
+        
+        labelRegister.setForeground(Color.BLUE);
+        labelRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        labelRegister.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    UserSignUp signup = new UserSignUp();
+                    signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    signup.setVisible(true);
+
+                    UserLogIn.this.dispose();
+                });
+            }
+        });
+        
     }
     
     /**
@@ -73,18 +92,22 @@ public class UserLogIn extends javax.swing.JFrame {
 
         panelLogin = new javax.swing.JPanel();
         labelLogIn = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        labelImage = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        jPanel2 = new javax.swing.JPanel();
+        buttonLogin = new javax.swing.JButton();
+        labelLog = new javax.swing.JPanel();
         checkPassword = new javax.swing.JCheckBox();
+        panelInfo = new javax.swing.JPanel();
         panelPassword = new javax.swing.JPanel();
         textPassword = new javax.swing.JPasswordField();
         labelPassword = new javax.swing.JLabel();
         panelEmail = new javax.swing.JPanel();
         textEmail = new javax.swing.JTextField();
         labelEmail = new javax.swing.JLabel();
-        buttonLogin = new javax.swing.JButton();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        labelImage = new javax.swing.JLabel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        labelRegister = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,10 +123,42 @@ public class UserLogIn extends javax.swing.JFrame {
         panelLogin.add(labelLogIn, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 18;
+        panelLogin.add(filler2, gridBagConstraints);
+
+        labelImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/calleCarroFondoBlanco.png"))); // NOI18N
+        labelImage.setMinimumSize(new java.awt.Dimension(450, 450));
+        labelImage.setPreferredSize(new java.awt.Dimension(560, 480));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        panelLogin.add(labelImage, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 24;
         gridBagConstraints.weighty = 0.1;
+        panelLogin.add(filler3, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        buttonLogin.setBackground(new java.awt.Color(246, 172, 30));
+        buttonLogin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonLogin.setForeground(new java.awt.Color(255, 255, 255));
+        buttonLogin.setText("Log In");
+        buttonLogin.setPreferredSize(new java.awt.Dimension(90, 40));
+        buttonLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonLoginActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.ipady = 20;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        panelLogin.add(filler1, gridBagConstraints);
+        jPanel2.add(buttonLogin, gridBagConstraints);
+
+        labelLog.setLayout(new java.awt.GridBagLayout());
 
         checkPassword.setText("Show Password");
         checkPassword.addActionListener(new java.awt.event.ActionListener() {
@@ -112,10 +167,13 @@ public class UserLogIn extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 0);
-        panelLogin.add(checkPassword, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        labelLog.add(checkPassword, gridBagConstraints);
+
+        panelInfo.setLayout(new java.awt.GridBagLayout());
 
         panelPassword.setLayout(new java.awt.GridBagLayout());
 
@@ -123,7 +181,8 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 140;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 5, 0);
         panelPassword.add(textPassword, gridBagConstraints);
 
@@ -135,14 +194,14 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
         panelPassword.add(labelPassword, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
-        panelLogin.add(panelPassword, gridBagConstraints);
+        panelInfo.add(panelPassword, gridBagConstraints);
 
         panelEmail.setLayout(new java.awt.GridBagLayout());
 
@@ -151,7 +210,8 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 140;
         gridBagConstraints.insets = new java.awt.Insets(0, 7, 10, 0);
         panelEmail.add(textEmail, gridBagConstraints);
 
@@ -167,43 +227,46 @@ public class UserLogIn extends javax.swing.JFrame {
         panelEmail.add(labelEmail, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        panelLogin.add(panelEmail, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        panelInfo.add(panelEmail, gridBagConstraints);
 
-        buttonLogin.setBackground(new java.awt.Color(246, 172, 30));
-        buttonLogin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonLogin.setForeground(new java.awt.Color(255, 255, 255));
-        buttonLogin.setText("Log In");
-        buttonLogin.setPreferredSize(new java.awt.Dimension(90, 40));
-        buttonLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonLoginActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 21;
-        gridBagConstraints.weighty = 0.1;
-        panelLogin.add(buttonLogin, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 18;
-        panelLogin.add(filler2, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        labelLog.add(panelInfo, gridBagConstraints);
 
-        labelImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/calleCarroFondoBlanco.png"))); // NOI18N
-        labelImage.setPreferredSize(new java.awt.Dimension(560, 480));
+        labelRegister.setText("Need to create an account?");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        panelLogin.add(labelImage, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
+        labelLog.add(labelRegister, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 24;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.weighty = 0.1;
-        panelLogin.add(filler3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        labelLog.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(labelLog, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.2;
+        panelLogin.add(jPanel2, gridBagConstraints);
 
         getContentPane().add(panelLogin, java.awt.BorderLayout.CENTER);
 
@@ -277,11 +340,15 @@ public class UserLogIn extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelImage;
+    private javax.swing.JPanel labelLog;
     private javax.swing.JLabel labelLogIn;
     private javax.swing.JLabel labelPassword;
+    private javax.swing.JLabel labelRegister;
     private javax.swing.JPanel panelEmail;
+    private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JPanel panelPassword;
     private javax.swing.JTextField textEmail;

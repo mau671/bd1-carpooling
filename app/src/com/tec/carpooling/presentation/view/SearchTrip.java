@@ -5,9 +5,14 @@
 package com.tec.carpooling.presentation.view;
 
 import java.awt.*;
+import java.net.URL;
 import javax.swing.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -21,6 +26,7 @@ public class SearchTrip extends javax.swing.JFrame {
     public SearchTrip(String role) {
         this.userRole = role;
         initComponents();
+        customizeDatePicker();
         getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
         
         // Para el panel con card layout
@@ -33,6 +39,80 @@ public class SearchTrip extends javax.swing.JFrame {
         Image scaledPassenger = photo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         photoDriver.setIcon(new ImageIcon(scaledPassenger));
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void filterAvailableTimes(JComboBox<String> comboTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+        LocalTime now = LocalTime.now();
+
+        String[] allTimes = getAllTimes(); // use same helper for both methods
+
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        for (String timeString : allTimes) {
+            LocalTime time = LocalTime.parse(timeString, formatter);
+            if (!time.isBefore(now)) {
+                model.addElement(timeString);
+            }
+        }
+        comboTime.setModel(model);
+    }
+    
+    private String[] getAllTimes() {
+        return new String[]{
+            "05:30 AM", "06:00 AM", "06:30 AM", "07:00 AM", "07:30 AM", "08:00 AM",
+            "08:30 AM", "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM",
+            "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM",
+            "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM",
+            "05:30 PM", "06:00 PM", "06:30 PM", "07:00 PM", "07:30 PM", "08:00 PM",
+            "08:30 PM", "09:00 PM", "09:30 PM", "10:00 PM", "10:30 PM", "11:00 PM",
+            "11:30 PM"
+        };
+    }
+    
+    private void resetAllTimes(JComboBox<String> comboTime) {
+        String[] allTimes = getAllTimes();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(allTimes);
+        comboTime.setModel(model);
+    }
+    
+    private void customizeDatePicker() {
+        URL dateImageURL = getClass().getResource("/Assets/datePickerIcon.png");
+        if (dateImageURL != null) {
+            Image dateImage = getToolkit().getImage(dateImageURL);
+            ImageIcon dateIcon = new ImageIcon(dateImage);
+
+            datePicker.getComponentDateTextField().setEditable(false);
+            datePicker.getComponentDateTextField().setEnabled(false);
+            datePicker.setDateToToday();
+            datePicker.setLocale(Locale.ENGLISH);
+
+            // ✅ Disallow past dates
+            datePicker.getSettings().setVetoPolicy(date -> !date.isBefore(LocalDate.now()));
+
+            // ✅ Add listener for date changes
+            datePicker.addDateChangeListener(event -> {
+                LocalDate selectedDate = event.getNewDate();
+                LocalDate today = LocalDate.now();
+
+                if (selectedDate != null) {
+                    if (selectedDate.isEqual(today)) {
+                        filterAvailableTimes(boxTime);
+                    } else {
+                        resetAllTimes(boxTime);
+                    }
+                }
+            });
+
+            // ✅ Set calendar icon
+            JButton datePickerButton = datePicker.getComponentToggleCalendarButton();
+            datePickerButton.setText("");
+            datePickerButton.setIcon(dateIcon);
+
+            // ✅ Manually filter on init (because today is selected by default)
+            filterAvailableTimes(boxTime);
+        } else {
+            System.err.println("Image for date picker button not found.");
+        }
     }
     
     private void showCoordinatesList(List<double[]> coordenates) {
@@ -126,15 +206,18 @@ public class SearchTrip extends javax.swing.JFrame {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabel19 = new javax.swing.JLabel();
         buttonTrip = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel22 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jPanel6 = new javax.swing.JPanel();
+        panelTime = new javax.swing.JPanel();
+        labelTimeArrival = new javax.swing.JLabel();
+        boxTime = new javax.swing.JComboBox<>();
+        panelDatePlace = new javax.swing.JPanel();
         jComboBox3 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel24 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        datePicker = new com.github.lgooddatepicker.components.DatePicker();
+        labelDate = new javax.swing.JLabel();
+        panelChooseStop = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         boxStops = new javax.swing.JComboBox<>();
 
@@ -171,10 +254,11 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(60, 20, 60, 0);
+        gridBagConstraints.insets = new java.awt.Insets(60, 0, 60, 0);
         jPanel1.add(labelSearchTrips, gridBagConstraints);
 
         jLabel1.setText("Information:");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 4;
@@ -451,6 +535,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
 
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel19.setText("Search Trip By: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -461,88 +546,109 @@ public class SearchTrip extends javax.swing.JFrame {
         buttonTrip.setBackground(new java.awt.Color(246, 172, 30));
         buttonTrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonTrip.setForeground(new java.awt.Color(255, 255, 255));
-        buttonTrip.setText("Schedule Trip");
+        buttonTrip.setText("Book Trip");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.ipadx = 15;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 20);
         jPanel1.add(buttonTrip, gridBagConstraints);
 
-        jPanel5.setLayout(new java.awt.GridBagLayout());
+        panelTime.setLayout(new java.awt.GridBagLayout());
 
-        jLabel22.setText("Time of Departure: ");
+        labelTimeArrival.setText("Time of Arrival: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel5.add(jLabel22, gridBagConstraints);
+        panelTime.add(labelTimeArrival, gridBagConstraints);
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "05:00AM", "05:30AM", "06:00AM", "06:30AM", "07:00AM", "07:30AM", "08:00AM", "08:30AM", "09:00AM", "09:30AM", "10:00AM", "10:30AM", "11:00AM", "11:30AM", "12:00PM", "12:30PM", "01:00PM", "01:30PM", "02:00PM", "02:30PM", "03:00PM", "03:30PM", "04:00PM", "04:30PM", "05:00PM", "05:30PM", "06:00PM", "06:30PM", "07:00PM", "07:30PM", "08:00PM", "08:30PM", "09:00PM", "09:30PM", "10:00PM", "10:30PM", "11:00PM", "11:30PM" }));
-        jPanel5.add(jComboBox4, new java.awt.GridBagConstraints());
+        boxTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "05:30AM", "06:00AM", "06:30AM", "07:00AM", "07:30AM", "08:00AM", "08:30AM", "09:00AM", "09:30AM", "10:00AM", "10:30AM", "11:00AM", "11:30AM", "12:00PM", "12:30PM", "01:00PM", "01:30PM", "02:00PM", "02:30PM", "03:00PM", "03:30PM", "04:00PM", "04:30PM", "05:00PM", "05:30PM", "06:00PM", "06:30PM", "07:00PM", "07:30PM", "08:00PM", "08:30PM", "09:00PM", "09:30PM", "10:00PM", "10:30PM", "11:00PM", "11:30PM" }));
+        panelTime.add(boxTime, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
-        jPanel1.add(jPanel5, gridBagConstraints);
+        jPanel1.add(panelTime, gridBagConstraints);
 
-        jPanel6.setLayout(new java.awt.GridBagLayout());
+        panelDatePlace.setLayout(new java.awt.GridBagLayout());
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel6.add(jComboBox3, gridBagConstraints);
+        panelDatePlace.add(jComboBox3, gridBagConstraints);
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel6.add(jComboBox2, gridBagConstraints);
+        panelDatePlace.add(jComboBox2, gridBagConstraints);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        jPanel6.add(jComboBox1, gridBagConstraints);
+        gridBagConstraints.gridy = 1;
+        panelDatePlace.add(jComboBox1, gridBagConstraints);
 
         jLabel24.setText("Destination: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel6.add(jLabel24, gridBagConstraints);
+        panelDatePlace.add(jLabel24, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(datePicker, gridBagConstraints);
+
+        labelDate.setText("Date: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel2.add(labelDate, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
+        panelDatePlace.add(jPanel2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
-        jPanel1.add(jPanel6, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
+        jPanel1.add(panelDatePlace, gridBagConstraints);
 
-        jPanel7.setLayout(new java.awt.GridBagLayout());
+        panelChooseStop.setLayout(new java.awt.GridBagLayout());
 
         jLabel26.setText("Choose a Stop:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        jPanel7.add(jLabel26, gridBagConstraints);
+        panelChooseStop.add(jLabel26, gridBagConstraints);
 
         boxStops.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        jPanel7.add(boxStops, gridBagConstraints);
+        panelChooseStop.add(boxStops, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
-        jPanel1.add(jPanel7, gridBagConstraints);
+        jPanel1.add(panelChooseStop, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -606,14 +712,15 @@ public class SearchTrip extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxInfo;
     private javax.swing.JComboBox<String> boxStops;
+    private javax.swing.JComboBox<String> boxTime;
     private javax.swing.JButton buttonTrip;
     private javax.swing.JPanel cardPanel;
+    private com.github.lgooddatepicker.components.DatePicker datePicker;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -626,7 +733,6 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel26;
@@ -638,14 +744,13 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAge;
     private javax.swing.JLabel labelChosenCapacity;
+    private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelGender;
     private javax.swing.JLabel labelName;
@@ -653,11 +758,15 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JLabel labelSearchTrips;
     private javax.swing.JLabel labelSeatsLeft;
     private javax.swing.JLabel labelStart;
+    private javax.swing.JLabel labelTimeArrival;
     private javax.swing.JList<String> listNumbers;
     private javax.swing.JList<String> listTrips;
+    private javax.swing.JPanel panelChooseStop;
+    private javax.swing.JPanel panelDatePlace;
     private javax.swing.JPanel panelDriver;
     private javax.swing.JPanel panelList;
     private javax.swing.JPanel panelStops;
+    private javax.swing.JPanel panelTime;
     private javax.swing.JPanel panelTimeCost;
     private javax.swing.JPanel panelVehicle;
     private javax.swing.JLabel photoDriver;

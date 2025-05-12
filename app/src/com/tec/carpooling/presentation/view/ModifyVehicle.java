@@ -51,11 +51,11 @@ public class ModifyVehicle extends javax.swing.JFrame {
         buttonModify = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        jPanel5 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        panelInfo = new javax.swing.JPanel();
+        panelPlate = new javax.swing.JPanel();
         labelPlate = new javax.swing.JLabel();
         textPlate = new javax.swing.JTextField();
-        jPanel4 = new javax.swing.JPanel();
+        panelCapacity = new javax.swing.JPanel();
         boxCapacity = new javax.swing.JComboBox<>();
         labelCapacity = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -77,13 +77,13 @@ public class ModifyVehicle extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(30, 100, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(30, 50, 0, 0);
         jPanel1.add(labelModifyVehicle, gridBagConstraints);
 
         buttonModify.setBackground(new java.awt.Color(246, 172, 30));
         buttonModify.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonModify.setForeground(new java.awt.Color(255, 255, 255));
-        buttonModify.setText("Modify Vehicle");
+        buttonModify.setText("Save Chnages");
         buttonModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonModifyActionPerformed(evt);
@@ -93,7 +93,7 @@ public class ModifyVehicle extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.ipady = 30;
-        gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 70);
         jPanel1.add(buttonModify, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -108,72 +108,77 @@ public class ModifyVehicle extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
 
-        jPanel5.setMaximumSize(new java.awt.Dimension(394, 60));
-        jPanel5.setLayout(new java.awt.GridBagLayout());
+        panelInfo.setMaximumSize(new java.awt.Dimension(394, 60));
+        panelInfo.setLayout(new java.awt.GridBagLayout());
 
-        jPanel3.setMaximumSize(new java.awt.Dimension(201, 60));
-        jPanel3.setMinimumSize(new java.awt.Dimension(201, 60));
-        jPanel3.setPreferredSize(new java.awt.Dimension(193, 60));
-        jPanel3.setLayout(new java.awt.GridBagLayout());
+        panelPlate.setMaximumSize(new java.awt.Dimension(201, 60));
+        panelPlate.setMinimumSize(new java.awt.Dimension(201, 60));
+        panelPlate.setPreferredSize(new java.awt.Dimension(193, 60));
+        panelPlate.setLayout(new java.awt.GridBagLayout());
 
+        labelPlate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelPlate.setText("<html>Plate Number: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 70;
+        gridBagConstraints.ipadx = 30;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
-        jPanel3.add(labelPlate, gridBagConstraints);
+        panelPlate.add(labelPlate, gridBagConstraints);
 
         textPlate.setMaximumSize(new java.awt.Dimension(64, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.ipadx = 44;
         gridBagConstraints.ipady = 30;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 50, 0);
-        jPanel3.add(textPlate, gridBagConstraints);
+        panelPlate.add(textPlate, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
-        jPanel5.add(jPanel3, gridBagConstraints);
+        panelInfo.add(panelPlate, gridBagConstraints);
 
-        jPanel4.setMaximumSize(new java.awt.Dimension(201, 60));
-        jPanel4.setMinimumSize(new java.awt.Dimension(201, 60));
-        jPanel4.setPreferredSize(new java.awt.Dimension(201, 60));
-        jPanel4.setLayout(new java.awt.GridBagLayout());
+        panelCapacity.setMaximumSize(new java.awt.Dimension(201, 60));
+        panelCapacity.setMinimumSize(new java.awt.Dimension(201, 60));
+        panelCapacity.setPreferredSize(new java.awt.Dimension(201, 60));
+        panelCapacity.setLayout(new java.awt.GridBagLayout());
 
         boxCapacity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        jPanel4.add(boxCapacity, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 0);
+        panelCapacity.add(boxCapacity, gridBagConstraints);
 
+        labelCapacity.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelCapacity.setText("<html>Maximum Capacity: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 60;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        jPanel4.add(labelCapacity, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 17);
+        panelCapacity.add(labelCapacity, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        jPanel5.add(jPanel4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelInfo.add(panelCapacity, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 100;
-        gridBagConstraints.insets = new java.awt.Insets(100, 50, 0, 0);
-        jPanel1.add(jPanel5, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(100, 0, 0, 0);
+        jPanel1.add(panelInfo, gridBagConstraints);
 
         panelModifyVehicle.add(jPanel1);
 
@@ -200,7 +205,7 @@ public class ModifyVehicle extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
             return;
         }
-        JOptionPane.showMessageDialog(null, "Changes applied successfully!");
+        JOptionPane.showMessageDialog(null, "Changes saved successfully!");
         // Go back to vehicle registration screen
         javax.swing.SwingUtilities.invokeLater(() -> {
             RegisteredVehicle registry = new RegisteredVehicle(userRole);
@@ -258,14 +263,14 @@ public class ModifyVehicle extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel labelCapacity;
     private javax.swing.JLabel labelImage;
     private javax.swing.JLabel labelModifyVehicle;
     private javax.swing.JLabel labelPlate;
+    private javax.swing.JPanel panelCapacity;
+    private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelModifyVehicle;
+    private javax.swing.JPanel panelPlate;
     private javax.swing.JTextField textPlate;
     // End of variables declaration//GEN-END:variables
 }

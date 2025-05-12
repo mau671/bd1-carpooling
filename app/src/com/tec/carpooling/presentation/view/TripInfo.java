@@ -77,8 +77,12 @@ public class TripInfo extends javax.swing.JFrame {
 
         panelTripInfo = new javax.swing.JPanel();
         labelTripInfo = new javax.swing.JLabel();
-        leftHorizontalDivision = new javax.swing.JPanel();
-        rightHorizontalDivision = new javax.swing.JPanel();
+        verticalDivision = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        panelRight = new javax.swing.JPanel();
+        panelDownR = new javax.swing.JPanel();
+        labelTitleRoute = new javax.swing.JLabel();
         panelStops = new javax.swing.JPanel();
         labelStops = new javax.swing.JLabel();
         scrollStops = new javax.swing.JScrollPane();
@@ -89,13 +93,25 @@ public class TripInfo extends javax.swing.JFrame {
         panelEndPoint = new javax.swing.JPanel();
         labelEndName = new javax.swing.JLabel();
         labelEndPoint = new javax.swing.JLabel();
-        labelTitleTime = new javax.swing.JLabel();
-        labelTitleVehicle = new javax.swing.JLabel();
+        PanelTopR = new javax.swing.JPanel();
+        rightHorizontalDivision = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        panelPrices = new javax.swing.JPanel();
+        panelPayment = new javax.swing.JPanel();
+        labelMethodChosen = new javax.swing.JLabel();
+        labelPaymentMethod = new javax.swing.JLabel();
+        panelPrice = new javax.swing.JPanel();
+        labelPrice = new javax.swing.JLabel();
+        labelPricePay = new javax.swing.JLabel();
+        panelCurrency = new javax.swing.JPanel();
+        labelCurrencyChosen = new javax.swing.JLabel();
+        labelCurrency = new javax.swing.JLabel();
         labelTitlePricing = new javax.swing.JLabel();
-        verticalDivision = new javax.swing.JPanel();
-        labelTitleRoute = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        jPanel5 = new javax.swing.JPanel();
+        panelLeft = new javax.swing.JPanel();
+        panelTopL = new javax.swing.JPanel();
+        leftBottomHorizontalDivision = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         panelTimesDates = new javax.swing.JPanel();
         panelEndTime = new javax.swing.JPanel();
         labelEnd = new javax.swing.JLabel();
@@ -109,6 +125,10 @@ public class TripInfo extends javax.swing.JFrame {
         panelStatus = new javax.swing.JPanel();
         labelSatus = new javax.swing.JLabel();
         labelCurrentStatus = new javax.swing.JLabel();
+        labelTitleTime = new javax.swing.JLabel();
+        panelMiddleL = new javax.swing.JPanel();
+        leftHorizontalDivision = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         panelVehicle = new javax.swing.JPanel();
         panelAmountSeats = new javax.swing.JPanel();
         labelMaxSeats = new javax.swing.JLabel();
@@ -119,16 +139,20 @@ public class TripInfo extends javax.swing.JFrame {
         panelPlate = new javax.swing.JPanel();
         labelPlateNumber = new javax.swing.JLabel();
         labelPlate = new javax.swing.JLabel();
-        panelPrices = new javax.swing.JPanel();
-        panelPayment = new javax.swing.JPanel();
-        labelMethodChosen = new javax.swing.JLabel();
-        labelPaymentMethod = new javax.swing.JLabel();
-        panelPrice = new javax.swing.JPanel();
-        labelPrice = new javax.swing.JLabel();
-        labelPricePay = new javax.swing.JLabel();
-        panelCurrency = new javax.swing.JPanel();
-        labelCurrencyChosen = new javax.swing.JLabel();
-        labelCurrency = new javax.swing.JLabel();
+        labelTitleVehicle = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        labelDriver = new javax.swing.JLabel();
+        panelDriver = new javax.swing.JPanel();
+        labelNameDriver = new javax.swing.JLabel();
+        labelName = new javax.swing.JLabel();
+        scrollNumbers = new javax.swing.JScrollPane();
+        listNumbers = new javax.swing.JList<>();
+        labelGenderDriver = new javax.swing.JLabel();
+        labelGender = new javax.swing.JLabel();
+        labelAgeDriver = new javax.swing.JLabel();
+        labelAge = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        photoDriver = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,50 +169,51 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 118, 0, 0);
         panelTripInfo.add(labelTripInfo, gridBagConstraints);
 
-        leftHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
+        verticalDivision.setBackground(new java.awt.Color(153, 153, 153));
 
-        javax.swing.GroupLayout leftHorizontalDivisionLayout = new javax.swing.GroupLayout(leftHorizontalDivision);
-        leftHorizontalDivision.setLayout(leftHorizontalDivisionLayout);
-        leftHorizontalDivisionLayout.setHorizontalGroup(
-            leftHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout verticalDivisionLayout = new javax.swing.GroupLayout(verticalDivision);
+        verticalDivision.setLayout(verticalDivisionLayout);
+        verticalDivisionLayout.setHorizontalGroup(
+            verticalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        leftHorizontalDivisionLayout.setVerticalGroup(
-            leftHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        verticalDivisionLayout.setVerticalGroup(
+            verticalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.ipadx = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 50);
+        panelTripInfo.add(verticalDivision, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 238;
-        gridBagConstraints.ipady = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-        gridBagConstraints.insets = new java.awt.Insets(50, 0, 50, 0);
-        panelTripInfo.add(leftHorizontalDivision, gridBagConstraints);
-
-        rightHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
-
-        javax.swing.GroupLayout rightHorizontalDivisionLayout = new javax.swing.GroupLayout(rightHorizontalDivision);
-        rightHorizontalDivision.setLayout(rightHorizontalDivisionLayout);
-        rightHorizontalDivisionLayout.setHorizontalGroup(
-            rightHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        rightHorizontalDivisionLayout.setVerticalGroup(
-            rightHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        panelTripInfo.add(filler1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 2;
-        gridBagConstraints.insets = new java.awt.Insets(50, 0, 50, 0);
-        panelTripInfo.add(rightHorizontalDivision, gridBagConstraints);
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        panelTripInfo.add(filler2, gridBagConstraints);
+
+        panelRight.setLayout(new java.awt.GridBagLayout());
+
+        panelDownR.setLayout(new java.awt.GridBagLayout());
+
+        labelTitleRoute.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelTitleRoute.setText("Route");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 20, 0);
+        panelDownR.add(labelTitleRoute, gridBagConstraints);
 
         panelStops.setLayout(new java.awt.GridBagLayout());
 
@@ -221,7 +246,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelStartPoint.add(labelStartName, gridBagConstraints);
 
         labelStartPoint.setText("Start: ");
@@ -229,7 +254,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelStartPoint.add(labelStartPoint, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -244,7 +269,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelEndPoint.add(labelEndName, gridBagConstraints);
 
         labelEndPoint.setText("End: ");
@@ -252,7 +277,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelEndPoint.add(labelEndPoint, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -262,77 +287,174 @@ public class TripInfo extends javax.swing.JFrame {
         panelStops.add(panelEndPoint, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-        panelTripInfo.add(panelStops, gridBagConstraints);
+        panelDownR.add(panelStops, gridBagConstraints);
 
-        labelTitleTime.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelTitleTime.setText("Times and Dates");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        panelRight.add(panelDownR, gridBagConstraints);
+
+        PanelTopR.setLayout(new java.awt.GridBagLayout());
+
+        rightHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout rightHorizontalDivisionLayout = new javax.swing.GroupLayout(rightHorizontalDivision);
+        rightHorizontalDivision.setLayout(rightHorizontalDivisionLayout);
+        rightHorizontalDivisionLayout.setHorizontalGroup(
+            rightHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        rightHorizontalDivisionLayout.setVerticalGroup(
+            rightHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 30, 0);
+        PanelTopR.add(rightHorizontalDivision, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        panelPrices.setLayout(new java.awt.GridBagLayout());
+
+        panelPayment.setLayout(new java.awt.GridBagLayout());
+
+        labelMethodChosen.setText("MethodChosen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        panelPayment.add(labelMethodChosen, gridBagConstraints);
+
+        labelPaymentMethod.setText("Payment Method:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelPayment.add(labelPaymentMethod, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        panelTripInfo.add(labelTitleTime, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelPrices.add(panelPayment, gridBagConstraints);
 
-        labelTitleVehicle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelTitleVehicle.setText("Vehicle");
+        panelPrice.setLayout(new java.awt.GridBagLayout());
+
+        labelPrice.setText("Price Per Passenger:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelPrice.add(labelPrice, gridBagConstraints);
+
+        labelPricePay.setText("PricePayed");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        panelTripInfo.add(labelTitleVehicle, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        panelPrice.add(labelPricePay, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelPrices.add(panelPrice, gridBagConstraints);
+
+        panelCurrency.setLayout(new java.awt.GridBagLayout());
+
+        labelCurrencyChosen.setText("CurrencyChosen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        panelCurrency.add(labelCurrencyChosen, gridBagConstraints);
+
+        labelCurrency.setText("Currency:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelCurrency.add(labelCurrency, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 53, 10, 0);
+        panelPrices.add(panelCurrency, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        jPanel2.add(panelPrices, gridBagConstraints);
 
         labelTitlePricing.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelTitlePricing.setText("Pricing");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 20, 0);
-        panelTripInfo.add(labelTitlePricing, gridBagConstraints);
+        jPanel2.add(labelTitlePricing, gridBagConstraints);
 
-        verticalDivision.setBackground(new java.awt.Color(153, 153, 153));
-
-        javax.swing.GroupLayout verticalDivisionLayout = new javax.swing.GroupLayout(verticalDivision);
-        verticalDivision.setLayout(verticalDivisionLayout);
-        verticalDivisionLayout.setHorizontalGroup(
-            verticalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        verticalDivisionLayout.setVerticalGroup(
-            verticalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.ipadx = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 50);
-        panelTripInfo.add(verticalDivision, gridBagConstraints);
-
-        labelTitleRoute.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelTitleRoute.setText("Route");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 20, 0);
-        panelTripInfo.add(labelTitleRoute, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        panelTripInfo.add(filler1, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        PanelTopR.add(jPanel2, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.weighty = 0.1;
-        panelTripInfo.add(filler2, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        panelRight.add(PanelTopR, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        panelTripInfo.add(panelRight, gridBagConstraints);
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        panelLeft.setLayout(new java.awt.GridBagLayout());
+
+        panelTopL.setLayout(new java.awt.GridBagLayout());
+
+        leftBottomHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout leftBottomHorizontalDivisionLayout = new javax.swing.GroupLayout(leftBottomHorizontalDivision);
+        leftBottomHorizontalDivision.setLayout(leftBottomHorizontalDivisionLayout);
+        leftBottomHorizontalDivisionLayout.setHorizontalGroup(
+            leftBottomHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        leftBottomHorizontalDivisionLayout.setVerticalGroup(
+            leftBottomHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 238;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 30, 0);
+        panelTopL.add(leftBottomHorizontalDivision, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         panelTimesDates.setLayout(new java.awt.GridBagLayout());
 
@@ -426,11 +548,56 @@ public class TripInfo extends javax.swing.JFrame {
         panelTimesDates.add(panelStatus, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 60);
-        panelTripInfo.add(panelTimesDates, gridBagConstraints);
+        jPanel1.add(panelTimesDates, gridBagConstraints);
+
+        labelTitleTime.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelTitleTime.setText("Times and Dates");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        jPanel1.add(labelTitleTime, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        panelTopL.add(jPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        panelLeft.add(panelTopL, gridBagConstraints);
+
+        panelMiddleL.setLayout(new java.awt.GridBagLayout());
+
+        leftHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout leftHorizontalDivisionLayout = new javax.swing.GroupLayout(leftHorizontalDivision);
+        leftHorizontalDivision.setLayout(leftHorizontalDivisionLayout);
+        leftHorizontalDivisionLayout.setHorizontalGroup(
+            leftHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        leftHorizontalDivisionLayout.setVerticalGroup(
+            leftHorizontalDivisionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 238;
+        gridBagConstraints.ipady = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 30, 0);
+        panelMiddleL.add(leftHorizontalDivision, gridBagConstraints);
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
 
         panelVehicle.setLayout(new java.awt.GridBagLayout());
 
@@ -501,86 +668,129 @@ public class TripInfo extends javax.swing.JFrame {
         panelVehicle.add(panelPlate, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
-        panelTripInfo.add(panelVehicle, gridBagConstraints);
+        jPanel3.add(panelVehicle, gridBagConstraints);
 
-        panelPrices.setLayout(new java.awt.GridBagLayout());
+        labelTitleVehicle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelTitleVehicle.setText("Vehicle");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        jPanel3.add(labelTitleVehicle, gridBagConstraints);
 
-        panelPayment.setLayout(new java.awt.GridBagLayout());
-
-        labelMethodChosen.setText("MethodChosen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        panelPayment.add(labelMethodChosen, gridBagConstraints);
-
-        labelPaymentMethod.setText("Payment Method:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panelPayment.add(labelPaymentMethod, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        panelPrices.add(panelPayment, gridBagConstraints);
-
-        panelPrice.setLayout(new java.awt.GridBagLayout());
-
-        labelPrice.setText("Price Per Passenger:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panelPrice.add(labelPrice, gridBagConstraints);
-
-        labelPricePay.setText("PricePayed");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        panelPrice.add(labelPricePay, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        panelPrices.add(panelPrice, gridBagConstraints);
-
-        panelCurrency.setLayout(new java.awt.GridBagLayout());
-
-        labelCurrencyChosen.setText("CurrencyChosen");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        panelCurrency.add(labelCurrencyChosen, gridBagConstraints);
-
-        labelCurrency.setText("Currency:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panelCurrency.add(labelCurrency, gridBagConstraints);
+        panelMiddleL.add(jPanel3, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 53, 10, 0);
-        panelPrices.add(panelCurrency, gridBagConstraints);
+        panelLeft.add(panelMiddleL, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel5.add(panelLeft, gridBagConstraints);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        labelDriver.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelDriver.setText("Driver");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 20, 0);
+        jPanel4.add(labelDriver, gridBagConstraints);
+
+        panelDriver.setLayout(new java.awt.GridBagLayout());
+
+        labelNameDriver.setText("Full Name: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 5);
+        panelDriver.add(labelNameDriver, gridBagConstraints);
+
+        labelName.setText("jLabel3");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 30);
+        panelDriver.add(labelName, gridBagConstraints);
+
+        listNumbers.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        scrollNumbers.setViewportView(listNumbers);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 50;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelDriver.add(scrollNumbers, gridBagConstraints);
+
+        labelGenderDriver.setText("Gender: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 5);
+        panelDriver.add(labelGenderDriver, gridBagConstraints);
+
+        labelGender.setText("jLabel5");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 30);
+        panelDriver.add(labelGender, gridBagConstraints);
+
+        labelAgeDriver.setText("Age: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        panelTripInfo.add(panelPrices, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 5);
+        panelDriver.add(labelAgeDriver, gridBagConstraints);
+
+        labelAge.setText("jLabel7");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 30);
+        panelDriver.add(labelAge, gridBagConstraints);
+
+        jLabel8.setText("Phone Numbers:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelDriver.add(jLabel8, gridBagConstraints);
+        panelDriver.add(photoDriver, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        jPanel4.add(panelDriver, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        jPanel5.add(jPanel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        panelTripInfo.add(jPanel5, gridBagConstraints);
 
         getContentPane().add(panelTripInfo, java.awt.BorderLayout.CENTER);
 
@@ -630,20 +840,34 @@ public class TripInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel PanelTopR;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel labelAge;
+    private javax.swing.JLabel labelAgeDriver;
     private javax.swing.JLabel labelAvailableSeats;
     private javax.swing.JLabel labelCurrency;
     private javax.swing.JLabel labelCurrencyChosen;
     private javax.swing.JLabel labelCurrentStatus;
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelDateTrip;
+    private javax.swing.JLabel labelDriver;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelEndName;
     private javax.swing.JLabel labelEndPoint;
     private javax.swing.JLabel labelEndTime;
+    private javax.swing.JLabel labelGender;
+    private javax.swing.JLabel labelGenderDriver;
     private javax.swing.JLabel labelMaxSeats;
     private javax.swing.JLabel labelMethodChosen;
+    private javax.swing.JLabel labelName;
+    private javax.swing.JLabel labelNameDriver;
     private javax.swing.JLabel labelPaymentMethod;
     private javax.swing.JLabel labelPlate;
     private javax.swing.JLabel labelPlateNumber;
@@ -662,26 +886,36 @@ public class TripInfo extends javax.swing.JFrame {
     private javax.swing.JLabel labelTitleTime;
     private javax.swing.JLabel labelTitleVehicle;
     private javax.swing.JLabel labelTripInfo;
+    private javax.swing.JPanel leftBottomHorizontalDivision;
     private javax.swing.JPanel leftHorizontalDivision;
+    private javax.swing.JList<String> listNumbers;
     private javax.swing.JPanel panelAmountSeats;
     private javax.swing.JPanel panelCurrency;
     private javax.swing.JPanel panelDate;
+    private javax.swing.JPanel panelDownR;
+    private javax.swing.JPanel panelDriver;
     private javax.swing.JPanel panelEndPoint;
     private javax.swing.JPanel panelEndTime;
+    private javax.swing.JPanel panelLeft;
     private javax.swing.JPanel panelList;
+    private javax.swing.JPanel panelMiddleL;
     private javax.swing.JPanel panelPayment;
     private javax.swing.JPanel panelPlate;
     private javax.swing.JPanel panelPrice;
     private javax.swing.JPanel panelPrices;
+    private javax.swing.JPanel panelRight;
     private javax.swing.JPanel panelSeatsLeft;
     private javax.swing.JPanel panelStartPoint;
     private javax.swing.JPanel panelStartTime;
     private javax.swing.JPanel panelStatus;
     private javax.swing.JPanel panelStops;
     private javax.swing.JPanel panelTimesDates;
+    private javax.swing.JPanel panelTopL;
     private javax.swing.JPanel panelTripInfo;
     private javax.swing.JPanel panelVehicle;
+    private javax.swing.JLabel photoDriver;
     private javax.swing.JPanel rightHorizontalDivision;
+    private javax.swing.JScrollPane scrollNumbers;
     private javax.swing.JScrollPane scrollStops;
     private javax.swing.JPanel verticalDivision;
     // End of variables declaration//GEN-END:variables

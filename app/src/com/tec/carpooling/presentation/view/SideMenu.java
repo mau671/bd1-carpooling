@@ -19,6 +19,7 @@ public class SideMenu {
         JButton vehicleInfoButton = new JButton("Registered Vehicles");
         JButton tripButton = new JButton("Trips Created");
         JButton searchTripButton = new JButton("Search for Trips");
+        JButton tripBookedButton = new JButton("Trips Booked");
         JButton logButton = new JButton("Activity Log");
         JButton switchRoleButton = new JButton();
         JButton logoutButton = new JButton("Log Out");
@@ -26,16 +27,16 @@ public class SideMenu {
         toolBar.add(profileButton);
 
         if (userRole.equals("Passenger")) {
+            toolBar.add(tripBookedButton);
             toolBar.add(searchTripButton);
-            toolBar.add(logButton);
             switchRoleButton.setText("Switch to Driver");
         } else if (userRole.equals("Driver")) {
             toolBar.add(vehicleInfoButton);
             toolBar.add(tripButton);
-            toolBar.add(logButton);
             switchRoleButton.setText("Switch to Passenger");
         }
-
+        
+        toolBar.add(logButton);
         toolBar.add(switchRoleButton);
         toolBar.add(logoutButton);
 
@@ -47,7 +48,15 @@ public class SideMenu {
             
             parentFrame.dispose();
         });
-
+        
+        tripBookedButton.addActionListener(e -> {
+            TripBooked search = new TripBooked(userRole);
+            search.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            search.setVisible(true);
+            
+            parentFrame.dispose();
+        });
+        
         searchTripButton.addActionListener(e -> {
             SearchTrip search = new SearchTrip(userRole);
             search.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -72,10 +81,10 @@ public class SideMenu {
             parentFrame.dispose();
         });
 
-        /*logButton.addActionListener(e -> {
-            new Historial(userRole).setVisible(true);
+        logButton.addActionListener(e -> {
+            new UserLog(userRole).setVisible(true);
             parentFrame.dispose();
-        });*/
+        });
 
         logoutButton.addActionListener(e -> {
             InitialPage home = new InitialPage();

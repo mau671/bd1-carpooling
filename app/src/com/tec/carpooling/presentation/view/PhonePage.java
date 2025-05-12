@@ -13,12 +13,12 @@ import javax.swing.JOptionPane;
  *
  * @author hidal
  */
-public class AddPhone extends javax.swing.JFrame {
+public class PhonePage extends javax.swing.JFrame {
 
     /**
      * Creates new form AddPhone
      */
-    public AddPhone() {
+    public PhonePage() {
         initComponents();
         setSize(450, 450);
         
@@ -63,12 +63,12 @@ public class AddPhone extends javax.swing.JFrame {
 
         labelAddPhone.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
         labelAddPhone.setForeground(new java.awt.Color(18, 102, 160));
-        labelAddPhone.setText("ADD PHONE NUMBER");
+        labelAddPhone.setText("PHONE NUMBER");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 40, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 40, 0);
         jPanel1.add(labelAddPhone, gridBagConstraints);
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -150,7 +150,7 @@ public class AddPhone extends javax.swing.JFrame {
         buttonNumber.setBackground(new java.awt.Color(246, 172, 30));
         buttonNumber.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonNumber.setForeground(new java.awt.Color(255, 255, 255));
-        buttonNumber.setText("Add Number");
+        buttonNumber.setText("Save Changes");
         buttonNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonNumberActionPerformed(evt);
@@ -176,7 +176,7 @@ public class AddPhone extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
             return;
         }
-        JOptionPane.showMessageDialog(null, "Phone number added successfully!");
+        JOptionPane.showMessageDialog(null, "Changes saved successfully!");
         // Go back to User Profile screen
         this.dispose();
     }//GEN-LAST:event_buttonNumberActionPerformed
@@ -198,20 +198,21 @@ public class AddPhone extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddPhone.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PhonePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddPhone.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PhonePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddPhone.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PhonePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddPhone.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PhonePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddPhone().setVisible(true);
+                new PhonePage().setVisible(true);
             }
         });
     }

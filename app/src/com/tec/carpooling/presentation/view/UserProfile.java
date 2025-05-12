@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -103,6 +104,9 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel29 = new javax.swing.JPanel();
         buttonAddNumber = new javax.swing.JButton();
         buttonAddEmail = new javax.swing.JButton();
+        buttonAddInstitution = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        buttonEliminate = new javax.swing.JButton();
         jPanel34 = new javax.swing.JPanel();
         buttonModifyProfile = new javax.swing.JButton();
 
@@ -639,7 +643,8 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel28.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 120);
         jPanel1.add(jPanel28, gridBagConstraints);
 
         jLabel9.setToolTipText("");
@@ -682,13 +687,36 @@ public class UserProfile extends javax.swing.JFrame {
         buttonAddEmail.setBackground(new java.awt.Color(18, 102, 160));
         buttonAddEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonAddEmail.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAddEmail.setText("Add Email");
+        buttonAddEmail.setText("Add Institution");
         buttonAddEmail.setMaximumSize(new java.awt.Dimension(85, 23));
         buttonAddEmail.setMinimumSize(new java.awt.Dimension(85, 23));
         buttonAddEmail.setPreferredSize(new java.awt.Dimension(90, 40));
         buttonAddEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonAddEmailActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 65;
+        gridBagConstraints.ipady = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        jPanel29.add(buttonAddEmail, gridBagConstraints);
+
+        buttonAddInstitution.setBackground(new java.awt.Color(18, 102, 160));
+        buttonAddInstitution.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonAddInstitution.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAddInstitution.setText("Add Email");
+        buttonAddInstitution.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonAddInstitution.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonAddInstitution.setPreferredSize(new java.awt.Dimension(90, 40));
+        buttonAddInstitution.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddInstitutionActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -700,14 +728,36 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel29.add(buttonAddEmail, gridBagConstraints);
+        jPanel29.add(buttonAddInstitution, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 80);
         jPanel1.add(jPanel29, gridBagConstraints);
+
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        buttonEliminate.setBackground(new java.awt.Color(255, 90, 90));
+        buttonEliminate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonEliminate.setForeground(new java.awt.Color(255, 255, 255));
+        buttonEliminate.setText("Eliminate Account");
+        buttonEliminate.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonEliminate.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonEliminate.setPreferredSize(new java.awt.Dimension(90, 40));
+        buttonEliminate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEliminateActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 65;
+        gridBagConstraints.ipady = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 0);
+        jPanel6.add(buttonEliminate, gridBagConstraints);
 
         jPanel34.setLayout(new java.awt.GridBagLayout());
 
@@ -733,11 +783,17 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel34.add(buttonModifyProfile, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 120);
+        jPanel6.add(jPanel34, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 120);
-        jPanel1.add(jPanel34, gridBagConstraints);
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 80, 0, 0);
+        jPanel1.add(jPanel6, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -746,7 +802,7 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void buttonAddEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddEmailActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            AddEmail email = new AddEmail();
+            EmailPage email = new EmailPage();
             email.setVisible(true);
             email.setLocationRelativeTo(null); // center on screen
         });
@@ -754,7 +810,7 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void buttonAddNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddNumberActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            AddPhone phone = new AddPhone();
+            PhonePage phone = new PhonePage();
             phone.setVisible(true);
             phone.setLocationRelativeTo(null); // center on screen
         });
@@ -769,6 +825,42 @@ public class UserProfile extends javax.swing.JFrame {
             UserProfile.this.dispose();
         });
     }//GEN-LAST:event_buttonModifyProfileActionPerformed
+
+    private void buttonEliminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEliminateActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to delete your account?",
+            "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Your account was successfully deleted.",
+                "Account Deleted",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                InitialPage start = new InitialPage();
+                start.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                start.setVisible(true);
+
+                UserProfile.this.dispose();
+            });
+        }
+    }//GEN-LAST:event_buttonEliminateActionPerformed
+
+    private void buttonAddInstitutionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddInstitutionActionPerformed
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            InstitutionPage institution = new InstitutionPage();
+            institution.setVisible(true);
+            institution.setLocationRelativeTo(null); // center on screen
+        });
+    }//GEN-LAST:event_buttonAddInstitutionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -810,7 +902,9 @@ public class UserProfile extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAddEmail;
+    private javax.swing.JButton buttonAddInstitution;
     private javax.swing.JButton buttonAddNumber;
+    private javax.swing.JButton buttonEliminate;
     private javax.swing.JButton buttonModifyProfile;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -860,6 +954,7 @@ public class UserProfile extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;

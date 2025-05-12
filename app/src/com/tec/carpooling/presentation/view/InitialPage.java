@@ -7,6 +7,8 @@ package com.tec.carpooling.presentation.view;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 /**
  *
  * @author hidal
@@ -79,13 +81,17 @@ public class InitialPage extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jButtonAboutUs.setText("About");
+        jButtonAboutUs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAboutUsActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 19;
         gridBagConstraints.ipady = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 155, 55, 4);
+        gridBagConstraints.insets = new java.awt.Insets(18, 170, 55, 4);
         jPanel3.add(jButtonAboutUs, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -186,6 +192,18 @@ public class InitialPage extends javax.swing.JFrame {
             this.dispose();
         });
     }//GEN-LAST:event_jButtonSignUpActionPerformed
+
+    private void jButtonAboutUsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAboutUsActionPerformed
+        JFrame about = new JFrame("About Us");
+        JTextArea textArea = new JTextArea("About us info go here...");
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+        textArea.setEditable(false);
+        about.add(new JScrollPane(textArea));
+        about.setSize(400, 300);
+        about.setLocationRelativeTo(null);
+        about.setVisible(true);
+    }//GEN-LAST:event_jButtonAboutUsActionPerformed
 
     /**
      * @param args the command line arguments

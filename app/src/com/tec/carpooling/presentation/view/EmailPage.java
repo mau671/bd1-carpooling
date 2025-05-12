@@ -15,12 +15,12 @@ import javax.swing.JTextField;
  *
  * @author hidal
  */
-public class AddEmail extends javax.swing.JFrame {
+public class EmailPage extends javax.swing.JFrame {
 
     /**
      * Creates new form AddEmail
      */
-    public AddEmail() {
+    public EmailPage() {
         initComponents();
         setSize(300, 450);
         
@@ -81,17 +81,17 @@ public class AddEmail extends javax.swing.JFrame {
 
         labelAddEmail.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
         labelAddEmail.setForeground(new java.awt.Color(18, 102, 160));
-        labelAddEmail.setText("ADD EMAIL");
+        labelAddEmail.setText("EMAIL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 40, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 40, 0);
         jPanel1.add(labelAddEmail, gridBagConstraints);
 
         buttonEmail.setBackground(new java.awt.Color(246, 172, 30));
         buttonEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonEmail.setForeground(new java.awt.Color(255, 255, 255));
-        buttonEmail.setText("Add Email");
+        buttonEmail.setText("Save Chnages");
         buttonEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonEmailActionPerformed(evt);
@@ -195,7 +195,7 @@ public class AddEmail extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
             return;
         }
-        JOptionPane.showMessageDialog(null, "Email added successfully!");
+        JOptionPane.showMessageDialog(null, "Changes saved successfully!");
         // Go back to User Profile screen
         this.dispose();
     }//GEN-LAST:event_buttonEmailActionPerformed
@@ -217,20 +217,21 @@ public class AddEmail extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmailPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmailPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmailPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddEmail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmailPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddEmail().setVisible(true);
+                new EmailPage().setVisible(true);
             }
         });
     }

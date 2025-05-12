@@ -305,9 +305,6 @@ public class ModifyRoute extends javax.swing.JFrame {
         panelStartP = new javax.swing.JPanel();
         boxStartP = new javax.swing.JComboBox<>();
         labelStartP = new javax.swing.JLabel();
-        panelPassengers = new javax.swing.JPanel();
-        boxPassengers = new javax.swing.JComboBox<>();
-        labelPassengers = new javax.swing.JLabel();
         buttonModifyTrip = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -596,33 +593,6 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         panelTimes.add(panelStart, gridBagConstraints);
 
-        panelPassengers.setLayout(new java.awt.GridBagLayout());
-
-        boxPassengers.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        panelPassengers.add(boxPassengers, gridBagConstraints);
-
-        labelPassengers.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelPassengers.setText("<html>Amount of Passengers: <span style='color:red'>*</span></html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
-        panelPassengers.add(labelPassengers, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(50, 30, 0, 0);
-        panelTimes.add(panelPassengers, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -730,7 +700,6 @@ public class ModifyRoute extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxEndC;
     private javax.swing.JComboBox<String> boxEndD;
     private javax.swing.JComboBox<String> boxEndP;
-    private javax.swing.JComboBox<String> boxPassengers;
     private javax.swing.JComboBox<String> boxStartC;
     private javax.swing.JComboBox<String> boxStartD;
     private javax.swing.JComboBox<String> boxStartP;
@@ -742,7 +711,6 @@ public class ModifyRoute extends javax.swing.JFrame {
     private javax.swing.JLabel labelEndD;
     private javax.swing.JLabel labelEndP;
     private javax.swing.JLabel labelModifyRoute;
-    private javax.swing.JLabel labelPassengers;
     private javax.swing.JLabel labelSearch;
     private javax.swing.JLabel labelStart;
     private javax.swing.JLabel labelStartC;
@@ -758,7 +726,6 @@ public class ModifyRoute extends javax.swing.JFrame {
     private javax.swing.JPanel panelMap;
     private javax.swing.JPanel panelMapStops;
     private javax.swing.JPanel panelModifyRoute;
-    private javax.swing.JPanel panelPassengers;
     private javax.swing.JPanel panelSearch;
     private javax.swing.JPanel panelStart;
     private javax.swing.JPanel panelStartC;

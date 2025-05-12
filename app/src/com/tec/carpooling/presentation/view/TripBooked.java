@@ -5,21 +5,22 @@
 package com.tec.carpooling.presentation.view;
 
 import java.awt.BorderLayout;
+import javax.swing.JCheckBox;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author hidal
  */
-public class ViewTrip extends javax.swing.JFrame {
+public class TripBooked extends javax.swing.JFrame {
     private String userRole;
     /**
-     * Creates new form Trips
+     * Creates new form TripBooked
      */
-    public ViewTrip(String role) {
+    public TripBooked(String role) {
         this.userRole = role;
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
@@ -51,7 +52,7 @@ public class ViewTrip extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        labelTrips = new javax.swing.JLabel();
+        labelTripsBooked = new javax.swing.JLabel();
         panelTable = new javax.swing.JPanel();
         scrollTrips = new javax.swing.JScrollPane();
         tableTrips = new javax.swing.JTable();
@@ -59,8 +60,8 @@ public class ViewTrip extends javax.swing.JFrame {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel3 = new javax.swing.JPanel();
-        buttonModify = new javax.swing.JButton();
-        buttonAdd = new javax.swing.JButton();
+        buttonCancel = new javax.swing.JButton();
+        buttonBook = new javax.swing.JButton();
         panelOrder = new javax.swing.JPanel();
         labelOrder = new javax.swing.JLabel();
         boxOrder = new javax.swing.JComboBox<>();
@@ -69,9 +70,9 @@ public class ViewTrip extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        labelTrips.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
-        labelTrips.setForeground(new java.awt.Color(18, 102, 160));
-        labelTrips.setText("TRIPS");
+        labelTripsBooked.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
+        labelTripsBooked.setForeground(new java.awt.Color(18, 102, 160));
+        labelTripsBooked.setText("TRIPS BOOKED");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -79,8 +80,8 @@ public class ViewTrip extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 400, 0, 0);
-        jPanel1.add(labelTrips, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 320, 0, 0);
+        jPanel1.add(labelTripsBooked, gridBagConstraints);
 
         panelTable.setLayout(new java.awt.BorderLayout());
 
@@ -125,34 +126,34 @@ public class ViewTrip extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        buttonModify.setBackground(new java.awt.Color(18, 102, 160));
-        buttonModify.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonModify.setForeground(new java.awt.Color(255, 255, 255));
-        buttonModify.setText("Modify Trip");
-        buttonModify.addActionListener(new java.awt.event.ActionListener() {
+        buttonCancel.setBackground(new java.awt.Color(18, 102, 160));
+        buttonCancel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonCancel.setForeground(new java.awt.Color(255, 255, 255));
+        buttonCancel.setText("Cancel Booking");
+        buttonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonModifyActionPerformed(evt);
+                buttonCancelActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipady = 30;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
-        jPanel3.add(buttonModify, gridBagConstraints);
+        jPanel3.add(buttonCancel, gridBagConstraints);
 
-        buttonAdd.setBackground(new java.awt.Color(246, 172, 30));
-        buttonAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonAdd.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAdd.setText("Schedule a Trip");
-        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
+        buttonBook.setBackground(new java.awt.Color(246, 172, 30));
+        buttonBook.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonBook.setForeground(new java.awt.Color(255, 255, 255));
+        buttonBook.setText("Book a Trip");
+        buttonBook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddActionPerformed(evt);
+                buttonBookActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipady = 30;
-        jPanel3.add(buttonAdd, gridBagConstraints);
+        jPanel3.add(buttonBook, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -170,7 +171,7 @@ public class ViewTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         panelOrder.add(labelOrder, gridBagConstraints);
 
-        boxOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Start Point", "Destination Point", "Vehicle Plate", "Status" }));
+        boxOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Start Point", "Destination Point", "Status" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -186,32 +187,34 @@ public class ViewTrip extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyActionPerformed
-        int row = tableTrips.getSelectedRow();
-        if (row != -1) {
-            Object valorColumna1 = tableTrips.getValueAt(row, 0); // Columna 0
-            Object valorColumna2 = tableTrips.getValueAt(row, 1); // Columna 1
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                ModifyTrip modify = new ModifyTrip(userRole);
-                modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                modify.setVisible(true);
+    private void buttonBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBookActionPerformed
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            SearchTrip search = new SearchTrip(userRole);
+            search.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            search.setVisible(true);
 
-                ViewTrip.this.dispose();
-            });
+            TripBooked.this.dispose();
+        });
+    }//GEN-LAST:event_buttonBookActionPerformed
+
+    private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
+        int row = tableTrips.getSelectedRow();
+
+        if (row != -1) {
+            // Check the "Status" column (adjust index if needed)
+            Object statusObj = tableTrips.getValueAt(row, 4); // Check Status Column
+            String status = statusObj != null ? statusObj.toString() : "";
+
+            if (status.equals("Scheduled")) {
+                // Continue only if status is "Scheduled"
+                JOptionPane.showMessageDialog(this, "Booking canceled successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Only trips with status 'Scheduled' can be canceled.");
+            }
         } else {
             JOptionPane.showMessageDialog(this, "A row must be selected.");
         }
-    }//GEN-LAST:event_buttonModifyActionPerformed
-
-    private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            ScheduleTrip add = new ScheduleTrip(userRole);
-            add.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            add.setVisible(true);
-
-            ViewTrip.this.dispose();
-        });
-    }//GEN-LAST:event_buttonAddActionPerformed
+    }//GEN-LAST:event_buttonCancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,15 +233,14 @@ public class ViewTrip extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewTrip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TripBooked.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewTrip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TripBooked.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewTrip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TripBooked.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewTrip.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TripBooked.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -246,22 +248,22 @@ public class ViewTrip extends javax.swing.JFrame {
             private String userRole;
             public void run() {
                 userRole = "Driver";
-                new ViewTrip(userRole).setVisible(true);
+                new TripBooked(userRole).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxOrder;
-    private javax.swing.JButton buttonAdd;
-    private javax.swing.JButton buttonModify;
+    private javax.swing.JButton buttonBook;
+    private javax.swing.JButton buttonCancel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel labelOrder;
-    private javax.swing.JLabel labelTrips;
+    private javax.swing.JLabel labelTripsBooked;
     private javax.swing.JPanel panelOrder;
     private javax.swing.JPanel panelTable;
     private javax.swing.JScrollPane scrollTrips;

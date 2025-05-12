@@ -8,6 +8,7 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.github.lgooddatepicker.components.TimePickerSettings;
 import java.net.URL;
 import java.util.Locale;
+import java.time.LocalDate;
 
 import java.awt.Image;
 import java.awt.Color;
@@ -75,6 +76,21 @@ public class UserSignUp extends javax.swing.JFrame {
             }
         });
         
+        labelLogIn.setForeground(Color.BLUE);
+        labelLogIn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        labelLogIn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    UserLogIn login = new UserLogIn();
+                    login.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    login.setVisible(true);
+
+                    UserSignUp.this.dispose();
+                });
+            }
+        });
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
@@ -88,16 +104,17 @@ public class UserSignUp extends javax.swing.JFrame {
             Image dateImage = getToolkit().getImage(dateImageURL);
             ImageIcon dateIcon = new ImageIcon(dateImage);
 
-            // Disable text field editing
-            dateOfBIrthPicker.getComponentDateTextField().setEditable(false);
-            dateOfBIrthPicker.getComponentDateTextField().setEnabled(false);
-            dateOfBIrthPicker.setDateToToday();
-            dateOfBIrthPicker.setLocale(Locale.ENGLISH);
+            dateOfBirthPicker.getComponentDateTextField().setEditable(false);
+            dateOfBirthPicker.getComponentDateTextField().setEnabled(false);
+            dateOfBirthPicker.setDateToToday();
+            dateOfBirthPicker.setLocale(Locale.ENGLISH);
 
-            // Set icon on button
-            JButton datePickerButton = dateOfBIrthPicker.getComponentToggleCalendarButton();
+            // ✅ Inline veto policy to block past dates
+            dateOfBirthPicker.getSettings().setVetoPolicy(date -> !date.isAfter(LocalDate.now()));
+
+            JButton datePickerButton = dateOfBirthPicker.getComponentToggleCalendarButton();
             datePickerButton.setText("");
-            datePickerButton.setIcon(dateIcon); 
+            datePickerButton.setIcon(dateIcon);
         } else {
             System.err.println("Image for date picker button not found.");
         }
@@ -114,8 +131,9 @@ public class UserSignUp extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
+        labelLogIn = new javax.swing.JLabel();
         buttonRegister = new javax.swing.JButton();
-        labelIngresar = new javax.swing.JLabel();
+        labelRegister = new javax.swing.JLabel();
         buttonPhoto = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
@@ -171,11 +189,20 @@ public class UserSignUp extends javax.swing.JFrame {
         termsCheckBox = new javax.swing.JCheckBox();
         jPanel6 = new javax.swing.JPanel();
         name_label5 = new javax.swing.JLabel();
-        dateOfBIrthPicker = new com.github.lgooddatepicker.components.DatePicker();
+        dateOfBirthPicker = new com.github.lgooddatepicker.components.DatePicker();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        labelLogIn.setText("Already have an account?");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 20, 0);
+        jPanel1.add(labelLogIn, gridBagConstraints);
 
         buttonRegister.setText("Register");
         buttonRegister.setBackground(new java.awt.Color(246, 172, 30));
@@ -199,16 +226,15 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 120, 31, 0);
         jPanel1.add(buttonRegister, gridBagConstraints);
 
-        labelIngresar.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
-        labelIngresar.setForeground(new java.awt.Color(18, 102, 160));
-        labelIngresar.setText("REGISTER");
+        labelRegister.setText("REGISTER");
+        labelRegister.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
+        labelRegister.setForeground(new java.awt.Color(18, 102, 160));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(60, 0, 60, 0);
-        jPanel1.add(labelIngresar, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(40, 100, 40, 0);
+        jPanel1.add(labelRegister, gridBagConstraints);
 
         buttonPhoto.setText("Add Photo");
         buttonPhoto.setPreferredSize(new java.awt.Dimension(80, 23));
@@ -283,7 +309,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel18, gridBagConstraints);
 
         jPanel20.setLayout(new java.awt.GridBagLayout());
@@ -316,7 +342,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel20, gridBagConstraints);
 
         jPanel22.setLayout(new java.awt.GridBagLayout());
@@ -348,7 +374,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel22, gridBagConstraints);
 
         jPanel24.setLayout(new java.awt.GridBagLayout());
@@ -403,7 +429,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 160, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel2, gridBagConstraints);
 
         jPanel26.setLayout(new java.awt.GridBagLayout());
@@ -465,7 +491,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 160, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel3, gridBagConstraints);
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -510,7 +536,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 160, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel4, gridBagConstraints);
 
         jPanel7.setLayout(new java.awt.GridBagLayout());
@@ -557,7 +583,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel7, gridBagConstraints);
 
         jPanel34.setLayout(new java.awt.GridBagLayout());
@@ -590,7 +616,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 160, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel34, gridBagConstraints);
 
         jPanel36.setLayout(new java.awt.GridBagLayout());
@@ -623,7 +649,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 160, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel36, gridBagConstraints);
 
         jPanel38.setLayout(new java.awt.GridBagLayout());
@@ -656,7 +682,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 23;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel38, gridBagConstraints);
 
         jPanel40.setLayout(new java.awt.GridBagLayout());
@@ -688,7 +714,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 160, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel40, gridBagConstraints);
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
@@ -735,13 +761,13 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 7, 0, 0);
-        jPanel6.add(dateOfBIrthPicker, gridBagConstraints);
+        jPanel6.add(dateOfBirthPicker, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 90, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel6, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -827,7 +853,7 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboBoxID;
     private javax.swing.JComboBox<String> comboBoxInstitution;
     private javax.swing.JComboBox<String> comboBoxNumber;
-    private com.github.lgooddatepicker.components.DatePicker dateOfBIrthPicker;
+    private com.github.lgooddatepicker.components.DatePicker dateOfBirthPicker;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -858,7 +884,8 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JLabel labelIngresar;
+    private javax.swing.JLabel labelLogIn;
+    private javax.swing.JLabel labelRegister;
     private javax.swing.JLabel name_label;
     private javax.swing.JLabel name_label10;
     private javax.swing.JLabel name_label11;
