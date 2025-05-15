@@ -63,8 +63,10 @@ public class ModifyVehicle extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        panelModifyVehicle.setBackground(new java.awt.Color(225, 239, 255));
         panelModifyVehicle.setLayout(new java.awt.GridLayout(1, 2, 2, 0));
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelModifyVehicle.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -108,9 +110,11 @@ public class ModifyVehicle extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
 
+        panelInfo.setBackground(new java.awt.Color(225, 239, 255));
         panelInfo.setMaximumSize(new java.awt.Dimension(394, 60));
         panelInfo.setLayout(new java.awt.GridBagLayout());
 
+        panelPlate.setBackground(new java.awt.Color(225, 239, 255));
         panelPlate.setMaximumSize(new java.awt.Dimension(201, 60));
         panelPlate.setMinimumSize(new java.awt.Dimension(201, 60));
         panelPlate.setPreferredSize(new java.awt.Dimension(193, 60));
@@ -143,6 +147,7 @@ public class ModifyVehicle extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         panelInfo.add(panelPlate, gridBagConstraints);
 
+        panelCapacity.setBackground(new java.awt.Color(225, 239, 255));
         panelCapacity.setMaximumSize(new java.awt.Dimension(201, 60));
         panelCapacity.setMinimumSize(new java.awt.Dimension(201, 60));
         panelCapacity.setPreferredSize(new java.awt.Dimension(201, 60));
@@ -182,6 +187,7 @@ public class ModifyVehicle extends javax.swing.JFrame {
 
         panelModifyVehicle.add(jPanel1);
 
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

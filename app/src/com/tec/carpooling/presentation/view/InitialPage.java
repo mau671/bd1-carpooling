@@ -28,6 +28,15 @@ public class InitialPage extends javax.swing.JFrame {
 
         // Set the scaled image as icon
         jLabelHomeImage.setIcon(new ImageIcon(scaledImage));
+        
+        ImageIcon logo = new ImageIcon(getClass().getResource("/Assets/logoRueda.png"));
+
+        // Scale it to fit the label
+        Image scaledLogo = logo.getImage().getScaledInstance(labelLogo.getWidth(), labelLogo.getHeight(), Image.SCALE_SMOOTH);
+
+        // Set the scaled image as icon
+        labelLogo.setIcon(new ImageIcon(scaledLogo));
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
@@ -43,7 +52,6 @@ public class InitialPage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabelHomeImage = new javax.swing.JLabel();
-        labelTitulo = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jButtonAboutUs = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -51,9 +59,14 @@ public class InitialPage extends javax.swing.JFrame {
         jButtonLogIn = new javax.swing.JButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        labelSlogan = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        labelLogo = new javax.swing.JLabel();
+        labelTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabelHomeImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assets/HomeImage.png"))); // NOI18N
@@ -65,19 +78,10 @@ public class InitialPage extends javax.swing.JFrame {
         gridBagConstraints.ipadx = -1185;
         gridBagConstraints.ipady = -773;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(22, 30, 22, 6);
+        gridBagConstraints.insets = new java.awt.Insets(22, 0, 20, 200);
         jPanel1.add(jLabelHomeImage, gridBagConstraints);
 
-        labelTitulo.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
-        labelTitulo.setForeground(new java.awt.Color(18, 102, 160));
-        labelTitulo.setText("BUDDYRIDE");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 160);
-        jPanel1.add(labelTitulo, gridBagConstraints);
-
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         jButtonAboutUs.setText("About");
@@ -91,9 +95,10 @@ public class InitialPage extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipady = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 170, 55, 4);
+        gridBagConstraints.insets = new java.awt.Insets(18, 170, 55, 6);
         jPanel3.add(jButtonAboutUs, gridBagConstraints);
 
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jButtonSignUp.setBackground(new java.awt.Color(18, 102, 160));
@@ -108,8 +113,9 @@ public class InitialPage extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.ipadx = 63;
-        gridBagConstraints.ipady = 27;
+        gridBagConstraints.ipady = 29;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 50);
         jPanel2.add(jButtonSignUp, gridBagConstraints);
@@ -127,6 +133,7 @@ public class InitialPage extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.ipadx = 52;
         gridBagConstraints.ipady = 27;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -142,9 +149,7 @@ public class InitialPage extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 180);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 200);
         jPanel1.add(jPanel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -157,6 +162,43 @@ public class InitialPage extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(filler5, gridBagConstraints);
+
+        labelSlogan.setFont(new java.awt.Font("Gadugi", 3, 14)); // NOI18N
+        labelSlogan.setForeground(new java.awt.Color(246, 172, 30));
+        labelSlogan.setText("Your Carpooling Companion");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 320);
+        jPanel1.add(labelSlogan, gridBagConstraints);
+
+        jPanel4.setBackground(new java.awt.Color(225, 239, 255));
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        labelLogo.setPreferredSize(new java.awt.Dimension(50, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 33;
+        gridBagConstraints.ipady = 59;
+        jPanel4.add(labelLogo, gridBagConstraints);
+
+        labelTitulo.setFont(new java.awt.Font("Cascadia Code", 1, 40)); // NOI18N
+        labelTitulo.setForeground(new java.awt.Color(18, 102, 160));
+        labelTitulo.setText("BUDDYRIDE");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 30);
+        jPanel4.add(labelTitulo, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 200);
+        jPanel1.add(jPanel4, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -251,6 +293,9 @@ public class InitialPage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel labelLogo;
+    private javax.swing.JLabel labelSlogan;
     private javax.swing.JLabel labelTitulo;
     // End of variables declaration//GEN-END:variables
 }

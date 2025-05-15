@@ -68,6 +68,7 @@ public class TripBooked extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelTripsBooked.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -80,10 +81,13 @@ public class TripBooked extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 320, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 290, 0, 0);
         jPanel1.add(labelTripsBooked, gridBagConstraints);
 
+        panelTable.setBackground(new java.awt.Color(225, 239, 255));
         panelTable.setLayout(new java.awt.BorderLayout());
+
+        scrollTrips.setBackground(new java.awt.Color(225, 239, 255));
 
         tableTrips.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,6 +128,7 @@ public class TripBooked extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler3, gridBagConstraints);
 
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         buttonCancel.setBackground(new java.awt.Color(18, 102, 160));
@@ -162,6 +167,7 @@ public class TripBooked extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         jPanel1.add(jPanel3, gridBagConstraints);
 
+        panelOrder.setBackground(new java.awt.Color(225, 239, 255));
         panelOrder.setLayout(new java.awt.GridBagLayout());
 
         labelOrder.setText("Order By:");

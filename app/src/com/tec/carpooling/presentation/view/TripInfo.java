@@ -156,6 +156,7 @@ public class TripInfo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        panelTripInfo.setBackground(new java.awt.Color(225, 239, 255));
         panelTripInfo.setLayout(new java.awt.GridBagLayout());
 
         labelTripInfo.setFont(new java.awt.Font("Segoe UI Semibold", 1, 40)); // NOI18N
@@ -169,7 +170,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 118, 0, 0);
         panelTripInfo.add(labelTripInfo, gridBagConstraints);
 
-        verticalDivision.setBackground(new java.awt.Color(153, 153, 153));
+        verticalDivision.setBackground(new java.awt.Color(18, 102, 160));
 
         javax.swing.GroupLayout verticalDivisionLayout = new javax.swing.GroupLayout(verticalDivision);
         verticalDivision.setLayout(verticalDivisionLayout);
@@ -203,8 +204,10 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         panelTripInfo.add(filler2, gridBagConstraints);
 
+        panelRight.setBackground(new java.awt.Color(225, 239, 255));
         panelRight.setLayout(new java.awt.GridBagLayout());
 
+        panelDownR.setBackground(new java.awt.Color(225, 239, 255));
         panelDownR.setLayout(new java.awt.GridBagLayout());
 
         labelTitleRoute.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -215,6 +218,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 20, 0);
         panelDownR.add(labelTitleRoute, gridBagConstraints);
 
+        panelStops.setBackground(new java.awt.Color(225, 239, 255));
         panelStops.setLayout(new java.awt.GridBagLayout());
 
         labelStops.setText("Stops:");
@@ -224,6 +228,9 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panelStops.add(labelStops, gridBagConstraints);
 
+        scrollStops.setBackground(new java.awt.Color(225, 239, 255));
+
+        panelList.setBackground(new java.awt.Color(225, 239, 255));
         panelList.setLayout(new javax.swing.BoxLayout(panelList, javax.swing.BoxLayout.Y_AXIS));
         scrollStops.setViewportView(panelList);
 
@@ -239,6 +246,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelStops.add(scrollStops, gridBagConstraints);
 
+        panelStartPoint.setBackground(new java.awt.Color(225, 239, 255));
         panelStartPoint.setLayout(new java.awt.GridBagLayout());
 
         labelStartName.setText("jLabel18");
@@ -262,6 +270,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         panelStops.add(panelStartPoint, gridBagConstraints);
 
+        panelEndPoint.setBackground(new java.awt.Color(225, 239, 255));
         panelEndPoint.setLayout(new java.awt.GridBagLayout());
 
         labelEndName.setText("jLabel21");
@@ -298,9 +307,10 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         panelRight.add(panelDownR, gridBagConstraints);
 
+        PanelTopR.setBackground(new java.awt.Color(225, 239, 255));
         PanelTopR.setLayout(new java.awt.GridBagLayout());
 
-        rightHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
+        rightHorizontalDivision.setBackground(new java.awt.Color(18, 102, 160));
 
         javax.swing.GroupLayout rightHorizontalDivisionLayout = new javax.swing.GroupLayout(rightHorizontalDivision);
         rightHorizontalDivision.setLayout(rightHorizontalDivisionLayout);
@@ -322,10 +332,13 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 30, 0);
         PanelTopR.add(rightHorizontalDivision, gridBagConstraints);
 
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        panelPrices.setBackground(new java.awt.Color(225, 239, 255));
         panelPrices.setLayout(new java.awt.GridBagLayout());
 
+        panelPayment.setBackground(new java.awt.Color(225, 239, 255));
         panelPayment.setLayout(new java.awt.GridBagLayout());
 
         labelMethodChosen.setText("MethodChosen");
@@ -348,6 +361,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         panelPrices.add(panelPayment, gridBagConstraints);
 
+        panelPrice.setBackground(new java.awt.Color(225, 239, 255));
         panelPrice.setLayout(new java.awt.GridBagLayout());
 
         labelPrice.setText("Price Per Passenger:");
@@ -370,6 +384,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelPrices.add(panelPrice, gridBagConstraints);
 
+        panelCurrency.setBackground(new java.awt.Color(225, 239, 255));
         panelCurrency.setLayout(new java.awt.GridBagLayout());
 
         labelCurrencyChosen.setText("CurrencyChosen");
@@ -425,13 +440,16 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         panelTripInfo.add(panelRight, gridBagConstraints);
 
+        jPanel5.setBackground(new java.awt.Color(225, 239, 255));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
+        panelLeft.setBackground(new java.awt.Color(225, 239, 255));
         panelLeft.setLayout(new java.awt.GridBagLayout());
 
+        panelTopL.setBackground(new java.awt.Color(225, 239, 255));
         panelTopL.setLayout(new java.awt.GridBagLayout());
 
-        leftBottomHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
+        leftBottomHorizontalDivision.setBackground(new java.awt.Color(18, 102, 160));
 
         javax.swing.GroupLayout leftBottomHorizontalDivisionLayout = new javax.swing.GroupLayout(leftBottomHorizontalDivision);
         leftBottomHorizontalDivision.setLayout(leftBottomHorizontalDivisionLayout);
@@ -454,10 +472,13 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 30, 0);
         panelTopL.add(leftBottomHorizontalDivision, gridBagConstraints);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
+        panelTimesDates.setBackground(new java.awt.Color(225, 239, 255));
         panelTimesDates.setLayout(new java.awt.GridBagLayout());
 
+        panelEndTime.setBackground(new java.awt.Color(225, 239, 255));
         panelEndTime.setLayout(new java.awt.GridBagLayout());
 
         labelEnd.setText("End Time:");
@@ -478,6 +499,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 52, 10, 0);
         panelTimesDates.add(panelEndTime, gridBagConstraints);
 
+        panelDate.setBackground(new java.awt.Color(225, 239, 255));
         panelDate.setLayout(new java.awt.GridBagLayout());
 
         labelDateTrip.setText("Date");
@@ -503,6 +525,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 40, 10, 0);
         panelTimesDates.add(panelDate, gridBagConstraints);
 
+        panelStartTime.setBackground(new java.awt.Color(225, 239, 255));
         panelStartTime.setLayout(new java.awt.GridBagLayout());
 
         labelStart.setText("Start Time:");
@@ -523,6 +546,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 49, 10, 0);
         panelTimesDates.add(panelStartTime, gridBagConstraints);
 
+        panelStatus.setBackground(new java.awt.Color(225, 239, 255));
         panelStatus.setLayout(new java.awt.GridBagLayout());
 
         labelSatus.setText("Current Status:");
@@ -572,9 +596,10 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         panelLeft.add(panelTopL, gridBagConstraints);
 
+        panelMiddleL.setBackground(new java.awt.Color(225, 239, 255));
         panelMiddleL.setLayout(new java.awt.GridBagLayout());
 
-        leftHorizontalDivision.setBackground(new java.awt.Color(153, 153, 153));
+        leftHorizontalDivision.setBackground(new java.awt.Color(18, 102, 160));
 
         javax.swing.GroupLayout leftHorizontalDivisionLayout = new javax.swing.GroupLayout(leftHorizontalDivision);
         leftHorizontalDivision.setLayout(leftHorizontalDivisionLayout);
@@ -597,10 +622,13 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 30, 0);
         panelMiddleL.add(leftHorizontalDivision, gridBagConstraints);
 
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        panelVehicle.setBackground(new java.awt.Color(225, 239, 255));
         panelVehicle.setLayout(new java.awt.GridBagLayout());
 
+        panelAmountSeats.setBackground(new java.awt.Color(225, 239, 255));
         panelAmountSeats.setLayout(new java.awt.GridBagLayout());
 
         labelMaxSeats.setText("Amount of Seats:");
@@ -623,6 +651,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 23, 10, 0);
         panelVehicle.add(panelAmountSeats, gridBagConstraints);
 
+        panelSeatsLeft.setBackground(new java.awt.Color(225, 239, 255));
         panelSeatsLeft.setLayout(new java.awt.GridBagLayout());
 
         labelAvailableSeats.setText("NumberSeats");
@@ -646,6 +675,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         panelVehicle.add(panelSeatsLeft, gridBagConstraints);
 
+        panelPlate.setBackground(new java.awt.Color(225, 239, 255));
         panelPlate.setLayout(new java.awt.GridBagLayout());
 
         labelPlateNumber.setText("Plate Number:");
@@ -697,6 +727,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         jPanel5.add(panelLeft, gridBagConstraints);
 
+        jPanel4.setBackground(new java.awt.Color(225, 239, 255));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         labelDriver.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -707,6 +738,7 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 20, 0);
         jPanel4.add(labelDriver, gridBagConstraints);
 
+        panelDriver.setBackground(new java.awt.Color(225, 239, 255));
         panelDriver.setLayout(new java.awt.GridBagLayout());
 
         labelNameDriver.setText("Full Name: ");
@@ -722,6 +754,8 @@ public class TripInfo extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 30);
         panelDriver.add(labelName, gridBagConstraints);
+
+        scrollNumbers.setBackground(new java.awt.Color(225, 239, 255));
 
         listNumbers.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };

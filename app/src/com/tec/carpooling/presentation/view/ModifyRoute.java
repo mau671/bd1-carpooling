@@ -309,11 +309,12 @@ public class ModifyRoute extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        panelModifyRoute.setBackground(new java.awt.Color(225, 239, 255));
         panelModifyRoute.setLayout(new java.awt.GridBagLayout());
 
+        labelModifyRoute.setText("MODIFY ROUTE");
         labelModifyRoute.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
         labelModifyRoute.setForeground(new java.awt.Color(18, 102, 160));
-        labelModifyRoute.setText("MODIFY ROUTE");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -321,7 +322,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 330, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 280, 0, 0);
         panelModifyRoute.add(labelModifyRoute, gridBagConstraints);
 
         labelStop.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -333,14 +334,17 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 10, 30);
         panelModifyRoute.add(labelStop, gridBagConstraints);
 
+        panelMapStops.setBackground(new java.awt.Color(225, 239, 255));
         panelMapStops.setMinimumSize(new java.awt.Dimension(500, 500));
         panelMapStops.setLayout(new javax.swing.BoxLayout(panelMapStops, javax.swing.BoxLayout.Y_AXIS));
 
+        panelMap.setBackground(new java.awt.Color(225, 239, 255));
         panelMap.setMinimumSize(new java.awt.Dimension(280, 300));
         panelMap.setPreferredSize(new java.awt.Dimension(500, 300));
         panelMap.setLayout(new java.awt.BorderLayout());
         panelMapStops.add(panelMap);
 
+        panelList.setBackground(new java.awt.Color(225, 239, 255));
         panelList.setLayout(new java.awt.BorderLayout());
 
         scrollPanelList.setAlignmentX(0.0F);
@@ -349,6 +353,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         scrollPanelList.setMinimumSize(new java.awt.Dimension(280, 200));
         scrollPanelList.setRequestFocusEnabled(false);
 
+        panelStops.setBackground(new java.awt.Color(225, 239, 255));
         panelStops.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         panelStops.setAlignmentY(0.0F);
         panelStops.setMaximumSize(new java.awt.Dimension(300, 200));
@@ -376,6 +381,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         panelModifyRoute.add(filler2, gridBagConstraints);
 
+        panelSearch.setBackground(new java.awt.Color(225, 239, 255));
         panelSearch.setLayout(new java.awt.GridBagLayout());
 
         labelSearch.setText("Search Place: ");
@@ -404,12 +410,16 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 20);
         panelModifyRoute.add(panelSearch, gridBagConstraints);
 
+        panelInfo.setBackground(new java.awt.Color(225, 239, 255));
         panelInfo.setLayout(new java.awt.GridBagLayout());
 
+        panelTimes.setBackground(new java.awt.Color(225, 239, 255));
         panelTimes.setLayout(new java.awt.GridBagLayout());
 
+        panelEnd.setBackground(new java.awt.Color(225, 239, 255));
         panelEnd.setLayout(new java.awt.GridBagLayout());
 
+        panelEndD.setBackground(new java.awt.Color(225, 239, 255));
         panelEndD.setLayout(new java.awt.GridBagLayout());
 
         labelEndD.setText("District:");
@@ -434,6 +444,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         panelEnd.add(panelEndD, gridBagConstraints);
 
+        panelEndP.setBackground(new java.awt.Color(225, 239, 255));
         panelEndP.setLayout(new java.awt.GridBagLayout());
 
         labelEndP.setText("Province:");
@@ -458,6 +469,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         panelEnd.add(panelEndP, gridBagConstraints);
 
+        panelEndC.setBackground(new java.awt.Color(225, 239, 255));
         panelEndC.setLayout(new java.awt.GridBagLayout());
 
         labelEndC.setText("Canton:");
@@ -500,8 +512,10 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         panelTimes.add(panelEnd, gridBagConstraints);
 
+        panelStart.setBackground(new java.awt.Color(225, 239, 255));
         panelStart.setLayout(new java.awt.GridBagLayout());
 
+        panelStartD.setBackground(new java.awt.Color(225, 239, 255));
         panelStartD.setLayout(new java.awt.GridBagLayout());
 
         boxStartD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -529,6 +543,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 2;
         panelStart.add(panelStartD, gridBagConstraints);
 
+        panelStartC.setBackground(new java.awt.Color(225, 239, 255));
         panelStartC.setLayout(new java.awt.GridBagLayout());
 
         labelStartC.setText("Canton:");
@@ -564,6 +579,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 0);
         panelStart.add(labelStart, gridBagConstraints);
 
+        panelStartP.setBackground(new java.awt.Color(225, 239, 255));
         panelStartP.setLayout(new java.awt.GridBagLayout());
 
         boxStartP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));

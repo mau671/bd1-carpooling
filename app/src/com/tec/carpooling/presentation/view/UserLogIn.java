@@ -111,6 +111,7 @@ public class UserLogIn extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        panelLogin.setBackground(new java.awt.Color(225, 239, 255));
         panelLogin.setLayout(new java.awt.GridBagLayout());
 
         labelLogIn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -139,6 +140,7 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         panelLogin.add(filler3, gridBagConstraints);
 
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         buttonLogin.setBackground(new java.awt.Color(246, 172, 30));
@@ -158,6 +160,7 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
         jPanel2.add(buttonLogin, gridBagConstraints);
 
+        labelLog.setBackground(new java.awt.Color(225, 239, 255));
         labelLog.setLayout(new java.awt.GridBagLayout());
 
         checkPassword.setText("Show Password");
@@ -173,8 +176,10 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         labelLog.add(checkPassword, gridBagConstraints);
 
+        panelInfo.setBackground(new java.awt.Color(225, 239, 255));
         panelInfo.setLayout(new java.awt.GridBagLayout());
 
+        panelPassword.setBackground(new java.awt.Color(225, 239, 255));
         panelPassword.setLayout(new java.awt.GridBagLayout());
 
         textPassword.setPreferredSize(new java.awt.Dimension(134, 30));
@@ -203,6 +208,7 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         panelInfo.add(panelPassword, gridBagConstraints);
 
+        panelEmail.setBackground(new java.awt.Color(225, 239, 255));
         panelEmail.setLayout(new java.awt.GridBagLayout());
 
         textEmail.setText("jTextField1");

@@ -222,6 +222,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelAddTrip.setText("SCHEDULE TRIP");
@@ -233,9 +234,10 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 22;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 300, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 270, 0, 0);
         jPanel1.add(labelAddTrip, gridBagConstraints);
 
+        panelDate.setBackground(new java.awt.Color(225, 239, 255));
         panelDate.setLayout(new java.awt.GridBagLayout());
 
         labelDate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -260,6 +262,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 70, 30, 0);
         jPanel1.add(panelDate, gridBagConstraints);
 
+        panelPrice.setBackground(new java.awt.Color(225, 239, 255));
         panelPrice.setLayout(new java.awt.GridBagLayout());
 
         labelPrice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -291,6 +294,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(panelPrice, gridBagConstraints);
 
+        panelPayment.setBackground(new java.awt.Color(225, 239, 255));
         panelPayment.setLayout(new java.awt.GridBagLayout());
 
         boxMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -315,6 +319,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 50, 0);
         jPanel1.add(panelPayment, gridBagConstraints);
 
+        panelPassengers.setBackground(new java.awt.Color(225, 239, 255));
         panelPassengers.setLayout(new java.awt.GridBagLayout());
 
         labelSeats.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -337,6 +342,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 70, 50, 0);
         jPanel1.add(panelPassengers, gridBagConstraints);
 
+        panelCurrency.setBackground(new java.awt.Color(225, 239, 255));
         panelCurrency.setLayout(new java.awt.GridBagLayout());
 
         labelCurrency.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -387,8 +393,10 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
 
+        panelTimes.setBackground(new java.awt.Color(225, 239, 255));
         panelTimes.setLayout(new java.awt.GridBagLayout());
 
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         boxStartTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "05:00AM", "05:30AM", "06:00AM", "06:30AM", "07:00AM", "07:30AM", "08:00AM", "08:30AM", "09:00AM", "09:30AM", "10:00AM", "10:30AM", "11:00AM", "11:30AM", "12:00PM", "12:30PM", "01:00PM", "01:30PM", "02:00PM", "02:30PM", "03:00PM", "03:30PM", "04:00PM", "04:30PM", "05:00PM", "05:30PM", "06:00PM", "06:30PM", "07:00PM", "07:30PM", "08:00PM", "08:30PM", "09:00PM", "09:30PM", "10:00PM", "10:30PM", "11:00PM", "11:30PM" }));
@@ -418,6 +426,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelTimes.add(jPanel3, gridBagConstraints);
 
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         labelEndTime.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -448,7 +457,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 70, 30, 0);
         jPanel1.add(panelTimes, gridBagConstraints);
 
-        panelDivision.setBackground(new java.awt.Color(153, 153, 153));
+        panelDivision.setBackground(new java.awt.Color(18, 102, 160));
         panelDivision.setMinimumSize(new java.awt.Dimension(2, 10));
         panelDivision.setPreferredSize(new java.awt.Dimension(2, 10));
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -43,6 +43,7 @@ public class PasswordPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         labelChangePassword.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -70,6 +71,7 @@ public class PasswordPage extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 40, 0);
         jPanel3.add(buttonPassword, gridBagConstraints);
 
+        panelNew.setBackground(new java.awt.Color(225, 239, 255));
         panelNew.setLayout(new java.awt.GridBagLayout());
 
         labelNew.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -110,6 +112,7 @@ public class PasswordPage extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         jPanel3.add(panelNew, gridBagConstraints);
 
+        panelOld.setBackground(new java.awt.Color(225, 239, 255));
         panelOld.setLayout(new java.awt.GridBagLayout());
 
         labelOld.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -223,16 +226,10 @@ public class PasswordPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonEmail;
-    private javax.swing.JButton buttonEmail1;
     private javax.swing.JButton buttonPassword;
     private javax.swing.JCheckBox checkNew;
     private javax.swing.JCheckBox checkOld;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JLabel labelAddEmail;
-    private javax.swing.JLabel labelAddEmail1;
     private javax.swing.JLabel labelChangePassword;
     private javax.swing.JLabel labelNew;
     private javax.swing.JLabel labelOld;

@@ -137,7 +137,6 @@ public class UserSignUp extends javax.swing.JFrame {
         buttonPhoto = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        jPanel5 = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel18 = new javax.swing.JPanel();
@@ -149,28 +148,21 @@ public class UserSignUp extends javax.swing.JFrame {
         jPanel22 = new javax.swing.JPanel();
         name_label4 = new javax.swing.JLabel();
         textSurname2 = new javax.swing.JTextField();
-        jPanel24 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         name_label = new javax.swing.JLabel();
-        jPanel14 = new javax.swing.JPanel();
         comboBoxID = new javax.swing.JComboBox<>();
-        jPanel26 = new javax.swing.JPanel();
-        jPanel27 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel28 = new javax.swing.JPanel();
         name_label7 = new javax.swing.JLabel();
-        jPanel29 = new javax.swing.JPanel();
         comboBoxNumber = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jPanel30 = new javax.swing.JPanel();
         name_label8 = new javax.swing.JLabel();
-        jPanel31 = new javax.swing.JPanel();
         comboBoxInstitution = new javax.swing.JComboBox<>();
         jPanel7 = new javax.swing.JPanel();
         jPanel32 = new javax.swing.JPanel();
         name_label9 = new javax.swing.JLabel();
-        jPanel33 = new javax.swing.JPanel();
         comboBoxGender = new javax.swing.JComboBox<>();
         jPanel34 = new javax.swing.JPanel();
         name_label10 = new javax.swing.JLabel();
@@ -193,6 +185,7 @@ public class UserSignUp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelLogIn.setText("Already have an account?");
@@ -255,15 +248,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridy = 17;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
-
-        jPanel5.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
-        jPanel1.add(jPanel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 2;
@@ -275,6 +259,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(filler4, gridBagConstraints);
 
+        jPanel18.setBackground(new java.awt.Color(225, 239, 255));
         jPanel18.setLayout(new java.awt.GridBagLayout());
 
         name_label2.setText("Second Name:");
@@ -312,6 +297,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel18, gridBagConstraints);
 
+        jPanel20.setBackground(new java.awt.Color(225, 239, 255));
         jPanel20.setLayout(new java.awt.GridBagLayout());
 
         name_label3.setText("<html>First Surname: <span style='color:red'>*</span></html>");
@@ -345,6 +331,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel20, gridBagConstraints);
 
+        jPanel22.setBackground(new java.awt.Color(225, 239, 255));
         jPanel22.setLayout(new java.awt.GridBagLayout());
 
         name_label4.setText("Second Surame:");
@@ -377,18 +364,10 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel22, gridBagConstraints);
 
-        jPanel24.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
-        jPanel1.add(jPanel24, gridBagConstraints);
-
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        jPanel15.setBackground(new java.awt.Color(225, 239, 255));
         jPanel15.setLayout(new java.awt.GridBagLayout());
 
         name_label.setText("<html>Type of Identification: <span style='color:red'>*</span></html>");
@@ -400,14 +379,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel15.add(name_label, gridBagConstraints);
-
-        jPanel14.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel15.add(jPanel14, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -432,25 +403,10 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel2, gridBagConstraints);
 
-        jPanel26.setLayout(new java.awt.GridBagLayout());
-
-        jPanel27.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel26.add(jPanel27, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
-        jPanel1.add(jPanel26, gridBagConstraints);
-
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        jPanel28.setBackground(new java.awt.Color(225, 239, 255));
         jPanel28.setLayout(new java.awt.GridBagLayout());
 
         name_label7.setText("<html>Type of Phone Number: <span style='color:red'>*</span></html>");
@@ -462,14 +418,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel28.add(name_label7, gridBagConstraints);
-
-        jPanel29.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel28.add(jPanel29, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -494,8 +442,10 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel3, gridBagConstraints);
 
+        jPanel4.setBackground(new java.awt.Color(225, 239, 255));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
+        jPanel30.setBackground(new java.awt.Color(225, 239, 255));
         jPanel30.setLayout(new java.awt.GridBagLayout());
 
         name_label8.setText("<html>Institution You Belong To: <span style='color:red'>*</span></html>");
@@ -507,14 +457,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel30.add(name_label8, gridBagConstraints);
-
-        jPanel31.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel30.add(jPanel31, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -539,8 +481,10 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel4, gridBagConstraints);
 
+        jPanel7.setBackground(new java.awt.Color(225, 239, 255));
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
+        jPanel32.setBackground(new java.awt.Color(225, 239, 255));
         jPanel32.setLayout(new java.awt.GridBagLayout());
 
         name_label9.setText("<html>Gender: <span style='color:red'>*</span></html>");
@@ -553,14 +497,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel32.add(name_label9, gridBagConstraints);
-
-        jPanel33.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel32.add(jPanel33, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -586,6 +522,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel7, gridBagConstraints);
 
+        jPanel34.setBackground(new java.awt.Color(225, 239, 255));
         jPanel34.setLayout(new java.awt.GridBagLayout());
 
         name_label10.setText("<html>Phone Number: <span style='color:red'>*</span></html>");
@@ -619,6 +556,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel34, gridBagConstraints);
 
+        jPanel36.setBackground(new java.awt.Color(225, 239, 255));
         jPanel36.setLayout(new java.awt.GridBagLayout());
 
         name_label11.setText("<html>Email: <span style='color:red'>*</span></html>");
@@ -652,6 +590,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel36, gridBagConstraints);
 
+        jPanel38.setBackground(new java.awt.Color(225, 239, 255));
         jPanel38.setLayout(new java.awt.GridBagLayout());
 
         name_label12.setText("<html>First Name: <span style='color:red'>*</span></html>");
@@ -685,6 +624,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel38, gridBagConstraints);
 
+        jPanel40.setBackground(new java.awt.Color(225, 239, 255));
         jPanel40.setLayout(new java.awt.GridBagLayout());
 
         name_label13.setText("<html>Identification Number: <span style='color:red'>*</span></html>");
@@ -717,6 +657,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel40, gridBagConstraints);
 
+        jPanel8.setBackground(new java.awt.Color(225, 239, 255));
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
         termsLink.setText("Terms and Conditions");
@@ -746,6 +687,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 2;
         jPanel1.add(jPanel8, gridBagConstraints);
 
+        jPanel6.setBackground(new java.awt.Color(225, 239, 255));
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         name_label5.setText("<html>Date of Birth: <span style='color:red'>*</span></html>");
@@ -859,28 +801,20 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel24;
-    private javax.swing.JPanel jPanel26;
-    private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
-    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel32;
-    private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel34;
     private javax.swing.JPanel jPanel36;
     private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;

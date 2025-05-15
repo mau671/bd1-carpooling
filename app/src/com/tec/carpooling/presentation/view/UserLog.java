@@ -45,6 +45,7 @@ public class UserLog extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelLog.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -57,10 +58,13 @@ public class UserLog extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 330, 30, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 300, 30, 0);
         jPanel1.add(labelLog, gridBagConstraints);
 
+        panelTable.setBackground(new java.awt.Color(225, 239, 255));
         panelTable.setLayout(new java.awt.BorderLayout());
+
+        scrollLog.setBackground(new java.awt.Color(225, 239, 255));
 
         tableLog.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,6 +105,7 @@ public class UserLog extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler3, gridBagConstraints);
 
+        panelOrder.setBackground(new java.awt.Color(225, 239, 255));
         panelOrder.setLayout(new java.awt.GridBagLayout());
 
         labelOrder.setText("Order By:");

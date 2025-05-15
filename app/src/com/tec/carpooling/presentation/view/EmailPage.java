@@ -69,7 +69,6 @@ public class EmailPage extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel30 = new javax.swing.JPanel();
         name_label8 = new javax.swing.JLabel();
-        jPanel31 = new javax.swing.JPanel();
         boxInstitution = new javax.swing.JComboBox<>();
         jPanel36 = new javax.swing.JPanel();
         name_label11 = new javax.swing.JLabel();
@@ -77,6 +76,7 @@ public class EmailPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelAddEmail.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -104,8 +104,10 @@ public class EmailPage extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 40, 0);
         jPanel1.add(buttonEmail, gridBagConstraints);
 
+        jPanel4.setBackground(new java.awt.Color(225, 239, 255));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
+        jPanel30.setBackground(new java.awt.Color(225, 239, 255));
         jPanel30.setLayout(new java.awt.GridBagLayout());
 
         name_label8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -117,14 +119,6 @@ public class EmailPage extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel30.add(name_label8, gridBagConstraints);
-
-        jPanel31.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel30.add(jPanel31, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -151,6 +145,7 @@ public class EmailPage extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         jPanel1.add(jPanel4, gridBagConstraints);
 
+        jPanel36.setBackground(new java.awt.Color(225, 239, 255));
         jPanel36.setLayout(new java.awt.GridBagLayout());
 
         name_label11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -241,7 +236,6 @@ public class EmailPage extends javax.swing.JFrame {
     private javax.swing.JButton buttonEmail;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel36;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel labelAddEmail;

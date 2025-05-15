@@ -82,14 +82,12 @@ public class ModifyProfile extends javax.swing.JFrame {
         labelProfile = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        jPanel5 = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel2 = new javax.swing.JPanel();
         panelGender = new javax.swing.JPanel();
         jPanel32 = new javax.swing.JPanel();
         name_label9 = new javax.swing.JLabel();
-        jPanel33 = new javax.swing.JPanel();
         boxGender = new javax.swing.JComboBox<>();
         panelDateBirth = new javax.swing.JPanel();
         name_label5 = new javax.swing.JLabel();
@@ -118,7 +116,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel30 = new javax.swing.JPanel();
         name_label8 = new javax.swing.JLabel();
-        jPanel31 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listInstitutions = new javax.swing.JList<>();
         jPanel7 = new javax.swing.JPanel();
@@ -138,7 +135,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         panelIDType = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         name_label = new javax.swing.JLabel();
-        jPanel14 = new javax.swing.JPanel();
         boxID = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         buttonModify = new javax.swing.JButton();
@@ -147,6 +143,7 @@ public class ModifyProfile extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelProfile.setText("MODIFY USER PROFILE");
@@ -158,7 +155,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.ipady = 80;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 40);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 50);
         jPanel1.add(labelProfile, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -170,14 +167,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.gridy = 17;
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
-
-        jPanel5.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
-        jPanel1.add(jPanel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 2;
@@ -189,10 +178,13 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(filler4, gridBagConstraints);
 
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
+        panelGender.setBackground(new java.awt.Color(225, 239, 255));
         panelGender.setLayout(new java.awt.GridBagLayout());
 
+        jPanel32.setBackground(new java.awt.Color(225, 239, 255));
         jPanel32.setLayout(new java.awt.GridBagLayout());
 
         name_label9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -204,14 +196,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel32.add(name_label9, gridBagConstraints);
-
-        jPanel33.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel32.add(jPanel33, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -236,6 +220,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
         jPanel2.add(panelGender, gridBagConstraints);
 
+        panelDateBirth.setBackground(new java.awt.Color(225, 239, 255));
         panelDateBirth.setLayout(new java.awt.GridBagLayout());
 
         name_label5.setText("<html>Date of Birth: <span style='color:red'>*</span></html>");
@@ -260,6 +245,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 90, 0, 0);
         jPanel2.add(panelDateBirth, gridBagConstraints);
 
+        panelSurname1.setBackground(new java.awt.Color(225, 239, 255));
         panelSurname1.setLayout(new java.awt.GridBagLayout());
 
         name_label3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -293,6 +279,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
         jPanel2.add(panelSurname1, gridBagConstraints);
 
+        panelName1.setBackground(new java.awt.Color(225, 239, 255));
         panelName1.setLayout(new java.awt.GridBagLayout());
 
         name_label12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -326,6 +313,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
         jPanel2.add(panelName1, gridBagConstraints);
 
+        panelName2.setBackground(new java.awt.Color(225, 239, 255));
         panelName2.setLayout(new java.awt.GridBagLayout());
 
         name_label2.setText("Second Name:");
@@ -358,6 +346,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
         jPanel2.add(panelName2, gridBagConstraints);
 
+        panelSurname2.setBackground(new java.awt.Color(225, 239, 255));
         panelSurname2.setLayout(new java.awt.GridBagLayout());
 
         name_label4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -396,8 +385,10 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         jPanel1.add(jPanel2, gridBagConstraints);
 
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        panelNumbers.setBackground(new java.awt.Color(225, 239, 255));
         panelNumbers.setLayout(new java.awt.GridBagLayout());
 
         name_label7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -432,6 +423,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         panelNumbers.add(jScrollPane2, gridBagConstraints);
 
+        jPanel6.setBackground(new java.awt.Color(225, 239, 255));
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
         buttonEraseP.setText("Erase");
@@ -474,10 +466,13 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 10, 0);
         jPanel3.add(panelNumbers, gridBagConstraints);
 
+        panelInstitutions.setBackground(new java.awt.Color(225, 239, 255));
         panelInstitutions.setLayout(new java.awt.GridBagLayout());
 
+        jPanel4.setBackground(new java.awt.Color(225, 239, 255));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
+        jPanel30.setBackground(new java.awt.Color(225, 239, 255));
         jPanel30.setLayout(new java.awt.GridBagLayout());
 
         name_label8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -488,14 +483,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         jPanel30.add(name_label8, gridBagConstraints);
-
-        jPanel31.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel30.add(jPanel31, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -526,6 +513,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         panelInstitutions.add(jScrollPane1, gridBagConstraints);
 
+        jPanel7.setBackground(new java.awt.Color(225, 239, 255));
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
         buttonEditI.setText("Edit");
@@ -567,6 +555,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 10, 0);
         jPanel3.add(panelInstitutions, gridBagConstraints);
 
+        panelEmails.setBackground(new java.awt.Color(225, 239, 255));
         panelEmails.setLayout(new java.awt.GridBagLayout());
 
         listEmails.setModel(new javax.swing.AbstractListModel<String>() {
@@ -585,6 +574,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         panelEmails.add(jScrollPane3, gridBagConstraints);
 
+        jPanel36.setBackground(new java.awt.Color(225, 239, 255));
         jPanel36.setLayout(new java.awt.GridBagLayout());
 
         name_label11.setText("Emails:");
@@ -604,6 +594,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         panelEmails.add(jPanel36, gridBagConstraints);
 
+        jPanel8.setBackground(new java.awt.Color(225, 239, 255));
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
         buttonEraseE.setText("Erase");
@@ -645,6 +636,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 60, 0);
         jPanel3.add(panelEmails, gridBagConstraints);
 
+        panelIDNumber.setBackground(new java.awt.Color(225, 239, 255));
         panelIDNumber.setLayout(new java.awt.GridBagLayout());
 
         name_label13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -677,8 +669,10 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 0);
         jPanel3.add(panelIDNumber, gridBagConstraints);
 
+        panelIDType.setBackground(new java.awt.Color(225, 239, 255));
         panelIDType.setLayout(new java.awt.GridBagLayout());
 
+        jPanel15.setBackground(new java.awt.Color(225, 239, 255));
         jPanel15.setLayout(new java.awt.GridBagLayout());
 
         name_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -690,14 +684,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel15.add(name_label, gridBagConstraints);
-
-        jPanel14.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel15.add(jPanel14, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -730,6 +716,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.30000000000000004;
         jPanel1.add(jPanel3, gridBagConstraints);
 
+        jPanel9.setBackground(new java.awt.Color(225, 239, 255));
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
         buttonModify.setText("Save Chnages");
@@ -787,6 +774,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 100);
         jPanel1.add(jPanel9, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -901,7 +889,11 @@ public class ModifyProfile extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonEditEActionPerformed
 
     private void buttonPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPasswordActionPerformed
-        // TODO add your handling code here:
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            PasswordPage password = new PasswordPage();
+            password.setVisible(true);
+            password.setLocationRelativeTo(null); // center on screen
+        });
     }//GEN-LAST:event_buttonPasswordActionPerformed
 
     /**
@@ -961,17 +953,13 @@ public class ModifyProfile extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel32;
-    private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel36;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;

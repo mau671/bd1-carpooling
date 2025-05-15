@@ -49,6 +49,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelRegisteredVehicles.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -61,10 +62,13 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 250, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 230, 0, 0);
         jPanel1.add(labelRegisteredVehicles, gridBagConstraints);
 
+        jPanel2.setBackground(new java.awt.Color(225, 239, 255));
         jPanel2.setLayout(new java.awt.BorderLayout());
+
+        scrollVehicles.setBackground(new java.awt.Color(255, 255, 255));
 
         tableVehicles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -104,6 +108,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler3, gridBagConstraints);
 
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
         buttonModify.setBackground(new java.awt.Color(18, 102, 160));

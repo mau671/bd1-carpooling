@@ -36,12 +36,12 @@ public class InstitutionPage extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanel28 = new javax.swing.JPanel();
         name_label7 = new javax.swing.JLabel();
-        jPanel29 = new javax.swing.JPanel();
         comboBoxNumber = new javax.swing.JComboBox<>();
         buttonNumber = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         labelAddPhone.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -51,11 +51,13 @@ public class InstitutionPage extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 40, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 40, 0);
         jPanel1.add(labelAddPhone, gridBagConstraints);
 
+        jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
+        jPanel28.setBackground(new java.awt.Color(225, 239, 255));
         jPanel28.setLayout(new java.awt.GridBagLayout());
 
         name_label7.setText("<html>Institution You Belong To: <span style='color:red'>*</span></html>");
@@ -67,14 +69,6 @@ public class InstitutionPage extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel28.add(name_label7, gridBagConstraints);
-
-        jPanel29.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel28.add(jPanel29, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -95,13 +89,13 @@ public class InstitutionPage extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 140, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 0);
         jPanel1.add(jPanel3, gridBagConstraints);
 
+        buttonNumber.setText("Save Changes");
         buttonNumber.setBackground(new java.awt.Color(246, 172, 30));
         buttonNumber.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonNumber.setForeground(new java.awt.Color(255, 255, 255));
-        buttonNumber.setText("Save Changes");
         buttonNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonNumberActionPerformed(evt);
@@ -165,7 +159,6 @@ public class InstitutionPage extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboBoxNumber;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel28;
-    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel labelAddPhone;
     private javax.swing.JLabel name_label7;
