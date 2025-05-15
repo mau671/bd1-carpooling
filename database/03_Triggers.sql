@@ -348,7 +348,33 @@ END;
 /
 
 -- ============================================
--- 14. Trigger for table ADM.INSTITUTION (Moved to ADM)
+-- 14. Trigger for table ADM.CURRENCY
+-- ============================================
+CREATE OR REPLACE TRIGGER ADM.trg_currency_audit
+BEFORE INSERT OR UPDATE ON ADM.CURRENCY
+FOR EACH ROW
+BEGIN
+    IF INSERTING THEN
+        IF :NEW.id IS NULL THEN
+            SELECT ADM.CURRENCY_SEQ.NEXTVAL INTO :NEW.id FROM DUAL;
+        END IF;
+        :NEW.creator := USER;
+        :NEW.creation_date := SYSDATE;
+        :NEW.modifier := USER;
+        :NEW.modification_date := SYSDATE;
+        INSERT INTO ADM.LOGS (id, description, creator, creation_date, modifier, modification_date, log_date)
+        VALUES (ADM.LOGS_SEQ.NEXTVAL, 'INSERT in ADM.CURRENCY (ID: ' || :NEW.id || ')', USER, SYSDATE, USER, SYSDATE, SYSDATE);
+    ELSIF UPDATING THEN
+        :NEW.modifier := USER;
+        :NEW.modification_date := SYSDATE;
+        INSERT INTO ADM.LOGS (id, description, creator, creation_date, modifier, modification_date, log_date)
+        VALUES (ADM.LOGS_SEQ.NEXTVAL, 'UPDATE in ADM.CURRENCY (ID: ' || :NEW.id || ')', USER, SYSDATE, USER, SYSDATE, SYSDATE);
+    END IF;
+END;
+/
+
+-- ============================================
+-- 15. Trigger for table ADM.INSTITUTION (Moved to ADM)
 -- ============================================
 CREATE OR REPLACE TRIGGER ADM.trg_institution_audit
 BEFORE INSERT OR UPDATE ON ADM.INSTITUTION
@@ -374,7 +400,7 @@ END;
 /
 
 -- ============================================
--- 15. Trigger for table ADM.DOMAIN (Moved to ADM)
+-- 16. Trigger for table ADM.DOMAIN (Moved to ADM)
 -- ============================================
 CREATE OR REPLACE TRIGGER ADM.trg_domain_audit
 BEFORE INSERT OR UPDATE ON ADM.DOMAIN
@@ -400,7 +426,7 @@ END;
 /
 
 -- ============================================
--- 16. Trigger for table ADM.INSTITUTION_DOMAIN (Moved to ADM)
+-- 17. Trigger for table ADM.INSTITUTION_DOMAIN (Moved to ADM)
 -- (No own ID with sequence)
 -- ============================================
 CREATE OR REPLACE TRIGGER ADM.trg_institution_domain_audit

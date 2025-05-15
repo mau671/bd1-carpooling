@@ -443,6 +443,35 @@ COMMENT ON COLUMN ADM.PAYMENTMETHOD.creation_date IS 'Record creation date';
 COMMENT ON COLUMN ADM.PAYMENTMETHOD.modifier IS 'User who modified the record';
 COMMENT ON COLUMN ADM.PAYMENTMETHOD.modification_date IS 'Record modification date';
 
+-- ============================================
+-- 15. CURRENCY Table
+-- ============================================
+CREATE TABLE ADM.CURRENCY (
+    id                NUMBER CONSTRAINT pk_CURRENCY PRIMARY KEY
+                        USING INDEX TABLESPACE ADM_Index
+                                STORAGE (
+                                    INITIAL 10K NEXT 10K MINEXTENTS 1 
+                                    MAXEXTENTS UNLIMITED PCTINCREASE 0
+                                ),
+    name              VARCHAR2(50) NOT NULL,
+    creator           VARCHAR2(50),
+    creation_date     DATE,
+    modifier          VARCHAR2(50),
+    modification_date DATE
+)
+TABLESPACE ADM_Data
+STORAGE (
+    INITIAL 6144 NEXT 6144 MINEXTENTS 1 MAXEXTENTS 5
+);
+
+COMMENT ON TABLE ADM.CURRENCY IS 'Table that stores currency in which to pay';
+COMMENT ON COLUMN ADM.CURRENCY.id IS 'Unique identifier for currency';
+COMMENT ON COLUMN ADM.CURRENCY.name IS 'Currency name';
+COMMENT ON COLUMN ADM.CURRENCY.creator IS 'User who created the record';
+COMMENT ON COLUMN ADM.CURRENCY.creation_date IS 'Record creation date';
+COMMENT ON COLUMN ADM.CURRENCY.modifier IS 'User who modified the record';
+COMMENT ON COLUMN ADM.CURRENCY.modification_date IS 'Record modification date';
+
 GRANT SELECT, REFERENCES ON ADM.GENDER              TO PU;
 GRANT SELECT, REFERENCES ON ADM.TYPE_IDENTIFICATION TO PU;
 GRANT SELECT, REFERENCES ON ADM.TYPE_PHONE          TO PU;
@@ -454,13 +483,14 @@ GRANT SELECT, REFERENCES ON ADM.STATUS              TO PU;
 GRANT SELECT, REFERENCES ON ADM.MAXCAPACITY         TO PU;
 GRANT SELECT, REFERENCES ON ADM.PERSON              TO PU;
 GRANT SELECT, REFERENCES ON ADM.PAYMENTMETHOD       TO PU;
+GRANT SELECT, REFERENCES ON ADM.CURRENCY            TO PU;
 
 -- ============================================
 -- PU Tables Creation
 -- ============================================
 
 -- ============================================
--- 15. PHOTO Table (Dependent on PERSON)
+-- 16. PHOTO Table (Dependent on PERSON)
 -- ============================================
 CREATE TABLE PU.PHOTO (
     id                NUMBER CONSTRAINT pk_PHOTO PRIMARY KEY
@@ -494,7 +524,7 @@ COMMENT ON COLUMN PU.PHOTO.modification_date IS 'Record modification date';
 COMMENT ON COLUMN PU.PHOTO.person_id IS 'Foreign key to PERSON table';
 
 -- ============================================
--- 16. PHONE Table (Dependent on PERSON and TYPE_PHONE)
+-- 17. PHONE Table (Dependent on PERSON and TYPE_PHONE)
 -- ============================================
 CREATE TABLE PU.PHONE (
     id                NUMBER CONSTRAINT pk_PHONE PRIMARY KEY
@@ -527,45 +557,6 @@ COMMENT ON COLUMN PU.PHONE.creation_date IS 'Record creation date';
 COMMENT ON COLUMN PU.PHONE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.PHONE.modification_date IS 'Record modification date';
 COMMENT ON COLUMN PU.PHONE.type_phone_id IS 'Foreign key to TYPE_PHONE table';
-
--- ============================================
--- 17. EMAIL Table (Dependent on PERSON)
--- ============================================
-CREATE TABLE PU.EMAIL (
-    id                NUMBER CONSTRAINT pk_EMAIL PRIMARY KEY
-                         USING INDEX TABLESPACE PU_Index
-                         STORAGE (
-                             INITIAL 10K NEXT 10K MINEXTENTS 1 
-                             MAXEXTENTS UNLIMITED PCTINCREASE 0
-                         ),
-    name              VARCHAR2(100) NOT NULL,  -- Email address
-    creator           VARCHAR2(50),
-    creation_date     DATE,
-    modifier          VARCHAR2(50),
-    modification_date DATE,
-    
-    person_id         NUMBER NOT NULL,
-    CONSTRAINT fk_EMAIL_PERSON
-       FOREIGN KEY (person_id) REFERENCES ADM.PERSON(id)
-
-    domain_id        NUMBER NOT NULL, 
-    CONSTRAINT fk_EMAIL_DOMAIN
-       FOREIGN KEY (domain_id) REFERENCES ADM.DOMAIN(id)
-)
-TABLESPACE PU_Data
-STORAGE (
-    INITIAL 6144 NEXT 6144 MINEXTENTS 1 MAXEXTENTS 5
-);
-
-COMMENT ON TABLE PU.EMAIL IS 'Table that stores person email addresses';
-COMMENT ON COLUMN PU.EMAIL.id IS 'Unique identifier for email';
-COMMENT ON COLUMN PU.EMAIL.name IS 'Email address';
-COMMENT ON COLUMN PU.EMAIL.creator IS 'User who created the record';
-COMMENT ON COLUMN PU.EMAIL.creation_date IS 'Record creation date';
-COMMENT ON COLUMN PU.EMAIL.modifier IS 'User who modified the record';
-COMMENT ON COLUMN PU.EMAIL.modification_date IS 'Record modification date';
-COMMENT ON COLUMN PU.EMAIL.person_id IS 'Foreign key to PERSON table';
-COMMENT ON COLUMN PU.EMAIL.domain_id IS 'Foreign key to DOMAIN table';
 
 -- ============================================
 -- 18. INSTITUTION Table (Master)
@@ -629,7 +620,46 @@ GRANT SELECT, REFERENCES ON ADM.INSTITUTION         TO PU;
 GRANT SELECT, REFERENCES ON ADM.DOMAIN              TO PU;
 
 -- ============================================
--- 20. VEHICLE Table
+-- 20. EMAIL Table (Dependent on PERSON)
+-- ============================================
+CREATE TABLE PU.EMAIL (
+    id                NUMBER CONSTRAINT pk_EMAIL PRIMARY KEY
+                         USING INDEX TABLESPACE PU_Index
+                         STORAGE (
+                             INITIAL 10K NEXT 10K MINEXTENTS 1 
+                             MAXEXTENTS UNLIMITED PCTINCREASE 0
+                         ),
+    name              VARCHAR2(100) NOT NULL,  -- Email address
+    creator           VARCHAR2(50),
+    creation_date     DATE,
+    modifier          VARCHAR2(50),
+    modification_date DATE,
+    
+    person_id         NUMBER NOT NULL,
+    CONSTRAINT fk_EMAIL_PERSON
+       FOREIGN KEY (person_id) REFERENCES ADM.PERSON(id),
+
+    domain_id        NUMBER NOT NULL, 
+    CONSTRAINT fk_EMAIL_DOMAIN
+       FOREIGN KEY (domain_id) REFERENCES ADM.DOMAIN(id)
+)
+TABLESPACE PU_Data
+STORAGE (
+    INITIAL 6144 NEXT 6144 MINEXTENTS 1 MAXEXTENTS 5
+);
+
+COMMENT ON TABLE PU.EMAIL IS 'Table that stores person email addresses';
+COMMENT ON COLUMN PU.EMAIL.id IS 'Unique identifier for email';
+COMMENT ON COLUMN PU.EMAIL.name IS 'Email address';
+COMMENT ON COLUMN PU.EMAIL.creator IS 'User who created the record';
+COMMENT ON COLUMN PU.EMAIL.creation_date IS 'Record creation date';
+COMMENT ON COLUMN PU.EMAIL.modifier IS 'User who modified the record';
+COMMENT ON COLUMN PU.EMAIL.modification_date IS 'Record modification date';
+COMMENT ON COLUMN PU.EMAIL.person_id IS 'Foreign key to PERSON table';
+COMMENT ON COLUMN PU.EMAIL.domain_id IS 'Foreign key to DOMAIN table';
+
+-- ============================================
+-- 21. VEHICLE Table
 -- ============================================
 CREATE TABLE PU.VEHICLE (
     id                NUMBER CONSTRAINT pk_VEHICLE PRIMARY KEY
@@ -658,7 +688,7 @@ COMMENT ON COLUMN PU.VEHICLE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.VEHICLE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 21. WAYPOINT Table (renamed from STOP)
+-- 22. WAYPOINT Table (renamed from STOP)
 -- ============================================
 CREATE TABLE PU.WAYPOINT (
     id                NUMBER CONSTRAINT pk_WAYPOINT PRIMARY KEY
@@ -695,7 +725,7 @@ COMMENT ON COLUMN PU.WAYPOINT.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.WAYPOINT.modification_date IS 'Record modification date';
 
 -- ============================================
--- 22. PHONE_PERSON Table (Relationship between PERSON and PHONE)
+-- 23. PHONE_PERSON Table (Relationship between PERSON and PHONE)
 -- ============================================
 CREATE TABLE PU.PHONE_PERSON (
     person_id         NUMBER NOT NULL,
@@ -727,7 +757,7 @@ COMMENT ON COLUMN PU.PHONE_PERSON.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.PHONE_PERSON.modification_date IS 'Record modification date';
 
 -- ============================================
--- 23. INSTITUTION_PERSON Table (Relationship between INSTITUTION and PERSON)
+-- 24. INSTITUTION_PERSON Table (Relationship between INSTITUTION and PERSON)
 -- ============================================
 CREATE TABLE PU.INSTITUTION_PERSON (
     institution_id    NUMBER NOT NULL,
@@ -759,7 +789,7 @@ COMMENT ON COLUMN PU.INSTITUTION_PERSON.modifier IS 'User who modified the recor
 COMMENT ON COLUMN PU.INSTITUTION_PERSON.modification_date IS 'Record modification date';
 
 -- ============================================
--- 24. INSTITUTION_DOMAIN Table (Relationship between INSTITUTION and DOMAIN)
+-- 25. INSTITUTION_DOMAIN Table (Relationship between INSTITUTION and DOMAIN)
 -- ============================================
 CREATE TABLE ADM.INSTITUTION_DOMAIN (
     institution_id    NUMBER NOT NULL,
@@ -793,7 +823,7 @@ COMMENT ON COLUMN ADM.INSTITUTION_DOMAIN.modification_date IS 'Record modificati
 GRANT SELECT             ON ADM.INSTITUTION_DOMAIN  TO PU;
 
 -- ============================================
--- 25. PERSONUSER Table (renamed from USER)
+-- 26. PERSONUSER Table (renamed from USER)
 -- ============================================
 CREATE TABLE PU.PERSONUSER (
     id                NUMBER CONSTRAINT pk_USER PRIMARY KEY
@@ -833,7 +863,7 @@ COMMENT ON COLUMN PU.PERSONUSER.person_id IS 'Foreign key to PERSON table';
 --------------------------------------------------------------------------------
 
 -- ============================================
--- 26. ROUTE Table
+-- 27. ROUTE Table
 -- ============================================
 CREATE TABLE PU.ROUTE (
     id                NUMBER CONSTRAINT pk_ROUTE PRIMARY KEY
@@ -872,7 +902,7 @@ COMMENT ON COLUMN PU.ROUTE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.ROUTE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 27. VEHICLEXROUTE Table (Relationship between VEHICLE and ROUTE)
+-- 28. VEHICLEXROUTE Table (Relationship between VEHICLE and ROUTE)
 -- ============================================
 CREATE TABLE PU.VEHICLEXROUTE (
     id                NUMBER CONSTRAINT pk_VEHICLEXROUTE PRIMARY KEY,
@@ -908,7 +938,7 @@ GRANT REFERENCES ON PU.VEHICLEXROUTE TO ADM;
 --------------------------------------------------------------------------------
 
 -- ============================================
--- 28. TRIP Table (Related to VEHICLE and ROUTE)
+-- 29. TRIP Table (Related to VEHICLE and ROUTE)
 -- ============================================
 CREATE TABLE PU.TRIP (
     id                NUMBER CONSTRAINT pk_TRIP PRIMARY KEY
@@ -946,7 +976,7 @@ COMMENT ON COLUMN PU.TRIP.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.TRIP.modification_date IS 'Record modification date';
 
 -- ============================================
--- 29. STATUSXTRIP Table (Relationship between TRIP and STATUS)
+-- 30. STATUSXTRIP Table (Relationship between TRIP and STATUS)
 -- ============================================
 CREATE TABLE PU.STATUSXTRIP (
     trip_id           NUMBER NOT NULL,
@@ -978,7 +1008,7 @@ COMMENT ON COLUMN PU.STATUSXTRIP.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.STATUSXTRIP.modification_date IS 'Record modification date';
 
 -- ============================================
--- 30. WAYPOINTXTRIP Table (Relationship between TRIP and WAYPOINT)
+-- 31. WAYPOINTXTRIP Table (Relationship between TRIP and WAYPOINT)
 -- ============================================
 CREATE TABLE PU.WAYPOINTXTRIP (
     trip_id           NUMBER NOT NULL,
@@ -1014,7 +1044,7 @@ COMMENT ON COLUMN PU.WAYPOINTXTRIP.modification_date IS 'Record modification dat
 --------------------------------------------------------------------------------
 
 -- ============================================
--- 31. PASSENGER Table (Inherits from PERSON)
+-- 32. PASSENGER Table (Inherits from PERSON)
 -- ============================================
 CREATE TABLE PU.PASSENGER (
     person_id         NUMBER CONSTRAINT pk_PASSENGER PRIMARY KEY,  -- shared primary key with PERSON
@@ -1040,7 +1070,7 @@ COMMENT ON COLUMN PU.PASSENGER.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.PASSENGER.modification_date IS 'Record modification date';
 
 -- ============================================
--- 32. DRIVER Table (Inherits from PERSON)
+-- 33. DRIVER Table (Inherits from PERSON)
 -- ============================================
 CREATE TABLE PU.DRIVER (
     person_id         NUMBER CONSTRAINT pk_DRIVER PRIMARY KEY,  -- shared primary key with PERSON
@@ -1070,7 +1100,7 @@ COMMENT ON COLUMN PU.DRIVER.modification_date IS 'Record modification date';
 --------------------------------------------------------------------------------
 
 -- ============================================
--- 33. PASSENGERXWAYPOINT Table (Relationship between PASSENGER and WAYPOINT)
+-- 34. PASSENGERXWAYPOINT Table (Relationship between PASSENGER and WAYPOINT)
 -- ============================================
 CREATE TABLE PU.PASSENGERXWAYPOINT (
     passenger_id      NUMBER NOT NULL,
@@ -1099,7 +1129,7 @@ COMMENT ON COLUMN PU.PASSENGERXWAYPOINT.modifier IS 'User who modified the recor
 COMMENT ON COLUMN PU.PASSENGERXWAYPOINT.modification_date IS 'Record modification date';
 
 -- ============================================
--- 34. DRIVERXVEHICLE Table (Relationship between DRIVER and VEHICLE)
+-- 35. DRIVERXVEHICLE Table (Relationship between DRIVER and VEHICLE)
 -- ============================================
 CREATE TABLE PU.DRIVERXVEHICLE (
     id                NUMBER CONSTRAINT pk_DRIVERXVEHICLE PRIMARY KEY,
@@ -1129,7 +1159,7 @@ COMMENT ON COLUMN PU.DRIVERXVEHICLE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.DRIVERXVEHICLE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 35. MAXCAPACITYXVEHICLE Table (Relationship between MAXCAPACITY and VEHICLE)
+-- 36. MAXCAPACITYXVEHICLE Table (Relationship between MAXCAPACITY and VEHICLE)
 -- ============================================
 CREATE TABLE PU.MAXCAPACITYXVEHICLE (
     id                NUMBER CONSTRAINT pk_MAXCAPACITYXVEHICLE PRIMARY KEY,
@@ -1159,7 +1189,7 @@ COMMENT ON COLUMN PU.MAXCAPACITYXVEHICLE.modifier IS 'User who modified the reco
 COMMENT ON COLUMN PU.MAXCAPACITYXVEHICLE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 36. PASSENGERXTRIP Table (Relationship between PASSENGER and TRIP)
+-- 37. PASSENGERXTRIP Table (Relationship between PASSENGER and TRIP)
 -- ============================================
 CREATE TABLE PU.PASSENGERXTRIP (
     id                NUMBER CONSTRAINT pk_PASSENGERXTRIP PRIMARY KEY,
@@ -1194,7 +1224,7 @@ COMMENT ON COLUMN PU.PASSENGERXTRIP.amount IS 'Amount paid for the trip';
 --  I)  Payments
 --------------------------------------------------------------------------------
 -- ============================================
--- 37. PASSENGERXTRIPXPAYMENT Table (Relationship between PASSENGERXTRIP and PAYMENTMETHOD)
+-- 38. PASSENGERXTRIPXPAYMENT Table (Relationship between PASSENGERXTRIP and PAYMENTMETHOD)
 -- ============================================
 CREATE TABLE PU.PASSENGERXTRIPXPAYMENT (
     id                    NUMBER CONSTRAINT pk_PASSENGERXTRIPXPAYMENT PRIMARY KEY,
@@ -1227,7 +1257,7 @@ COMMENT ON COLUMN PU.PASSENGERXTRIPXPAYMENT.modification_date IS 'Record modific
 --  J)  ADM table dependent on PU
 --------------------------------------------------------------------------------
 -- ============================================
--- 38. CHOSENCAPACITY Table
+-- 39. CHOSENCAPACITY Table
 -- ============================================
 CREATE TABLE ADM.CHOSENCAPACITY (
     id                NUMBER CONSTRAINT pk_CHOSENCAPACITY PRIMARY KEY
