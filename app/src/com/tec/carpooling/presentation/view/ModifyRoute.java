@@ -306,6 +306,9 @@ public class ModifyRoute extends javax.swing.JFrame {
         boxStartP = new javax.swing.JComboBox<>();
         labelStartP = new javax.swing.JLabel();
         buttonModifyTrip = new javax.swing.JButton();
+        panelCountry = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -325,8 +328,8 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 280, 0, 0);
         panelModifyRoute.add(labelModifyRoute, gridBagConstraints);
 
-        labelStop.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelStop.setText("<html>Add Stop Points: <span style='color:red'>*</span></html>");
+        labelStop.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 17;
         gridBagConstraints.gridy = 2;
@@ -606,7 +609,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         panelTimes.add(panelStart, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -643,6 +646,33 @@ public class ModifyRoute extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 23;
         gridBagConstraints.ipadx = 50;
         panelModifyRoute.add(panelInfo, gridBagConstraints);
+
+        panelCountry.setBackground(new java.awt.Color(225, 239, 255));
+        panelCountry.setLayout(new java.awt.GridBagLayout());
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 30);
+        panelCountry.add(jComboBox1, gridBagConstraints);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setText("<html>Country: <span style='color:red'>*</span></html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelCountry.add(jLabel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
+        panelModifyRoute.add(panelCountry, gridBagConstraints);
 
         getContentPane().add(panelModifyRoute, java.awt.BorderLayout.CENTER);
 
@@ -722,6 +752,8 @@ public class ModifyRoute extends javax.swing.JFrame {
     private javax.swing.JButton buttonModifyTrip;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelEndC;
     private javax.swing.JLabel labelEndD;
@@ -733,6 +765,7 @@ public class ModifyRoute extends javax.swing.JFrame {
     private javax.swing.JLabel labelStartD;
     private javax.swing.JLabel labelStartP;
     private javax.swing.JLabel labelStop;
+    private javax.swing.JPanel panelCountry;
     private javax.swing.JPanel panelEnd;
     private javax.swing.JPanel panelEndC;
     private javax.swing.JPanel panelEndD;
