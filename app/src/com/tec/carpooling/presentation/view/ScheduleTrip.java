@@ -219,6 +219,9 @@ public class ScheduleTrip extends javax.swing.JFrame {
         labelEndTime = new javax.swing.JLabel();
         boxEndTime = new javax.swing.JComboBox<>();
         panelDivision = new javax.swing.JPanel();
+        panelVehicle = new javax.swing.JPanel();
+        labelSeats1 = new javax.swing.JLabel();
+        boxSeats1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -323,7 +326,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         panelPassengers.setLayout(new java.awt.GridBagLayout());
 
         labelSeats.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelSeats.setText("<html>Amount of Passengers: <span style='color:red'>*</span></html>");
+        labelSeats.setText("<html>Vehicle: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.ipadx = 10;
@@ -337,7 +340,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 19;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 70, 50, 0);
         jPanel1.add(panelPassengers, gridBagConstraints);
@@ -463,10 +466,33 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 20;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.gridheight = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         jPanel1.add(panelDivision, gridBagConstraints);
+
+        panelVehicle.setBackground(new java.awt.Color(225, 239, 255));
+        panelVehicle.setLayout(new java.awt.GridBagLayout());
+
+        labelSeats1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelSeats1.setText("<html>Amount of Passengers: <span style='color:red'>*</span></html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.ipadx = 10;
+        panelVehicle.add(labelSeats1, gridBagConstraints);
+
+        boxSeats1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.ipady = 20;
+        panelVehicle.add(boxSeats1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 19;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 70, 50, 0);
+        jPanel1.add(panelVehicle, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -552,6 +578,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxEndTime;
     private javax.swing.JComboBox<String> boxMethod;
     private javax.swing.JComboBox<String> boxSeats;
+    private javax.swing.JComboBox<String> boxSeats1;
     private javax.swing.JComboBox<String> boxStartTime;
     private javax.swing.JButton buttonAddRoute;
     private com.github.lgooddatepicker.components.DatePicker datePicker;
@@ -567,6 +594,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
     private javax.swing.JLabel labelMethod;
     private javax.swing.JLabel labelPrice;
     private javax.swing.JLabel labelSeats;
+    private javax.swing.JLabel labelSeats1;
     private javax.swing.JLabel labelStartTime;
     private javax.swing.JPanel panelCurrency;
     private javax.swing.JPanel panelDate;
@@ -575,6 +603,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
     private javax.swing.JPanel panelPayment;
     private javax.swing.JPanel panelPrice;
     private javax.swing.JPanel panelTimes;
+    private javax.swing.JPanel panelVehicle;
     private javax.swing.JTextField textPrice;
     // End of variables declaration//GEN-END:variables
 }
