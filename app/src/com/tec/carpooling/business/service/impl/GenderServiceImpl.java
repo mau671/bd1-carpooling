@@ -4,8 +4,11 @@ import com.tec.carpooling.business.service.GenderService;
 import com.tec.carpooling.data.dao.CatalogRegistrationException;
 import com.tec.carpooling.data.dao.GenderDAO;
 import com.tec.carpooling.data.impl.GenderDAOImpl; // Mejorar con DI
+import com.tec.carpooling.domain.entity.Gender;
 import com.tec.carpooling.dto.CatalogData;
+import com.tec.carpooling.dto.GenderDTO;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GenderServiceImpl implements GenderService {
 
