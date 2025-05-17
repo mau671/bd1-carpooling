@@ -2,7 +2,7 @@ package com.tec.carpooling;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
-import com.tec.carpooling.presentation.view.HomePage;
+import com.tec.carpooling.presentation.view.InitialPage;
 import com.tec.carpooling.presentation.view.admin.AdminFrame;
 
 import javax.swing.JFrame;
@@ -55,7 +55,7 @@ public class MainApp {
      */
     private static void launchUserInterface() {
         SwingUtilities.invokeLater(() -> {
-            AdminFrame homePageFrame = new AdminFrame();
+            /*AdminFrame homePageFrame = new AdminFrame();
             homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             // Set the size of the frame to the preferred size
             homePageFrame.setSize(800, 600); // Set to a default size
@@ -64,6 +64,14 @@ public class MainApp {
             homePageFrame.setLocationRelativeTo(null);
             homePageFrame.setTitle("Carpooling TEC"); // Change to obtain the name from database
             homePageFrame.pack();
+            homePageFrame.setVisible(true);*/
+            
+            InitialPage homePageFrame = new InitialPage();
+            homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            homePageFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Start maximized
+            homePageFrame.setResizable(true);
+            homePageFrame.setLocationRelativeTo(null);
+            homePageFrame.setTitle("Carpooling TEC");
             homePageFrame.setVisible(true);
         });
     }

@@ -4,18 +4,41 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
+import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
+
+import javax.swing.*;
+import java.awt.*;
+
 /**
  *
  * @author hidal
  */
-public class ModificarVehiculo extends javax.swing.JFrame {
-
+public class MapViewer extends javax.swing.JFrame {
+    private JMapViewer map;
     /**
-     * Creates new form AddVehicle
+     * Creates new form MapViewer
      */
-    public ModificarVehiculo() {
+    public MapViewer() {
         initComponents();
     }
+    
+    public MapViewer(double lat, double lon) {
+        System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; CarpoolingApp/1.0)");
+        setTitle("Ubicación en el mapa");
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        map = new JMapViewer();
+        map.setDisplayPosition(new Coordinate(lat, lon), 15);
+        map.addMapMarker(new MapMarkerDot(lat, lon));
+
+        getContentPane().add(map, BorderLayout.CENTER);
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,21 +82,20 @@ public class ModificarVehiculo extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ModificarVehiculo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MapViewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ModificarVehiculo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MapViewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ModificarVehiculo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MapViewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ModificarVehiculo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MapViewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ModificarVehiculo().setVisible(true);
+                new MapViewer().setVisible(true);
             }
         });
     }
