@@ -443,15 +443,14 @@ GRANT EXECUTE ON ADM.ADM_INSTITUTION_MGMT_PKG TO PU;
 -- Package for user authentication and management
 CREATE OR REPLACE PACKAGE PU.USER_AUTH_PKG AS
     -- Constants for status codes
-    GC_SUCCESS CONSTANT NUMBER := 1;
-    GC_FAILURE CONSTANT NUMBER := 0;
+    STATUS_SUCCESS CONSTANT NUMBER := 1;
+    STATUS_FAILURE CONSTANT NUMBER := 0;
     
     -- Procedure to register a new user
     PROCEDURE REGISTER_USER(
         p_username IN VARCHAR2,
         p_password IN VARCHAR2,
         p_person_id IN NUMBER,
-        p_user_id OUT NUMBER,
         p_success OUT NUMBER
     );
     
@@ -464,16 +463,40 @@ CREATE OR REPLACE PACKAGE PU.USER_AUTH_PKG AS
         p_success OUT NUMBER
     );
     
-    -- Procedure to check if user is a driver
+    -- Procedure to check if a person is a driver
     PROCEDURE CHECK_DRIVER_ROLE(
         p_person_id IN NUMBER,
         p_is_driver OUT NUMBER
     );
     
-    -- Procedure to check if user is a passenger
+    -- Procedure to check if a person is a passenger
     PROCEDURE CHECK_PASSENGER_ROLE(
         p_person_id IN NUMBER,
         p_is_passenger OUT NUMBER
+    );
+    
+    -- Procedure to add driver role to a person
+    PROCEDURE ADD_DRIVER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
+    );
+    
+    -- Procedure to add passenger role to a person
+    PROCEDURE ADD_PASSENGER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
+    );
+    
+    -- Procedure to remove driver role from a person
+    PROCEDURE REMOVE_DRIVER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
+    );
+    
+    -- Procedure to remove passenger role from a person
+    PROCEDURE REMOVE_PASSENGER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
     );
 END USER_AUTH_PKG;
 /
@@ -483,7 +506,6 @@ CREATE OR REPLACE PACKAGE BODY PU.USER_AUTH_PKG AS
         p_username IN VARCHAR2,
         p_password IN VARCHAR2,
         p_person_id IN NUMBER,
-        p_user_id OUT NUMBER,
         p_success OUT NUMBER
     ) IS
         v_count NUMBER;
@@ -494,7 +516,7 @@ CREATE OR REPLACE PACKAGE BODY PU.USER_AUTH_PKG AS
         WHERE USERNAME = p_username;
         
         IF v_count > 0 THEN
-            p_success := GC_FAILURE; -- Username already exists
+            p_success := STATUS_FAILURE; -- Username already exists
             RETURN;
         END IF;
         
@@ -503,11 +525,11 @@ CREATE OR REPLACE PACKAGE BODY PU.USER_AUTH_PKG AS
         VALUES (p_username, p_password, p_person_id)
         RETURNING ID INTO p_user_id;
         
-        p_success := GC_SUCCESS; -- Registration successful
+        p_success := STATUS_SUCCESS; -- Registration successful
         COMMIT;
     EXCEPTION
         WHEN OTHERS THEN
-            p_success := GC_FAILURE;
+            p_success := STATUS_FAILURE;
             ROLLBACK;
             RAISE;
     END REGISTER_USER;
@@ -525,14 +547,14 @@ CREATE OR REPLACE PACKAGE BODY PU.USER_AUTH_PKG AS
         WHERE USERNAME = p_username
         AND PASSWORD = p_password;
         
-        p_success := GC_SUCCESS; -- Authentication successful
+        p_success := STATUS_SUCCESS; -- Authentication successful
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            p_success := GC_FAILURE; -- Invalid credentials
+            p_success := STATUS_FAILURE; -- Invalid credentials
             p_user_id := NULL;
             p_person_id := NULL;
         WHEN OTHERS THEN
-            p_success := GC_FAILURE;
+            p_success := STATUS_FAILURE;
             RAISE;
     END VALIDATE_USER;
     
@@ -546,10 +568,10 @@ CREATE OR REPLACE PACKAGE BODY PU.USER_AUTH_PKG AS
         FROM PU.DRIVER
         WHERE PERSONID = p_person_id;
         
-        p_is_driver := CASE WHEN v_count > 0 THEN GC_SUCCESS ELSE GC_FAILURE END;
+        p_is_driver := CASE WHEN v_count > 0 THEN STATUS_SUCCESS ELSE STATUS_FAILURE END;
     EXCEPTION
         WHEN OTHERS THEN
-            p_is_driver := GC_FAILURE;
+            p_is_driver := STATUS_FAILURE;
             RAISE;
     END CHECK_DRIVER_ROLE;
     
@@ -563,11 +585,188 @@ CREATE OR REPLACE PACKAGE BODY PU.USER_AUTH_PKG AS
         FROM PU.PASSENGER
         WHERE PERSONID = p_person_id;
         
-        p_is_passenger := CASE WHEN v_count > 0 THEN GC_SUCCESS ELSE GC_FAILURE END;
+        p_is_passenger := CASE WHEN v_count > 0 THEN STATUS_SUCCESS ELSE STATUS_FAILURE END;
     EXCEPTION
         WHEN OTHERS THEN
-            p_is_passenger := GC_FAILURE;
+            p_is_passenger := STATUS_FAILURE;
             RAISE;
     END CHECK_PASSENGER_ROLE;
+    
+    PROCEDURE ADD_DRIVER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
+    ) IS
+        v_count NUMBER;
+    BEGIN
+        -- Check if person exists
+        SELECT COUNT(*) INTO v_count
+        FROM ADM.PERSON
+        WHERE id = p_person_id;
+        
+        IF v_count = 0 THEN
+            p_success := STATUS_FAILURE;
+            RETURN;
+        END IF;
+        
+        -- Check if already has driver role
+        SELECT COUNT(*) INTO v_count
+        FROM ADM.DRIVER
+        WHERE person_id = p_person_id;
+        
+        IF v_count > 0 THEN
+            p_success := STATUS_FAILURE;
+            RETURN;
+        END IF;
+        
+        -- Add driver role
+        INSERT INTO ADM.DRIVER (person_id)
+        VALUES (p_person_id);
+        
+        p_success := STATUS_SUCCESS;
+    EXCEPTION
+        WHEN OTHERS THEN
+            p_success := STATUS_FAILURE;
+    END ADD_DRIVER_ROLE;
+    
+    PROCEDURE ADD_PASSENGER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
+    ) IS
+        v_count NUMBER;
+    BEGIN
+        -- Check if person exists
+        SELECT COUNT(*) INTO v_count
+        FROM ADM.PERSON
+        WHERE id = p_person_id;
+        
+        IF v_count = 0 THEN
+            p_success := STATUS_FAILURE;
+            RETURN;
+        END IF;
+        
+        -- Check if already has passenger role
+        SELECT COUNT(*) INTO v_count
+        FROM ADM.PASSENGER
+        WHERE person_id = p_person_id;
+        
+        IF v_count > 0 THEN
+            p_success := STATUS_FAILURE;
+            RETURN;
+        END IF;
+        
+        -- Add passenger role
+        INSERT INTO ADM.PASSENGER (person_id)
+        VALUES (p_person_id);
+        
+        p_success := STATUS_SUCCESS;
+    EXCEPTION
+        WHEN OTHERS THEN
+            p_success := STATUS_FAILURE;
+    END ADD_PASSENGER_ROLE;
+    
+    PROCEDURE REMOVE_DRIVER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
+    ) IS
+    BEGIN
+        DELETE FROM ADM.DRIVER
+        WHERE person_id = p_person_id;
+        
+        p_success := STATUS_SUCCESS;
+    EXCEPTION
+        WHEN OTHERS THEN
+            p_success := STATUS_FAILURE;
+    END REMOVE_DRIVER_ROLE;
+    
+    PROCEDURE REMOVE_PASSENGER_ROLE(
+        p_person_id IN NUMBER,
+        p_success OUT NUMBER
+    ) IS
+    BEGIN
+        DELETE FROM ADM.PASSENGER
+        WHERE person_id = p_person_id;
+        
+        p_success := STATUS_SUCCESS;
+    EXCEPTION
+        WHEN OTHERS THEN
+            p_success := STATUS_FAILURE;
+    END REMOVE_PASSENGER_ROLE;
 END USER_AUTH_PKG;
+/
+
+-- Package for catalog management
+CREATE OR REPLACE PACKAGE ADM.ADM_CATALOG_MGMT_PKG AS
+    -- Function to get all genders
+    FUNCTION find_all_genders_cursor RETURN SYS_REFCURSOR;
+    
+    -- Function to get all institutions
+    FUNCTION find_all_institutions_cursor RETURN SYS_REFCURSOR;
+    
+    -- Function to get all identification types
+    FUNCTION find_all_id_types_cursor RETURN SYS_REFCURSOR;
+    
+    -- Function to get all phone types
+    FUNCTION find_all_phone_types_cursor RETURN SYS_REFCURSOR;
+    
+    -- Function to get domains by institution
+    FUNCTION find_domains_by_institution_cursor(
+        p_institution_id IN NUMBER
+    ) RETURN SYS_REFCURSOR;
+END ADM_CATALOG_MGMT_PKG;
+/
+
+CREATE OR REPLACE PACKAGE BODY ADM.ADM_CATALOG_MGMT_PKG AS
+    FUNCTION find_all_genders_cursor RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT id, name
+            FROM ADM.GENDER
+            ORDER BY name;
+        RETURN v_cursor;
+    END find_all_genders_cursor;
+    
+    FUNCTION find_all_institutions_cursor RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT id, name
+            FROM ADM.INSTITUTION
+            ORDER BY name;
+        RETURN v_cursor;
+    END find_all_institutions_cursor;
+    
+    FUNCTION find_all_id_types_cursor RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT id, name
+            FROM ADM.ID_TYPE
+            ORDER BY name;
+        RETURN v_cursor;
+    END find_all_id_types_cursor;
+    
+    FUNCTION find_all_phone_types_cursor RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT id, name
+            FROM ADM.PHONE_TYPE
+            ORDER BY name;
+        RETURN v_cursor;
+    END find_all_phone_types_cursor;
+    
+    FUNCTION find_domains_by_institution_cursor(
+        p_institution_id IN NUMBER
+    ) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT id, name
+            FROM ADM.DOMAIN
+            WHERE institution_id = p_institution_id
+            ORDER BY name;
+        RETURN v_cursor;
+    END find_domains_by_institution_cursor;
+END ADM_CATALOG_MGMT_PKG;
 /

@@ -3,8 +3,7 @@ package com.tec.carpooling.domain.entity;
 import java.util.Objects;
 
 /**
- * Represents the ADM.INSTITUTION entity.
- * This class contains information about academic institutions in the carpooling system.
+ * Entity class representing an institution.
  */
 public class Institution {
     private long id;        // Unique identifier for the institution
@@ -16,32 +15,43 @@ public class Institution {
     public Institution() { }
     
     /**
-     * Gets the institution's ID.
-     * @return the institution ID
+     * Constructor with parameters.
+     * 
+     * @param id The institution ID
+     * @param name The institution name
+     */
+    public Institution(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    /**
+     * Gets the institution ID.
+     * @return The institution ID
      */
     public long getId() { 
         return id; 
     }
     
     /**
-     * Sets the institution's ID.
-     * @param id the institution ID to set
+     * Sets the institution ID.
+     * @param id The institution ID to set
      */
     public void setId(long id) { 
         this.id = id; 
     }
     
     /**
-     * Gets the institution's name.
-     * @return the institution name
+     * Gets the institution name.
+     * @return The institution name
      */
     public String getName() { 
         return name; 
     }
     
     /**
-     * Sets the institution's name.
-     * @param name the institution name to set
+     * Sets the institution name.
+     * @param name The institution name to set
      */
     public void setName(String name) { 
         this.name = name; 
@@ -69,7 +79,7 @@ public class Institution {
      */
     @Override
     public int hashCode() { 
-        return Objects.hash(id); 
+        return (int) (id ^ (id >>> 32)); 
     }
     
     /**
@@ -79,6 +89,6 @@ public class Institution {
      */
     @Override
     public String toString() { 
-        return "Institution{id=" + id + ", name='" + name + "'}"; 
+        return name; 
     }
 }
