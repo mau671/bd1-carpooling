@@ -9,6 +9,8 @@ import com.github.lgooddatepicker.components.TimePickerSettings;
 import java.net.URL;
 import java.util.Locale;
 import java.time.LocalDate;
+import java.util.List;
+import java.sql.SQLException;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -594,7 +596,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 25, 5);
         jPanel36.add(jLabel1, gridBagConstraints);
 
-        jComboBoxDomain.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
@@ -741,33 +742,124 @@ public class UserSignUp extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_termsCheckBoxActionPerformed
 
-    private void buttonRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRegisterActionPerformed
-        String name = textName1.getText().trim();
-        String surname = textSurname1.getText().trim();
-        String id = textID.getText().trim();
-        String number = textNumber.getText().trim();
-        String email = textEmail.getText().trim();
+    private void buttonRegisterActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            // Validar campos requeridos
+            if (!validateRequiredFields()) {
+                return;
+            }
 
-        // Check if any field is empty
-        if (name.isEmpty() || surname.isEmpty() || id.isEmpty() || number.isEmpty() || email.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
-            return;
-        }
-        // Check that terms and conditions where accepted
-        if (!termsCheckBox.isSelected()) {
-            JOptionPane.showMessageDialog(null, "You must accept the Terms and Conditions to register.");
-            return;
-        }
-        JOptionPane.showMessageDialog(null, "Registration successful!");
-        // Go back to initial screen
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            InitialPage home = new InitialPage();
-            home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            home.setVisible(true);
+            // Validar términos y condiciones
+            if (!termsCheckBox.isSelected()) {
+                JOptionPane.showMessageDialog(this,
+                    ERROR_TERMS_NOT_ACCEPTED,
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-            this.dispose();
-        });
-    }//GEN-LAST:event_buttonRegisterActionPerformed
+            // Obtener valores de los campos
+            String firstName = textName1.getText().trim();
+            String secondName = textName2.getText().trim();
+            String firstSurname = textSurname1.getText().trim();
+            String secondSurname = textSurname2.getText().trim();
+            String idNumber = textID.getText().trim();
+            String phoneNumber = textNumber.getText().trim();
+            String email = textEmail.getText().trim();
+            LocalDate dateOfBirth = dateOfBirthPicker.getDate();
+
+            // Obtener valores de los combos
+            IdType idType = (IdType) comboBoxID.getSelectedItem();
+            PhoneType phoneType = (PhoneType) comboBoxNumber.getSelectedItem();
+            Institution institution = (Institution) comboBoxInstitution.getSelectedItem();
+            Gender gender = (Gender) comboBoxGender.getSelectedItem();
+            Domain domain = (Domain) jComboBoxDomain.getSelectedItem();
+
+            // Validar que se hayan seleccionado todos los combos y que no sean los items por defecto
+            if (idType == null || idType.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select an ID type.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (phoneType == null || phoneType.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select a phone type.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (institution == null || institution.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select an institution.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (gender == null || gender.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select a gender.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (domain == null || domain.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select a domain.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // TODO: Implementar el registro de usuario
+            // Por ahora solo mostramos un mensaje de éxito
+            JOptionPane.showMessageDialog(this,
+                "Registration successful!",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+
+            // Volver a la pantalla inicial
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                InitialPage home = new InitialPage();
+                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                home.setVisible(true);
+                this.dispose();
+            });
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "An error occurred during registration: " + ex.getMessage(),
+                TITLE_ERROR,
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Valida que todos los campos requeridos estén completos.
+     * 
+     * @return true si todos los campos requeridos están completos, false en caso contrario
+     */
+    private boolean validateRequiredFields() {
+        if (textName1.getText().trim().isEmpty() ||
+            textSurname1.getText().trim().isEmpty() ||
+            textID.getText().trim().isEmpty() ||
+            textNumber.getText().trim().isEmpty() ||
+            textEmail.getText().trim().isEmpty() ||
+            dateOfBirthPicker.getDate() == null) {
+            
+            JOptionPane.showMessageDialog(this,
+                "Please fill in all required fields.",
+                TITLE_VALIDATION,
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 
     private void textName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textName2ActionPerformed
         // TODO add your handling code here:
@@ -890,32 +982,48 @@ public class UserSignUp extends javax.swing.JFrame {
     private void loadCatalogs() {
         try {
             // Cargar géneros
-            List<Gender> genders = catalogService.getAllGenders();
             comboBoxGender.removeAllItems();
+            comboBoxGender.addItem(new Gender(0, "Select Gender")); // Item por defecto
+            List<Gender> genders = catalogService.getAllGenders();
             for (Gender gender : genders) {
-                comboBoxGender.addItem(gender);
+                if (gender.getId() != 0) { // Evitar duplicar el item por defecto
+                    comboBoxGender.addItem(gender);
+                }
             }
             
             // Cargar instituciones
-            List<Institution> institutions = catalogService.getAllInstitutions();
             comboBoxInstitution.removeAllItems();
+            comboBoxInstitution.addItem(new Institution(0, "Select Institution")); // Item por defecto
+            List<Institution> institutions = catalogService.getAllInstitutions();
             for (Institution institution : institutions) {
-                comboBoxInstitution.addItem(institution);
+                if (institution.getId() != 0) { // Evitar duplicar el item por defecto
+                    comboBoxInstitution.addItem(institution);
+                }
             }
             
             // Cargar tipos de identificación
-            List<IdType> idTypes = catalogService.getAllIdTypes();
             comboBoxID.removeAllItems();
+            comboBoxID.addItem(new IdType(0, "Select ID Type")); // Item por defecto
+            List<IdType> idTypes = catalogService.getAllIdTypes();
             for (IdType idType : idTypes) {
-                comboBoxID.addItem(idType);
+                if (idType.getId() != 0) { // Evitar duplicar el item por defecto
+                    comboBoxID.addItem(idType);
+                }
             }
             
             // Cargar tipos de teléfono
-            List<PhoneType> phoneTypes = catalogService.getAllPhoneTypes();
             comboBoxNumber.removeAllItems();
+            comboBoxNumber.addItem(new PhoneType(0, "Select Phone Type")); // Item por defecto
+            List<PhoneType> phoneTypes = catalogService.getAllPhoneTypes();
             for (PhoneType phoneType : phoneTypes) {
-                comboBoxNumber.addItem(phoneType);
+                if (phoneType.getId() != 0) { // Evitar duplicar el item por defecto
+                    comboBoxNumber.addItem(phoneType);
+                }
             }
+            
+            // Inicializar el combo de dominios con un item por defecto
+            jComboBoxDomain.removeAllItems();
+            jComboBoxDomain.addItem(new Domain(0, "Select Domain", 0));
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
@@ -932,10 +1040,13 @@ public class UserSignUp extends javax.swing.JFrame {
      */
     private void loadDomainsForInstitution(long institutionId) {
         try {
-            List<Domain> domains = catalogService.getDomainsByInstitution(institutionId);
             jComboBoxDomain.removeAllItems();
+            jComboBoxDomain.addItem(new Domain(0, "Select Domain", institutionId)); // Item por defecto
+            List<Domain> domains = catalogService.getDomainsByInstitution(institutionId);
             for (Domain domain : domains) {
-                jComboBoxDomain.addItem(domain);
+                if (domain.getId() != 0) { // Evitar duplicar el item por defecto
+                    jComboBoxDomain.addItem(domain);
+                }
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,

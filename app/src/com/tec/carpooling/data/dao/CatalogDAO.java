@@ -10,49 +10,49 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Data Access Object interface for catalog operations.
- * Handles retrieval of catalog data such as genders, institutions, etc.
+ * Data Access Object interface for catalog data.
+ * Handles all database operations related to catalog information.
  */
 public interface CatalogDAO {
     
     /**
      * Retrieves all genders from the database.
      * 
-     * @return List of all genders
-     * @throws SQLException if a database error occurs
+     * @return List of Gender entities
+     * @throws SQLException if a database access error occurs
      */
-    List<Gender> findAllGenders() throws SQLException;
+    List<Gender> getAllGenders() throws SQLException;
     
     /**
      * Retrieves all institutions from the database.
      * 
-     * @return List of all institutions
-     * @throws SQLException if a database error occurs
+     * @return List of Institution entities
+     * @throws SQLException if a database access error occurs
      */
-    List<Institution> findAllInstitutions() throws SQLException;
+    List<Institution> getAllInstitutions() throws SQLException;
     
     /**
      * Retrieves all identification types from the database.
      * 
-     * @return List of all identification types
-     * @throws SQLException if a database error occurs
+     * @return List of IdType entities
+     * @throws SQLException if a database access error occurs
      */
-    List<IdType> findAllIdTypes() throws SQLException;
+    List<IdType> getAllIdTypes() throws SQLException;
     
     /**
      * Retrieves all phone types from the database.
      * 
-     * @return List of all phone types
-     * @throws SQLException if a database error occurs
+     * @return List of PhoneType entities
+     * @throws SQLException if a database access error occurs
      */
-    List<PhoneType> findAllPhoneTypes() throws SQLException;
+    List<PhoneType> getAllPhoneTypes() throws SQLException;
     
     /**
      * Retrieves all domains for a specific institution.
      * 
      * @param institutionId The ID of the institution
-     * @return List of domains for the specified institution
-     * @throws SQLException if a database error occurs
+     * @return List of Domain entities
+     * @throws SQLException if a database access error occurs
      */
-    List<Domain> findDomainsByInstitution(long institutionId) throws SQLException;
+    List<Domain> getDomainsByInstitution(long institutionId) throws SQLException;
 } 

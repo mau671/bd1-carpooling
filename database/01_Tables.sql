@@ -325,7 +325,7 @@ CREATE TABLE ADM.PARAMETER (
                              MAXEXTENTS UNLIMITED PCTINCREASE 0
                          ),
     name              VARCHAR2(50) NOT NULL,
-    value             NUMBER
+    value             VARCHAR2(50) NOT NULL
 )
 TABLESPACE ADM_Data
 STORAGE (

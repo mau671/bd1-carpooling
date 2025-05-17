@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Implementation of the CatalogService interface.
- * Handles business logic for catalog data.
+ * Provides business logic for managing catalog data.
  */
 public class CatalogServiceImpl implements CatalogService {
     
@@ -30,7 +30,7 @@ public class CatalogServiceImpl implements CatalogService {
     /**
      * Constructor that accepts a custom DAO implementation.
      * 
-     * @param catalogDAO The catalog DAO to use
+     * @param catalogDAO The DAO implementation to use
      */
     public CatalogServiceImpl(CatalogDAO catalogDAO) {
         this.catalogDAO = catalogDAO;
@@ -38,26 +38,26 @@ public class CatalogServiceImpl implements CatalogService {
     
     @Override
     public List<Gender> getAllGenders() throws SQLException {
-        return catalogDAO.findAllGenders();
+        return catalogDAO.getAllGenders();
     }
     
     @Override
     public List<Institution> getAllInstitutions() throws SQLException {
-        return catalogDAO.findAllInstitutions();
+        return catalogDAO.getAllInstitutions();
     }
     
     @Override
     public List<IdType> getAllIdTypes() throws SQLException {
-        return catalogDAO.findAllIdTypes();
+        return catalogDAO.getAllIdTypes();
     }
     
     @Override
     public List<PhoneType> getAllPhoneTypes() throws SQLException {
-        return catalogDAO.findAllPhoneTypes();
+        return catalogDAO.getAllPhoneTypes();
     }
     
     @Override
     public List<Domain> getDomainsByInstitution(long institutionId) throws SQLException {
-        return catalogDAO.findDomainsByInstitution(institutionId);
+        return catalogDAO.getDomainsByInstitution(institutionId);
     }
 } 
