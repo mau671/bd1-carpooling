@@ -22,29 +22,20 @@ import javax.swing.JTextField;
  * @author hidal
  */
 
-public class UserLogIn extends javax.swing.JFrame {
-    // Suppose your text field is called 'textCorreo'
-    private void setupPlaceholder(JTextField textField, String placeholder) {
-        textField.setText(placeholder);
-        textField.setForeground(Color.GRAY);
+public class UserLogIn extends javax.swing.JFrame { 
+    /**
+     * Creates new form UserLogIn
+     */
+    public UserLogIn() {
+        initComponents();
+        // Load the image
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/calleCarro.png"));
 
-        textField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textField.getText().equals(placeholder)) {
-                    textField.setText("");
-                    textField.setForeground(Color.BLACK);
-                }
-            }
+        // Scale it to fit the label
+        Image scaledImage = icon.getImage().getScaledInstance(labelImage.getWidth(), labelImage.getHeight(), Image.SCALE_SMOOTH);
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textField.getText().isEmpty()) {
-                    textField.setForeground(Color.GRAY);
-                    textField.setText(placeholder);
-                }
-            }
-        });
+        // Set the scaled image as icon
+        labelImage.setIcon(new ImageIcon(scaledImage));
         
         labelRegister.setForeground(Color.BLUE);
         labelRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -61,22 +52,6 @@ public class UserLogIn extends javax.swing.JFrame {
             }
         });
         
-    }
-    
-    /**
-     * Creates new form UserLogIn
-     */
-    public UserLogIn() {
-        initComponents();
-        // Load the image
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/calleCarro.png"));
-
-        // Scale it to fit the label
-        Image scaledImage = icon.getImage().getScaledInstance(labelImage.getWidth(), labelImage.getHeight(), Image.SCALE_SMOOTH);
-
-        // Set the scaled image as icon
-        labelImage.setIcon(new ImageIcon(scaledImage));
-        setupPlaceholder(textEmail, "example@domain.com");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
@@ -104,8 +79,8 @@ public class UserLogIn extends javax.swing.JFrame {
         textPassword = new javax.swing.JPasswordField();
         labelPassword = new javax.swing.JLabel();
         panelEmail = new javax.swing.JPanel();
-        textEmail = new javax.swing.JTextField();
-        labelEmail = new javax.swing.JLabel();
+        textUsername = new javax.swing.JTextField();
+        labelUsername = new javax.swing.JLabel();
         labelRegister = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
 
@@ -197,7 +172,7 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 6;
+        gridBagConstraints.ipadx = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
         panelPassword.add(labelPassword, gridBagConstraints);
@@ -206,31 +181,31 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipady = 10;
         panelInfo.add(panelPassword, gridBagConstraints);
 
         panelEmail.setBackground(new java.awt.Color(225, 239, 255));
         panelEmail.setLayout(new java.awt.GridBagLayout());
 
-        textEmail.setText("jTextField1");
-        textEmail.setPreferredSize(new java.awt.Dimension(135, 30));
+        textUsername.setPreferredSize(new java.awt.Dimension(135, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 140;
-        gridBagConstraints.insets = new java.awt.Insets(0, 7, 10, 0);
-        panelEmail.add(textEmail, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelEmail.add(textUsername, gridBagConstraints);
 
-        labelEmail.setBackground(new java.awt.Color(18, 102, 160));
-        labelEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelEmail.setForeground(new java.awt.Color(18, 102, 160));
-        labelEmail.setText("Email:");
+        labelUsername.setBackground(new java.awt.Color(18, 102, 160));
+        labelUsername.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelUsername.setForeground(new java.awt.Color(18, 102, 160));
+        labelUsername.setText("Username:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.ipadx = 5;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        panelEmail.add(labelEmail, gridBagConstraints);
+        panelEmail.add(labelUsername, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -280,11 +255,11 @@ public class UserLogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoginActionPerformed
-        String username = textEmail.getText().trim();
+        String username = textUsername.getText().trim();
         char[] passwordChars = textPassword.getPassword();
         String password = new String(passwordChars).trim();
         // Check if any field is empty
-        if (username.isEmpty() || username.equals("example@domain.com") || password.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please fill in both password and username fields.");
             return;
         }
@@ -347,17 +322,17 @@ public class UserLogIn extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelImage;
     private javax.swing.JPanel labelLog;
     private javax.swing.JLabel labelLogIn;
     private javax.swing.JLabel labelPassword;
     private javax.swing.JLabel labelRegister;
+    private javax.swing.JLabel labelUsername;
     private javax.swing.JPanel panelEmail;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JPanel panelPassword;
-    private javax.swing.JTextField textEmail;
     private javax.swing.JPasswordField textPassword;
+    private javax.swing.JTextField textUsername;
     // End of variables declaration//GEN-END:variables
 }
