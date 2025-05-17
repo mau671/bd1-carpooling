@@ -781,11 +781,42 @@ public class UserSignUp extends javax.swing.JFrame {
             Gender gender = (Gender) comboBoxGender.getSelectedItem();
             Domain domain = (Domain) jComboBoxDomain.getSelectedItem();
 
-            // Validar que se hayan seleccionado todos los combos
-            if (idType == null || phoneType == null || institution == null || 
-                gender == null || domain == null) {
+            // Validar que se hayan seleccionado todos los combos y que no sean los items por defecto
+            if (idType == null || idType.getId() == 0) {
                 JOptionPane.showMessageDialog(this,
-                    "Please select all required options from the dropdown menus.",
+                    "Please select an ID type.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (phoneType == null || phoneType.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select a phone type.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (institution == null || institution.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select an institution.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (gender == null || gender.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select a gender.",
+                    TITLE_VALIDATION,
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (domain == null || domain.getId() == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select a domain.",
                     TITLE_VALIDATION,
                     JOptionPane.WARNING_MESSAGE);
                 return;
