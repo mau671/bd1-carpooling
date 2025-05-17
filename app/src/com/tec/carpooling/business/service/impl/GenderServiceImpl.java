@@ -5,6 +5,7 @@ import com.tec.carpooling.data.dao.CatalogRegistrationException;
 import com.tec.carpooling.data.dao.GenderDAO;
 import com.tec.carpooling.data.impl.GenderDAOImpl; // Mejorar con DI
 import com.tec.carpooling.dto.CatalogData;
+import java.util.List;
 
 public class GenderServiceImpl implements GenderService {
 
@@ -28,4 +29,21 @@ public class GenderServiceImpl implements GenderService {
     }
 
     // Implementar getAllGenders() aquí si se necesita...
+    @Override
+    public List<GenderDTO> getAllGenders() throws Exception { // Devuelve DTOs
+        try {
+            List<Gender> genders = genderDAO.findAll();
+            return genders.stream()
+                          .map(this::mapToGenderDTO) // Necesitas mapToGenderDTO
+                          .collect(Collectors.toList());
+        } catch (Exception e) {
+            // Loggear
+            throw new Exception("Error al obtener géneros.", e);
+        }
+    }
+
+    private GenderDTO mapToGenderDTO(Gender gender) {
+        if (gender == null) return null;
+        return new GenderDTO(gender.getId(), gender.getName()); // Necesitas GenderDTO
+    }
 }
