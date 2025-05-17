@@ -4,6 +4,11 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.business.service.UserService;
+import com.tec.carpooling.business.service.impl.UserServiceImpl;
+import com.tec.carpooling.dto.LoginData;
+import com.tec.carpooling.dto.LoginResultDTO;
+import com.tec.carpooling.util.SessionManager;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -16,14 +21,30 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import java.util.Set;
 
 /**
- *
- * @author hidal
+ * Login window for the carpooling application.
+ * Handles user authentication and role selection.
  */
-
 public class UserLogIn extends javax.swing.JFrame {
-    // Suppose your text field is called 'textCorreo'
+    
+    private static final String EMAIL_PLACEHOLDER = "example@domain.com";
+    private static final String ERROR_EMPTY_FIELDS = "Please fill in all required fields.";
+    private static final String ERROR_INVALID_CREDENTIALS = "Invalid credentials. Please check your username and password.";
+    private static final String ERROR_LOGIN = "Error during login attempt: ";
+    private static final String TITLE_VALIDATION = "Validation Error";
+    private static final String TITLE_AUTHENTICATION = "Authentication Error";
+    private static final String TITLE_ERROR = "Error";
+    private static final String TITLE_ROLE_SELECTION = "Role Selection";
+    private static final String MESSAGE_ROLE_SELECTION = "Please select your role:";
+
+    /**
+     * Sets up placeholder behavior for a text field.
+     * 
+     * @param textField The text field to set up
+     * @param placeholder The placeholder text to display
+     */
     private void setupPlaceholder(JTextField textField, String placeholder) {
         textField.setText(placeholder);
         textField.setForeground(Color.GRAY);
@@ -45,39 +66,63 @@ public class UserLogIn extends javax.swing.JFrame {
                 }
             }
         });
-        
+    }
+
+    /**
+     * Sets up the register label with click behavior.
+     */
+    private void setupRegisterLabel() {
         labelRegister.setForeground(Color.BLUE);
         labelRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
         labelRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    UserSignUp signup = new UserSignUp();
-                    signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    signup.setVisible(true);
-
-                    UserLogIn.this.dispose();
-                });
+                openSignUpWindow();
             }
         });
-        
     }
-    
+
+    /**
+     * Opens the sign up window and closes the current window.
+     */
+    private void openSignUpWindow() {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            UserSignUp signup = new UserSignUp();
+            signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            signup.setVisible(true);
+            UserLogIn.this.dispose();
+        });
+    }
+
     /**
      * Creates new form UserLogIn
      */
     public UserLogIn() {
         initComponents();
-        // Load the image
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/calleCarro.png"));
+        setupWindow();
+    }
 
-        // Scale it to fit the label
-        Image scaledImage = icon.getImage().getScaledInstance(labelImage.getWidth(), labelImage.getHeight(), Image.SCALE_SMOOTH);
-
-        // Set the scaled image as icon
-        labelImage.setIcon(new ImageIcon(scaledImage));
-        setupPlaceholder(textEmail, "example@domain.com");
+    /**
+     * Sets up the window components and appearance.
+     */
+    private void setupWindow() {
+        setupImage();
+        setupPlaceholder(textEmail, EMAIL_PLACEHOLDER);
+        setupRegisterLabel();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    /**
+     * Sets up the background image.
+     */
+    private void setupImage() {
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/calleCarro.png"));
+        Image scaledImage = icon.getImage().getScaledInstance(
+            labelImage.getWidth(), 
+            labelImage.getHeight(), 
+            Image.SCALE_SMOOTH
+        );
+        labelImage.setIcon(new ImageIcon(scaledImage));
     }
 
     /**
@@ -279,31 +324,98 @@ public class UserLogIn extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoginActionPerformed
+    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String username = textEmail.getText().trim();
-        char[] passwordChars = textPassword.getPassword();
-        String password = new String(passwordChars).trim();
-        // Check if any field is empty
-        if (username.isEmpty() || username.equals("example@domain.com") || password.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in both password and username fields.");
+        String password = new String(textPassword.getPassword()).trim();
+        
+        if (isInputInvalid(username, password)) {
+            showValidationError();
             return;
         }
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            UserType type = new UserType();
-            type.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            type.setVisible(true);
-
-            UserLogIn.this.dispose();
-        });
-    }//GEN-LAST:event_buttonLoginActionPerformed
-
-    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPasswordActionPerformed
-        if (checkPassword.isSelected()) {
-            textPassword.setEchoChar((char) 0); // Show characters
-        } else {
-            textPassword.setEchoChar('*'); // Hide with asterisks again
+        
+        try {
+            LoginData loginData = new LoginData(username, password);
+            UserService userService = new UserServiceImpl();
+            LoginResultDTO loginResult = userService.validateLoginAndGetRoles(loginData);
+            
+            if (loginResult.isLoginSuccessful()) {
+                handleSuccessfulLogin(loginResult);
+            } else {
+                showLoginError();
+            }
+        } catch (Exception ex) {
+            handleLoginException(ex);
         }
-    }//GEN-LAST:event_checkPasswordActionPerformed
+    }
+    
+    private boolean isInputInvalid(String username, String password) {
+        return username.isEmpty() || 
+               username.equals(EMAIL_PLACEHOLDER) || 
+               password.isEmpty();
+    }
+    
+    private void showValidationError() {
+        JOptionPane.showMessageDialog(this, 
+            ERROR_EMPTY_FIELDS,
+            TITLE_VALIDATION,
+            JOptionPane.WARNING_MESSAGE);
+    }
+    
+    private void handleSuccessfulLogin(LoginResultDTO loginResult) {
+        Set<String> roles = loginResult.getRoles();
+        String selectedRole = selectUserRole(roles);
+        
+        if (selectedRole == null) {
+            return; // User cancelled role selection
+        }
+        
+        SessionManager.getInstance().login(loginResult.getUser(), roles, selectedRole);
+        openMainWindow(selectedRole);
+        this.dispose();
+    }
+    
+    private String selectUserRole(Set<String> roles) {
+        if (roles.size() > 1) {
+            String[] roleOptions = roles.toArray(new String[0]);
+            return (String) JOptionPane.showInputDialog(
+                this,
+                MESSAGE_ROLE_SELECTION,
+                TITLE_ROLE_SELECTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                roleOptions,
+                roleOptions[0]
+            );
+        }
+        return roles.iterator().next();
+    }
+    
+    private void openMainWindow(String role) {
+        JFrame mainWindow = role.equals(SessionManager.ROLE_DRIVER) ? 
+            new DriverMain() : new PassengerMain();
+        
+        mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mainWindow.setVisible(true);
+    }
+    
+    private void showLoginError() {
+        JOptionPane.showMessageDialog(this, 
+            ERROR_INVALID_CREDENTIALS,
+            TITLE_AUTHENTICATION,
+            JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void handleLoginException(Exception ex) {
+        JOptionPane.showMessageDialog(this,
+            ERROR_LOGIN + ex.getMessage(),
+            TITLE_ERROR,
+            JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+
+    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {
+        textPassword.setEchoChar(checkPassword.isSelected() ? (char) 0 : '*');
+    }
     
     /**
      * @param args the command line arguments

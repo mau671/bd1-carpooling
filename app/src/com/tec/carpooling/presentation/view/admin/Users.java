@@ -160,117 +160,23 @@ public class Users extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionSaveActionPerformed
-        String name = jTextFieldInstitutionName.getText().trim();
-        if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            InstitutionDTO newInstitution = institutionService.registerInstitution(name);
-            JOptionPane.showMessageDialog(this, "Institución '" + newInstitution.getName() + "' registrada con ID: " + newInstitution.getId());
-            loadInstitutions(); // Recargar la tabla
-        } catch (InstitutionManagementException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            // Loggear
-            JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    
     }//GEN-LAST:event_jButtonInstitutionSaveActionPerformed
 
     private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionUpdateActionPerformed
-        if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        String newName = jTextFieldInstitutionName.getText().trim();
-        if (newName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            boolean success = institutionService.updateInstitutionName(selectedInstitutionId, newName);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
-                loadInstitutions(); // Recargar tabla
-            }
-            // El servicio debería lanzar excepción si falla
-        } catch (InstitutionManagementException e) {
-            JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error de Actualización", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            // Loggear
-            JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        
     }//GEN-LAST:event_jButtonInstitutionUpdateActionPerformed
 
     private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionDeleteActionPerformed
-        if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int confirmation = JOptionPane.showConfirmDialog(this,
-            "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
-            "Confirmar Eliminación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE);
-
-        if (confirmation == JOptionPane.YES_OPTION) {
-            try {
-                boolean success = institutionService.deleteInstitution(selectedInstitutionId);
-                if (success) {
-                    JOptionPane.showMessageDialog(this, "Institución eliminada.");
-                    loadInstitutions(); // Recargar tabla
-                }
-                // El servicio debería lanzar excepción si falla
-            } catch (InstitutionManagementException e) { // Capturar error específico si existe FK constraint
-                JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage() + "\n(Posiblemente está asociada a usuarios u otros datos).", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
-            }
-            catch (Exception e) {
-                // Loggear
-                JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+       
     }//GEN-LAST:event_jButtonInstitutionDeleteActionPerformed
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableInstitutionMouseClicked
-        int selectedRow = jTableInstitution.getSelectedRow();
-        if (selectedRow >= 0) {
-            // Obtener datos de la fila seleccionada
-            // Columna 0 es ID (Long), Columna 1 es Nombre (String)
-            selectedInstitutionId = (Long) institutionTableModel.getValueAt(selectedRow, 0);
-            String selectedName = (String) institutionTableModel.getValueAt(selectedRow, 1);
-
-            // Actualizar campo de texto
-            jTextFieldInstitutionName.setText(selectedName);
-
-            // Habilitar/deshabilitar botones
-            jButtonInstitutionSave.setEnabled(false); // No guardar nuevo si hay selección
-            jButtonInstitutionUpdate.setEnabled(true);
-            jButtonInstitutionDelete.setEnabled(true);
-            jButtonEditDomains.setEnabled(true);
-
-        } else {
-            clearSelectionAndFields(); // Limpiar si no hay fila válida
-        }
+        
     }//GEN-LAST:event_jTableInstitutionMouseClicked
 
     private void jButtonEditDomainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditDomainsActionPerformed
-        if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // Obtener la ventana padre
-        java.awt.Window owner = SwingUtilities.getWindowAncestor(this);
-        // Crear y mostrar el diálogo, pasando el ID
-        DomainsDialog dialog = new DomainsDialog((Frame) owner, true, selectedInstitutionId);
-        dialog.setVisible(true);
-
-        // El diálogo se encarga de guardar los cambios, no necesitamos hacer nada aquí después de que cierre.
-        // Si necesitaras refrescar algo en ESTE panel después de que el diálogo cierre,
-        // podrías añadir un listener al diálogo o hacer que devuelva un valor.
+      
     }//GEN-LAST:event_jButtonEditDomainsActionPerformed
 
     private void jTextFieldInstitutionNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldInstitutionNameActionPerformed

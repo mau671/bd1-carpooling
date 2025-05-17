@@ -3,8 +3,7 @@ package com.tec.carpooling.dto;
 import java.util.Date;
 
 /**
- * DTO to transport data required for registering a new user
- * from the presentation layer to the business layer.
+ * DTO para manejar los datos de registro de usuarios.
  */
 public class UserRegistrationData {
 
@@ -24,7 +23,7 @@ public class UserRegistrationData {
 
     // User Account data
     private String username;
-    private String plainPassword; // Plain text password from UI
+    private String password;
     private String hashedPassword; // Hashed password (set by service)
 
     // Contact Information
@@ -34,10 +33,18 @@ public class UserRegistrationData {
     // Photo data
     private byte[] photoBlob; // Image as byte array from UI
 
+    private long personId;
+
     /**
      * Default constructor.
      */
     public UserRegistrationData() {
+    }
+
+    public UserRegistrationData(String username, String password, long personId) {
+        this.username = username;
+        this.password = password;
+        this.personId = personId;
     }
 
     // --- Getters and Setters for all fields ---
@@ -153,14 +160,14 @@ public class UserRegistrationData {
     public void setUsername(String username) { this.username = username; }
     
     /**
-     * @return The plain text password
+     * @return The password
      */
-    public String getPlainPassword() { return plainPassword; }
+    public String getPassword() { return password; }
     
     /**
-     * @param plainPassword The plain text password to set
+     * @param password The password to set
      */
-    public void setPlainPassword(String plainPassword) { this.plainPassword = plainPassword; }
+    public void setPassword(String password) { this.password = password; }
     
     /**
      * @return The hashed password
@@ -202,6 +209,14 @@ public class UserRegistrationData {
      */
     public void setPhotoBlob(byte[] photoBlob) { this.photoBlob = photoBlob; }
 
+    public long getPersonId() {
+        return personId;
+    }
+    
+    public void setPersonId(long personId) {
+        this.personId = personId;
+    }
+
     /**
      * Returns a string representation of this object for debugging purposes.
      * 
@@ -216,6 +231,7 @@ public class UserRegistrationData {
                ", firstName='" + firstName + '\'' +
                ", firstSurname='" + firstSurname + '\'' +
                ", idNumber='" + idNumber + '\'' +
-               "}";
+               ", personId=" + personId +
+               '}';
     }
 }

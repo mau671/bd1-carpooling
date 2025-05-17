@@ -170,6 +170,8 @@ public class UserSignUp extends javax.swing.JFrame {
         jPanel36 = new javax.swing.JPanel();
         name_label11 = new javax.swing.JLabel();
         textEmail = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxDomain = new javax.swing.JComboBox<>();
         jPanel38 = new javax.swing.JPanel();
         name_label12 = new javax.swing.JLabel();
         textName1 = new javax.swing.JTextField();
@@ -580,6 +582,12 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
         jPanel36.add(textEmail, gridBagConstraints);
 
+        jLabel1.setText("@");
+        jPanel36.add(jLabel1, new java.awt.GridBagConstraints());
+
+        jComboBoxDomain.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel36.add(jComboBoxDomain, new java.awt.GridBagConstraints());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 8;
@@ -800,6 +808,8 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.JComboBox<String> jComboBoxDomain;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel18;

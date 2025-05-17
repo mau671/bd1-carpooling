@@ -7,17 +7,27 @@ import java.util.List;
 // import com.tec.carpooling.domain.entity.Gender;
 // import java.util.List;
 
+/**
+ * Data Access Object interface for Gender entity.
+ * Handles all database operations related to genders.
+ */
 public interface GenderDAO {
     /**
-     * Registra un nuevo género en la base de datos.
-     * Llama al procedimiento ADM.ADM_CATALOG_MGMT_PKG.register_gender.
+     * Registers a new gender in the database.
+     * Calls the ADM.ADM_CATALOG_MGMT_PKG.register_gender procedure.
      *
-     * @param name El nombre del género a registrar.
-     * @throws SQLException Si ocurre un error general de base de datos.
-     * @throws CatalogRegistrationException Si el nombre está vacío o el género ya existe (mapeado desde errores PL/SQL 20201, 20202).
+     * @param name The name of the gender to register
+     * @throws SQLException if a general database error occurs
+     * @throws CatalogRegistrationException if the name is empty or the gender already exists
      */
     void registerGender(String name) throws SQLException, CatalogRegistrationException;
     
+    /**
+     * Retrieves all genders from the database.
+     * 
+     * @return List of all Gender entities
+     * @throws SQLException if a database error occurs
+     */
     List<Gender> findAll() throws SQLException;
 
     // List<Gender> findAll() throws SQLException; // Ejemplo para el futuro

@@ -5,11 +5,12 @@
 package com.tec.carpooling.data.impl;
 
 import com.tec.carpooling.data.dao.UserDAO;
+import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.tec.carpooling.data.connection.DatabaseConnection;
 
 /**
  * Implementation of the UserDAO interface. Provides database operations
@@ -19,56 +20,94 @@ import com.tec.carpooling.data.connection.DatabaseConnection;
  */
 public class UserDAOImpl implements UserDAO {
     
-    /**
-     * Checks if a person is registered as a driver.
-     *
-     * @param personId The unique identifier of the person
-     * @return true if the person is a driver, false otherwise
-     * @throws SQLException if a database access error occurs
-     */
+    @Override
+    public User findUserByUsername(String username) throws SQLException {
+        String sql = "{call PU.USER_AUTH_PKG.VALIDATE_USER(?, ?, ?, ?, ?)}";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+            
+            // Configurar parámetros de entrada
+            stmt.setString(1, username);
+            stmt.setString(2, ""); // Password vacío para solo buscar por username
+            
+            // Registrar parámetros de salida
+            stmt.registerOutParameter(3, java.sql.Types.NUMERIC); // user_id
+            stmt.registerOutParameter(4, java.sql.Types.NUMERIC); // person_id
+            stmt.registerOutParameter(5, java.sql.Types.NUMERIC); // success
+            
+            // Ejecutar procedimiento
+            stmt.execute();
+            
+            // Verificar resultado
+            if (stmt.getInt(5) == 1) {
+                User user = new User();
+                user.setId(stmt.getLong(3));
+                user.setUsername(username);
+                user.setPersonId(stmt.getLong(4));
+                return user;
+            }
+            
+            return null;
+        }
+    }
+    
+    @Override
+    public boolean registerUser(User user) throws SQLException {
+        String sql = "{call PU.USER_AUTH_PKG.REGISTER_USER(?, ?, ?, ?, ?)}";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+            
+            // Configurar parámetros
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+            stmt.setLong(3, user.getPersonId());
+            stmt.registerOutParameter(4, java.sql.Types.NUMERIC); // user_id
+            stmt.registerOutParameter(5, java.sql.Types.NUMERIC); // success
+            
+            // Ejecutar procedimiento
+            stmt.execute();
+            
+            // Verificar resultado
+            if (stmt.getInt(5) == 1) {
+                user.setId(stmt.getLong(4));
+                return true;
+            }
+            
+            return false;
+        }
+    }
+    
     @Override
     public boolean isDriver(long personId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM PU.DRIVER WHERE person_id = ?";
-        return checkRoleExists(sql, personId);
+        String sql = "{call PU.USER_AUTH_PKG.CHECK_DRIVER_ROLE(?, ?)}";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+            
+            stmt.setLong(1, personId);
+            stmt.registerOutParameter(2, java.sql.Types.NUMERIC);
+            
+            stmt.execute();
+            
+            return stmt.getInt(2) == 1;
+        }
     }
-
-    /**
-     * Checks if a person is registered as a passenger.
-     *
-     * @param personId The unique identifier of the person
-     * @return true if the person is a passenger, false otherwise
-     * @throws SQLException if a database access error occurs
-     */
+    
     @Override
     public boolean isPassenger(long personId) throws SQLException {
-         String sql = "SELECT COUNT(*) FROM PU.PASSENGER WHERE person_id = ?";
-         return checkRoleExists(sql, personId);
-    }
-
-    /**
-     * Helper method to check existence in role tables.
-     * Uses prepared statements to prevent SQL injection.
-     *
-     * @param sql The SQL query to execute
-     * @param personId The person ID to check
-     * @return true if the role exists for the person, false otherwise
-     * @throws SQLException if a database access error occurs
-     */
-    private boolean checkRoleExists(String sql, long personId) throws SQLException {
-        boolean exists = false;
+        String sql = "{call PU.USER_AUTH_PKG.CHECK_PASSENGER_ROLE(?, ?)}";
+        
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setLong(1, personId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    exists = rs.getInt(1) > 0;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error checking role for personId " + personId + ": " + e.getMessage());
-            throw e; // Rethrow for higher layer handling
+             CallableStatement stmt = conn.prepareCall(sql)) {
+            
+            stmt.setLong(1, personId);
+            stmt.registerOutParameter(2, java.sql.Types.NUMERIC);
+            
+            stmt.execute();
+            
+            return stmt.getInt(2) == 1;
         }
-        return exists;
     }
 }

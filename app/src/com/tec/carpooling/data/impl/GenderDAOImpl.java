@@ -7,68 +7,106 @@ import com.tec.carpooling.domain.entity.Gender;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import oracle.jdbc.OracleTypes;
 
+/**
+ * Implementation of the GenderDAO interface that handles database operations for Gender entities.
+ */
 public class GenderDAOImpl implements GenderDAO {
+
+    private static final String REGISTER_GENDER_PROC = "{call ADM.ADM_CATALOG_MGMT_PKG.register_gender(?)}";
+    private static final String FIND_ALL_GENDERS_FUNC = "{? = call ADM.ADM_CATALOG_MGMT_PKG.find_all_genders_cursor()}";
+    
+    private static final String ERROR_DUPLICATE = "Gender '%s' already exists.";
+    private static final String ERROR_EMPTY_NAME = "Gender name cannot be empty.";
+    private static final String ERROR_RETRIEVING = "Error retrieving genders from database.";
 
     @Override
     public void registerGender(String name) throws SQLException, CatalogRegistrationException {
-        String sql = "{call ADM.ADM_CATALOG_MGMT_PKG.register_gender(?)}";
-
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cs = conn.prepareCall(sql)) {
+             CallableStatement cs = conn.prepareCall(REGISTER_GENDER_PROC)) {
 
             cs.setString(1, name);
             cs.execute();
 
         } catch (SQLException e) {
-            handleGenderException(e, name); // Llama a un método helper
+            handleGenderException(e, name);
         }
     }
     
     @Override
     public List<Gender> findAll() throws SQLException {
-        // Asume una función find_all_genders_cursor en ADM_CATALOG_MGMT_PKG
-        String sql = "{? = call ADM.ADM_CATALOG_MGMT_PKG.find_all_genders_cursor()}";
         List<Gender> genders = new ArrayList<>();
         ResultSet rs = null;
+        
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cs = conn.prepareCall(sql)) {
+             CallableStatement cs = conn.prepareCall(FIND_ALL_GENDERS_FUNC)) {
+            
             cs.registerOutParameter(1, OracleTypes.CURSOR);
             cs.execute();
+            
             rs = (ResultSet) cs.getObject(1);
             while (rs != null && rs.next()) {
-                genders.add(mapToGender(rs)); // Necesitas un método mapToGender
+                genders.add(mapToGender(rs));
             }
+            
+            return genders;
+            
         } catch (SQLException e) {
-            System.err.println("Error SQL en findAllGenders:"); e.printStackTrace(); throw e;
+            throw new SQLException(ERROR_RETRIEVING, e);
         } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+            closeResultSet(rs);
         }
-        return genders;
     }
 
+    /**
+     * Maps a ResultSet row to a Gender entity.
+     * 
+     * @param rs The ResultSet containing the gender data
+     * @return A Gender entity with the data from the ResultSet
+     * @throws SQLException if an error occurs while accessing the ResultSet
+     */
     private Gender mapToGender(ResultSet rs) throws SQLException {
-        Gender g = new Gender();
-        g.setId(rs.getLong("id"));
-        g.setName(rs.getString("name"));
-        return g;
+        Gender gender = new Gender();
+        gender.setId(rs.getLong("id"));
+        gender.setName(rs.getString("name"));
+        return gender;
     }
 
-    // Método helper para manejar excepciones específicas de Género
+    /**
+     * Handles specific gender-related exceptions.
+     * 
+     * @param e The SQLException to handle
+     * @param name The gender name that caused the exception
+     * @throws SQLException if a general database error occurs
+     * @throws CatalogRegistrationException if the error is related to validation or duplicates
+     */
     private void handleGenderException(SQLException e, String name) throws SQLException, CatalogRegistrationException {
-         if (e.getErrorCode() == 20202) { // Código de error PL/SQL para duplicado
-            throw new CatalogRegistrationException("El género '" + name + "' ya existe.", e);
-        } else if (e.getErrorCode() == 20201) { // Código de error PL/SQL para nombre vacío
-             throw new CatalogRegistrationException("El nombre del género no puede estar vacío.", e);
-         } else {
-            // Loggear error genérico: e.printStackTrace(); o usar Logger
-            throw e; // Relanzar error SQL genérico
+        if (e.getErrorCode() == 20202) {
+            throw new CatalogRegistrationException(String.format(ERROR_DUPLICATE, name), e);
+        } else if (e.getErrorCode() == 20201) {
+            throw new CatalogRegistrationException(ERROR_EMPTY_NAME, e);
+        } else {
+            throw e;
         }
     }
 
-    // Implementar findAll(), findById() aquí si se necesita...
+    /**
+     * Safely closes a ResultSet.
+     * 
+     * @param rs The ResultSet to close
+     */
+    private void closeResultSet(ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException ignore) {
+                // Log error if needed
+            }
+        }
+    }
 }

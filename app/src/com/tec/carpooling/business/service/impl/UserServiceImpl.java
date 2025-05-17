@@ -22,6 +22,9 @@ import com.tec.carpooling.util.SessionManager;
  */
 public class UserServiceImpl implements UserService {
 
+    private static final String ROLE_DRIVER = "DRIVER";
+    private static final String ROLE_PASSENGER = "PASSENGER";
+    
     private final UserDAO userDAO = new UserDAOImpl();
 
     /**
@@ -33,9 +36,17 @@ public class UserServiceImpl implements UserService {
      * @throws Exception If an unexpected error occurs
      */
     @Override
-    public boolean registerUser(UserRegistrationDTO registrationData) throws UserRegistrationException, Exception {
-        // Registration logic here (not implemented in this snippet)
-        return false;
+    public boolean registerUser(UserRegistrationData registrationData) throws UserRegistrationException, Exception {
+        try {
+            validateRegistrationData(registrationData);
+            checkExistingUser(registrationData.getUsername());
+            
+            User newUser = createUserFromRegistrationData(registrationData);
+            return userDAO.registerUser(newUser);
+            
+        } catch (SQLException e) {
+            throw new UserRegistrationException("Error registering user: " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -47,95 +58,73 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public LoginResultDTO validateLoginAndGetRoles(LoginData loginData) throws Exception {
-        User user = null;
-        Set<String> roles = new HashSet<>();
-
-        // Validate input data
-        if (isLoginDataInvalid(loginData)) {
-            System.err.println("Login attempt with empty credentials.");
-            return new LoginResultDTO(null, roles); // Login fails
-        }
-
         try {
-            // Find user by username
-            user = userDAO.findUserByUsername(loginData.getUsername());
-
-            // Verify user exists and password matches
+            if (isLoginDataInvalid(loginData)) {
+                return createFailedLoginResult();
+            }
+            
+            User user = userDAO.findUserByUsername(loginData.getUsername());
             if (isAuthenticationFailed(user, loginData.getPlainPassword())) {
-                System.out.println("Failed login for user: " + loginData.getUsername());
-                return new LoginResultDTO(null, roles); // Login fails
+                return createFailedLoginResult();
             }
-
-            // User authenticated, collect roles
-            System.out.println("User authenticated: " + user.getUsername() + ", PersonID: " + user.getPersonId());
-            roles = collectUserRoles(user.getPersonId());
-
-            // Handle case when user has no roles
-            if (roles.isEmpty()) {
-                System.err.println("Warning! User " + user.getUsername() + " authenticated but has no roles (DRIVER/PASSENGER) assigned.");
-                // For now, failing login if no functional role exists
-                return new LoginResultDTO(null, roles);
-            }
-
-            // Successful login with user and roles
-            System.out.println("Successful login for " + user.getUsername() + " with roles: " + roles);
+            
+            Set<String> roles = collectUserRoles(user.getPersonId());
             return new LoginResultDTO(user, roles);
-
-        } catch (SQLException sqle) {
-            // Log specific SQL error
-            System.err.println("Database error during login for " + loginData.getUsername());
-            sqle.printStackTrace();
-            throw new Exception("Database error during login.", sqle);
-        } catch (Exception e) {
-            // Log unexpected error
-            System.err.println("Unexpected error during login for " + loginData.getUsername());
-            e.printStackTrace();
-            throw new Exception("Unexpected error during login.", e);
+            
+        } catch (SQLException e) {
+            throw new Exception("Error validating credentials: " + e.getMessage(), e);
         }
     }
     
-    /**
-     * Checks if login data is invalid (null or empty username/password).
-     *
-     * @param loginData The login credentials to validate
-     * @return true if data is invalid, false otherwise
-     */
+    private void validateRegistrationData(UserRegistrationData data) throws UserRegistrationException {
+        if (data == null || 
+            data.getUsername() == null || data.getUsername().isEmpty() ||
+            data.getPassword() == null || data.getPassword().isEmpty() ||
+            data.getPersonId() <= 0) {
+            throw new UserRegistrationException("Invalid registration data");
+        }
+    }
+    
+    private void checkExistingUser(String username) throws SQLException, UserRegistrationException {
+        User existingUser = userDAO.findUserByUsername(username);
+        if (existingUser != null) {
+            throw new UserRegistrationException("Username is already in use");
+        }
+    }
+    
+    private User createUserFromRegistrationData(UserRegistrationData data) {
+        User newUser = new User();
+        newUser.setUsername(data.getUsername());
+        newUser.setPassword(PasswordHasher.hashPassword(data.getPassword()));
+        newUser.setPersonId(data.getPersonId());
+        return newUser;
+    }
+    
     private boolean isLoginDataInvalid(LoginData loginData) {
-        return loginData.getUsername() == null || loginData.getUsername().isEmpty() ||
+        return loginData == null || 
+               loginData.getUsername() == null || loginData.getUsername().isEmpty() ||
                loginData.getPlainPassword() == null || loginData.getPlainPassword().isEmpty();
     }
     
-    /**
-     * Verifies if authentication should fail based on user existence and password.
-     *
-     * @param user The user to authenticate
-     * @param plainPassword The password provided in plain text
-     * @return true if authentication should fail, false otherwise
-     */
+    private LoginResultDTO createFailedLoginResult() {
+        return new LoginResultDTO(null, new HashSet<>());
+    }
+    
     private boolean isAuthenticationFailed(User user, String plainPassword) {
         return user == null || !PasswordHasher.verifyPassword(plainPassword, user.getPassword());
     }
     
-    /**
-     * Collects all roles associated with a user.
-     *
-     * @param personId The person ID to check for roles
-     * @return Set of role identifiers
-     * @throws SQLException If a database error occurs
-     */
-    private Set<String> collectUserRoles(int personId) throws SQLException {
+    private Set<String> collectUserRoles(long personId) throws SQLException {
         Set<String> roles = new HashSet<>();
         
         if (userDAO.isDriver(personId)) {
-            roles.add(SessionManager.ROLE_DRIVER);
-            System.out.println("Role detected: DRIVER");
+            roles.add(ROLE_DRIVER);
         }
-        
         if (userDAO.isPassenger(personId)) {
-            roles.add(SessionManager.ROLE_PASSENGER);
-            System.out.println("Role detected: PASSENGER");
+            roles.add(ROLE_PASSENGER);
         }
         
         return roles;
     }
 }
+

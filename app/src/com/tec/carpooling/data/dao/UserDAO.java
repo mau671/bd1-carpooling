@@ -2,6 +2,8 @@
  * UserDAO - Data Access Object for managing user-related database operations
  */
 package com.tec.carpooling.data.dao;
+
+import com.tec.carpooling.domain.entity.User;
 import java.sql.SQLException;
 
 /**
@@ -12,20 +14,34 @@ import java.sql.SQLException;
  */
 public interface UserDAO {
     /**
-     * Checks if a person is registered as a driver.
-     * 
-     * @param personId The ID of the person (ADM.PERSON.id)
-     * @return true if there is an entry in PU.DRIVER for this person, false otherwise
-     * @throws SQLException If a database error occurs
+     * Busca un usuario por su nombre de usuario
+     * @param username El nombre de usuario a buscar
+     * @return El usuario encontrado o null si no existe
+     * @throws SQLException Si ocurre un error de base de datos
+     */
+    User findUserByUsername(String username) throws SQLException;
+    
+    /**
+     * Registra un nuevo usuario en el sistema
+     * @param user El usuario a registrar
+     * @return true si el registro fue exitoso, false en caso contrario
+     * @throws SQLException Si ocurre un error de base de datos
+     */
+    boolean registerUser(User user) throws SQLException;
+    
+    /**
+     * Verifica si un usuario es conductor
+     * @param personId El ID de la persona
+     * @return true si es conductor, false en caso contrario
+     * @throws SQLException Si ocurre un error de base de datos
      */
     boolean isDriver(long personId) throws SQLException;
-
+    
     /**
-     * Checks if a person is registered as a passenger.
-     * 
-     * @param personId The ID of the person (ADM.PERSON.id)
-     * @return true if there is an entry in PU.PASSENGER for this person, false otherwise
-     * @throws SQLException If a database error occurs
+     * Verifica si un usuario es pasajero
+     * @param personId El ID de la persona
+     * @return true si es pasajero, false en caso contrario
+     * @throws SQLException Si ocurre un error de base de datos
      */
     boolean isPassenger(long personId) throws SQLException;
 }
