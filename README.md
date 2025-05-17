@@ -37,3 +37,8 @@ Instrucciones para ejecutar el sistema:
 - Color de fondo (reposo): #1b998b
 - Color de fondo (hover): #188b7d
 - Color de texto: #F8F1FF
+
+
+UI (Frame) -> UserService.registerUser(DTO) -> PasswordHasher.hash() -> UserDAO.registerUserProcedure(DTO con hash) -> CallableStatement -> PL/SQL Procedure -> Base de Datos.
+Y para el login:
+UI (Frame) -> UserService.validateLogin(DTO) -> UserDAO.findUserByUsername() -> ResultSet -> User Object -> PasswordHasher.verifyPassword() -> Comparación -> Resultado Booleano.

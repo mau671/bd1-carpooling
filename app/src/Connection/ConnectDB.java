@@ -18,9 +18,9 @@ import java.sql.Date;
  */
 public class ConnectDB {
     public static void insertPhoneType(int id, String name, String creator, Date creation_date, String modifier, Date modification_date) {
-        String host = "jdbc:oracle:thin:@localhost:1521:LIGHTNING";
+        String host = "jdbc:oracle:thin:@localhost:1521:DBProyecto";
         String uName = "system";
-        String uPass = "iBBs9QkOr3";
+        String uPass = "1234";
 
         try {
             Connection con = DriverManager.getConnection(host, uName, uPass);

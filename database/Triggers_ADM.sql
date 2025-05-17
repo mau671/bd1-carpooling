@@ -10,7 +10,7 @@ BEFORE INSERT OR UPDATE ON GENDER
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
-        :NEW.creation_user := USER;
+        :NEW.creator := USER;
         :NEW.creation_date := SYSDATE;
         :NEW.modifier := USER;
         :NEW.modification_date := SYSDATE;
@@ -241,14 +241,14 @@ BEFORE INSERT OR UPDATE ON PERSON
 FOR EACH ROW
 BEGIN
     IF INSERTING THEN
-        :NEW.creation_user := USER;
+        :NEW.creator := USER;
         :NEW.creation_date := SYSDATE;
-        :NEW.modification_user := USER;
+        :NEW.modifier := USER;
         :NEW.modification_date := SYSDATE;
         INSERT INTO LOGS (id, description, log_date)
         VALUES (LOGS_SEQ.NEXTVAL, 'Se insertó en PERSON por ' || USER, SYSDATE); 
     ELSIF UPDATING THEN
-        :NEW.modification_user := USER;
+        :NEW.modifier := USER;
         :NEW.modification_date := SYSDATE;
         INSERT INTO LOGS (id, description, log_date)
         VALUES (LOGS_SEQ.NEXTVAL, 'Se modificó PERSON por ' || USER, SYSDATE); 
