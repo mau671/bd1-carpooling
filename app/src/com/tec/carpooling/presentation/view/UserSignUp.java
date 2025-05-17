@@ -10,20 +10,17 @@ import java.net.URL;
 import java.util.Locale;
 import java.time.LocalDate;
 
-import java.awt.Image;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import com.tec.carpooling.business.service.CatalogService;
+import com.tec.carpooling.business.service.impl.CatalogServiceImpl;
+import com.tec.carpooling.domain.entity.Gender;
+import com.tec.carpooling.domain.entity.Institution;
+import com.tec.carpooling.domain.entity.IdType;
+import com.tec.carpooling.domain.entity.PhoneType;
+import com.tec.carpooling.domain.entity.Domain;
 
 /**
  *
@@ -31,12 +28,22 @@ import javax.swing.JOptionPane;
  */
 public class UserSignUp extends javax.swing.JFrame {
 
+    private static final String ERROR_LOADING_CATALOGS = "Error loading catalog data: ";
+    private static final String ERROR_TERMS_NOT_ACCEPTED = "You must accept the terms and conditions to continue.";
+    private static final String TITLE_ERROR = "Error";
+    private static final String TITLE_VALIDATION = "Validation Error";
+    
+    private final CatalogService catalogService;
+
     /**
      * Creates new form UserSignUp
      */
     public UserSignUp() {
         initComponents();
         customizeDatePicker();
+        catalogService = new CatalogServiceImpl();
+        setupWindow();
+        loadCatalogs();
         
         textNumber.addKeyListener(new KeyAdapter() {
             @Override
@@ -170,6 +177,8 @@ public class UserSignUp extends javax.swing.JFrame {
         jPanel36 = new javax.swing.JPanel();
         name_label11 = new javax.swing.JLabel();
         textEmail = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxDomain = new javax.swing.JComboBox<>();
         jPanel38 = new javax.swing.JPanel();
         name_label12 = new javax.swing.JLabel();
         textName1 = new javax.swing.JTextField();
@@ -573,12 +582,23 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 7;
+        gridBagConstraints.ipadx = 3;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
         jPanel36.add(textEmail, gridBagConstraints);
+
+        jLabel1.setText("@");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 25, 5);
+        jPanel36.add(jLabel1, gridBagConstraints);
+
+        jComboBoxDomain.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
+        jPanel36.add(jComboBoxDomain, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
@@ -800,6 +820,8 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.JComboBox<String> jComboBoxDomain;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel18;
@@ -842,4 +864,84 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.JTextField textSurname1;
     private javax.swing.JTextField textSurname2;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Configura la ventana de registro.
+     * Establece el título, ícono y comportamiento de la ventana.
+     */
+    private void setupWindow() {
+        setTitle("User Registration");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
+        // Configurar el comportamiento del combo de instituciones
+        comboBoxInstitution.addActionListener(e -> {
+            Institution selectedInstitution = (Institution) comboBoxInstitution.getSelectedItem();
+            if (selectedInstitution != null) {
+                loadDomainsForInstitution(selectedInstitution.getId());
+            }
+        });
+    }
+    
+    /**
+     * Carga todos los catálogos necesarios para el formulario.
+     * Incluye géneros, instituciones, tipos de identificación y tipos de teléfono.
+     */
+    private void loadCatalogs() {
+        try {
+            // Cargar géneros
+            List<Gender> genders = catalogService.getAllGenders();
+            comboBoxGender.removeAllItems();
+            for (Gender gender : genders) {
+                comboBoxGender.addItem(gender);
+            }
+            
+            // Cargar instituciones
+            List<Institution> institutions = catalogService.getAllInstitutions();
+            comboBoxInstitution.removeAllItems();
+            for (Institution institution : institutions) {
+                comboBoxInstitution.addItem(institution);
+            }
+            
+            // Cargar tipos de identificación
+            List<IdType> idTypes = catalogService.getAllIdTypes();
+            comboBoxID.removeAllItems();
+            for (IdType idType : idTypes) {
+                comboBoxID.addItem(idType);
+            }
+            
+            // Cargar tipos de teléfono
+            List<PhoneType> phoneTypes = catalogService.getAllPhoneTypes();
+            comboBoxNumber.removeAllItems();
+            for (PhoneType phoneType : phoneTypes) {
+                comboBoxNumber.addItem(phoneType);
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                ERROR_LOADING_CATALOGS + ex.getMessage(),
+                TITLE_ERROR,
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Carga los dominios de correo electrónico para una institución específica.
+     * 
+     * @param institutionId El ID de la institución
+     */
+    private void loadDomainsForInstitution(long institutionId) {
+        try {
+            List<Domain> domains = catalogService.getDomainsByInstitution(institutionId);
+            jComboBoxDomain.removeAllItems();
+            for (Domain domain : domains) {
+                jComboBoxDomain.addItem(domain);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                ERROR_LOADING_CATALOGS + ex.getMessage(),
+                TITLE_ERROR,
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

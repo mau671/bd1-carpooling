@@ -841,11 +841,7 @@ CREATE TABLE PU.ROUTE (
     creator           VARCHAR2(50),
     creation_date     DATE,
     modifier          VARCHAR2(50),
-    modification_date DATE,
-    
-    CONSTRAINT fk_ROUTE_WAYPOINT
-        FOREIGN KEY (waypoint_id)
-        REFERENCES PU.WAYPOINT(id)
+    modification_date DATE
 )
 TABLESPACE PU_Data
 STORAGE (
@@ -854,7 +850,6 @@ STORAGE (
 
 COMMENT ON TABLE PU.ROUTE IS 'Table that stores routes';
 COMMENT ON COLUMN PU.ROUTE.id IS 'Unique identifier for route';
-COMMENT ON COLUMN PU.ROUTE.waypoint_id IS 'Foreign key to WAYPOINT table';
 COMMENT ON COLUMN PU.ROUTE.start_time IS 'Route start time';
 COMMENT ON COLUMN PU.ROUTE.end_time IS 'Route end time';
 COMMENT ON COLUMN PU.ROUTE.programming_date IS 'Date when the route was programmed';
@@ -916,7 +911,10 @@ CREATE TABLE PU.WAYPOINT (
     
     CONSTRAINT fk_WAYPOINT_DISTRICT
         FOREIGN KEY (district_id)
-        REFERENCES ADM.DISTRICT(id)
+        REFERENCES ADM.DISTRICT(id),
+    CONSTRAINT fk_WAYPOINT_ROUTE
+        FOREIGN KEY (route_id)
+        REFERENCES PU.ROUTE(id)
 )
 TABLESPACE PU_Data
 STORAGE (
@@ -926,6 +924,7 @@ STORAGE (
 COMMENT ON TABLE PU.WAYPOINT IS 'Table that stores waypoints/stops';
 COMMENT ON COLUMN PU.WAYPOINT.id IS 'Unique identifier for waypoint';
 COMMENT ON COLUMN PU.WAYPOINT.district_id IS 'Foreign key to DISTRICT table';
+COMMENT ON COLUMN PU.WAYPOINT.route_id IS 'Foreign key to ROUTE table';
 COMMENT ON COLUMN PU.WAYPOINT.latitude IS 'Waypoint latitude coordinate';
 COMMENT ON COLUMN PU.WAYPOINT.longitude IS 'Waypoint longitude coordinate';
 COMMENT ON COLUMN PU.WAYPOINT.creator IS 'User who created the record';

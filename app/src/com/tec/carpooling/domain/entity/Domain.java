@@ -3,49 +3,91 @@ package com.tec.carpooling.domain.entity;
 import java.util.Objects;
 
 /**
- * Represents the ADM.DOMAIN entity.
- * This class models domains used for email addresses in the system.
+ * Entity class representing an email domain.
  */
 public class Domain {
-    private long id;        // Unique identifier for the domain
-    private String name;    // Domain name (e.g., "gmail.com")
-
+    private long id;
+    private String name;
+    private long institutionId;
+    
     /**
      * Default constructor.
      */
-    public Domain() { }
-
-    /**
-     * Gets the domain id.
-     * @return the domain id
-     */
-    public long getId() { return id; }
+    public Domain() {
+    }
     
     /**
-     * Sets the domain id.
-     * @param id the domain id to set
+     * Constructor with parameters.
+     * 
+     * @param id The domain ID
+     * @param name The domain name
+     * @param institutionId The ID of the institution this domain belongs to
      */
-    public void setId(long id) { this.id = id; }
+    public Domain(long id, String name, long institutionId) {
+        this.id = id;
+        this.name = name;
+        this.institutionId = institutionId;
+    }
+    
+    /**
+     * Gets the domain ID.
+     * 
+     * @return The domain ID
+     */
+    public long getId() {
+        return id;
+    }
+    
+    /**
+     * Sets the domain ID.
+     * 
+     * @param id The domain ID to set
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
     
     /**
      * Gets the domain name.
-     * @return the domain name
+     * 
+     * @return The domain name
      */
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
     
     /**
      * Sets the domain name.
-     * @param name the domain name to set
-     */
-    public void setName(String name) { this.name = name; }
-
-    /**
-     * Compares this domain with another object for equality.
-     * Domains are considered equal if they have the same id.
      * 
-     * @param o the object to compare with
-     * @return true if the objects are equal, false otherwise
+     * @param name The domain name to set
      */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    /**
+     * Gets the institution ID.
+     * 
+     * @return The institution ID
+     */
+    public long getInstitutionId() {
+        return institutionId;
+    }
+    
+    /**
+     * Sets the institution ID.
+     * 
+     * @param institutionId The institution ID to set
+     */
+    public void setInstitutionId(long institutionId) {
+        this.institutionId = institutionId;
+    }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,19 +96,8 @@ public class Domain {
         return id == domain.id;
     }
     
-    /**
-     * Generates a hash code for this domain.
-     * 
-     * @return the hash code
-     */
     @Override
-    public int hashCode() { return Objects.hash(id); }
-    
-    /**
-     * Returns a string representation of this domain.
-     * 
-     * @return a string representation
-     */
-    @Override
-    public String toString() { return "Domain{id=" + id + ", name='" + name + "'}"; }
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 }

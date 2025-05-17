@@ -4,25 +4,29 @@
  */
 package com.tec.carpooling.presentation.view;
 
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import java.awt.Image;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import com.tec.carpooling.business.service.UserService;
+import com.tec.carpooling.business.service.impl.UserServiceImpl;
+import com.tec.carpooling.dto.LoginData;
+import com.tec.carpooling.dto.LoginResultDTO;
+import com.tec.carpooling.util.SessionManager;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Set;
 
 /**
- *
- * @author hidal
+ * Login window for the carpooling application.
+ * Handles user authentication and role selection.
  */
-
 public class UserLogIn extends javax.swing.JFrame { 
+    private static final String ERROR_EMPTY_FIELDS = "Please fill in all required fields.";
+    private static final String ERROR_INVALID_CREDENTIALS = "Invalid credentials. Please check your username and password.";
+    private static final String ERROR_LOGIN = "Error during login attempt: ";
+    private static final String TITLE_VALIDATION = "Validation Error";
+    private static final String TITLE_AUTHENTICATION = "Authentication Error";
+    private static final String TITLE_ERROR = "Error";
+    private static final String TITLE_ROLE_SELECTION = "Role Selection";
+    private static final String MESSAGE_ROLE_SELECTION = "Please select your role:";
     /**
      * Creates new form UserLogIn
      */
@@ -42,19 +46,24 @@ public class UserLogIn extends javax.swing.JFrame {
         labelRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    UserSignUp signup = new UserSignUp();
-                    signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    signup.setVisible(true);
-
-                    UserLogIn.this.dispose();
-                });
+                openSignUpWindow();
             }
         });
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    /**
+     * Opens the sign up window and closes the current window.
+     */
+    private void openSignUpWindow() {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            UserSignUp signup = new UserSignUp();
+            signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            signup.setVisible(true);
+            UserLogIn.this.dispose();
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -253,32 +262,65 @@ public class UserLogIn extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoginActionPerformed
+    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {
         String username = textUsername.getText().trim();
         char[] passwordChars = textPassword.getPassword();
         String password = new String(passwordChars).trim();
-        // Check if any field is empty
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in both password and username fields.");
+        
+        if (isInputInvalid(username, password)) {
+            showValidationError();
             return;
         }
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            UserType type = new UserType();
-            type.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            type.setVisible(true);
+        
+        try {
+            LoginData loginData = new LoginData(username, password);
+            UserService userService = new UserServiceImpl();
+            LoginResultDTO loginResult = userService.validateLoginAndGetRoles(loginData);
+            
+            if (loginResult.isLoginSuccessful()) {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                UserType type = new UserType();
+                type.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                type.setVisible(true);
 
-            UserLogIn.this.dispose();
-        });
-    }//GEN-LAST:event_buttonLoginActionPerformed
-
-    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPasswordActionPerformed
-        if (checkPassword.isSelected()) {
-            textPassword.setEchoChar((char) 0); // Show characters
-        } else {
-            textPassword.setEchoChar('*'); // Hide with asterisks again
+                UserLogIn.this.dispose();
+            });
+            } else {
+                showLoginError();
+            }
+        } catch (Exception ex) {
+            handleLoginException(ex);
         }
-    }//GEN-LAST:event_checkPasswordActionPerformed
+    }
+    
+    private boolean isInputInvalid(String username, String password) {
+        return username.isEmpty() || password.isEmpty();
+    }
+    
+    private void showValidationError() {
+        JOptionPane.showMessageDialog(this, 
+            ERROR_EMPTY_FIELDS,
+            TITLE_VALIDATION,
+            JOptionPane.WARNING_MESSAGE);
+    }  
+    private void showLoginError() {
+        JOptionPane.showMessageDialog(this, 
+            ERROR_INVALID_CREDENTIALS,
+            TITLE_AUTHENTICATION,
+            JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void handleLoginException(Exception ex) {
+        JOptionPane.showMessageDialog(this,
+            ERROR_LOGIN + ex.getMessage(),
+            TITLE_ERROR,
+            JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+
+    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {
+        textPassword.setEchoChar(checkPassword.isSelected() ? (char) 0 : '*');
+    }
     
     /**
      * @param args the command line arguments

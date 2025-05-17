@@ -28,24 +28,46 @@ public class AdminFrame extends javax.swing.JFrame {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItemManagementInstitutions = new javax.swing.JMenuItem();
+        jMenuItemManagementUsers = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("Management");
 
-        jMenuItem1.setText("Institutions");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemManagementInstitutions.setText("Institutions");
+        jMenuItemManagementInstitutions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemManagementInstitutionsActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(jMenuItemManagementInstitutions);
+
+        jMenuItemManagementUsers.setText("Users");
+        jMenu1.add(jMenuItemManagementUsers);
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu3.setText("Catalogs");
+
+        jMenuItem4.setText("Manage Genres");
+        jMenu3.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu2.setText("System");
+
+        jMenuItem2.setText("Parameters");
+        jMenu2.add(jMenuItem2);
+
+        jMenuItem3.setText("Logs");
+        jMenu2.add(jMenuItem3);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -64,9 +86,9 @@ public class AdminFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemManagementInstitutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementInstitutionsActionPerformed
         displayInstitutionsPanel();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemManagementInstitutionsActionPerformed
     
     /**
      * Displays the Institutions panel within the current frame
@@ -121,7 +143,12 @@ public class AdminFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItemManagementInstitutions;
+    private javax.swing.JMenuItem jMenuItemManagementUsers;
     // End of variables declaration//GEN-END:variables
 }

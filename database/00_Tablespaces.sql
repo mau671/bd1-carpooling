@@ -59,7 +59,7 @@ CREATE TABLESPACE PU_Index
 
 -- Create ADM tablespaces
 CREATE TABLESPACE ADM_Data
-    DATAFILE 'C:\app\dilan\oradata\DBProyecto\admdata01.dbf'
+    DATAFILE 'C:\app\hidal\oradata\LIGHTNING\Proyecto-1\admdata01.dbf'
     SIZE 10M
     REUSE
     AUTOEXTEND ON
@@ -67,7 +67,7 @@ CREATE TABLESPACE ADM_Data
     MAXSIZE 200M;
 
 CREATE TABLESPACE ADM_Index
-    DATAFILE 'C:\app\dilan\oradata\DBProyecto\admindex01.dbf'
+    DATAFILE 'C:\app\hidal\oradata\LIGHTNING\Proyecto-1\admindex01.dbf'
     SIZE 10M
     REUSE
     AUTOEXTEND ON
