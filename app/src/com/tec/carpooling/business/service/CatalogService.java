@@ -11,39 +11,39 @@ import java.util.List;
 
 /**
  * Service interface for catalog operations.
- * Handles business logic for catalog data.
+ * Provides business logic for managing catalog data.
  */
 public interface CatalogService {
     
     /**
-     * Retrieves all genders.
+     * Retrieves all genders from the system.
      * 
-     * @return List of all genders
-     * @throws SQLException if a database error occurs
+     * @return List of Gender entities
+     * @throws SQLException if a database access error occurs
      */
     List<Gender> getAllGenders() throws SQLException;
     
     /**
-     * Retrieves all institutions.
+     * Retrieves all institutions from the system.
      * 
-     * @return List of all institutions
-     * @throws SQLException if a database error occurs
+     * @return List of Institution entities
+     * @throws SQLException if a database access error occurs
      */
     List<Institution> getAllInstitutions() throws SQLException;
     
     /**
-     * Retrieves all identification types.
+     * Retrieves all identification types from the system.
      * 
-     * @return List of all identification types
-     * @throws SQLException if a database error occurs
+     * @return List of IdType entities
+     * @throws SQLException if a database access error occurs
      */
     List<IdType> getAllIdTypes() throws SQLException;
     
     /**
-     * Retrieves all phone types.
+     * Retrieves all phone types from the system.
      * 
-     * @return List of all phone types
-     * @throws SQLException if a database error occurs
+     * @return List of PhoneType entities
+     * @throws SQLException if a database access error occurs
      */
     List<PhoneType> getAllPhoneTypes() throws SQLException;
     
@@ -51,8 +51,8 @@ public interface CatalogService {
      * Retrieves all domains for a specific institution.
      * 
      * @param institutionId The ID of the institution
-     * @return List of domains for the specified institution
-     * @throws SQLException if a database error occurs
+     * @return List of Domain entities
+     * @throws SQLException if a database access error occurs
      */
     List<Domain> getDomainsByInstitution(long institutionId) throws SQLException;
 } 
