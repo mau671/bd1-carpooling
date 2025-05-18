@@ -40,7 +40,8 @@ CREATE OR REPLACE PACKAGE BODY PU.PU_VEHICLE_DRIVER_PKG AS
             JOIN PU.VEHICLE v ON v.id = dv.vehicle_id
             LEFT JOIN PU.MAXCAPACITYXVEHICLE mcv ON mcv.vehicle_id = v.id
             LEFT JOIN ADM.MAXCAPACITY mc ON mc.id = mcv.max_capacity_id
-            WHERE dv.driver_id = p_driver_id;
+            WHERE dv.driver_id = p_driver_id
+            ORDER BY v.plate;
         RETURN v_cursor;
     END;
 

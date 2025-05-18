@@ -5,11 +5,15 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.data.dao.VehicleDAO;
+import com.tec.carpooling.domain.entity.VehicleInfo;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
+import java.util.List;
 
 /**
  *
@@ -30,6 +34,24 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableVehicles.getModel();
         // Add sample rows if needed
         model.setRowCount(0);  // This removes all rows
+        
+        try {
+            VehicleDAO dao = new VehicleDAO();
+            List<VehicleInfo> vehicles = dao.getVehiclesByDriver(user.getPersonId());
+
+            for (VehicleInfo v : vehicles) {
+                model.addRow(new Object[]{
+                    v.getPlateNumber(),
+                    v.getMaxCapacity(),
+                    v.getTripCount()
+                });
+            }
+
+            tableVehicles.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load vehicles: " + e.getMessage());
+        }
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
