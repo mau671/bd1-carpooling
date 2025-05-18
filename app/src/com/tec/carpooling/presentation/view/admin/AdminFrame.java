@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view.admin;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author mauricio
@@ -26,6 +28,7 @@ public class AdminFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelMain = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItemManagementInstitutions = new javax.swing.JMenuItem();
@@ -41,6 +44,17 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenuItemStadistics = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
+        jPanelMain.setLayout(jPanelMainLayout);
+        jPanelMainLayout.setHorizontalGroup(
+            jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        jPanelMainLayout.setVerticalGroup(
+            jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 576, Short.MAX_VALUE)
+        );
 
         jMenu1.setText("Management");
 
@@ -92,14 +106,15 @@ public class AdminFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addComponent(jPanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 576, Short.MAX_VALUE)
+            .addComponent(jPanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemManagementInstitutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementInstitutionsActionPerformed
@@ -111,14 +126,29 @@ public class AdminFrame extends javax.swing.JFrame {
      */
     private void displayInstitutionsPanel() {
         Institutions institutionsPanel = new Institutions();
-        institutionsPanel.setSize(getWidth(), getHeight());
-        institutionsPanel.setLocation(0, 0);
-        institutionsPanel.setVisible(true);
+        showPanel(institutionsPanel);
+    }
+
+    private void showPanel(JPanel panel) {
+        // Limpiar el panel principal
+        jPanelMain.removeAll();
         
-        getContentPane().removeAll();
-        getContentPane().add(institutionsPanel);
-        revalidate();
-        repaint();
+        // Configurar el layout del panel principal para centrar
+        jPanelMain.setLayout(new java.awt.BorderLayout());
+        
+        // Crear un panel contenedor con GridBagLayout para centrar
+        JPanel centerPanel = new JPanel(new java.awt.GridBagLayout());
+        centerPanel.setBackground(jPanelMain.getBackground());
+        
+        // Agregar el panel al centro
+        centerPanel.add(panel);
+        
+        // Agregar el panel centrado al panel principal
+        jPanelMain.add(centerPanel, java.awt.BorderLayout.CENTER);
+        
+        // Actualizar la interfaz
+        jPanelMain.revalidate();
+        jPanelMain.repaint();
     }
 
     /**
@@ -170,5 +200,6 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemManagementUsers;
     private javax.swing.JMenuItem jMenuItemParameters;
     private javax.swing.JMenuItem jMenuItemStadistics;
+    private javax.swing.JPanel jPanelMain;
     // End of variables declaration//GEN-END:variables
 }
