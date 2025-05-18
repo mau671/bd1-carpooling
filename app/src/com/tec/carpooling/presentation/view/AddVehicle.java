@@ -4,13 +4,9 @@
  */
 package com.tec.carpooling.presentation.view;
 
-import javax.swing.JFrame;
-import javax.swing.JToolBar;
-import javax.swing.JButton;
-import java.awt.BorderLayout;
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 /**
  *
@@ -33,6 +29,15 @@ public class AddVehicle extends javax.swing.JFrame {
 
         // Set the scaled image as icon
         labelImage.setIcon(new ImageIcon(scaledImage));
+        
+        textPlate.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (textPlate.getText().length() >= 9) {
+                    e.consume(); // block the input
+                }
+            }
+        });
         
     }
 
@@ -133,6 +138,11 @@ public class AddVehicle extends javax.swing.JFrame {
         panelPlate.add(labelPlate, gridBagConstraints);
 
         textPlate.setMaximumSize(new java.awt.Dimension(64, 22));
+        textPlate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textPlateActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -223,6 +233,10 @@ public class AddVehicle extends javax.swing.JFrame {
             AddVehicle.this.dispose();
         });
     }//GEN-LAST:event_buttonAddActionPerformed
+
+    private void textPlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPlateActionPerformed
+
+    }//GEN-LAST:event_textPlateActionPerformed
 
     /**
      * @param args the command line arguments

@@ -1,8 +1,6 @@
 -- =====================================================================
 -- Package: PU_ROUTE_MGMT_PKG
 -- Description: Contains procedures to manage the routes of the system
--- Author: Carmen Hidalgo Paz
--- Creation Date: 17/05/2025
 -- =====================================================================
 CREATE OR REPLACE PACKAGE PU.PU_ROUTE_MGMT_PKG AS
 
