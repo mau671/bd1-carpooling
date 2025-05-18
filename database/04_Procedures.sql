@@ -194,23 +194,23 @@ END ADM_INST_PKG;
 -- Purpose: Gestiona operaciones relacionadas con dominios
 -- ============================================================================
 CREATE OR REPLACE PACKAGE ADM.ADM_DOM_PKG AS
-    TYPE ref_cursor_type IS REF CURSOR;
+  TYPE ref_cursor_type IS REF CURSOR;
 
     PROCEDURE create_dom (
         p_name IN ADM.DOMAIN.name%TYPE,
         o_id   OUT ADM.DOMAIN.id%TYPE
-    );
+  );
 
     PROCEDURE delete_dom (
         p_id IN ADM.DOMAIN.id%TYPE
-    );
+  );
 
     FUNCTION find_dom_by_id (
         p_id IN ADM.DOMAIN.id%TYPE
-    ) RETURN ref_cursor_type;
+  ) RETURN ref_cursor_type;
 
     FUNCTION find_all_dom
-    RETURN ref_cursor_type;
+  RETURN ref_cursor_type;
 END ADM_DOM_PKG;
 /
 
@@ -218,78 +218,78 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_DOM_PKG AS
     PROCEDURE create_dom (
         p_name IN ADM.DOMAIN.name%TYPE,
         o_id   OUT ADM.DOMAIN.id%TYPE
-    ) AS
-        v_name ADM.DOMAIN.name%TYPE;
-    BEGIN
+  ) AS
+    v_name ADM.DOMAIN.name%TYPE;
+  BEGIN
         v_name := TRIM(LOWER(p_name));
-        
-        IF v_name IS NULL THEN
-           RAISE_APPLICATION_ERROR(-20101, 'Domain name cannot be empty.');
-        END IF;
+    
+    IF v_name IS NULL THEN
+       RAISE_APPLICATION_ERROR(-20101, 'Domain name cannot be empty.');
+    END IF;
 
         INSERT INTO ADM.DOMAIN (name) VALUES (v_name) RETURNING id INTO o_id;
-        COMMIT;
-    EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN
-            ROLLBACK; 
-            RAISE_APPLICATION_ERROR(-20102, 'Domain ''' || v_name || ''' already exists.');
-        WHEN OTHERS THEN
-            ROLLBACK; 
-            RAISE;
+    COMMIT;
+  EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+      ROLLBACK; 
+      RAISE_APPLICATION_ERROR(-20102, 'Domain ''' || v_name || ''' already exists.');
+    WHEN OTHERS THEN
+      ROLLBACK; 
+      RAISE;
     END create_dom;
 
     PROCEDURE delete_dom (
         p_id IN ADM.DOMAIN.id%TYPE
-    ) AS
-    BEGIN
+  ) AS
+  BEGIN
         DELETE FROM ADM.DOMAIN WHERE id = p_id;
-        
-        IF SQL%ROWCOUNT = 0 THEN
+    
+    IF SQL%ROWCOUNT = 0 THEN
              RAISE_APPLICATION_ERROR(-20111, 'Domain with ID ' || p_id || ' not found for deletion.');
-        END IF;
-        COMMIT;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF SQLCODE = -2292 THEN
-                 ROLLBACK; 
+    END IF;
+    COMMIT;
+  EXCEPTION
+    WHEN OTHERS THEN
+      IF SQLCODE = -2292 THEN
+         ROLLBACK; 
                  RAISE_APPLICATION_ERROR(-20112, 'Cannot delete domain ID ' || p_id || ' because it is associated with institutions.');
-            ELSE
-                 ROLLBACK; 
-                 RAISE;
-            END IF;
+      ELSE
+         ROLLBACK; 
+         RAISE;
+      END IF;
     END delete_dom;
 
     FUNCTION find_dom_by_id (
         p_id IN ADM.DOMAIN.id%TYPE
-    ) RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.DOMAIN
+  ) RETURN ref_cursor_type
+  AS
+    v_cursor ref_cursor_type;
+  BEGIN
+    OPEN v_cursor FOR
+      SELECT id, name
+      FROM ADM.DOMAIN
             WHERE id = p_id;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
+    RETURN v_cursor;
+  EXCEPTION
+     WHEN OTHERS THEN
+       IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
+       RAISE;
     END find_dom_by_id;
 
     FUNCTION find_all_dom
-    RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.DOMAIN
-            ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
+  RETURN ref_cursor_type
+  AS
+    v_cursor ref_cursor_type;
+  BEGIN
+    OPEN v_cursor FOR
+      SELECT id, name
+      FROM ADM.DOMAIN
+      ORDER BY name;
+    RETURN v_cursor;
+  EXCEPTION
+    WHEN OTHERS THEN
+       IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
+       RAISE;
     END find_all_dom;
 END ADM_DOM_PKG;
 /
@@ -304,20 +304,20 @@ CREATE OR REPLACE PACKAGE ADM.ADM_INST_DOM_PKG AS
     PROCEDURE add_dom_to_inst (
         p_inst_id IN ADM.INSTITUTION.id%TYPE,
         p_dom_id IN ADM.DOMAIN.id%TYPE
-    );
+  );
 
     PROCEDURE rem_dom_from_inst (
         p_inst_id IN ADM.INSTITUTION.id%TYPE,
         p_dom_id IN ADM.DOMAIN.id%TYPE
-    );
+  );
 
     FUNCTION get_inst_dom (
         p_inst_id IN ADM.INSTITUTION.id%TYPE
-    ) RETURN ref_cursor_type;
+  ) RETURN ref_cursor_type;
 
     FUNCTION get_avail_dom (
         p_inst_id IN ADM.INSTITUTION.id%TYPE
-    ) RETURN ref_cursor_type;
+  ) RETURN ref_cursor_type;
 END ADM_INST_DOM_PKG;
 /
 
@@ -325,37 +325,37 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_INST_DOM_PKG AS
     PROCEDURE add_dom_to_inst (
         p_inst_id IN ADM.INSTITUTION.id%TYPE,
         p_dom_id IN ADM.DOMAIN.id%TYPE
-    ) AS
-    BEGIN
+  ) AS
+  BEGIN
         INSERT INTO ADM.INSTITUTION_DOMAIN (institution_id, domain_id)
         VALUES (p_inst_id, p_dom_id);
-        COMMIT;
-    EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN
-            ROLLBACK;
+      COMMIT;
+  EXCEPTION
+      WHEN DUP_VAL_ON_INDEX THEN 
+          ROLLBACK; 
             RAISE_APPLICATION_ERROR(-20201, 'Domain is already associated with this institution.');
-        WHEN OTHERS THEN
-            ROLLBACK;
-            RAISE;
+      WHEN OTHERS THEN 
+          ROLLBACK; 
+          RAISE;
     END add_dom_to_inst;
 
     PROCEDURE rem_dom_from_inst (
         p_inst_id IN ADM.INSTITUTION.id%TYPE,
         p_dom_id IN ADM.DOMAIN.id%TYPE
-    ) AS
-    BEGIN
+  ) AS
+  BEGIN
         DELETE FROM ADM.INSTITUTION_DOMAIN
         WHERE institution_id = p_inst_id
         AND domain_id = p_dom_id;
         
-        IF SQL%ROWCOUNT = 0 THEN
+      IF SQL%ROWCOUNT = 0 THEN 
             RAISE_APPLICATION_ERROR(-20202, 'Domain is not associated with this institution.');
-        END IF;
-        COMMIT;
-    EXCEPTION
-        WHEN OTHERS THEN
-            ROLLBACK;
-            RAISE;
+      END IF;
+      COMMIT;
+  EXCEPTION
+      WHEN OTHERS THEN 
+          ROLLBACK; 
+          RAISE;
     END rem_dom_from_inst;
 
     FUNCTION get_inst_dom (
@@ -363,7 +363,7 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_INST_DOM_PKG AS
     ) RETURN ref_cursor_type
     AS
         v_cursor ref_cursor_type;
-    BEGIN
+  BEGIN
         OPEN v_cursor FOR
             SELECT d.id, d.name, 1 as enabled
             FROM ADM.DOMAIN d
@@ -371,30 +371,30 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_INST_DOM_PKG AS
             WHERE id.institution_id = p_inst_id
             ORDER BY d.name;
         RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
+  EXCEPTION
+      WHEN OTHERS THEN
             IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
+              RAISE; 
     END get_inst_dom;
 
     FUNCTION get_avail_dom (
         p_inst_id IN ADM.INSTITUTION.id%TYPE
-    ) RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
+  ) RETURN ref_cursor_type
+  AS
+      v_cursor ref_cursor_type;
+  BEGIN
+      OPEN v_cursor FOR 
             SELECT d.id, d.name, 
                    CASE WHEN id.domain_id IS NOT NULL THEN 1 ELSE 0 END as enabled
             FROM ADM.DOMAIN d
             LEFT JOIN ADM.INSTITUTION_DOMAIN id ON d.id = id.domain_id 
                 AND id.institution_id = p_inst_id
             ORDER BY d.name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
+      RETURN v_cursor;
+  EXCEPTION
+      WHEN OTHERS THEN 
+          IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
+          RAISE;
     END get_avail_dom;
 END ADM_INST_DOM_PKG;
 /
@@ -405,7 +405,7 @@ END ADM_INST_DOM_PKG;
 -- ============================================================================
 CREATE OR REPLACE PACKAGE ADM.ADM_GEN_PKG AS
     TYPE ref_cursor_type IS REF CURSOR;
-    
+
     FUNCTION get_all_gen
     RETURN ref_cursor_type;
 END ADM_GEN_PKG;
@@ -413,19 +413,19 @@ END ADM_GEN_PKG;
 
 CREATE OR REPLACE PACKAGE BODY ADM.ADM_GEN_PKG AS
     FUNCTION get_all_gen
-    RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
+  RETURN ref_cursor_type
+  AS
+      v_cursor ref_cursor_type;
+  BEGIN
+      OPEN v_cursor FOR 
+          SELECT id, name 
             FROM ADM.GENDER
-            ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
+          ORDER BY name;
+      RETURN v_cursor;
+  EXCEPTION
+      WHEN OTHERS THEN 
+          IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
+          RAISE;
     END get_all_gen;
 END ADM_GEN_PKG;
 /
@@ -447,16 +447,16 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_PHONE_TYPE_PKG AS
     RETURN ref_cursor_type
     AS
         v_cursor ref_cursor_type;
-    BEGIN
+       BEGIN
         OPEN v_cursor FOR
             SELECT id, name
             FROM ADM.TYPE_PHONE
             ORDER BY name;
         RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
+       EXCEPTION
+         WHEN OTHERS THEN 
             IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
+         RAISE;
     END get_all_phone_type;
 END ADM_PHONE_TYPE_PKG;
 /
@@ -467,7 +467,7 @@ END ADM_PHONE_TYPE_PKG;
 -- ============================================================================
 CREATE OR REPLACE PACKAGE ADM.ADM_ID_TYPE_PKG AS
     TYPE ref_cursor_type IS REF CURSOR;
-    
+
     FUNCTION get_all_id_type
     RETURN ref_cursor_type;
 END ADM_ID_TYPE_PKG;
@@ -476,18 +476,18 @@ END ADM_ID_TYPE_PKG;
 CREATE OR REPLACE PACKAGE BODY ADM.ADM_ID_TYPE_PKG AS
     FUNCTION get_all_id_type
     RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
+  AS
+     v_cursor ref_cursor_type;
+  BEGIN
+     OPEN v_cursor FOR
             SELECT id, name
             FROM ADM.TYPE_IDENTIFICATION
             ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
+     RETURN v_cursor;
+  EXCEPTION
+     WHEN OTHERS THEN 
+         IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
+         RAISE;
     END get_all_id_type;
 END ADM_ID_TYPE_PKG;
 /

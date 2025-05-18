@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import oracle.jdbc.OracleTypes;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  *
@@ -58,6 +61,12 @@ public class Domains extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(parent);
         setTitle("Manage Domains - " + institutionName);
+        
+        // Centrar el contenido
+        setResizable(true);
+        pack();
+        setLocationRelativeTo(null);
+        
         loadDomains();
         
         addWindowListener(new WindowAdapter() {
@@ -78,7 +87,7 @@ public class Domains extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableVerServicios = new javax.swing.JTable();
+        jTableSeeDomains = new javax.swing.JTable();
         jButtonAceptar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
         jLabelDomainName = new javax.swing.JLabel();
@@ -89,7 +98,7 @@ public class Domains extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTableVerServicios.setModel(new javax.swing.table.DefaultTableModel(
+        jTableSeeDomains.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -112,7 +121,7 @@ public class Domains extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTableVerServicios);
+        jScrollPane1.setViewportView(jTableSeeDomains);
 
         jButtonAceptar.setText("Aceptar");
         jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -208,7 +217,7 @@ public class Domains extends javax.swing.JDialog {
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall("{ ? = call ADM.ADM_INST_DOM_PKG.get_avail_dom(?) }")) {
             
-            stmt.registerOutParameter(1, java.sql.Types.REF_CURSOR);
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
             stmt.setInt(2, institutionId);
             stmt.execute();
             
@@ -223,14 +232,14 @@ public class Domains extends javax.swing.JDialog {
                 });
             }
             
-            jTableVerServicios.setModel(tableModel);
-            jTableVerServicios.getColumnModel().getColumn(0).setPreferredWidth(50);
-            jTableVerServicios.getColumnModel().getColumn(1).setPreferredWidth(200);
-            jTableVerServicios.getColumnModel().getColumn(2).setPreferredWidth(80);
+            jTableSeeDomains.setModel(tableModel);
+            jTableSeeDomains.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableSeeDomains.getColumnModel().getColumn(1).setPreferredWidth(200);
+            jTableSeeDomains.getColumnModel().getColumn(2).setPreferredWidth(80);
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error loading domains: " + ex.getMessage(),
+                "Error al cargar dominios: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -238,30 +247,48 @@ public class Domains extends javax.swing.JDialog {
 
     private void saveDomainChanges() {
         try (Connection conn = DatabaseConnection.getConnection()) {
+            // Primero obtenemos el estado actual de los dominios
+            Map<Integer, Boolean> currentState = new HashMap<>();
+            try (CallableStatement stmt = conn.prepareCall("{ ? = call ADM.ADM_INST_DOM_PKG.get_avail_dom(?) }")) {
+                stmt.registerOutParameter(1, OracleTypes.CURSOR);
+                stmt.setInt(2, institutionId);
+                stmt.execute();
+                
+                ResultSet rs = (ResultSet) stmt.getObject(1);
+                while (rs.next()) {
+                    currentState.put(rs.getInt("id"), rs.getInt("enabled") == 1);
+                }
+            }
+            
+            // Ahora procesamos solo los cambios
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 int domainId = (int) tableModel.getValueAt(i, 0);
-                boolean enabled = (boolean) tableModel.getValueAt(i, 2);
+                boolean newEnabled = (boolean) tableModel.getValueAt(i, 2);
+                boolean oldEnabled = currentState.getOrDefault(domainId, false);
                 
-                CallableStatement stmt;
-                if (enabled) {
-                    stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.add_dom_to_inst(?, ?) }");
-                } else {
-                    stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.rem_dom_from_inst(?, ?) }");
+                // Solo procesamos si el estado cambió
+                if (newEnabled != oldEnabled) {
+                    CallableStatement stmt;
+                    if (newEnabled) {
+                        stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.add_dom_to_inst(?, ?) }");
+                    } else {
+                        stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.rem_dom_from_inst(?, ?) }");
+                    }
+                    
+                    stmt.setInt(1, institutionId);
+                    stmt.setInt(2, domainId);
+                    stmt.execute();
                 }
-                
-                stmt.setInt(1, institutionId);
-                stmt.setInt(2, domainId);
-                stmt.execute();
             }
             
             JOptionPane.showMessageDialog(this,
-                "Domain associations updated successfully.",
-                "Success",
+                "Asociaciones de dominios actualizadas exitosamente.",
+                "Éxito",
                 JOptionPane.INFORMATION_MESSAGE);
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error saving domain changes: " + ex.getMessage(),
+                "Error al guardar cambios de dominios: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -471,7 +498,7 @@ public class Domains extends javax.swing.JDialog {
     private javax.swing.JButton jButtonDomainUpdate;
     private javax.swing.JLabel jLabelDomainName;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableVerServicios;
+    private javax.swing.JTable jTableSeeDomains;
     private javax.swing.JTextField jTextFieldDomainName;
     // End of variables declaration//GEN-END:variables
 }
