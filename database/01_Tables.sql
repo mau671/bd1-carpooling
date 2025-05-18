@@ -335,7 +335,7 @@ STORAGE (
 COMMENT ON TABLE ADM.PARAMETER IS 'Table that stores system configuration parameters';
 COMMENT ON COLUMN ADM.PARAMETER.id IS 'Unique identifier for parameter';
 COMMENT ON COLUMN ADM.PARAMETER.name IS 'Parameter name';
-COMMENT ON COLUMN ADM.PARAMETER.value IS 'Numeric value of the parameter';
+COMMENT ON COLUMN ADM.PARAMETER.value IS 'Value of the parameter';
 
 -- ============================================
 -- 12. PERSON Table (Master)

@@ -1,5 +1,8 @@
 /*
 -- Initial INSERTS for the application parameters
+INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_NAME', 'BUDDY_RIDE');
+');
+*/
 
 -- ===================================
 -- Institution related data
@@ -84,6 +87,7 @@ COMMIT;
 -- User records
 -- ===================================
 
+/*
 -- Register the first administrator
 INSERT INTO ADM.PERSON (
     id, 
