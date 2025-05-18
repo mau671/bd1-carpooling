@@ -30,6 +30,10 @@ import java.awt.event.KeyEvent;
 import java.awt.Cursor;
 import java.awt.Font;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.sql.Date;
+
 import java.net.URI;
 import java.net.URL;
 import java.net.URISyntaxException;
@@ -57,12 +61,29 @@ public class CreateRoute extends javax.swing.JFrame {
     private String userRole;
     private JMapViewer map;
     private final User user;
+    private Timestamp startTime;
+    private Timestamp endTime;
+    private Date tripDate;
+    private int amountOfPassengers;
+    private BigDecimal pricePerPassenger;
+    private Long currencyId;
+    private long vehicleId;
     /**
      * Creates new form CrearRuta
      */
-    public CreateRoute(String role, User user) {
+    public CreateRoute(String role, User user, Timestamp startTime,
+                       Timestamp endTime, Date tripDate, int amountOfPassengers,
+                       BigDecimal pricePerPassenger, Long currencyId,
+                       long vehicleId) {
         this.user = user;
         this.userRole = role;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.tripDate = tripDate;
+        this.amountOfPassengers = amountOfPassengers;
+        this.pricePerPassenger = pricePerPassenger;
+        this.currencyId = currencyId;
+        this.vehicleId = vehicleId;
         System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CarpoolingApp/1.0");
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
@@ -737,14 +758,22 @@ public class CreateRoute extends javax.swing.JFrame {
         //</editor-fold>
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            private String userRole;
-            private User user;
-            public void run() {
-                userRole = "Driver";
-                user = new User(1, "testuser", 101);
-                new CreateRoute(userRole, user).setVisible(true);
-            }
-        });
+    public void run() {
+        String userRole = "Driver";
+        User user = new User(1, "testuser", 101);
+
+        // Sample values for testing:
+        Timestamp startTime = Timestamp.valueOf("2025-06-01 07:30:00");
+        Timestamp endTime = Timestamp.valueOf("2025-06-01 08:30:00");
+        java.sql.Date tripDate = java.sql.Date.valueOf("2025-06-01");
+        int passengers = 2;
+        BigDecimal price = new BigDecimal("5.50");
+        Long currencyId = 1L;
+        long vehicleId = 10L;
+
+        new CreateRoute(userRole, user, startTime, endTime, tripDate, passengers, price, currencyId, vehicleId).setVisible(true);
+    }
+});
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

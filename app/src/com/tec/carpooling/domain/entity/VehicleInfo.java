@@ -25,4 +25,10 @@ public class VehicleInfo {
     public String getPlateNumber() { return plateNumber; }
     public int getMaxCapacity() { return maxCapacity; }
     public int getTripCount() { return tripCount; }
+    
+    @Override
+    public String toString() {
+        return plateNumber;
+    }
+    
 }

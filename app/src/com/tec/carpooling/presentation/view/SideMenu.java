@@ -99,10 +99,17 @@ public class SideMenu {
         });
 
         logoutButton.addActionListener(e -> {
-            InitialPage home = new InitialPage();
-            home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            home.setVisible(true);
-            parentFrame.dispose();
+            int confirm = JOptionPane.showConfirmDialog(null,
+            "Are you sure you want to log out?", "Log Out",
+            JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Go back to the login screen
+                InitialPage home = new InitialPage();
+                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                home.setVisible(true);
+                parentFrame.dispose();
+            }
         });
 
         switchRoleButton.addActionListener(e -> {

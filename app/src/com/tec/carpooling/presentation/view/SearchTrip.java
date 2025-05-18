@@ -224,6 +224,12 @@ public class SearchTrip extends javax.swing.JFrame {
         panelChooseStop = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         boxStops = new javax.swing.JComboBox<>();
+        panelPayment = new javax.swing.JPanel();
+        boxMethod = new javax.swing.JComboBox<>();
+        labelMethod = new javax.swing.JLabel();
+        panelCurrency = new javax.swing.JPanel();
+        labelCurrency = new javax.swing.JLabel();
+        boxCurrency = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -247,7 +253,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         labelSearchTrips.setText("SEARCH TRIPS");
@@ -257,7 +263,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(60, 0, 60, 40);
         jPanel1.add(labelSearchTrips, gridBagConstraints);
@@ -539,7 +545,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 130);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 130);
         jPanel1.add(cardPanel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
@@ -647,17 +653,20 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
         jPanel1.add(panelDatePlace, gridBagConstraints);
 
         panelChooseStop.setBackground(new java.awt.Color(225, 239, 255));
         panelChooseStop.setLayout(new java.awt.GridBagLayout());
 
-        jLabel26.setText("Choose a Stop:");
+        jLabel26.setText("<html>Pick up Point: <span style='color:red'>*</span></html>");
+        jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.ipadx = 7;
+        gridBagConstraints.insets = new java.awt.Insets(0, 33, 0, 0);
         panelChooseStop.add(jLabel26, gridBagConstraints);
 
         boxStops.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -666,10 +675,59 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         panelChooseStop.add(boxStops, gridBagConstraints);
 
+        panelPayment.setBackground(new java.awt.Color(225, 239, 255));
+        panelPayment.setLayout(new java.awt.GridBagLayout());
+
+        boxMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
+        gridBagConstraints.gridy = 0;
+        panelPayment.add(boxMethod, gridBagConstraints);
+
+        labelMethod.setText("<html>Payment Method: <span style='color:red'>*</span></html>");
+        labelMethod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panelPayment.add(labelMethod, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
+        panelChooseStop.add(panelPayment, gridBagConstraints);
+
+        panelCurrency.setBackground(new java.awt.Color(225, 239, 255));
+        panelCurrency.setLayout(new java.awt.GridBagLayout());
+
+        labelCurrency.setText("<html>Currency: <span style='color:red'>*</span></html>");
+        labelCurrency.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 57, 0, 0);
+        panelCurrency.add(labelCurrency, gridBagConstraints);
+
+        boxCurrency.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        panelCurrency.add(boxCurrency, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        panelChooseStop.add(panelCurrency, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(20, 30, 10, 0);
         jPanel1.add(panelChooseStop, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -745,7 +803,9 @@ public class SearchTrip extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> boxCurrency;
     private javax.swing.JComboBox<String> boxInfo;
+    private javax.swing.JComboBox<String> boxMethod;
     private javax.swing.JComboBox<String> boxStops;
     private javax.swing.JComboBox<String> boxTime;
     private javax.swing.JButton buttonTrip;
@@ -785,9 +845,11 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAge;
     private javax.swing.JLabel labelChosenCapacity;
+    private javax.swing.JLabel labelCurrency;
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelGender;
+    private javax.swing.JLabel labelMethod;
     private javax.swing.JLabel labelName;
     private javax.swing.JLabel labelPlate;
     private javax.swing.JLabel labelSearchTrips;
@@ -797,9 +859,11 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JList<String> listNumbers;
     private javax.swing.JList<String> listTrips;
     private javax.swing.JPanel panelChooseStop;
+    private javax.swing.JPanel panelCurrency;
     private javax.swing.JPanel panelDatePlace;
     private javax.swing.JPanel panelDriver;
     private javax.swing.JPanel panelList;
+    private javax.swing.JPanel panelPayment;
     private javax.swing.JPanel panelStops;
     private javax.swing.JPanel panelTime;
     private javax.swing.JPanel panelTimeCost;
