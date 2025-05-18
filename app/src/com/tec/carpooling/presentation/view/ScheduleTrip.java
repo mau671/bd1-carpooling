@@ -4,18 +4,30 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.data.dao.VehicleDAO;
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.domain.entity.VehicleInfo;
+import com.tec.carpooling.data.dao.CurrencyDAO;
+import com.tec.carpooling.domain.entity.Currency;
+import com.tec.carpooling.domain.entity.ChosenCapacity;
+
 
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.sql.Date;
+
 import java.net.URL;
 import java.util.Locale;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,6 +37,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -43,61 +58,83 @@ public class ScheduleTrip extends javax.swing.JFrame {
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         customizeDatePicker();
         textPrice.setToolTipText("Write 0 for no charge.");
-        textPrice.addKeyListener(new KeyAdapter() {
-             @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
+        textPrice.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                toggleCurrencyBox();
+            }
 
-                // Allow digits and one dot
-                if (!Character.isDigit(c) && c != '.') {
-                    e.consume();
-                    return;
-                }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                toggleCurrencyBox();
+            }
 
-                // Prevent more than one dot
-                if (c == '.' && textPrice.getText().contains(".")) {
-                    e.consume();
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                toggleCurrencyBox(); // Not needed for plain text fields but included for completeness
+            }
+
+            private void toggleCurrencyBox() {
+                boxCurrency.setSelectedIndex(0);
+                String text = textPrice.getText().trim();
+                try {
+                    BigDecimal price = new BigDecimal(text);
+                    boxCurrency.setEnabled(price.compareTo(BigDecimal.ZERO) > 0);
+                } catch (NumberFormatException ex) {
+                    // Disable currency selection on invalid input
+                    boxCurrency.setEnabled(false);
                 }
             }
         });
-        textPrice.getDocument().addDocumentListener(new DocumentListener() {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            checkPriceField();
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            checkPriceField();
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            checkPriceField();
-        }
-
-        private void checkPriceField() {
-            String text = textPrice.getText().trim();
-            if (text.isEmpty()) {
-                // Optional: disable if empty
-                boxCurrency.setEnabled(false);
-                boxMethod.setEnabled(false);
-                return;
+        
+        try {
+            VehicleDAO dao = new VehicleDAO();
+            List<VehicleInfo> vehicles = dao.getVehiclesByDriver(user.getPersonId());
+            boxVehicles.removeAllItems();
+            boxVehicles.addItem(new VehicleInfo(0, "Select Vehicle", 0, 0)); // Item por defecto
+            for (VehicleInfo v : vehicles) {
+                if (v.getId() != 0) { // Evitar duplicar el item por defecto
+                    boxVehicles.addItem(v);
+                }
             }
-
-            try {
-                double price = Double.parseDouble(text);
-                boolean isFree = price == 0.0;
-
-                boxCurrency.setEnabled(!isFree);
-                boxMethod.setEnabled(!isFree);
-            } catch (NumberFormatException ex) {
-                // Optional: disable if invalid input
-                boxCurrency.setEnabled(false);
-                boxMethod.setEnabled(false);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load vehicles: " + e.getMessage());
         }
-    });
+        boxVehicles.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    VehicleInfo selectedVehicle = (VehicleInfo) boxVehicles.getSelectedItem();
+                    if (selectedVehicle != null && selectedVehicle.getId() != 0) {
+                        int maxCapacity = selectedVehicle.getMaxCapacity();
+
+                        boxSeats.removeAllItems();
+                        for (int i = 1; i <= maxCapacity; i++) {
+                            boxSeats.addItem(i);  // Use the full object
+                        }
+                    } else {
+                        // Reset combo box if placeholder selected
+                        boxSeats.removeAllItems();
+                    }
+                }
+            }
+        });
+        try {
+            CurrencyDAO cdao = new CurrencyDAO();
+            List<Currency> currencies = cdao.getAllCurrencies();
+            boxCurrency.removeAllItems();
+            boxCurrency.addItem(new Currency(0, "No Currency Selected")); // Item por defecto
+            for (Currency c : currencies) {
+                if (c.getId() != 0) { // Evitar duplicar el item por defecto
+                    boxCurrency.addItem(c);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load currencies: " + e.getMessage());
+        }
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
@@ -200,18 +237,9 @@ public class ScheduleTrip extends javax.swing.JFrame {
         panelDate = new javax.swing.JPanel();
         labelDate = new javax.swing.JLabel();
         datePicker = new com.github.lgooddatepicker.components.DatePicker();
-        panelPrice = new javax.swing.JPanel();
-        labelPrice = new javax.swing.JLabel();
-        textPrice = new javax.swing.JTextField();
-        panelPayment = new javax.swing.JPanel();
-        boxMethod = new javax.swing.JComboBox<>();
-        labelMethod = new javax.swing.JLabel();
-        panelPassengers = new javax.swing.JPanel();
-        labelSeats = new javax.swing.JLabel();
-        boxSeats = new javax.swing.JComboBox<>();
-        panelCurrency = new javax.swing.JPanel();
-        labelCurrency = new javax.swing.JLabel();
-        boxCurrency = new javax.swing.JComboBox<>();
+        panelVehicles = new javax.swing.JPanel();
+        labelVehicles = new javax.swing.JLabel();
+        boxVehicles = new javax.swing.JComboBox<>();
         buttonAddRoute = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
@@ -223,9 +251,16 @@ public class ScheduleTrip extends javax.swing.JFrame {
         labelEndTime = new javax.swing.JLabel();
         boxEndTime = new javax.swing.JComboBox<>();
         panelDivision = new javax.swing.JPanel();
-        panelVehicle = new javax.swing.JPanel();
-        labelSeats1 = new javax.swing.JLabel();
-        boxSeats1 = new javax.swing.JComboBox<>();
+        jPanel4 = new javax.swing.JPanel();
+        panelCurrency = new javax.swing.JPanel();
+        labelCurrency = new javax.swing.JLabel();
+        boxCurrency = new javax.swing.JComboBox<>();
+        panelPassenger = new javax.swing.JPanel();
+        labelSeats = new javax.swing.JLabel();
+        boxSeats = new javax.swing.JComboBox<>();
+        panelPrice = new javax.swing.JPanel();
+        labelPrice = new javax.swing.JLabel();
+        textPrice = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -241,7 +276,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 22;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 270, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 220, 0, 0);
         jPanel1.add(labelAddTrip, gridBagConstraints);
 
         panelDate.setBackground(new java.awt.Color(225, 239, 255));
@@ -269,108 +304,27 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 70, 30, 0);
         jPanel1.add(panelDate, gridBagConstraints);
 
-        panelPrice.setBackground(new java.awt.Color(225, 239, 255));
-        panelPrice.setLayout(new java.awt.GridBagLayout());
+        panelVehicles.setBackground(new java.awt.Color(225, 239, 255));
+        panelVehicles.setLayout(new java.awt.GridBagLayout());
 
-        labelPrice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelPrice.setText("<html>Price per Passenger: <span style='color:red'>*</span></html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        panelPrice.add(labelPrice, gridBagConstraints);
-
-        textPrice.setPreferredSize(new java.awt.Dimension(150, 40));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
-        panelPrice.add(textPrice, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 21;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.ipadx = 25;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.weightx = 0.1;
-        jPanel1.add(panelPrice, gridBagConstraints);
-
-        panelPayment.setBackground(new java.awt.Color(225, 239, 255));
-        panelPayment.setLayout(new java.awt.GridBagLayout());
-
-        boxMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipady = 20;
-        panelPayment.add(boxMethod, gridBagConstraints);
-
-        labelMethod.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelMethod.setText("<html>Payment Method: <span style='color:red'>*</span></html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 10;
-        panelPayment.add(labelMethod, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 21;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 50, 0);
-        jPanel1.add(panelPayment, gridBagConstraints);
-
-        panelPassengers.setBackground(new java.awt.Color(225, 239, 255));
-        panelPassengers.setLayout(new java.awt.GridBagLayout());
-
-        labelSeats.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelSeats.setText("<html>Vehicle: <span style='color:red'>*</span></html>");
+        labelVehicles.setText("<html>Vehicle: <span style='color:red'>*</span></html>");
+        labelVehicles.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.ipadx = 10;
-        panelPassengers.add(labelSeats, gridBagConstraints);
+        panelVehicles.add(labelVehicles, gridBagConstraints);
 
-        boxSeats.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.ipady = 20;
-        panelPassengers.add(boxSeats, gridBagConstraints);
+        panelVehicles.add(boxVehicles, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 19;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 70, 50, 0);
-        jPanel1.add(panelPassengers, gridBagConstraints);
-
-        panelCurrency.setBackground(new java.awt.Color(225, 239, 255));
-        panelCurrency.setLayout(new java.awt.GridBagLayout());
-
-        labelCurrency.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelCurrency.setText("<html>Currency: <span style='color:red'>*</span></html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.ipadx = 10;
-        panelCurrency.add(labelCurrency, gridBagConstraints);
-
-        boxCurrency.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.ipady = 20;
-        panelCurrency.add(boxCurrency, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 21;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
-        jPanel1.add(panelCurrency, gridBagConstraints);
+        jPanel1.add(panelVehicles, gridBagConstraints);
 
         buttonAddRoute.setText("Add Route");
         buttonAddRoute.setBackground(new java.awt.Color(18, 102, 160));
@@ -475,28 +429,93 @@ public class ScheduleTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         jPanel1.add(panelDivision, gridBagConstraints);
 
-        panelVehicle.setBackground(new java.awt.Color(225, 239, 255));
-        panelVehicle.setLayout(new java.awt.GridBagLayout());
+        jPanel4.setBackground(new java.awt.Color(225, 239, 255));
+        jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        labelSeats1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelSeats1.setText("<html>Amount of Passengers: <span style='color:red'>*</span></html>");
+        panelCurrency.setBackground(new java.awt.Color(225, 239, 255));
+        panelCurrency.setLayout(new java.awt.GridBagLayout());
+
+        labelCurrency.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelCurrency.setText("<html>Currency: <span style='color:red'>*</span></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.ipadx = 10;
-        panelVehicle.add(labelSeats1, gridBagConstraints);
+        panelCurrency.add(labelCurrency, gridBagConstraints);
 
-        boxSeats1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.ipady = 20;
-        panelVehicle.add(boxSeats1, gridBagConstraints);
+        panelCurrency.add(boxCurrency, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 19;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
+        jPanel4.add(panelCurrency, gridBagConstraints);
+
+        panelPassenger.setBackground(new java.awt.Color(225, 239, 255));
+        panelPassenger.setLayout(new java.awt.GridBagLayout());
+
+        labelSeats.setText("<html>Amount of Passengers: <span style='color:red'>*</span></html>");
+        labelSeats.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.ipadx = 10;
+        panelPassenger.add(labelSeats, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.ipady = 20;
+        panelPassenger.add(boxSeats, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 70, 50, 0);
-        jPanel1.add(panelVehicle, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
+        jPanel4.add(panelPassenger, gridBagConstraints);
+
+        panelPrice.setBackground(new java.awt.Color(225, 239, 255));
+        panelPrice.setLayout(new java.awt.GridBagLayout());
+
+        labelPrice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelPrice.setText("<html>Price per Passenger: <span style='color:red'>*</span></html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelPrice.add(labelPrice, gridBagConstraints);
+
+        textPrice.setPreferredSize(new java.awt.Dimension(150, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
+        panelPrice.add(textPrice, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 25;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
+        jPanel4.add(panelPrice, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 21;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 130);
+        jPanel1.add(jPanel4, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -504,20 +523,91 @@ public class ScheduleTrip extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAddRouteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddRouteActionPerformed
-        String price = textPrice.getText().trim();
+        try {
+            // 1. Get and validate price
+            String priceText = textPrice.getText().trim();
+            if (priceText.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter a price.");
+                return;
+            }
 
-        // Check if any field is empty
-        if (price.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
-            return;
+            BigDecimal price = new BigDecimal(textPrice.getText().trim());
+            Long currencyId = null;
+
+            if (price.compareTo(BigDecimal.ZERO) > 0) {
+                Currency selectedCurrency = (Currency) boxCurrency.getSelectedItem();
+                if (selectedCurrency == null || selectedCurrency.getId() == 0) {
+                    JOptionPane.showMessageDialog(null, "Please select a currency.");
+                    return;
+                }
+                currencyId = selectedCurrency.getId();
+            }
+
+            // 2. Get selected vehicle
+            VehicleInfo selectedVehicle = (VehicleInfo) boxVehicles.getSelectedItem();
+            if (selectedVehicle == null || selectedVehicle.getId() == 0) {
+                JOptionPane.showMessageDialog(null, "Please select a vehicle.");
+                return;
+            }
+            long vehicleId = selectedVehicle.getId();
+
+            // 3. Get number of passengers (chosen capacity)
+            Integer passengers = (Integer) boxSeats.getSelectedItem();
+            if (passengers == null) {
+                JOptionPane.showMessageDialog(null, "Please select the number of passengers.");
+                return;
+            }
+
+            // 4. Get selected date
+            LocalDate tripDate = datePicker.getDate(); // from your date picker component
+            if (tripDate == null) {
+                JOptionPane.showMessageDialog(null, "Please select a date.");
+                return;
+            }
+            java.sql.Date sqlTripDate = java.sql.Date.valueOf(tripDate);
+            
+            final Long finalCurrencyId = currencyId;
+            final java.sql.Date finalTripDate = sqlTripDate;
+            
+            // 5. Get start and end time from combo boxes
+            String startTimeText = (String) boxStartTime.getSelectedItem();
+            String endTimeText = (String) boxEndTime.getSelectedItem();
+            if (startTimeText == null || endTimeText == null) {
+                JOptionPane.showMessageDialog(null, "Please select start and end time.");
+                return;
+            }
+
+            // Combine date + time to create full Timestamp
+            
+            // Time formatter to parse combo box values like "10:30 AM"
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+            // Parse LocalTime from combo box text
+            LocalTime startTimeParsed = LocalTime.parse(startTimeText, timeFormatter);
+            LocalTime endTimeParsed = LocalTime.parse(endTimeText, timeFormatter);
+
+            // Combine date and time
+            LocalDateTime startDateTime = LocalDateTime.of(tripDate, startTimeParsed);
+            LocalDateTime endDateTime = LocalDateTime.of(tripDate, endTimeParsed);
+
+            // Convert to SQL Timestamp
+            Timestamp startTimestamp = Timestamp.valueOf(startDateTime);
+            Timestamp endTimestamp = Timestamp.valueOf(endDateTime);
+
+            // 6. Move to CreateRoute screen
+            SwingUtilities.invokeLater(() -> {
+                CreateRoute routeScreen = new CreateRoute(userRole, user, startTimestamp, endTimestamp, finalTripDate,
+                                                          passengers, price,
+                                                          finalCurrencyId, vehicleId);
+                routeScreen.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                routeScreen.setVisible(true);
+                ScheduleTrip.this.dispose();
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            CreateRoute route = new CreateRoute(userRole, user);
-            route.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            route.setVisible(true);
-
-            ScheduleTrip.this.dispose();
-        });
     }//GEN-LAST:event_buttonAddRouteActionPerformed
 
     private void boxStartTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxStartTimeActionPerformed
@@ -580,12 +670,11 @@ public class ScheduleTrip extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> boxCurrency;
+    private javax.swing.JComboBox<Currency> boxCurrency;
     private javax.swing.JComboBox<String> boxEndTime;
-    private javax.swing.JComboBox<String> boxMethod;
-    private javax.swing.JComboBox<String> boxSeats;
-    private javax.swing.JComboBox<String> boxSeats1;
+    private javax.swing.JComboBox<Integer> boxSeats;
     private javax.swing.JComboBox<String> boxStartTime;
+    private javax.swing.JComboBox<VehicleInfo> boxVehicles;
     private javax.swing.JButton buttonAddRoute;
     private com.github.lgooddatepicker.components.DatePicker datePicker;
     private javax.swing.Box.Filler filler1;
@@ -593,23 +682,22 @@ public class ScheduleTrip extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel labelAddTrip;
     private javax.swing.JLabel labelCurrency;
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelEndTime;
-    private javax.swing.JLabel labelMethod;
     private javax.swing.JLabel labelPrice;
     private javax.swing.JLabel labelSeats;
-    private javax.swing.JLabel labelSeats1;
     private javax.swing.JLabel labelStartTime;
+    private javax.swing.JLabel labelVehicles;
     private javax.swing.JPanel panelCurrency;
     private javax.swing.JPanel panelDate;
     private javax.swing.JPanel panelDivision;
-    private javax.swing.JPanel panelPassengers;
-    private javax.swing.JPanel panelPayment;
+    private javax.swing.JPanel panelPassenger;
     private javax.swing.JPanel panelPrice;
     private javax.swing.JPanel panelTimes;
-    private javax.swing.JPanel panelVehicle;
+    private javax.swing.JPanel panelVehicles;
     private javax.swing.JTextField textPrice;
     // End of variables declaration//GEN-END:variables
 }

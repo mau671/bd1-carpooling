@@ -472,6 +472,7 @@ COMMENT ON COLUMN ADM.CURRENCY.creation_date IS 'Record creation date';
 COMMENT ON COLUMN ADM.CURRENCY.modifier IS 'User who modified the record';
 COMMENT ON COLUMN ADM.CURRENCY.modification_date IS 'Record modification date';
 
+
 GRANT SELECT, REFERENCES ON ADM.GENDER              TO PU;
 GRANT SELECT, REFERENCES ON ADM.TYPE_IDENTIFICATION TO PU;
 GRANT SELECT, REFERENCES ON ADM.TYPE_PHONE          TO PU;
@@ -947,19 +948,24 @@ CREATE TABLE PU.TRIP (
                              INITIAL 10K NEXT 10K MINEXTENTS 1 
                              MAXEXTENTS UNLIMITED PCTINCREASE 0
                          ),
-    vehicle_id        NUMBER NOT NULL,
-    route_id          NUMBER NOT NULL,
-    creator           VARCHAR2(50),
-    creation_date     DATE,
-    modifier          VARCHAR2(50),
-    modification_date DATE,
+    vehicle_id          NUMBER NOT NULL,
+    route_id            NUMBER NOT NULL,
+    id_currency         NUMBER,
+    price_per_passenger NUMBER(10, 2) NOT NULL,
+    creator             VARCHAR2(50),
+    creation_date       DATE,
+    modifier            VARCHAR2(50),
+    modification_date   DATE,
     
     CONSTRAINT fk_TRIP_VEHICLE
         FOREIGN KEY (vehicle_id)
         REFERENCES PU.VEHICLE(id),
     CONSTRAINT fk_TRIP_ROUTE
         FOREIGN KEY (route_id)
-        REFERENCES PU.ROUTE(id)
+        REFERENCES PU.ROUTE(id),
+    CONSTRAINT fk_TRIP_CURRENCY
+        FOREIGN KEY (id_currency)
+        REFERENCES ADM.CURRENCY(id)
 )
 TABLESPACE PU_Data
 STORAGE (
@@ -970,6 +976,8 @@ COMMENT ON TABLE PU.TRIP IS 'Table that stores trips';
 COMMENT ON COLUMN PU.TRIP.id IS 'Unique identifier for trip';
 COMMENT ON COLUMN PU.TRIP.vehicle_id IS 'Foreign key to VEHICLE table';
 COMMENT ON COLUMN PU.TRIP.route_id IS 'Foreign key to ROUTE table';
+COMMENT ON COLUMN PU.TRIP.id_currency IS 'Foreign key to CURRENCY table';
+COMMENT ON COLUMN PU.TRIP.price_per_passenger IS 'The price each passenger has to pay';
 COMMENT ON COLUMN PU.TRIP.creator IS 'User who created the record';
 COMMENT ON COLUMN PU.TRIP.creation_date IS 'Record creation date';
 COMMENT ON COLUMN PU.TRIP.modifier IS 'User who modified the record';
@@ -1167,7 +1175,6 @@ CREATE TABLE PU.PASSENGERXTRIP (
     creation_date     DATE,
     modifier          VARCHAR2(50),
     modification_date DATE,
-    amount            NUMBER NOT NULL,
     CONSTRAINT fk_PASSENGERXTRIP_PASSENGER
         FOREIGN KEY (passenger_id) REFERENCES PU.PASSENGER(person_id),
     CONSTRAINT fk_PASSENGERXTRIP_TRIP
@@ -1186,7 +1193,6 @@ COMMENT ON COLUMN PU.PASSENGERXTRIP.creator IS 'User who created the record';
 COMMENT ON COLUMN PU.PASSENGERXTRIP.creation_date IS 'Record creation date';
 COMMENT ON COLUMN PU.PASSENGERXTRIP.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.PASSENGERXTRIP.modification_date IS 'Record modification date';
-COMMENT ON COLUMN PU.PASSENGERXTRIP.amount IS 'Amount paid for the trip';
 
 --------------------------------------------------------------------------------
 --  I)  Payments

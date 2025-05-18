@@ -1,0 +1,4 @@
+-- =====================================================================
+-- Package: PU_PASSENGER_TRIP_MGMT_PKG
+-- Description: Contains procedures to manage the trips of passengers in the system
+-- =====================================================================

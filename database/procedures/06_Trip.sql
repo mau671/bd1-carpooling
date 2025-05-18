@@ -5,8 +5,10 @@
 CREATE OR REPLACE PACKAGE PU.PU_TRIP_MGMT_PKG AS
 
     -- Create a trip
-    PROCEDURE create_trip (p_vehicle_id IN PU.TRIP.vehicle_id%TYPE,
-                            p_route_id   IN PU.TRIP.route_id%TYPE);
+    PROCEDURE create_trip (p_vehicle_id         IN PU.TRIP.vehicle_id%TYPE,
+                           p_route_id           IN PU.TRIP.route_id%TYPE,
+                           p_price              IN PU.TRIP.price_per_passenger%TYPE,
+                           p_currency_id        IN PU.TRIP.id_currency%TYPE);
    
     -- Obtain the information of a trip
     FUNCTION get_trip_info (p_trip_id IN PU.TRIP.id%TYPE) RETURN SYS_REFCURSOR;
@@ -28,17 +30,24 @@ END PU_TRIP_MGMT_PKG;
 CREATE OR REPLACE PACKAGE BODY PU.PU_TRIP_MGMT_PKG AS
 
     -- Procedure to add a trip
-    PROCEDURE create_trip (p_vehicle_id IN PU.TRIP.vehicle_id%TYPE,
-                            p_route_id   IN PU.TRIP.route_id%TYPE) AS
+    PROCEDURE create_trip (p_vehicle_id   IN PU.TRIP.vehicle_id%TYPE,
+                           p_route_id     IN PU.TRIP.route_id%TYPE,
+                           p_price        IN PU.TRIP.price_per_passenger%TYPE,
+                           p_currency_id  IN PU.TRIP.id_currency%TYPE) AS
     BEGIN
-        -- Insert into TRIP table
-        -- Assuming sequence/trigger for ID and auditing
-        INSERT INTO PU.TRIP (vehicle_id, route_id)
-                             VALUES (p_vehicle_id, p_route_id);
-
-        -- Confirm
+        INSERT INTO PU.TRIP (
+            vehicle_id,
+            route_id,
+            price_per_passenger,
+            id_currency
+        ) VALUES (
+            p_vehicle_id,
+            p_route_id,
+            p_price,
+            p_currency_id
+        );
+    
         COMMIT;
-
     END create_trip;
     
     -- Get trip info
