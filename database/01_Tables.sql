@@ -325,7 +325,7 @@ CREATE TABLE ADM.PARAMETER (
                              MAXEXTENTS UNLIMITED PCTINCREASE 0
                          ),
     name              VARCHAR2(50) NOT NULL,
-    value             NUMBER
+    value             VARCHAR2(50) NOT NULL
 )
 TABLESPACE ADM_Data
 STORAGE (
@@ -688,44 +688,7 @@ COMMENT ON COLUMN PU.VEHICLE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.VEHICLE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 22. WAYPOINT Table (renamed from STOP)
--- ============================================
-CREATE TABLE PU.WAYPOINT (
-    id                NUMBER CONSTRAINT pk_WAYPOINT PRIMARY KEY
-                         USING INDEX TABLESPACE PU_Index
-                         STORAGE (
-                             INITIAL 10K NEXT 10K MINEXTENTS 1 
-                             MAXEXTENTS UNLIMITED PCTINCREASE 0
-                         ),
-    district_id       NUMBER NOT NULL,
-    latitude          NUMBER(9,6) NOT NULL,
-    longitude         NUMBER(9,6) NOT NULL,
-    creator           VARCHAR2(50),
-    creation_date     DATE,
-    modifier          VARCHAR2(50),
-    modification_date DATE,
-    
-    CONSTRAINT fk_WAYPOINT_DISTRICT
-        FOREIGN KEY (district_id)
-        REFERENCES ADM.DISTRICT(id)
-)
-TABLESPACE PU_Data
-STORAGE (
-    INITIAL 6144 NEXT 6144 MINEXTENTS 1 MAXEXTENTS 5
-);
-
-COMMENT ON TABLE PU.WAYPOINT IS 'Table that stores waypoints/stops';
-COMMENT ON COLUMN PU.WAYPOINT.id IS 'Unique identifier for waypoint';
-COMMENT ON COLUMN PU.WAYPOINT.district_id IS 'Foreign key to DISTRICT table';
-COMMENT ON COLUMN PU.WAYPOINT.latitude IS 'Waypoint latitude coordinate';
-COMMENT ON COLUMN PU.WAYPOINT.longitude IS 'Waypoint longitude coordinate';
-COMMENT ON COLUMN PU.WAYPOINT.creator IS 'User who created the record';
-COMMENT ON COLUMN PU.WAYPOINT.creation_date IS 'Record creation date';
-COMMENT ON COLUMN PU.WAYPOINT.modifier IS 'User who modified the record';
-COMMENT ON COLUMN PU.WAYPOINT.modification_date IS 'Record modification date';
-
--- ============================================
--- 23. PHONE_PERSON Table (Relationship between PERSON and PHONE)
+-- 22. PHONE_PERSON Table (Relationship between PERSON and PHONE)
 -- ============================================
 CREATE TABLE PU.PHONE_PERSON (
     person_id         NUMBER NOT NULL,
@@ -757,7 +720,7 @@ COMMENT ON COLUMN PU.PHONE_PERSON.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.PHONE_PERSON.modification_date IS 'Record modification date';
 
 -- ============================================
--- 24. INSTITUTION_PERSON Table (Relationship between INSTITUTION and PERSON)
+-- 23. INSTITUTION_PERSON Table (Relationship between INSTITUTION and PERSON)
 -- ============================================
 CREATE TABLE PU.INSTITUTION_PERSON (
     institution_id    NUMBER NOT NULL,
@@ -789,7 +752,7 @@ COMMENT ON COLUMN PU.INSTITUTION_PERSON.modifier IS 'User who modified the recor
 COMMENT ON COLUMN PU.INSTITUTION_PERSON.modification_date IS 'Record modification date';
 
 -- ============================================
--- 25. INSTITUTION_DOMAIN Table (Relationship between INSTITUTION and DOMAIN)
+-- 24. INSTITUTION_DOMAIN Table (Relationship between INSTITUTION and DOMAIN)
 -- ============================================
 CREATE TABLE ADM.INSTITUTION_DOMAIN (
     institution_id    NUMBER NOT NULL,
@@ -823,7 +786,7 @@ COMMENT ON COLUMN ADM.INSTITUTION_DOMAIN.modification_date IS 'Record modificati
 GRANT SELECT             ON ADM.INSTITUTION_DOMAIN  TO PU;
 
 -- ============================================
--- 26. PERSONUSER Table (renamed from USER)
+-- 25. PERSONUSER Table (renamed from USER)
 -- ============================================
 CREATE TABLE PU.PERSONUSER (
     id                NUMBER CONSTRAINT pk_USER PRIMARY KEY
@@ -863,7 +826,7 @@ COMMENT ON COLUMN PU.PERSONUSER.person_id IS 'Foreign key to PERSON table';
 --------------------------------------------------------------------------------
 
 -- ============================================
--- 27. ROUTE Table
+-- 26. ROUTE Table
 -- ============================================
 CREATE TABLE PU.ROUTE (
     id                NUMBER CONSTRAINT pk_ROUTE PRIMARY KEY
@@ -872,18 +835,13 @@ CREATE TABLE PU.ROUTE (
                              INITIAL 10K NEXT 10K MINEXTENTS 1 
                              MAXEXTENTS UNLIMITED PCTINCREASE 0
                          ),
-    waypoint_id       NUMBER NOT NULL,
     start_time        TIMESTAMP NOT NULL,
     end_time          TIMESTAMP NOT NULL,
     programming_date  DATE NOT NULL,
     creator           VARCHAR2(50),
     creation_date     DATE,
     modifier          VARCHAR2(50),
-    modification_date DATE,
-    
-    CONSTRAINT fk_ROUTE_WAYPOINT
-        FOREIGN KEY (waypoint_id)
-        REFERENCES PU.WAYPOINT(id)
+    modification_date DATE
 )
 TABLESPACE PU_Data
 STORAGE (
@@ -892,7 +850,6 @@ STORAGE (
 
 COMMENT ON TABLE PU.ROUTE IS 'Table that stores routes';
 COMMENT ON COLUMN PU.ROUTE.id IS 'Unique identifier for route';
-COMMENT ON COLUMN PU.ROUTE.waypoint_id IS 'Foreign key to WAYPOINT table';
 COMMENT ON COLUMN PU.ROUTE.start_time IS 'Route start time';
 COMMENT ON COLUMN PU.ROUTE.end_time IS 'Route end time';
 COMMENT ON COLUMN PU.ROUTE.programming_date IS 'Date when the route was programmed';
@@ -902,7 +859,7 @@ COMMENT ON COLUMN PU.ROUTE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.ROUTE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 28. VEHICLEXROUTE Table (Relationship between VEHICLE and ROUTE)
+-- 27. VEHICLEXROUTE Table (Relationship between VEHICLE and ROUTE)
 -- ============================================
 CREATE TABLE PU.VEHICLEXROUTE (
     id                NUMBER CONSTRAINT pk_VEHICLEXROUTE PRIMARY KEY,
@@ -932,6 +889,49 @@ COMMENT ON COLUMN PU.VEHICLEXROUTE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.VEHICLEXROUTE.modification_date IS 'Record modification date';
 
 GRANT REFERENCES ON PU.VEHICLEXROUTE TO ADM;
+
+-- ============================================
+-- 28. WAYPOINT Table (renamed from STOP)
+-- ============================================
+CREATE TABLE PU.WAYPOINT (
+    id                NUMBER CONSTRAINT pk_WAYPOINT PRIMARY KEY
+                         USING INDEX TABLESPACE PU_Index
+                         STORAGE (
+                             INITIAL 10K NEXT 10K MINEXTENTS 1 
+                             MAXEXTENTS UNLIMITED PCTINCREASE 0
+                         ),
+    district_id       NUMBER,
+    route_id          NUMBER NOT NULL,
+    latitude          NUMBER(9,6),
+    longitude         NUMBER(9,6),
+    creator           VARCHAR2(50),
+    creation_date     DATE,
+    modifier          VARCHAR2(50),
+    modification_date DATE,
+    
+    CONSTRAINT fk_WAYPOINT_DISTRICT
+        FOREIGN KEY (district_id)
+        REFERENCES ADM.DISTRICT(id),
+    CONSTRAINT fk_WAYPOINT_ROUTE
+        FOREIGN KEY (route_id)
+        REFERENCES PU.ROUTE(id)
+)
+TABLESPACE PU_Data
+STORAGE (
+    INITIAL 6144 NEXT 6144 MINEXTENTS 1 MAXEXTENTS 5
+);
+
+COMMENT ON TABLE PU.WAYPOINT IS 'Table that stores waypoints/stops';
+COMMENT ON COLUMN PU.WAYPOINT.id IS 'Unique identifier for waypoint';
+COMMENT ON COLUMN PU.WAYPOINT.district_id IS 'Foreign key to DISTRICT table';
+COMMENT ON COLUMN PU.WAYPOINT.route_id IS 'Foreign key to ROUTE table';
+COMMENT ON COLUMN PU.WAYPOINT.latitude IS 'Waypoint latitude coordinate';
+COMMENT ON COLUMN PU.WAYPOINT.longitude IS 'Waypoint longitude coordinate';
+COMMENT ON COLUMN PU.WAYPOINT.creator IS 'User who created the record';
+COMMENT ON COLUMN PU.WAYPOINT.creation_date IS 'Record creation date';
+COMMENT ON COLUMN PU.WAYPOINT.modifier IS 'User who modified the record';
+COMMENT ON COLUMN PU.WAYPOINT.modification_date IS 'Record modification date';
+
 
 --------------------------------------------------------------------------------
 --  F)  Trips and statuses
@@ -1007,44 +1007,12 @@ COMMENT ON COLUMN PU.STATUSXTRIP.creation_date IS 'Record creation date';
 COMMENT ON COLUMN PU.STATUSXTRIP.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.STATUSXTRIP.modification_date IS 'Record modification date';
 
--- ============================================
--- 31. WAYPOINTXTRIP Table (Relationship between TRIP and WAYPOINT)
--- ============================================
-CREATE TABLE PU.WAYPOINTXTRIP (
-    trip_id           NUMBER NOT NULL,
-    waypoint_id       NUMBER NOT NULL,
-    creator           VARCHAR2(50),
-    creation_date     DATE,
-    modifier          VARCHAR2(50),
-    modification_date DATE,
-
-    CONSTRAINT pk_WAYPOINTXTRIP PRIMARY KEY (trip_id, waypoint_id),
-    
-    CONSTRAINT fk_WAYPOINTXTRIP_TRIP
-       FOREIGN KEY (trip_id) REFERENCES PU.TRIP(id),
-    
-    CONSTRAINT fk_WAYPOINTXTRIP_WAYPOINT
-       FOREIGN KEY (waypoint_id)  REFERENCES PU.WAYPOINT(id)
-)
-TABLESPACE PU_Data
-STORAGE (
-    INITIAL 6144 NEXT 6144 MINEXTENTS 1 MAXEXTENTS 5
-);
-
-COMMENT ON TABLE PU.WAYPOINTXTRIP IS 'Relationship table between TRIP and WAYPOINT';
-COMMENT ON COLUMN PU.WAYPOINTXTRIP.trip_id IS 'Foreign key to TRIP table';
-COMMENT ON COLUMN PU.WAYPOINTXTRIP.waypoint_id IS 'Foreign key to WAYPOINT table';
-COMMENT ON COLUMN PU.WAYPOINTXTRIP.creator IS 'User who created the record';
-COMMENT ON COLUMN PU.WAYPOINTXTRIP.creation_date IS 'Record creation date';
-COMMENT ON COLUMN PU.WAYPOINTXTRIP.modifier IS 'User who modified the record';
-COMMENT ON COLUMN PU.WAYPOINTXTRIP.modification_date IS 'Record modification date';
-
 --------------------------------------------------------------------------------
 --  G)  Passengers and drivers
 --------------------------------------------------------------------------------
 
 -- ============================================
--- 32. PASSENGER Table (Inherits from PERSON)
+-- 31. PASSENGER Table (Inherits from PERSON)
 -- ============================================
 CREATE TABLE PU.PASSENGER (
     person_id         NUMBER CONSTRAINT pk_PASSENGER PRIMARY KEY,  -- shared primary key with PERSON
@@ -1070,7 +1038,7 @@ COMMENT ON COLUMN PU.PASSENGER.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.PASSENGER.modification_date IS 'Record modification date';
 
 -- ============================================
--- 33. DRIVER Table (Inherits from PERSON)
+-- 32. DRIVER Table (Inherits from PERSON)
 -- ============================================
 CREATE TABLE PU.DRIVER (
     person_id         NUMBER CONSTRAINT pk_DRIVER PRIMARY KEY,  -- shared primary key with PERSON
@@ -1100,7 +1068,7 @@ COMMENT ON COLUMN PU.DRIVER.modification_date IS 'Record modification date';
 --------------------------------------------------------------------------------
 
 -- ============================================
--- 34. PASSENGERXWAYPOINT Table (Relationship between PASSENGER and WAYPOINT)
+-- 33. PASSENGERXWAYPOINT Table (Relationship between PASSENGER and WAYPOINT)
 -- ============================================
 CREATE TABLE PU.PASSENGERXWAYPOINT (
     passenger_id      NUMBER NOT NULL,
@@ -1129,7 +1097,7 @@ COMMENT ON COLUMN PU.PASSENGERXWAYPOINT.modifier IS 'User who modified the recor
 COMMENT ON COLUMN PU.PASSENGERXWAYPOINT.modification_date IS 'Record modification date';
 
 -- ============================================
--- 35. DRIVERXVEHICLE Table (Relationship between DRIVER and VEHICLE)
+-- 34. DRIVERXVEHICLE Table (Relationship between DRIVER and VEHICLE)
 -- ============================================
 CREATE TABLE PU.DRIVERXVEHICLE (
     id                NUMBER CONSTRAINT pk_DRIVERXVEHICLE PRIMARY KEY,
@@ -1159,7 +1127,7 @@ COMMENT ON COLUMN PU.DRIVERXVEHICLE.modifier IS 'User who modified the record';
 COMMENT ON COLUMN PU.DRIVERXVEHICLE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 36. MAXCAPACITYXVEHICLE Table (Relationship between MAXCAPACITY and VEHICLE)
+-- 35. MAXCAPACITYXVEHICLE Table (Relationship between MAXCAPACITY and VEHICLE)
 -- ============================================
 CREATE TABLE PU.MAXCAPACITYXVEHICLE (
     id                NUMBER CONSTRAINT pk_MAXCAPACITYXVEHICLE PRIMARY KEY,
@@ -1189,7 +1157,7 @@ COMMENT ON COLUMN PU.MAXCAPACITYXVEHICLE.modifier IS 'User who modified the reco
 COMMENT ON COLUMN PU.MAXCAPACITYXVEHICLE.modification_date IS 'Record modification date';
 
 -- ============================================
--- 37. PASSENGERXTRIP Table (Relationship between PASSENGER and TRIP)
+-- 36. PASSENGERXTRIP Table (Relationship between PASSENGER and TRIP)
 -- ============================================
 CREATE TABLE PU.PASSENGERXTRIP (
     id                NUMBER CONSTRAINT pk_PASSENGERXTRIP PRIMARY KEY,
@@ -1224,7 +1192,7 @@ COMMENT ON COLUMN PU.PASSENGERXTRIP.amount IS 'Amount paid for the trip';
 --  I)  Payments
 --------------------------------------------------------------------------------
 -- ============================================
--- 38. PASSENGERXTRIPXPAYMENT Table (Relationship between PASSENGERXTRIP and PAYMENTMETHOD)
+-- 37. PASSENGERXTRIPXPAYMENT Table (Relationship between PASSENGERXTRIP and PAYMENTMETHOD)
 -- ============================================
 CREATE TABLE PU.PASSENGERXTRIPXPAYMENT (
     id                    NUMBER CONSTRAINT pk_PASSENGERXTRIPXPAYMENT PRIMARY KEY,
@@ -1257,7 +1225,7 @@ COMMENT ON COLUMN PU.PASSENGERXTRIPXPAYMENT.modification_date IS 'Record modific
 --  J)  ADM table dependent on PU
 --------------------------------------------------------------------------------
 -- ============================================
--- 39. CHOSENCAPACITY Table
+-- 38. CHOSENCAPACITY Table
 -- ============================================
 CREATE TABLE ADM.CHOSENCAPACITY (
     id                NUMBER CONSTRAINT pk_CHOSENCAPACITY PRIMARY KEY

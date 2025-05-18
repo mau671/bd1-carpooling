@@ -4,73 +4,29 @@
  */
 package com.tec.carpooling.presentation.view;
 
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import java.awt.Image;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.CallableStatement;
-import java.sql.SQLException;
-import java.sql.Types;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import com.tec.carpooling.business.service.UserService;
+import com.tec.carpooling.business.service.impl.UserServiceImpl;
+import com.tec.carpooling.dto.LoginData;
+import com.tec.carpooling.dto.LoginResultDTO;
+import com.tec.carpooling.util.SessionManager;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Set;
 
 /**
- *
- * @author hidal
+ * Login window for the carpooling application.
+ * Handles user authentication and role selection.
  */
-
-public class UserLogIn extends javax.swing.JFrame {
-    String host = "jdbc:oracle:thin:@localhost:1521:DBProyecto";
-    String uName = "ADM";
-    String uPass = "adm";
-    // Suppose your text field is called 'textCorreo'
-    private void setupPlaceholder(JTextField textField, String placeholder) {
-        textField.setText(placeholder);
-        textField.setForeground(Color.GRAY);
-
-        textField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textField.getText().equals(placeholder)) {
-                    textField.setText("");
-                    textField.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textField.getText().isEmpty()) {
-                    textField.setForeground(Color.GRAY);
-                    textField.setText(placeholder);
-                }
-            }
-        });
-        
-        labelRegister.setForeground(Color.BLUE);
-        labelRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        labelRegister.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    UserSignUp signup = new UserSignUp();
-                    signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    signup.setVisible(true);
-
-                    UserLogIn.this.dispose();
-                });
-            }
-        });
-        
-    }
-    
+public class UserLogIn extends javax.swing.JFrame { 
+    private static final String ERROR_EMPTY_FIELDS = "Please fill in all required fields.";
+    private static final String ERROR_INVALID_CREDENTIALS = "Invalid credentials. Please check your username and password.";
+    private static final String ERROR_LOGIN = "Error during login attempt: ";
+    private static final String TITLE_VALIDATION = "Validation Error";
+    private static final String TITLE_AUTHENTICATION = "Authentication Error";
+    private static final String TITLE_ERROR = "Error";
+    private static final String TITLE_ROLE_SELECTION = "Role Selection";
+    private static final String MESSAGE_ROLE_SELECTION = "Please select your role:";
     /**
      * Creates new form UserLogIn
      */
@@ -84,10 +40,30 @@ public class UserLogIn extends javax.swing.JFrame {
 
         // Set the scaled image as icon
         labelImage.setIcon(new ImageIcon(scaledImage));
-        setupPlaceholder(textEmail, "example@domain.com");
+        
+        labelRegister.setForeground(Color.BLUE);
+        labelRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        labelRegister.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openSignUpWindow();
+            }
+        });
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    /**
+     * Opens the sign up window and closes the current window.
+     */
+    private void openSignUpWindow() {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            UserSignUp signup = new UserSignUp();
+            signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            signup.setVisible(true);
+            UserLogIn.this.dispose();
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,8 +88,8 @@ public class UserLogIn extends javax.swing.JFrame {
         textPassword = new javax.swing.JPasswordField();
         labelPassword = new javax.swing.JLabel();
         panelEmail = new javax.swing.JPanel();
-        textEmail = new javax.swing.JTextField();
-        labelEmail = new javax.swing.JLabel();
+        textUsername = new javax.swing.JTextField();
+        labelUsername = new javax.swing.JLabel();
         labelRegister = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
 
@@ -205,7 +181,7 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 6;
+        gridBagConstraints.ipadx = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
         panelPassword.add(labelPassword, gridBagConstraints);
@@ -214,31 +190,31 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipady = 10;
         panelInfo.add(panelPassword, gridBagConstraints);
 
         panelEmail.setBackground(new java.awt.Color(225, 239, 255));
         panelEmail.setLayout(new java.awt.GridBagLayout());
 
-        textEmail.setText("jTextField1");
-        textEmail.setPreferredSize(new java.awt.Dimension(135, 30));
+        textUsername.setPreferredSize(new java.awt.Dimension(135, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 140;
-        gridBagConstraints.insets = new java.awt.Insets(0, 7, 10, 0);
-        panelEmail.add(textEmail, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelEmail.add(textUsername, gridBagConstraints);
 
-        labelEmail.setBackground(new java.awt.Color(18, 102, 160));
-        labelEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelEmail.setForeground(new java.awt.Color(18, 102, 160));
-        labelEmail.setText("Email:");
+        labelUsername.setBackground(new java.awt.Color(18, 102, 160));
+        labelUsername.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelUsername.setForeground(new java.awt.Color(18, 102, 160));
+        labelUsername.setText("Username:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.ipadx = 5;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        panelEmail.add(labelEmail, gridBagConstraints);
+        panelEmail.add(labelUsername, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -286,86 +262,64 @@ public class UserLogIn extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoginActionPerformed
-        String input = textEmail.getText().trim();
+    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {
+        String username = textUsername.getText().trim();
         char[] passwordChars = textPassword.getPassword();
         String password = new String(passwordChars).trim();
-
-        if (input.isEmpty() || input.equals("example@domain.com") || password.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in both password and username fields.");
+        
+        if (isInputInvalid(username, password)) {
+            showValidationError();
             return;
         }
-
-        boolean esAdmin = validarAdmin(input, password);
-        boolean esUsuario = false;
-
-        if (!esAdmin) {
-            esUsuario = validarUsuario(input, password);
-        }
-
-        if (esAdmin) {
-            JOptionPane.showMessageDialog(null, "Inicio de sesión como ADMIN exitoso.");
-            // Abre ventana para admins
-        } else if (esUsuario) {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-            UserType type = new UserType();
-            type.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            type.setVisible(true);
-
-            UserLogIn.this.dispose();
-            });
-        } else {
-            JOptionPane.showMessageDialog(null, "Credenciales incorrectas.");
-        }
         
-    }//GEN-LAST:event_buttonLoginActionPerformed
+        try {
+            LoginData loginData = new LoginData(username, password);
+            UserService userService = new UserServiceImpl();
+            LoginResultDTO loginResult = userService.validateLoginAndGetRoles(loginData);
+            
+            if (loginResult.isLoginSuccessful()) {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                UserType type = new UserType();
+                type.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                type.setVisible(true);
 
-    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPasswordActionPerformed
-        if (checkPassword.isSelected()) {
-            textPassword.setEchoChar((char) 0); // Show characters
-        } else {
-            textPassword.setEchoChar('*'); // Hide with asterisks again
-        }
-    }//GEN-LAST:event_checkPasswordActionPerformed
-      
-    private boolean validarAdmin(String input, String password){        
-        System.out.println("Entra");
-        try{
-            Connection con = DriverManager.getConnection(host, uName, uPass);
-            CallableStatement cs = con.prepareCall("{CALL validar_admin(?,?,?)}");
-            cs.setString(1, input);
-            cs.setString(2, password);
-            cs.registerOutParameter(3, Types.INTEGER);
-            
-            cs.execute();
-            int result = cs.getInt(3);
-            return result == 1;
-            
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this, "Error validando admin" + ex.getMessage());
-            return false;
+                UserLogIn.this.dispose();
+            });
+            } else {
+                showLoginError();
+            }
+        } catch (Exception ex) {
+            handleLoginException(ex);
         }
     }
     
-    private boolean validarUsuario(String input, String password){
-        try{
-            
-            Connection con = DriverManager.getConnection(host, uName, uPass);
-            
-            CallableStatement cs = con.prepareCall("{CALL validar_usuario(?,?,?)}");
-            cs.setString(1, input);
-            cs.setString(2, password);
-            cs.registerOutParameter(3, Types.INTEGER);
-            
-            cs.execute();
-            int result = cs.getInt(3);
-            return result == 1;
-            
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this, "Error validando usuario: " + ex.getMessage());
-            return false;
-        }
+    private boolean isInputInvalid(String username, String password) {
+        return username.isEmpty() || password.isEmpty();
+    }
+    
+    private void showValidationError() {
+        JOptionPane.showMessageDialog(this, 
+            ERROR_EMPTY_FIELDS,
+            TITLE_VALIDATION,
+            JOptionPane.WARNING_MESSAGE);
+    }  
+    private void showLoginError() {
+        JOptionPane.showMessageDialog(this, 
+            ERROR_INVALID_CREDENTIALS,
+            TITLE_AUTHENTICATION,
+            JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void handleLoginException(Exception ex) {
+        JOptionPane.showMessageDialog(this,
+            ERROR_LOGIN + ex.getMessage(),
+            TITLE_ERROR,
+            JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+
+    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {
+        textPassword.setEchoChar(checkPassword.isSelected() ? (char) 0 : '*');
     }
     
     /**
@@ -410,17 +364,17 @@ public class UserLogIn extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelImage;
     private javax.swing.JPanel labelLog;
     private javax.swing.JLabel labelLogIn;
     private javax.swing.JLabel labelPassword;
     private javax.swing.JLabel labelRegister;
+    private javax.swing.JLabel labelUsername;
     private javax.swing.JPanel panelEmail;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JPanel panelPassword;
-    private javax.swing.JTextField textEmail;
     private javax.swing.JPasswordField textPassword;
+    private javax.swing.JTextField textUsername;
     // End of variables declaration//GEN-END:variables
 }
