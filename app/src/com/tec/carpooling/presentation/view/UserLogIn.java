@@ -4,9 +4,16 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.business.service.UserLoginService;
+import com.tec.carpooling.business.service.impl.UserLoginServiceImpl;
+import com.tec.carpooling.domain.entity.User;
+
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -14,24 +21,14 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.CallableStatement;
 import java.sql.SQLException;
-import java.sql.Types;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 /**
- *
- * @author hidal
+ * Ventana de inicio de sesión para usuarios
  */
-
 public class UserLogIn extends javax.swing.JFrame {
-    String host = "jdbc:oracle:thin:@localhost:1521:DBProyecto";
-    String uName = "ADM";
-    String uPass = "adm";
-    // Suppose your text field is called 'textCorreo'
+    private final UserLoginService userLoginService;
+    
     private void setupPlaceholder(JTextField textField, String placeholder) {
         textField.setText(placeholder);
         textField.setForeground(Color.GRAY);
@@ -68,14 +65,15 @@ public class UserLogIn extends javax.swing.JFrame {
                 });
             }
         });
-        
     }
     
     /**
-     * Creates new form UserLogIn
+     * Constructor de la ventana de inicio de sesión
      */
     public UserLogIn() {
         initComponents();
+        userLoginService = new UserLoginServiceImpl();
+        
         // Load the image
         ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/calleCarro.png"));
 
@@ -84,7 +82,7 @@ public class UserLogIn extends javax.swing.JFrame {
 
         // Set the scaled image as icon
         labelImage.setIcon(new ImageIcon(scaledImage));
-        setupPlaceholder(textEmail, "example@domain.com");
+        setupPlaceholder(textUsername, "example@domain.com");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
@@ -112,8 +110,8 @@ public class UserLogIn extends javax.swing.JFrame {
         textPassword = new javax.swing.JPasswordField();
         labelPassword = new javax.swing.JLabel();
         panelEmail = new javax.swing.JPanel();
-        textEmail = new javax.swing.JTextField();
-        labelEmail = new javax.swing.JLabel();
+        textUsername = new javax.swing.JTextField();
+        labelUserName = new javax.swing.JLabel();
         labelRegister = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
 
@@ -219,26 +217,25 @@ public class UserLogIn extends javax.swing.JFrame {
         panelEmail.setBackground(new java.awt.Color(225, 239, 255));
         panelEmail.setLayout(new java.awt.GridBagLayout());
 
-        textEmail.setText("jTextField1");
-        textEmail.setPreferredSize(new java.awt.Dimension(135, 30));
+        textUsername.setPreferredSize(new java.awt.Dimension(135, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 140;
         gridBagConstraints.insets = new java.awt.Insets(0, 7, 10, 0);
-        panelEmail.add(textEmail, gridBagConstraints);
+        panelEmail.add(textUsername, gridBagConstraints);
 
-        labelEmail.setBackground(new java.awt.Color(18, 102, 160));
-        labelEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        labelEmail.setForeground(new java.awt.Color(18, 102, 160));
-        labelEmail.setText("Email:");
+        labelUserName.setBackground(new java.awt.Color(18, 102, 160));
+        labelUserName.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelUserName.setForeground(new java.awt.Color(18, 102, 160));
+        labelUserName.setText("Username:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 30;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        panelEmail.add(labelEmail, gridBagConstraints);
+        panelEmail.add(labelUserName, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -287,84 +284,58 @@ public class UserLogIn extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoginActionPerformed
-        String input = textEmail.getText().trim();
-        char[] passwordChars = textPassword.getPassword();
-        String password = new String(passwordChars).trim();
-
-        if (input.isEmpty() || input.equals("example@domain.com") || password.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in both password and username fields.");
+    private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {
+        // Validar campos requeridos
+        if (textUsername.getText().trim().isEmpty() ||
+            textPassword.getPassword().length == 0) {
+            
+            JOptionPane.showMessageDialog(this,
+                "Por favor ingrese su nombre de usuario y contraseña.",
+                "Campos Incompletos",
+                JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        boolean esAdmin = validarAdmin(input, password);
-        boolean esUsuario = false;
+        try {
+            // Intentar iniciar sesión
+            User user = userLoginService.login(
+                textUsername.getText().trim(),
+                new String(textPassword.getPassword()).trim()
+            );
 
-        if (!esAdmin) {
-            esUsuario = validarUsuario(input, password);
+            if (user != null) {
+                JOptionPane.showMessageDialog(this,
+                    "Inicio de sesión exitoso.",
+                    "Bienvenido",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // TODO: Abrir la ventana principal de la aplicación
+                // this.dispose();
+                // new MainWindow(user).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Nombre de usuario o contraseña incorrectos.",
+                    "Error de Autenticación",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error de base de datos: " + ex.getMessage(),
+                "Error de Conexión",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error inesperado: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
+    }
 
-        if (esAdmin) {
-            JOptionPane.showMessageDialog(null, "Inicio de sesión como ADMIN exitoso.");
-            // Abre ventana para admins
-        } else if (esUsuario) {
-            javax.swing.SwingUtilities.invokeLater(() -> {
-            UserType type = new UserType();
-            type.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            type.setVisible(true);
-
-            UserLogIn.this.dispose();
-            });
-        } else {
-            JOptionPane.showMessageDialog(null, "Credenciales incorrectas.");
-        }
-        
-    }//GEN-LAST:event_buttonLoginActionPerformed
-
-    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPasswordActionPerformed
+    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {
         if (checkPassword.isSelected()) {
             textPassword.setEchoChar((char) 0); // Show characters
         } else {
             textPassword.setEchoChar('*'); // Hide with asterisks again
-        }
-    }//GEN-LAST:event_checkPasswordActionPerformed
-      
-    private boolean validarAdmin(String input, String password){        
-        System.out.println("Entra");
-        try{
-            Connection con = DriverManager.getConnection(host, uName, uPass);
-            CallableStatement cs = con.prepareCall("{CALL validar_admin(?,?,?)}");
-            cs.setString(1, input);
-            cs.setString(2, password);
-            cs.registerOutParameter(3, Types.INTEGER);
-            
-            cs.execute();
-            int result = cs.getInt(3);
-            return result == 1;
-            
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this, "Error validando admin" + ex.getMessage());
-            return false;
-        }
-    }
-    
-    private boolean validarUsuario(String input, String password){
-        try{
-            
-            Connection con = DriverManager.getConnection(host, uName, uPass);
-            
-            CallableStatement cs = con.prepareCall("{CALL validar_usuario(?,?,?)}");
-            cs.setString(1, input);
-            cs.setString(2, password);
-            cs.registerOutParameter(3, Types.INTEGER);
-            
-            cs.execute();
-            int result = cs.getInt(3);
-            return result == 1;
-            
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this, "Error validando usuario: " + ex.getMessage());
-            return false;
         }
     }
     
@@ -410,17 +381,17 @@ public class UserLogIn extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelImage;
     private javax.swing.JPanel labelLog;
     private javax.swing.JLabel labelLogIn;
     private javax.swing.JLabel labelPassword;
     private javax.swing.JLabel labelRegister;
+    private javax.swing.JLabel labelUserName;
     private javax.swing.JPanel panelEmail;
     private javax.swing.JPanel panelInfo;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JPanel panelPassword;
-    private javax.swing.JTextField textEmail;
     private javax.swing.JPasswordField textPassword;
+    private javax.swing.JTextField textUsername;
     // End of variables declaration//GEN-END:variables
 }

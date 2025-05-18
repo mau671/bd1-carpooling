@@ -23,6 +23,19 @@ public class User {
     }
 
     /**
+     * Constructor with all fields
+     * 
+     * @param id ID of the user
+     * @param username Username of the user
+     * @param personId ID of the associated person
+     */
+    public User(long id, String username, long personId) {
+        this.id = id;
+        this.username = username;
+        this.personId = personId;
+    }
+
+    /**
      * Gets the user ID.
      * @return The user ID.
      */

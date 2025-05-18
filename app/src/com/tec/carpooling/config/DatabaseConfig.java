@@ -48,8 +48,8 @@ public class DatabaseConfig {
      * @return the database username
      */
     public static String getDbUsername() {
-        System.out.println("Database Username: " + properties.getProperty("db.user"));
-        return properties.getProperty("db.user");
+        System.out.println("Database Username: " + properties.getProperty("db.username"));
+        return properties.getProperty("db.username");
     }
 
     /**

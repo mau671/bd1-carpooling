@@ -1,16 +1,70 @@
 -- ============================================================================
+-- GRANTS NECESARIOS PARA LA EJECUCIÓN DEL SCRIPT
+-- ============================================================================
+-- Grants para el esquema ADM
+GRANT CREATE PROCEDURE TO ADM;
+GRANT CREATE TYPE TO ADM;
+GRANT CREATE SESSION TO ADM;
+GRANT UNLIMITED TABLESPACE TO ADM;
+
+-- Grants para el esquema PU
+GRANT CREATE PROCEDURE TO PU;
+GRANT CREATE TYPE TO PU;
+GRANT CREATE SESSION TO PU;
+GRANT UNLIMITED TABLESPACE TO PU;
+
+-- Grants de tablas para ADM
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.PERSON TO PU;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.GENDER TO PU;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.INSTITUTION TO PU;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.TYPE_IDENTIFICATION TO PU;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.TYPE_PHONE TO PU;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.DOMAIN TO PU;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.INSTITUTION_DOMAIN TO PU;
+
+-- Grants de tablas para PU
+GRANT SELECT, INSERT, UPDATE, DELETE ON PU.PERSONUSER TO ADM;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PU.PHONE TO ADM;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PU.EMAIL TO ADM;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PU.PHONE_PERSON TO ADM;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PU.INSTITUTION_PERSON TO ADM;
+
+-- Grants de secuencias
+GRANT SELECT ON ADM.GENDER_SEQ TO PU;
+GRANT SELECT ON ADM.INSTITUTION_SEQ TO PU;
+GRANT SELECT ON ADM.TYPE_IDENTIFICATION_SEQ TO PU;
+GRANT SELECT ON ADM.TYPE_PHONE_SEQ TO PU;
+GRANT SELECT ON ADM.DOMAIN_SEQ TO PU;
+GRANT SELECT ON ADM.PERSON_SEQ TO PU;
+GRANT SELECT ON PU.PERSONUSER_SEQ TO ADM;
+GRANT SELECT ON PU.PHONE_SEQ TO ADM;
+GRANT SELECT ON PU.EMAIL_SEQ TO ADM;
+
+-- ============================================================================
 -- TYPES
 -- ============================================================================
+/**
+ * Tipo de tabla para almacenar IDs numéricos.
+ * Utilizado principalmente para operaciones en lote con múltiples IDs.
+ */
 CREATE OR REPLACE TYPE ADM.ID_TABLE_TYPE AS TABLE OF NUMBER;
 /
 
 -- ============================================================================
 -- PACKAGE: ADM_GENDER_PKG
--- Purpose: Manages operations related to genders in the system
+-- Purpose: Gestiona operaciones relacionadas con géneros en el sistema
 -- ============================================================================
+/**
+ * Paquete para la gestión de géneros en el sistema.
+ * Proporciona funcionalidades para consultar la información de géneros.
+ */
 CREATE OR REPLACE PACKAGE ADM.ADM_GENDER_PKG AS
     TYPE ref_cursor_type IS REF CURSOR;
     
+    /**
+     * Obtiene todos los géneros disponibles en el sistema.
+     * @return Cursor con la lista de géneros ordenados por nombre
+     */
     FUNCTION get_all_genders
     RETURN ref_cursor_type;
 END ADM_GENDER_PKG;
@@ -472,6 +526,239 @@ END ADM_CATALOG_MGMT_PKG;
 /
 
 -- ============================================================================
+-- PACKAGE: ADM_USER_REGISTRATION_PKG
+-- Purpose: Gestiona operaciones relacionadas con el registro de usuarios
+-- ============================================================================
+/**
+ * Paquete para la gestión del registro de usuarios en el sistema.
+ * Proporciona funcionalidades para registrar nuevos usuarios y sus datos relacionados.
+ */
+CREATE OR REPLACE PACKAGE ADM.ADM_USER_REGISTRATION_PKG AS
+    /**
+     * Registra un nuevo usuario en el sistema.
+     * 
+     * @param p_first_name Nombre del usuario
+     * @param p_second_name Segundo nombre del usuario (opcional)
+     * @param p_first_surname Primer apellido del usuario
+     * @param p_second_surname Segundo apellido del usuario (opcional)
+     * @param p_id_type_id ID del tipo de identificación
+     * @param p_id_number Número de identificación
+     * @param p_phone_type_id ID del tipo de teléfono
+     * @param p_phone_number Número de teléfono
+     * @param p_email Correo electrónico
+     * @param p_date_of_birth Fecha de nacimiento
+     * @param p_gender_id ID del género
+     * @param p_institution_id ID de la institución
+     * @param p_domain_id ID del dominio de correo
+     * @param p_username Nombre de usuario
+     * @param p_password Contraseña
+     * @param p_person_id OUT ID de la persona creada
+     * @param p_user_id OUT ID del usuario creado
+     */
+    PROCEDURE register_user(
+        p_first_name IN VARCHAR2,
+        p_second_name IN VARCHAR2,
+        p_first_surname IN VARCHAR2,
+        p_second_surname IN VARCHAR2,
+        p_id_type_id IN NUMBER,
+        p_id_number IN VARCHAR2,
+        p_phone_type_id IN NUMBER,
+        p_phone_number IN VARCHAR2,
+        p_email IN VARCHAR2,
+        p_date_of_birth IN DATE,
+        p_gender_id IN NUMBER,
+        p_institution_id IN NUMBER,
+        p_domain_id IN NUMBER,
+        p_username IN VARCHAR2,
+        p_password IN VARCHAR2,
+        p_person_id OUT NUMBER,
+        p_user_id OUT NUMBER
+    );
+END ADM_USER_REGISTRATION_PKG;
+/
+
+CREATE OR REPLACE PACKAGE BODY ADM.ADM_USER_REGISTRATION_PKG AS
+    PROCEDURE register_user(
+        p_first_name IN VARCHAR2,
+        p_second_name IN VARCHAR2,
+        p_first_surname IN VARCHAR2,
+        p_second_surname IN VARCHAR2,
+        p_id_type_id IN NUMBER,
+        p_id_number IN VARCHAR2,
+        p_phone_type_id IN NUMBER,
+        p_phone_number IN VARCHAR2,
+        p_email IN VARCHAR2,
+        p_date_of_birth IN DATE,
+        p_gender_id IN NUMBER,
+        p_institution_id IN NUMBER,
+        p_domain_id IN NUMBER,
+        p_username IN VARCHAR2,
+        p_password IN VARCHAR2,
+        p_person_id OUT NUMBER,
+        p_user_id OUT NUMBER
+    ) IS
+        v_person_id NUMBER;
+        v_user_id NUMBER;
+        v_phone_id NUMBER;
+        v_email_id NUMBER;
+    BEGIN
+        -- Validar que la institución existe
+        DECLARE
+            v_institution_count NUMBER;
+        BEGIN
+            SELECT COUNT(*) INTO v_institution_count
+            FROM ADM.INSTITUTION
+            WHERE id = p_institution_id;
+            
+            IF v_institution_count = 0 THEN
+                RAISE_APPLICATION_ERROR(-20001, 'Institution with ID ' || p_institution_id || ' does not exist.');
+            END IF;
+        END;
+
+        -- Validar que el dominio existe y está asociado a la institución
+        DECLARE
+            v_domain_count NUMBER;
+        BEGIN
+            SELECT COUNT(*) INTO v_domain_count
+            FROM ADM.INSTITUTION_DOMAIN
+            WHERE institution_id = p_institution_id
+            AND domain_id = p_domain_id;
+            
+            IF v_domain_count = 0 THEN
+                RAISE_APPLICATION_ERROR(-20002, 'Domain with ID ' || p_domain_id || ' is not associated with institution ' || p_institution_id);
+            END IF;
+        END;
+
+        -- Insert person
+        INSERT INTO ADM.PERSON (
+            first_name,
+            second_name,
+            first_surname,
+            second_surname,
+            identification_number,
+            date_of_birth,
+            gender_id,
+            type_identification_id
+        ) VALUES (
+            p_first_name,
+            p_second_name,
+            p_first_surname,
+            p_second_surname,
+            p_id_number,
+            p_date_of_birth,
+            p_gender_id,
+            p_id_type_id
+        ) RETURNING id INTO v_person_id;
+
+        -- Insert user account
+        INSERT INTO PU.PERSONUSER (
+            username,
+            password,
+            person_id
+        ) VALUES (
+            p_username,
+            p_password,
+            v_person_id
+        ) RETURNING id INTO v_user_id;
+
+        -- Insert phone
+        INSERT INTO PU.PHONE (
+            phone_number,
+            type_phone_id
+        ) VALUES (
+            p_phone_number,
+            p_phone_type_id
+        ) RETURNING id INTO v_phone_id;
+
+        -- Insert phone-person relationship
+        INSERT INTO PU.PHONE_PERSON (
+            phone_id,
+            person_id
+        ) VALUES (
+            v_phone_id,
+            v_person_id
+        );
+
+        -- Insert email
+        INSERT INTO PU.EMAIL (
+            name,
+            domain_id,
+            person_id
+        ) VALUES (
+            p_email,
+            p_domain_id,
+            v_person_id
+        ) RETURNING id INTO v_email_id;
+
+        -- Insert institution-person relationship
+        INSERT INTO PU.INSTITUTION_PERSON (
+            institution_id,
+            person_id
+        ) VALUES (
+            p_institution_id,
+            v_person_id
+        );
+
+        -- Set output parameters
+        p_person_id := v_person_id;
+        p_user_id := v_user_id;
+
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END register_user;
+END ADM_USER_REGISTRATION_PKG;
+/
+
+-- ============================================================================
+-- PACKAGE: ADM_USER_AUTH_PKG
+-- Purpose: Gestiona operaciones relacionadas con la autenticación de usuarios
+-- ============================================================================
+/**
+ * Paquete para la gestión de la autenticación de usuarios en el sistema.
+ * Proporciona funcionalidades para verificar las credenciales de los usuarios.
+ */
+CREATE OR REPLACE PACKAGE ADM.ADM_USER_AUTH_PKG AS
+    /**
+     * Autentica un usuario con el nombre de usuario y contraseña proporcionados.
+     * 
+     * @param p_username Nombre de usuario
+     * @param p_hashed_password Contraseña hasheada
+     * @return Cursor con la información del usuario si la autenticación es exitosa
+     */
+    FUNCTION authenticate_user(
+        p_username IN VARCHAR2,
+        p_hashed_password IN VARCHAR2
+    ) RETURN SYS_REFCURSOR;
+END ADM_USER_AUTH_PKG;
+/
+
+CREATE OR REPLACE PACKAGE BODY ADM.ADM_USER_AUTH_PKG AS
+    FUNCTION authenticate_user(
+        p_username IN VARCHAR2,
+        p_hashed_password IN VARCHAR2
+    ) RETURN SYS_REFCURSOR
+    IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT u.id, u.username, u.person_id
+            FROM PU.PERSONUSER u
+            WHERE u.username = p_username
+            AND u.password = p_hashed_password;
+            
+        RETURN v_cursor;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
+            RAISE;
+    END authenticate_user;
+END ADM_USER_AUTH_PKG;
+/
+
+-- ============================================================================
 -- GRANTS
 -- ============================================================================
 -- Package execution grants
@@ -501,3 +788,9 @@ GRANT SELECT ON ADM.TYPE_IDENTIFICATION_SEQ TO PU;
 GRANT SELECT ON ADM.TYPE_PHONE_SEQ TO PU;
 GRANT SELECT ON ADM.DOMAIN_SEQ TO PU;
 GRANT SELECT ON ADM.PERSON_SEQ TO PU;
+
+-- Grants for user registration package
+GRANT EXECUTE ON ADM.ADM_USER_REGISTRATION_PKG TO PU;
+
+-- Package execution grants
+GRANT EXECUTE ON ADM.ADM_USER_AUTH_PKG TO PU;

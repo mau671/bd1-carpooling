@@ -23,6 +23,8 @@ import com.tec.carpooling.domain.entity.Institution;
 import com.tec.carpooling.domain.entity.IdType;
 import com.tec.carpooling.domain.entity.PhoneType;
 import com.tec.carpooling.domain.entity.Domain;
+import com.tec.carpooling.business.service.UserRegistrationService;
+import com.tec.carpooling.business.service.impl.UserRegistrationServiceImpl;
 
 /**
  *
@@ -36,6 +38,7 @@ public class UserSignUp extends javax.swing.JFrame {
     private static final String TITLE_VALIDATION = "Validation Error";
     
     private final CatalogService catalogService;
+    private final UserRegistrationService userRegistrationService;
 
     /**
      * Creates new form UserSignUp
@@ -44,6 +47,7 @@ public class UserSignUp extends javax.swing.JFrame {
         initComponents();
         customizeDatePicker();
         catalogService = new CatalogServiceImpl();
+        userRegistrationService = new UserRegistrationServiceImpl();
         setupWindow();
         loadCatalogs();
         
@@ -828,126 +832,109 @@ public class UserSignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_termsCheckBoxActionPerformed
 
     private void buttonRegisterActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            // Validar campos requeridos
-            if (!validateRequiredFields()) {
-                return;
-            }
-
-            // Validar términos y condiciones
-            if (!termsCheckBox.isSelected()) {
-                JOptionPane.showMessageDialog(this,
-                    ERROR_TERMS_NOT_ACCEPTED,
-                    TITLE_VALIDATION,
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // Obtener valores de los campos
-            String firstName = textUsername.getText().trim();
-            String secondName = textName2.getText().trim();
-            String firstSurname = textSurname1.getText().trim();
-            String secondSurname = textSurname2.getText().trim();
-            String idNumber = textID.getText().trim();
-            String phoneNumber = textNumber.getText().trim();
-            String email = textEmail.getText().trim();
-            LocalDate dateOfBirth = dateOfBirthPicker.getDate();
-
-            // Obtener valores de los combos
-            IdType idType = (IdType) comboBoxID.getSelectedItem();
-            PhoneType phoneType = (PhoneType) comboBoxNumber.getSelectedItem();
-            Institution institution = (Institution) comboBoxInstitution.getSelectedItem();
-            Gender gender = (Gender) comboBoxGender.getSelectedItem();
-            Domain domain = (Domain) jComboBoxDomain.getSelectedItem();
-
-            // Validar que se hayan seleccionado todos los combos y que no sean los items por defecto
-            if (idType == null || idType.getId() == 0) {
-                JOptionPane.showMessageDialog(this,
-                    "Please select an ID type.",
-                    TITLE_VALIDATION,
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+        // Validar campos requeridos
+        if (textUser.getText().trim().isEmpty() ||
+            textSurname1.getText().trim().isEmpty() ||
+            textID.getText().trim().isEmpty() ||
+            textNumber.getText().trim().isEmpty() ||
+            textEmail.getText().trim().isEmpty() ||
+            textUsername.getText().trim().isEmpty() ||
+            textPassword.getPassword().length == 0 ||
+            !termsCheckBox.isSelected()) {
             
-            if (phoneType == null || phoneType.getId() == 0) {
-                JOptionPane.showMessageDialog(this,
-                    "Please select a phone type.",
-                    TITLE_VALIDATION,
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            if (institution == null || institution.getId() == 0) {
-                JOptionPane.showMessageDialog(this,
-                    "Please select an institution.",
-                    TITLE_VALIDATION,
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            if (gender == null || gender.getId() == 0) {
-                JOptionPane.showMessageDialog(this,
-                    "Please select a gender.",
-                    TITLE_VALIDATION,
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            if (domain == null || domain.getId() == 0) {
-                JOptionPane.showMessageDialog(this,
-                    "Please select a domain.",
-                    TITLE_VALIDATION,
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // TODO: Implementar el registro de usuario
-            // Por ahora solo mostramos un mensaje de éxito
             JOptionPane.showMessageDialog(this,
-                "Registration successful!",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+                "Por favor complete todos los campos requeridos y acepte los términos y condiciones.",
+                "Campos Incompletos",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-            // Volver a la pantalla inicial
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                InitialPage home = new InitialPage();
-                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                home.setVisible(true);
+        // Validar selección de combo boxes
+        if (comboBoxID.getSelectedItem() == null || ((IdType)comboBoxID.getSelectedItem()).getId() == 0 ||
+            comboBoxNumber.getSelectedItem() == null || ((PhoneType)comboBoxNumber.getSelectedItem()).getId() == 0 ||
+            comboBoxInstitution.getSelectedItem() == null || ((Institution)comboBoxInstitution.getSelectedItem()).getId() == 0 ||
+            comboBoxGender.getSelectedItem() == null || ((Gender)comboBoxGender.getSelectedItem()).getId() == 0 ||
+            jComboBoxDomain.getSelectedItem() == null || ((Domain)jComboBoxDomain.getSelectedItem()).getId() == 0) {
+            
+            JOptionPane.showMessageDialog(this,
+                "Por favor seleccione todas las opciones requeridas en los menús desplegables.",
+                "Selecciones Incompletas",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Obtener los valores seleccionados
+            IdType selectedIdType = (IdType) comboBoxID.getSelectedItem();
+            PhoneType selectedPhoneType = (PhoneType) comboBoxNumber.getSelectedItem();
+            Institution selectedInstitution = (Institution) comboBoxInstitution.getSelectedItem();
+            Gender selectedGender = (Gender) comboBoxGender.getSelectedItem();
+            Domain selectedDomain = (Domain) jComboBoxDomain.getSelectedItem();
+
+            // Obtener la fecha de nacimiento
+            LocalDate dateOfBirth = dateOfBirthPicker.getDate();
+            if (dateOfBirth == null) {
+                JOptionPane.showMessageDialog(this,
+                    "Por favor seleccione una fecha de nacimiento válida.",
+                    "Fecha Inválida",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Validar que la fecha no sea futura
+            if (dateOfBirth.isAfter(LocalDate.now())) {
+                JOptionPane.showMessageDialog(this,
+                    "La fecha de nacimiento no puede ser futura.",
+                    "Fecha Inválida",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Intentar registrar el usuario
+            boolean success = userRegistrationService.registerUser(
+                textUser.getText().trim(),
+                textName2.getText().trim(),
+                textSurname1.getText().trim(),
+                textSurname2.getText().trim(),
+                selectedIdType.getId(),
+                textID.getText().trim(),
+                selectedPhoneType.getId(),
+                textNumber.getText().trim(),
+                textEmail.getText().trim(), // Solo el nombre del correo (sin @dominio)
+                dateOfBirth,
+                selectedGender.getId(),
+                selectedInstitution.getId(),
+                selectedDomain.getId(),
+                textUsername.getText().trim(),
+                new String(textPassword.getPassword()).trim()
+            );
+
+            if (success) {
+                JOptionPane.showMessageDialog(this,
+                    "Usuario registrado exitosamente.",
+                    "Registro Exitoso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // Volver a la página inicial
                 this.dispose();
-            });
-
+                new InitialPage().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Error al registrar el usuario. Por favor intente nuevamente.",
+                    "Error de Registro",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error de base de datos: " + ex.getMessage(),
+                "Error de Registro",
+                JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "An error occurred during registration: " + ex.getMessage(),
-                TITLE_ERROR,
+                "Error inesperado: " + ex.getMessage(),
+                "Error de Registro",
                 JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    /**
-     * Valida que todos los campos requeridos estén completos.
-     * 
-     * @return true si todos los campos requeridos están completos, false en caso contrario
-     */
-    private boolean validateRequiredFields() {
-        char[] passwordChars = textPassword.getPassword();
-        String password = new String(passwordChars).trim();
-        if (textUsername.getText().trim().isEmpty()    ||
-            textSurname1.getText().trim().isEmpty() ||
-            textID.getText().trim().isEmpty()       ||
-            textNumber.getText().trim().isEmpty()   ||
-            textEmail.getText().trim().isEmpty()    ||
-            dateOfBirthPicker.getDate() == null     ||
-            textUsername.getText().trim().isEmpty() ||
-            password.isEmpty()) {
-            
-            JOptionPane.showMessageDialog(this,
-                "Please fill in all required fields.",
-                TITLE_VALIDATION,
-                JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        return true;
     }
 
     private void textName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textName2ActionPerformed
