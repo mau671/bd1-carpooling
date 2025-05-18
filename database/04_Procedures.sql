@@ -713,6 +713,52 @@ END ADM_USER_REGISTRATION_PKG;
 /
 
 -- ============================================================================
+-- PACKAGE: ADM_USER_AUTH_PKG
+-- Purpose: Gestiona operaciones relacionadas con la autenticación de usuarios
+-- ============================================================================
+/**
+ * Paquete para la gestión de la autenticación de usuarios en el sistema.
+ * Proporciona funcionalidades para verificar las credenciales de los usuarios.
+ */
+CREATE OR REPLACE PACKAGE ADM.ADM_USER_AUTH_PKG AS
+    /**
+     * Autentica un usuario con el nombre de usuario y contraseña proporcionados.
+     * 
+     * @param p_username Nombre de usuario
+     * @param p_hashed_password Contraseña hasheada
+     * @return Cursor con la información del usuario si la autenticación es exitosa
+     */
+    FUNCTION authenticate_user(
+        p_username IN VARCHAR2,
+        p_hashed_password IN VARCHAR2
+    ) RETURN SYS_REFCURSOR;
+END ADM_USER_AUTH_PKG;
+/
+
+CREATE OR REPLACE PACKAGE BODY ADM.ADM_USER_AUTH_PKG AS
+    FUNCTION authenticate_user(
+        p_username IN VARCHAR2,
+        p_hashed_password IN VARCHAR2
+    ) RETURN SYS_REFCURSOR
+    IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        OPEN v_cursor FOR
+            SELECT u.id, u.username, u.person_id
+            FROM PU.PERSONUSER u
+            WHERE u.username = p_username
+            AND u.password = p_hashed_password;
+            
+        RETURN v_cursor;
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
+            RAISE;
+    END authenticate_user;
+END ADM_USER_AUTH_PKG;
+/
+
+-- ============================================================================
 -- GRANTS
 -- ============================================================================
 -- Package execution grants
@@ -745,3 +791,6 @@ GRANT SELECT ON ADM.PERSON_SEQ TO PU;
 
 -- Grants for user registration package
 GRANT EXECUTE ON ADM.ADM_USER_REGISTRATION_PKG TO PU;
+
+-- Package execution grants
+GRANT EXECUTE ON ADM.ADM_USER_AUTH_PKG TO PU;
