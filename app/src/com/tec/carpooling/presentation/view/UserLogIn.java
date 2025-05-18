@@ -29,44 +29,6 @@ import java.sql.SQLException;
 public class UserLogIn extends javax.swing.JFrame {
     private final UserLoginService userLoginService;
     
-    private void setupPlaceholder(JTextField textField, String placeholder) {
-        textField.setText(placeholder);
-        textField.setForeground(Color.GRAY);
-
-        textField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (textField.getText().equals(placeholder)) {
-                    textField.setText("");
-                    textField.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (textField.getText().isEmpty()) {
-                    textField.setForeground(Color.GRAY);
-                    textField.setText(placeholder);
-                }
-            }
-        });
-        
-        labelRegister.setForeground(Color.BLUE);
-        labelRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        labelRegister.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    UserSignUp signup = new UserSignUp();
-                    signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    signup.setVisible(true);
-
-                    UserLogIn.this.dispose();
-                });
-            }
-        });
-    }
-    
     /**
      * Constructor de la ventana de inicio de sesión
      */
@@ -82,7 +44,22 @@ public class UserLogIn extends javax.swing.JFrame {
 
         // Set the scaled image as icon
         labelImage.setIcon(new ImageIcon(scaledImage));
-        setupPlaceholder(textUsername, "example@domain.com");
+        
+        // Go to the Register page
+        labelRegister.setForeground(Color.BLUE);
+        labelRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        labelRegister.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    UserSignUp signup = new UserSignUp();
+                    signup.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    signup.setVisible(true);
+
+                    UserLogIn.this.dispose();
+                });
+            }
+        });
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
@@ -194,7 +171,7 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 140;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 0);
         panelPassword.add(textPassword, gridBagConstraints);
 
         labelPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -205,7 +182,7 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 0, 0);
         panelPassword.add(labelPassword, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -233,8 +210,8 @@ public class UserLogIn extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 30;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.ipadx = 6;
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 0);
         panelEmail.add(labelUserName, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
