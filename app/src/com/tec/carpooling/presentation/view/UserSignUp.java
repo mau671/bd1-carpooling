@@ -140,8 +140,6 @@ public class UserSignUp extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        labelLogIn = new javax.swing.JLabel();
-        buttonRegister = new javax.swing.JButton();
         labelRegister = new javax.swing.JLabel();
         buttonPhoto = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
@@ -183,7 +181,7 @@ public class UserSignUp extends javax.swing.JFrame {
         jComboBoxDomain = new javax.swing.JComboBox<>();
         jPanel38 = new javax.swing.JPanel();
         name_label12 = new javax.swing.JLabel();
-        textName1 = new javax.swing.JTextField();
+        textUsername = new javax.swing.JTextField();
         jPanel40 = new javax.swing.JPanel();
         name_label13 = new javax.swing.JLabel();
         textID = new javax.swing.JTextField();
@@ -193,42 +191,21 @@ public class UserSignUp extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         name_label5 = new javax.swing.JLabel();
         dateOfBirthPicker = new com.github.lgooddatepicker.components.DatePicker();
+        panelUsername = new javax.swing.JPanel();
+        labelUser = new javax.swing.JLabel();
+        textUser = new javax.swing.JTextField();
+        panelPassword = new javax.swing.JPanel();
+        textPassword = new javax.swing.JPasswordField();
+        labelPassword = new javax.swing.JLabel();
+        checkPassword = new javax.swing.JCheckBox();
+        jPanel5 = new javax.swing.JPanel();
+        buttonRegister = new javax.swing.JButton();
+        labelLogIn = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        labelLogIn.setText("Already have an account?");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 20, 0);
-        jPanel1.add(labelLogIn, gridBagConstraints);
-
-        buttonRegister.setText("Register");
-        buttonRegister.setBackground(new java.awt.Color(246, 172, 30));
-        buttonRegister.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonRegister.setForeground(new java.awt.Color(255, 255, 255));
-        buttonRegister.setMaximumSize(new java.awt.Dimension(85, 23));
-        buttonRegister.setMinimumSize(new java.awt.Dimension(85, 23));
-        buttonRegister.setPreferredSize(new java.awt.Dimension(90, 40));
-        buttonRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonRegisterActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 65;
-        gridBagConstraints.ipady = 27;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 120, 31, 0);
-        jPanel1.add(buttonRegister, gridBagConstraints);
 
         labelRegister.setText("REGISTER");
         labelRegister.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
@@ -241,13 +218,16 @@ public class UserSignUp extends javax.swing.JFrame {
         jPanel1.add(labelRegister, gridBagConstraints);
 
         buttonPhoto.setText("Add Photo");
+        buttonPhoto.setBackground(new java.awt.Color(18, 102, 160));
+        buttonPhoto.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonPhoto.setForeground(new java.awt.Color(255, 255, 255));
         buttonPhoto.setPreferredSize(new java.awt.Dimension(80, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.ipady = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 150, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 170, 0, 0);
         jPanel1.add(buttonPhoto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -302,7 +282,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
@@ -335,7 +314,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.ipadx = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -369,7 +347,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
@@ -398,7 +375,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel2.add(jPanel15, gridBagConstraints);
 
-        comboBoxID.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboBoxID.setPreferredSize(new java.awt.Dimension(90, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -411,7 +387,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel2, gridBagConstraints);
 
         jPanel3.setBackground(new java.awt.Color(225, 239, 255));
@@ -437,7 +412,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel3.add(jPanel28, gridBagConstraints);
 
-        comboBoxNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboBoxNumber.setPreferredSize(new java.awt.Dimension(90, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -450,7 +424,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel3, gridBagConstraints);
 
         jPanel4.setBackground(new java.awt.Color(225, 239, 255));
@@ -476,7 +449,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel4.add(jPanel30, gridBagConstraints);
 
-        comboBoxInstitution.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboBoxInstitution.setPreferredSize(new java.awt.Dimension(90, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -489,7 +461,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel4, gridBagConstraints);
 
         jPanel7.setBackground(new java.awt.Color(225, 239, 255));
@@ -516,7 +487,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel7.add(jPanel32, gridBagConstraints);
 
-        comboBoxGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         comboBoxGender.setPreferredSize(new java.awt.Dimension(90, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -564,7 +534,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel34, gridBagConstraints);
 
         jPanel36.setBackground(new java.awt.Color(225, 239, 255));
@@ -608,13 +577,12 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel36, gridBagConstraints);
 
         jPanel38.setBackground(new java.awt.Color(225, 239, 255));
         jPanel38.setLayout(new java.awt.GridBagLayout());
 
-        name_label12.setText("<html>First Name: <span style='color:red'>*</span></html>");
+        name_label12.setText("<html>Username: <span style='color:red'>*</span></html>");
         name_label12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -624,7 +592,7 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel38.add(name_label12, gridBagConstraints);
 
-        textName1.setPreferredSize(new java.awt.Dimension(150, 40));
+        textUsername.setPreferredSize(new java.awt.Dimension(150, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -633,16 +601,15 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 7;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
-        jPanel38.add(textName1, gridBagConstraints);
+        jPanel38.add(textUsername, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.ipadx = 23;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 130, 0, 0);
         jPanel1.add(jPanel38, gridBagConstraints);
 
         jPanel40.setBackground(new java.awt.Color(225, 239, 255));
@@ -675,7 +642,6 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 120, 0, 0);
         jPanel1.add(jPanel40, gridBagConstraints);
 
         jPanel8.setBackground(new java.awt.Color(225, 239, 255));
@@ -704,8 +670,10 @@ public class UserSignUp extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
         jPanel1.add(jPanel8, gridBagConstraints);
 
         jPanel6.setBackground(new java.awt.Color(225, 239, 255));
@@ -729,9 +697,126 @@ public class UserSignUp extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 0);
         jPanel1.add(jPanel6, gridBagConstraints);
+
+        panelUsername.setBackground(new java.awt.Color(225, 239, 255));
+        panelUsername.setLayout(new java.awt.GridBagLayout());
+
+        labelUser.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelUser.setText("<html>First Name: <span style='color:red'>*</span></html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        panelUsername.add(labelUser, gridBagConstraints);
+
+        textUser.setPreferredSize(new java.awt.Dimension(150, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 7;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 25, 0);
+        panelUsername.add(textUser, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 23;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
+        jPanel1.add(panelUsername, gridBagConstraints);
+
+        panelPassword.setBackground(new java.awt.Color(225, 239, 255));
+        panelPassword.setLayout(new java.awt.GridBagLayout());
+
+        textPassword.setPreferredSize(new java.awt.Dimension(134, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 7;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 5, 0);
+        panelPassword.add(textPassword, gridBagConstraints);
+
+        labelPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        labelPassword.setText("<html>Password: <span style='color:red'>*</span></html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
+        panelPassword.add(labelPassword, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 23;
+        gridBagConstraints.insets = new java.awt.Insets(0, 50, 0, 0);
+        jPanel1.add(panelPassword, gridBagConstraints);
+
+        checkPassword.setText("Show Password");
+        checkPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkPasswordActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 20);
+        jPanel1.add(checkPassword, gridBagConstraints);
+
+        jPanel5.setBackground(new java.awt.Color(225, 239, 255));
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        buttonRegister.setText("Register");
+        buttonRegister.setBackground(new java.awt.Color(246, 172, 30));
+        buttonRegister.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonRegister.setForeground(new java.awt.Color(255, 255, 255));
+        buttonRegister.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonRegister.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonRegister.setPreferredSize(new java.awt.Dimension(90, 40));
+        buttonRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRegisterActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 65;
+        gridBagConstraints.ipady = 27;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 30, 0);
+        jPanel5.add(buttonRegister, gridBagConstraints);
+
+        labelLogIn.setText("Already have an account?");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
+        jPanel5.add(labelLogIn, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 60, 0, 0);
+        jPanel1.add(jPanel5, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -759,7 +844,7 @@ public class UserSignUp extends javax.swing.JFrame {
             }
 
             // Obtener valores de los campos
-            String firstName = textName1.getText().trim();
+            String firstName = textUsername.getText().trim();
             String secondName = textName2.getText().trim();
             String firstSurname = textSurname1.getText().trim();
             String secondSurname = textSurname2.getText().trim();
@@ -845,12 +930,16 @@ public class UserSignUp extends javax.swing.JFrame {
      * @return true si todos los campos requeridos están completos, false en caso contrario
      */
     private boolean validateRequiredFields() {
-        if (textName1.getText().trim().isEmpty() ||
+        char[] passwordChars = textPassword.getPassword();
+        String password = new String(passwordChars).trim();
+        if (textUsername.getText().trim().isEmpty()    ||
             textSurname1.getText().trim().isEmpty() ||
-            textID.getText().trim().isEmpty() ||
-            textNumber.getText().trim().isEmpty() ||
-            textEmail.getText().trim().isEmpty() ||
-            dateOfBirthPicker.getDate() == null) {
+            textID.getText().trim().isEmpty()       ||
+            textNumber.getText().trim().isEmpty()   ||
+            textEmail.getText().trim().isEmpty()    ||
+            dateOfBirthPicker.getDate() == null     ||
+            textUsername.getText().trim().isEmpty() ||
+            password.isEmpty()) {
             
             JOptionPane.showMessageDialog(this,
                 "Please fill in all required fields.",
@@ -864,6 +953,14 @@ public class UserSignUp extends javax.swing.JFrame {
     private void textName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textName2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textName2ActionPerformed
+
+    private void checkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPasswordActionPerformed
+        if (checkPassword.isSelected()) {
+            textPassword.setEchoChar((char) 0); // Show characters
+        } else {
+            textPassword.setEchoChar('*'); // Hide with asterisks again
+        }
+    }//GEN-LAST:event_checkPasswordActionPerformed
  
     /**
      * @param args the command line arguments
@@ -903,16 +1000,17 @@ public class UserSignUp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonPhoto;
     private javax.swing.JButton buttonRegister;
-    private javax.swing.JComboBox<String> comboBoxGender;
-    private javax.swing.JComboBox<String> comboBoxID;
-    private javax.swing.JComboBox<String> comboBoxInstitution;
-    private javax.swing.JComboBox<String> comboBoxNumber;
+    private javax.swing.JCheckBox checkPassword;
+    private javax.swing.JComboBox<Gender> comboBoxGender;
+    private javax.swing.JComboBox<IdType> comboBoxID;
+    private javax.swing.JComboBox<Institution> comboBoxInstitution;
+    private javax.swing.JComboBox<PhoneType> comboBoxNumber;
     private com.github.lgooddatepicker.components.DatePicker dateOfBirthPicker;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.JComboBox<String> jComboBoxDomain;
+    private javax.swing.JComboBox<Domain> jComboBoxDomain;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel15;
@@ -929,11 +1027,14 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel labelLogIn;
+    private javax.swing.JLabel labelPassword;
     private javax.swing.JLabel labelRegister;
+    private javax.swing.JLabel labelUser;
     private javax.swing.JLabel name_label;
     private javax.swing.JLabel name_label10;
     private javax.swing.JLabel name_label11;
@@ -946,15 +1047,19 @@ public class UserSignUp extends javax.swing.JFrame {
     private javax.swing.JLabel name_label7;
     private javax.swing.JLabel name_label8;
     private javax.swing.JLabel name_label9;
+    private javax.swing.JPanel panelPassword;
+    private javax.swing.JPanel panelUsername;
     private javax.swing.JCheckBox termsCheckBox;
     private javax.swing.JLabel termsLink;
     private javax.swing.JTextField textEmail;
     private javax.swing.JTextField textID;
-    private javax.swing.JTextField textName1;
     private javax.swing.JTextField textName2;
     private javax.swing.JTextField textNumber;
+    private javax.swing.JPasswordField textPassword;
     private javax.swing.JTextField textSurname1;
     private javax.swing.JTextField textSurname2;
+    private javax.swing.JTextField textUser;
+    private javax.swing.JTextField textUsername;
     // End of variables declaration//GEN-END:variables
 
     /**
