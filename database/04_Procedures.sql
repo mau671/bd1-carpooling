@@ -1,503 +1,441 @@
--- ============================================================================
--- TYPES
--- ============================================================================
+-- Execute as ADM or a user with the right privileges
 CREATE OR REPLACE TYPE ADM.ID_TABLE_TYPE AS TABLE OF NUMBER;
 /
-
--- ============================================================================
--- PACKAGE: ADM_GENDER_PKG
--- Purpose: Manages operations related to genders in the system
--- ============================================================================
-CREATE OR REPLACE PACKAGE ADM.ADM_GENDER_PKG AS
-    TYPE ref_cursor_type IS REF CURSOR;
-    
-    FUNCTION get_all_genders
-    RETURN ref_cursor_type;
-END ADM_GENDER_PKG;
-/
-
-CREATE OR REPLACE PACKAGE BODY ADM.ADM_GENDER_PKG AS
-    FUNCTION get_all_genders
-    RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.GENDER
-            ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
-    END get_all_genders;
-END ADM_GENDER_PKG;
-/
-
--- ============================================================================
--- PACKAGE: ADM_ID_TYPE_PKG
--- Purpose: Manages operations related to identification types in the system
--- ============================================================================
-CREATE OR REPLACE PACKAGE ADM.ADM_ID_TYPE_PKG AS
-    TYPE ref_cursor_type IS REF CURSOR;
-    
-    FUNCTION get_all_id_types
-    RETURN ref_cursor_type;
-END ADM_ID_TYPE_PKG;
-/
-
-CREATE OR REPLACE PACKAGE BODY ADM.ADM_ID_TYPE_PKG AS
-    FUNCTION get_all_id_types
-    RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.TYPE_IDENTIFICATION
-            ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
-    END get_all_id_types;
-END ADM_ID_TYPE_PKG;
-/
-
--- ============================================================================
--- PACKAGE: ADM_PHONE_TYPE_PKG
--- Purpose: Manages operations related to phone types in the system
--- ============================================================================
-CREATE OR REPLACE PACKAGE ADM.ADM_PHONE_TYPE_PKG AS
-    TYPE ref_cursor_type IS REF CURSOR;
-    
-    FUNCTION get_all_phone_types
-    RETURN ref_cursor_type;
-END ADM_PHONE_TYPE_PKG;
-/
-
-CREATE OR REPLACE PACKAGE BODY ADM.ADM_PHONE_TYPE_PKG AS
-    FUNCTION get_all_phone_types
-    RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.TYPE_PHONE
-            ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
-    END get_all_phone_types;
-END ADM_PHONE_TYPE_PKG;
-/
-
--- ============================================================================
--- PACKAGE: ADM_DOMAIN_MGMT_PKG
--- Purpose: Manages operations related to domains in the system
--- ============================================================================
-CREATE OR REPLACE PACKAGE ADM.ADM_DOMAIN_MGMT_PKG AS
-    TYPE ref_cursor_type IS REF CURSOR;
-
-    PROCEDURE register_domain (
-        p_domain_name IN ADM.DOMAIN.name%TYPE,
-        o_domain_id   OUT ADM.DOMAIN.id%TYPE
-    );
-
-    PROCEDURE delete_domain (
-        p_domain_id IN ADM.DOMAIN.id%TYPE
-    );
-
-    FUNCTION find_domain_by_id_cursor (
-        p_domain_id IN ADM.DOMAIN.id%TYPE
-    ) RETURN ref_cursor_type;
-
-    FUNCTION find_all_domains_cursor
-    RETURN ref_cursor_type;
-END ADM_DOMAIN_MGMT_PKG;
-/
-
-CREATE OR REPLACE PACKAGE BODY ADM.ADM_DOMAIN_MGMT_PKG AS
-    PROCEDURE register_domain (
-        p_domain_name IN ADM.DOMAIN.name%TYPE,
-        o_domain_id   OUT ADM.DOMAIN.id%TYPE
-    ) AS
-        v_name ADM.DOMAIN.name%TYPE;
-    BEGIN
-        v_name := TRIM(LOWER(p_domain_name));
-        
-        IF v_name IS NULL THEN
-           RAISE_APPLICATION_ERROR(-20101, 'Domain name cannot be empty.');
-        END IF;
-
-        INSERT INTO ADM.DOMAIN (name) VALUES (v_name) RETURNING id INTO o_domain_id;
-        COMMIT;
-    EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN
-            ROLLBACK; 
-            RAISE_APPLICATION_ERROR(-20102, 'Domain ''' || v_name || ''' already exists.');
-        WHEN OTHERS THEN
-            ROLLBACK; 
-            RAISE;
-    END register_domain;
-
-    PROCEDURE delete_domain (
-        p_domain_id IN ADM.DOMAIN.id%TYPE
-    ) AS
-    BEGIN
-        DELETE FROM ADM.DOMAIN WHERE id = p_domain_id;
-        
-        IF SQL%ROWCOUNT = 0 THEN
-             RAISE_APPLICATION_ERROR(-20111, 'Domain with ID ' || p_domain_id || ' not found for deletion.');
-        END IF;
-        COMMIT;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF SQLCODE = -2292 THEN
-                ROLLBACK; 
-                RAISE_APPLICATION_ERROR(-20112, 'Cannot delete domain ID ' || p_domain_id || ' because it is associated with institutions.');
-            ELSE
-                ROLLBACK; 
-                RAISE;
-            END IF;
-    END delete_domain;
-
-    FUNCTION find_domain_by_id_cursor (
-        p_domain_id IN ADM.DOMAIN.id%TYPE
-    ) RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.DOMAIN
-            WHERE id = p_domain_id;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
-    END find_domain_by_id_cursor;
-
-    FUNCTION find_all_domains_cursor
-    RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.DOMAIN
-            ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
-            RAISE;
-    END find_all_domains_cursor;
-END ADM_DOMAIN_MGMT_PKG;
-/
-
--- ============================================================================
--- PACKAGE: ADM_INSTITUTION_MGMT_PKG
--- Purpose: Manages operations related to institutions in the system
--- ============================================================================
-CREATE OR REPLACE PACKAGE ADM.ADM_INSTITUTION_MGMT_PKG AS
-    TYPE ref_cursor_type IS REF CURSOR;
-
-    PROCEDURE create_institution (
-        p_institution_name IN ADM.INSTITUTION.name%TYPE,
-        o_institution_id   OUT ADM.INSTITUTION.id%TYPE
-    );
-
-    PROCEDURE update_institution_name (
-        p_institution_id   IN ADM.INSTITUTION.id%TYPE,
-        p_new_name         IN ADM.INSTITUTION.name%TYPE
-    );
-
-    PROCEDURE delete_institution (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE
-    );
-
-    FUNCTION find_institution_by_id_cursor (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE
-    ) RETURN ref_cursor_type;
-
-    FUNCTION find_all_institutions_cursor
-    RETURN ref_cursor_type;
-
-    PROCEDURE update_institution_domains (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE,
-        p_new_domain_ids IN ADM.ID_TABLE_TYPE
-    );
-
-    FUNCTION get_assoc_domain_ids_cur (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE
-    ) RETURN ref_cursor_type;
-END ADM_INSTITUTION_MGMT_PKG;
-/
-
-CREATE OR REPLACE PACKAGE BODY ADM.ADM_INSTITUTION_MGMT_PKG AS
-    PROCEDURE create_institution (
-        p_institution_name IN ADM.INSTITUTION.name%TYPE,
-        o_institution_id   OUT ADM.INSTITUTION.id%TYPE
-    ) AS
-    BEGIN
-        IF p_institution_name IS NULL OR TRIM(p_institution_name) IS NULL THEN
-            RAISE_APPLICATION_ERROR(-20041, 'Institution name cannot be empty.');
-        END IF;
-        
-        INSERT INTO ADM.INSTITUTION (name) 
-        VALUES (TRIM(p_institution_name)) 
-        RETURNING id INTO o_institution_id;
-        COMMIT;
-    EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN 
-            ROLLBACK; 
-            RAISE_APPLICATION_ERROR(-20042, 'Institution ''' || TRIM(p_institution_name) || ''' already exists.');
-        WHEN OTHERS THEN 
-            ROLLBACK; 
-            RAISE;
-    END create_institution;
-
-    PROCEDURE update_institution_name (
-        p_institution_id   IN ADM.INSTITUTION.id%TYPE,
-        p_new_name         IN ADM.INSTITUTION.name%TYPE
-    ) AS
-        v_name ADM.INSTITUTION.name%TYPE;
-    BEGIN
-        v_name := TRIM(p_new_name);
-        IF v_name IS NULL THEN 
-            RAISE_APPLICATION_ERROR(-20051, 'New institution name cannot be empty.'); 
-        END IF;
-        
-        UPDATE ADM.INSTITUTION 
-        SET name = v_name 
-        WHERE id = p_institution_id;
-        
-        IF SQL%ROWCOUNT = 0 THEN 
-            RAISE_APPLICATION_ERROR(-20052, 'Institution with ID ' || p_institution_id || ' not found for update.'); 
-        END IF;
-        COMMIT;
-    EXCEPTION
-        WHEN DUP_VAL_ON_INDEX THEN 
-            ROLLBACK; 
-            RAISE_APPLICATION_ERROR(-20053, 'The name ''' || v_name || ''' is already in use.');
-        WHEN OTHERS THEN 
-            ROLLBACK; 
-            RAISE;
-    END update_institution_name;
-
-    PROCEDURE delete_institution (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE
-    ) AS
-    BEGIN
-        DELETE FROM ADM.INSTITUTION_DOMAIN WHERE institution_id = p_institution_id;
-        DELETE FROM ADM.INSTITUTION WHERE id = p_institution_id;
-        
-        IF SQL%ROWCOUNT = 0 THEN 
-            RAISE_APPLICATION_ERROR(-20061, 'Institution with ID ' || p_institution_id || ' not found for deletion.'); 
-        END IF;
-        COMMIT;
-    EXCEPTION
-        WHEN OTHERS THEN
-            IF SQLCODE = -2292 THEN 
-                ROLLBACK; 
-                RAISE_APPLICATION_ERROR(-20062, 'Cannot delete institution ID ' || p_institution_id || ' because it is associated with users or other data.');
-            ELSE 
-                ROLLBACK; 
-                RAISE; 
-            END IF;
-    END delete_institution;
-
-    FUNCTION find_institution_by_id_cursor (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE
-    ) RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR 
-            SELECT id, name 
-            FROM ADM.INSTITUTION 
-            WHERE id = p_institution_id;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN 
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
-            RAISE;
-    END find_institution_by_id_cursor;
-
-    FUNCTION find_all_institutions_cursor
-    RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR 
-            SELECT id, name 
-            FROM ADM.INSTITUTION 
-            ORDER BY name;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN 
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
-            RAISE;
-    END find_all_institutions_cursor;
-
-    PROCEDURE update_institution_domains (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE,
-        p_new_domain_ids IN ADM.ID_TABLE_TYPE
-    ) AS
-        v_inst_count NUMBER;
-    BEGIN
-        SELECT COUNT(*) INTO v_inst_count 
-        FROM ADM.INSTITUTION 
-        WHERE id = p_institution_id;
-        
-        IF v_inst_count = 0 THEN 
-            RAISE_APPLICATION_ERROR(-20031, 'Institution with ID ' || p_institution_id || ' does not exist.'); 
-        END IF;
-        
-        DELETE FROM ADM.INSTITUTION_DOMAIN WHERE institution_id = p_institution_id;
-        
-        IF p_new_domain_ids IS NOT NULL AND p_new_domain_ids.COUNT > 0 THEN
-            BEGIN
-                FORALL i IN 1..p_new_domain_ids.COUNT
-                    INSERT INTO ADM.INSTITUTION_DOMAIN (institution_id, domain_id) 
-                    VALUES (p_institution_id, p_new_domain_ids(i));
-            EXCEPTION
-                WHEN OTHERS THEN 
-                    ROLLBACK; 
-                    RAISE_APPLICATION_ERROR(-20032, 'Error inserting new domain associations for Institution ID ' || 
-                                    p_institution_id || '. Verify domain IDs. Error: ' || SQLERRM);
-            END;
-        END IF;
-        COMMIT;
-    EXCEPTION 
-        WHEN OTHERS THEN 
-            ROLLBACK; 
-            RAISE;
-    END update_institution_domains;
-
-    FUNCTION get_assoc_domain_ids_cur (
-        p_institution_id IN ADM.INSTITUTION.id%TYPE
-    ) RETURN ref_cursor_type
-    AS
-        v_cursor ref_cursor_type;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT domain_id 
-            FROM ADM.INSTITUTION_DOMAIN 
-            WHERE institution_id = p_institution_id;
-        RETURN v_cursor;
-    EXCEPTION
-        WHEN OTHERS THEN 
-            IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
-            RAISE;
-    END get_assoc_domain_ids_cur;
-END ADM_INSTITUTION_MGMT_PKG;
-/
-
--- ============================================================================
--- PACKAGE: ADM_CATALOG_MGMT_PKG
--- Purpose: Manages operations related to catalog data in the system
--- ============================================================================
-CREATE OR REPLACE PACKAGE ADM.ADM_CATALOG_MGMT_PKG AS
-    FUNCTION find_all_genders_cursor RETURN SYS_REFCURSOR;
-    FUNCTION find_all_institutions_cursor RETURN SYS_REFCURSOR;
-    FUNCTION find_all_id_types_cursor RETURN SYS_REFCURSOR;
-    FUNCTION find_all_phone_types_cursor RETURN SYS_REFCURSOR;
-    FUNCTION find_domains_by_inst_cursor(p_institution_id IN NUMBER) RETURN SYS_REFCURSOR;
-END ADM_CATALOG_MGMT_PKG;
-/
-
-CREATE OR REPLACE PACKAGE BODY ADM.ADM_CATALOG_MGMT_PKG AS
-    FUNCTION find_all_genders_cursor RETURN SYS_REFCURSOR IS
-        v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.GENDER
-            ORDER BY name;
-        RETURN v_cursor;
-    END find_all_genders_cursor;
-    
-    FUNCTION find_all_institutions_cursor RETURN SYS_REFCURSOR IS
-        v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.INSTITUTION
-            ORDER BY name;
-        RETURN v_cursor;
-    END find_all_institutions_cursor;
-    
-    FUNCTION find_all_id_types_cursor RETURN SYS_REFCURSOR IS
-        v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.TYPE_IDENTIFICATION
-            ORDER BY name;
-        RETURN v_cursor;
-    END find_all_id_types_cursor;
-    
-    FUNCTION find_all_phone_types_cursor RETURN SYS_REFCURSOR IS
-        v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT id, name
-            FROM ADM.TYPE_PHONE
-            ORDER BY name;
-        RETURN v_cursor;
-    END find_all_phone_types_cursor;
-    
-    FUNCTION find_domains_by_inst_cursor(
-        p_institution_id IN NUMBER
-    ) RETURN SYS_REFCURSOR IS
-        v_cursor SYS_REFCURSOR;
-    BEGIN
-        OPEN v_cursor FOR
-            SELECT d.id, d.name
-            FROM ADM.DOMAIN d
-            JOIN ADM.INSTITUTION_DOMAIN id ON d.id = id.domain_id
-            WHERE id.institution_id = p_institution_id
-            ORDER BY d.name;
-        RETURN v_cursor;
-    END find_domains_by_inst_cursor;
-END ADM_CATALOG_MGMT_PKG;
-/
-
--- ============================================================================
--- GRANTS
--- ============================================================================
--- Package execution grants
-GRANT EXECUTE ON ADM.ADM_DOMAIN_MGMT_PKG TO PU;
-GRANT EXECUTE ON ADM.ADM_INSTITUTION_MGMT_PKG TO PU;
-GRANT EXECUTE ON ADM.ADM_CATALOG_MGMT_PKG TO PU;
-GRANT EXECUTE ON ADM.ADM_GENDER_PKG TO PU;
-GRANT EXECUTE ON ADM.ADM_ID_TYPE_PKG TO PU;
-GRANT EXECUTE ON ADM.ADM_PHONE_TYPE_PKG TO PU;
-
--- Data type grants
 GRANT EXECUTE ON ADM.ID_TABLE_TYPE TO PU;
+/
 
--- Table grants
-GRANT SELECT ON ADM.GENDER TO PU;
-GRANT SELECT ON ADM.INSTITUTION TO PU;
-GRANT SELECT ON ADM.TYPE_IDENTIFICATION TO PU;
-GRANT SELECT ON ADM.TYPE_PHONE TO PU;
-GRANT SELECT ON ADM.DOMAIN TO PU;
-GRANT SELECT ON ADM.INSTITUTION_DOMAIN TO PU;
-GRANT SELECT ON ADM.PERSON TO PU;
+---------------------------------------------------------------------------
+-- Package Specification: ADM_DOMAIN_MGMT_PKG
+-- Purpose: Manages operations related to domains in the system
+-- Author: System Administrator
+-- Created: [Date]
+---------------------------------------------------------------------------
+CREATE OR REPLACE PACKAGE ADM.ADM_DOMAIN_MGMT_PKG AS
 
--- Sequence grants
-GRANT SELECT ON ADM.GENDER_SEQ TO PU;
-GRANT SELECT ON ADM.INSTITUTION_SEQ TO PU;
-GRANT SELECT ON ADM.TYPE_IDENTIFICATION_SEQ TO PU;
-GRANT SELECT ON ADM.TYPE_PHONE_SEQ TO PU;
-GRANT SELECT ON ADM.DOMAIN_SEQ TO PU;
-GRANT SELECT ON ADM.PERSON_SEQ TO PU;
+  -- Cursor type for returning result sets
+  TYPE ref_cursor_type IS REF CURSOR;
+
+  /**
+  * Registers a new domain in the system
+  * 
+  * @param p_domain_name  The name of the domain to register
+  * @param o_domain_id    Output parameter returning the newly created domain ID
+  */
+  PROCEDURE register_domain (
+    p_domain_name IN ADM.DOMAIN.name%TYPE,
+    o_domain_id   OUT ADM.DOMAIN.id%TYPE
+  );
+
+  /**
+  * Deletes a domain by its ID
+  * 
+  * @param p_domain_id    The ID of the domain to delete
+  */
+  PROCEDURE delete_domain (
+    p_domain_id IN ADM.DOMAIN.id%TYPE
+  );
+
+  /**
+  * Finds a domain by its ID and returns a cursor
+  * 
+  * @param p_domain_id    The ID of the domain to find
+  * @return               A cursor containing the domain data
+  */
+  FUNCTION find_domain_by_id_cursor (
+    p_domain_id IN ADM.DOMAIN.id%TYPE
+  ) RETURN ref_cursor_type;
+
+  /**
+  * Retrieves all domains in the system
+  * 
+  * @return               A cursor containing all domains
+  */
+  FUNCTION find_all_domains_cursor
+  RETURN ref_cursor_type;
+
+END ADM_DOMAIN_MGMT_PKG;
+/
+
+---------------------------------------------------------------------------
+-- Package Body: ADM_DOMAIN_MGMT_PKG
+-- Implementation of domain management functionality
+---------------------------------------------------------------------------
+CREATE OR REPLACE PACKAGE BODY ADM.ADM_DOMAIN_MGMT_PKG AS
+
+  PROCEDURE register_domain (
+    p_domain_name IN ADM.DOMAIN.name%TYPE,
+    o_domain_id   OUT ADM.DOMAIN.id%TYPE
+  ) AS
+    v_name ADM.DOMAIN.name%TYPE;
+  BEGIN
+    -- Normalize the domain name (trim and lowercase)
+    v_name := TRIM(LOWER(p_domain_name));
+    
+    -- Validate input
+    IF v_name IS NULL THEN
+       RAISE_APPLICATION_ERROR(-20101, 'Domain name cannot be empty.');
+    END IF;
+
+    -- Insert the new domain and return the ID
+    INSERT INTO ADM.DOMAIN (name) VALUES (v_name) RETURNING id INTO o_domain_id;
+    COMMIT;
+  EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+      ROLLBACK; 
+      RAISE_APPLICATION_ERROR(-20102, 'Domain ''' || v_name || ''' already exists.');
+    WHEN OTHERS THEN
+      ROLLBACK; 
+      RAISE;
+  END register_domain;
+
+  PROCEDURE delete_domain (
+    p_domain_id IN ADM.DOMAIN.id%TYPE
+  ) AS
+  BEGIN
+    -- Delete the domain with the specified ID
+    DELETE FROM ADM.DOMAIN WHERE id = p_domain_id;
+    
+    -- Check if a domain was actually deleted
+    IF SQL%ROWCOUNT = 0 THEN
+         RAISE_APPLICATION_ERROR(-20111, 'Domain with ID ' || p_domain_id || ' not found for deletion.');
+    END IF;
+    COMMIT;
+  EXCEPTION
+    WHEN OTHERS THEN
+      -- Handle foreign key constraint violation
+      IF SQLCODE = -2292 THEN
+         ROLLBACK; 
+         RAISE_APPLICATION_ERROR(-20112, 'Cannot delete domain ID ' || p_domain_id || ' because it is associated with institutions.');
+      ELSE
+         ROLLBACK; 
+         RAISE;
+      END IF;
+  END delete_domain;
+
+  FUNCTION find_domain_by_id_cursor (
+    p_domain_id IN ADM.DOMAIN.id%TYPE
+  ) RETURN ref_cursor_type
+  AS
+    v_cursor ref_cursor_type;
+  BEGIN
+    -- Open a cursor with domain information
+    OPEN v_cursor FOR
+      SELECT id, name
+      FROM ADM.DOMAIN
+      WHERE id = p_domain_id;
+    RETURN v_cursor;
+  EXCEPTION
+     WHEN OTHERS THEN
+       -- Ensure cursor is closed on error
+       IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
+       RAISE;
+  END find_domain_by_id_cursor;
+
+  FUNCTION find_all_domains_cursor
+  RETURN ref_cursor_type
+  AS
+    v_cursor ref_cursor_type;
+  BEGIN
+    -- Open a cursor with all domains, sorted by name
+    OPEN v_cursor FOR
+      SELECT id, name
+      FROM ADM.DOMAIN
+      ORDER BY name;
+    RETURN v_cursor;
+  EXCEPTION
+    WHEN OTHERS THEN
+       -- Ensure cursor is closed on error
+       IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF;
+       RAISE;
+  END find_all_domains_cursor;
+
+END ADM_DOMAIN_MGMT_PKG;
+/
+
+-- Grant execution permission to the application user
+GRANT EXECUTE ON ADM.ADM_DOMAIN_MGMT_PKG TO PU;
+/
+
+---------------------------------------------------------------------------
+-- Package Specification: ADM_INSTITUTION_MGMT_PKG
+-- Purpose: Manages operations related to institutions in the system
+-- Author: System Administrator
+-- Created: [Date]
+---------------------------------------------------------------------------
+CREATE OR REPLACE PACKAGE ADM.ADM_INSTITUTION_MGMT_PKG AS
+
+  -- Types
+  TYPE ref_cursor_type IS REF CURSOR; -- Cursor Type
+
+  -- *** BASIC CRUD OPERATIONS FOR INSTITUTION ***
+  
+  /**
+  * Creates a new institution
+  * 
+  * @param p_institution_name  The name of the institution to create
+  * @param o_institution_id    Output parameter returning the newly created institution ID
+  */
+  PROCEDURE create_institution (
+      p_institution_name IN ADM.INSTITUTION.name%TYPE,
+      o_institution_id   OUT ADM.INSTITUTION.id%TYPE
+  );
+
+  /**
+  * Updates an institution's name
+  * 
+  * @param p_institution_id    The ID of the institution to update
+  * @param p_new_name          The new name for the institution
+  */
+  PROCEDURE update_institution_name (
+      p_institution_id   IN ADM.INSTITUTION.id%TYPE,
+      p_new_name         IN ADM.INSTITUTION.name%TYPE
+  );
+
+  /**
+  * Deletes an institution by its ID
+  * 
+  * @param p_institution_id    The ID of the institution to delete
+  */
+  PROCEDURE delete_institution (
+      p_institution_id IN ADM.INSTITUTION.id%TYPE
+  );
+
+  -- *** QUERY FUNCTIONS (Return Cursors) ***
+  
+  /**
+  * Finds an institution by its ID
+  * 
+  * @param p_institution_id    The ID of the institution to find
+  * @return                    A cursor containing the institution data
+  */
+  FUNCTION find_institution_by_id_cursor (
+      p_institution_id IN ADM.INSTITUTION.id%TYPE
+  ) RETURN ref_cursor_type;
+
+  /**
+  * Retrieves all institutions in the system
+  * 
+  * @return    A cursor containing all institutions
+  */
+  FUNCTION find_all_institutions_cursor
+  RETURN ref_cursor_type;
+
+  -- *** DOMAIN MANAGEMENT ***
+   
+  /**
+  * Updates the domains associated with an institution
+  * 
+  * @param p_institution_id    The ID of the institution to update
+  * @param p_new_domain_ids    Table of domain IDs to associate with the institution
+  */
+  PROCEDURE update_institution_domains (
+     p_institution_id IN ADM.INSTITUTION.id%TYPE,
+     p_new_domain_ids IN ADM.ID_TABLE_TYPE
+  );
+
+  /**
+  * Gets all domain IDs associated with an institution
+  * 
+  * @param p_institution_id    The ID of the institution
+  * @return                    A cursor containing the associated domain IDs
+  */
+  FUNCTION get_assoc_domain_ids_cur (
+     p_institution_id IN ADM.INSTITUTION.id%TYPE
+  ) RETURN ref_cursor_type;
+
+END ADM_INSTITUTION_MGMT_PKG;
+/
+
+
+---------------------------------------------------------------------------
+-- Package Body: ADM_INSTITUTION_MGMT_PKG
+-- Implementation of institution management functionality
+---------------------------------------------------------------------------
+CREATE OR REPLACE PACKAGE BODY ADM.ADM_INSTITUTION_MGMT_PKG AS
+
+  -- *** IMPLEMENTATION OF BASIC INSTITUTION CRUD OPERATIONS ***
+  PROCEDURE create_institution (
+      p_institution_name IN ADM.INSTITUTION.name%TYPE,
+      o_institution_id   OUT ADM.INSTITUTION.id%TYPE
+  ) AS
+  BEGIN
+      -- Validate input
+      IF p_institution_name IS NULL OR TRIM(p_institution_name) IS NULL THEN
+          RAISE_APPLICATION_ERROR(-20041, 'Institution name cannot be empty.');
+      END IF;
+      
+      -- Insert the new institution and return the ID
+      INSERT INTO ADM.INSTITUTION (name) 
+      VALUES (TRIM(p_institution_name)) 
+      RETURNING id INTO o_institution_id;
+      COMMIT;
+  EXCEPTION
+      WHEN DUP_VAL_ON_INDEX THEN 
+          ROLLBACK; 
+          RAISE_APPLICATION_ERROR(-20042, 'Institution ''' || TRIM(p_institution_name) || ''' already exists.');
+      WHEN OTHERS THEN 
+          ROLLBACK; 
+          RAISE;
+  END create_institution;
+
+  PROCEDURE update_institution_name (
+      p_institution_id   IN ADM.INSTITUTION.id%TYPE,
+      p_new_name         IN ADM.INSTITUTION.name%TYPE
+  ) AS
+    v_name ADM.INSTITUTION.name%TYPE;
+  BEGIN
+      -- Normalize and validate the new name
+      v_name := TRIM(p_new_name);
+      IF v_name IS NULL THEN 
+          RAISE_APPLICATION_ERROR(-20051, 'New institution name cannot be empty.'); 
+      END IF;
+      
+      -- Update the institution name
+      UPDATE ADM.INSTITUTION 
+      SET name = v_name 
+      WHERE id = p_institution_id;
+      
+      -- Check if an institution was actually updated
+      IF SQL%ROWCOUNT = 0 THEN 
+          RAISE_APPLICATION_ERROR(-20052, 'Institution with ID ' || p_institution_id || ' not found for update.'); 
+      END IF;
+      COMMIT;
+  EXCEPTION
+      WHEN DUP_VAL_ON_INDEX THEN 
+          ROLLBACK; 
+          RAISE_APPLICATION_ERROR(-20053, 'The name ''' || v_name || ''' is already in use.');
+      WHEN OTHERS THEN 
+          ROLLBACK; 
+          RAISE;
+  END update_institution_name;
+
+  PROCEDURE delete_institution (
+      p_institution_id IN ADM.INSTITUTION.id%TYPE
+  ) AS
+  BEGIN
+      -- First delete associated domain relations
+      DELETE FROM ADM.INSTITUTION_DOMAIN WHERE institution_id = p_institution_id;
+      
+      -- Then delete the institution itself
+      DELETE FROM ADM.INSTITUTION WHERE id = p_institution_id;
+      
+      -- Check if an institution was actually deleted
+      IF SQL%ROWCOUNT = 0 THEN 
+          RAISE_APPLICATION_ERROR(-20061, 'Institution with ID ' || p_institution_id || ' not found for deletion.'); 
+      END IF;
+      COMMIT;
+  EXCEPTION
+      WHEN OTHERS THEN
+          -- Handle foreign key constraint violation
+          IF SQLCODE = -2292 THEN 
+              ROLLBACK; 
+              RAISE_APPLICATION_ERROR(-20062, 'Cannot delete institution ID ' || p_institution_id || ' because it is associated with users or other data.');
+          ELSE 
+              ROLLBACK; 
+              RAISE; 
+          END IF;
+  END delete_institution;
+
+  -- *** IMPLEMENTATION OF INSTITUTION QUERY FUNCTIONS (WITH CURSOR) ***
+  FUNCTION find_institution_by_id_cursor (
+      p_institution_id IN ADM.INSTITUTION.id%TYPE
+  ) RETURN ref_cursor_type
+  AS
+      v_cursor ref_cursor_type;
+  BEGIN
+      -- Open a cursor with institution information
+      OPEN v_cursor FOR 
+          SELECT id, name 
+          FROM ADM.INSTITUTION 
+          WHERE id = p_institution_id;
+      RETURN v_cursor;
+  EXCEPTION
+      WHEN OTHERS THEN 
+          -- Ensure cursor is closed on error
+          IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
+          RAISE;
+  END find_institution_by_id_cursor;
+
+  FUNCTION find_all_institutions_cursor
+  RETURN ref_cursor_type
+  AS
+      v_cursor ref_cursor_type;
+  BEGIN
+      -- Open a cursor with all institutions, sorted by name
+      OPEN v_cursor FOR 
+          SELECT id, name 
+          FROM ADM.INSTITUTION 
+          ORDER BY name;
+      RETURN v_cursor;
+  EXCEPTION
+      WHEN OTHERS THEN 
+          -- Ensure cursor is closed on error
+          IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
+          RAISE;
+  END find_all_institutions_cursor;
+
+  -- *** IMPLEMENTATION OF DOMAIN MANAGEMENT (WITH CURSOR AND ARRAY) ***
+  PROCEDURE update_institution_domains (
+     p_institution_id IN ADM.INSTITUTION.id%TYPE,
+     p_new_domain_ids IN ADM.ID_TABLE_TYPE
+  ) AS
+     v_inst_count NUMBER;
+  BEGIN
+     -- Verify that the institution exists
+     SELECT COUNT(*) INTO v_inst_count 
+     FROM ADM.INSTITUTION 
+     WHERE id = p_institution_id;
+     
+     IF v_inst_count = 0 THEN 
+         RAISE_APPLICATION_ERROR(-20031, 'Institution with ID ' || p_institution_id || ' does not exist.'); 
+     END IF;
+     
+     -- Remove all current domain associations
+     DELETE FROM ADM.INSTITUTION_DOMAIN WHERE institution_id = p_institution_id;
+     
+     -- Add new domain associations if provided
+     IF p_new_domain_ids IS NOT NULL AND p_new_domain_ids.COUNT > 0 THEN
+       BEGIN
+         -- Use FORALL for bulk insert of new domain associations
+         FORALL i IN 1..p_new_domain_ids.COUNT
+           INSERT INTO ADM.INSTITUTION_DOMAIN (institution_id, domain_id) 
+           VALUES (p_institution_id, p_new_domain_ids(i));
+       EXCEPTION
+         WHEN OTHERS THEN 
+             ROLLBACK; 
+             RAISE_APPLICATION_ERROR(-20032, 'Error inserting new domain associations for Institution ID ' || 
+                                     p_institution_id || '. Verify domain IDs. Error: ' || SQLERRM);
+       END;
+     END IF;
+     COMMIT;
+  EXCEPTION 
+     WHEN OTHERS THEN 
+         ROLLBACK; 
+         RAISE;
+  END update_institution_domains;
+
+  FUNCTION get_assoc_domain_ids_cur (
+     p_institution_id IN ADM.INSTITUTION.id%TYPE
+  ) RETURN ref_cursor_type
+  AS
+     v_cursor ref_cursor_type;
+  BEGIN
+     -- Open a cursor with domain IDs associated with the institution
+     OPEN v_cursor FOR
+       SELECT domain_id 
+       FROM ADM.INSTITUTION_DOMAIN 
+       WHERE institution_id = p_institution_id;
+     RETURN v_cursor;
+  EXCEPTION
+     WHEN OTHERS THEN 
+         -- Ensure cursor is closed on error
+         IF v_cursor%ISOPEN THEN CLOSE v_cursor; END IF; 
+         RAISE;
+  END get_assoc_domain_ids_cur;
+
+END ADM_INSTITUTION_MGMT_PKG;
+/
+
+-- Grant execution permission to the application user
+GRANT EXECUTE ON ADM.ADM_INSTITUTION_MGMT_PKG TO PU;
+/

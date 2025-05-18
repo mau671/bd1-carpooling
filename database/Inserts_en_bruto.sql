@@ -1782,11 +1782,194 @@ VALUES (DISTRICT_SEQ.NEXTVAL, 80, 'Río Jiménez');
 INSERT INTO DISTRICT (id, canton_id, name)
 VALUES (DISTRICT_SEQ.NEXTVAL, 80, 'Duacari');
 
+-- Initial INSERTS for the application parameters
+INSERT INTO PARAMETER (id, name, value) VALUES (1, 'app_name', 'My Application');
+INSERT INTO PARAMETER (id, name, value) VALUES (2, 'app_version', '1.0.0');
+INSERT INTO PARAMETER (id, name, value) VALUES (3, 'app_description', 'This is a sample application.');
+INSERT INTO PARAMETER (id, name, value) VALUES (4, 'app_author', 'John Doe');
+INSERT INTO PARAMETER (id, name, value) VALUES (5, 'app_license', 'MIT');
+INSERT INTO PARAMETER (id, name, value) VALUES (6, 'app_website', 'https://example.com');
 
--- ==============================
--- ver las tablas
--- ==============================
-SELECT * FROM COUNTRY;
-SELECT * FROM PROVINCE;
-SELECT * FROM CANTON;
-SELECT * FROM DISTRICT;
+-- Insert the main institution
+INSERT INTO INSTITUTION (id, name) VALUES (INSTITUTION_SEQ.NEXTVAL, 'Costa Rica Institute of Technology');
+
+-- Insert domains associated with the institution
+INSERT INTO DOMAIN (id, name) VALUES (DOMAIN_SEQ.NEXTVAL, 'itcr.ac.cr');
+INSERT INTO DOMAIN (id, name) VALUES (DOMAIN_SEQ.NEXTVAL, 'tec.ac.cr');
+INSERT INTO DOMAIN (id, name) VALUES (DOMAIN_SEQ.NEXTVAL, 'estudiantec.cr');
+
+-- Establish relationships between institution and domains
+INSERT INTO INSTITUTION_DOMAIN (institution_id, domain_id) VALUES (1, 1);
+INSERT INTO INSTITUTION_DOMAIN (institution_id, domain_id) VALUES (1, 2);
+INSERT INTO INSTITUTION_DOMAIN (institution_id, domain_id) VALUES (1, 3);
+
+-- ===================================
+-- Person related data
+-- ===================================
+
+-- Insert gender options
+INSERT INTO GENDER (id, name) VALUES (GENDER_SEQ.NEXTVAL, 'Male');
+INSERT INTO GENDER (id, name) VALUES (GENDER_SEQ.NEXTVAL, 'Female');
+INSERT INTO GENDER (id, name) VALUES (GENDER_SEQ.NEXTVAL, 'Other');
+INSERT INTO GENDER (id, name) VALUES (GENDER_SEQ.NEXTVAL, 'Prefer not to say');
+
+-- Insert identification types
+INSERT INTO TYPE_IDENTIFICATION (id, name) VALUES (TYPE_IDENTIFICATION_SEQ.NEXTVAL, 'ID Card');
+INSERT INTO TYPE_IDENTIFICATION (id, name) VALUES (TYPE_IDENTIFICATION_SEQ.NEXTVAL, 'Passport');
+
+-- Insert phone types
+INSERT INTO TYPE_PHONE (id, name) VALUES (TYPE_PHONE_SEQ.NEXTVAL, 'Mobile');
+INSERT INTO TYPE_PHONE (id, name) VALUES (TYPE_PHONE_SEQ.NEXTVAL, 'Landline');
+INSERT INTO TYPE_PHONE (id, name) VALUES (TYPE_PHONE_SEQ.NEXTVAL, 'Fax');
+
+-- ===================================
+-- Payment and trip related data
+-- ===================================
+
+-- Insert payment methods
+INSERT INTO PAYMENTMETHOD (id, name) VALUES (PAYMENTMETHOD_SEQ.NEXTVAL, 'Credit Card');
+INSERT INTO PAYMENTMETHOD (id, name) VALUES (PAYMENTMETHOD_SEQ.NEXTVAL, 'Debit Card');
+INSERT INTO PAYMENTMETHOD (id, name) VALUES (PAYMENTMETHOD_SEQ.NEXTVAL, 'PayPal');
+INSERT INTO PAYMENTMETHOD (id, name) VALUES (PAYMENTMETHOD_SEQ.NEXTVAL, 'Sinpe Movil');
+INSERT INTO PAYMENTMETHOD (id, name) VALUES (PAYMENTMETHOD_SEQ.NEXTVAL, 'Cash');
+
+-- Insert currencies
+INSERT INTO PAYMENTMETHOD (id, name) VALUES (CURRENCY_SEQ.NEXTVAL, 'Colones');
+INSERT INTO PAYMENTMETHOD (id, name) VALUES (CURRENCY_SEQ.NEXTVAL, 'US Dollar');
+
+-- Insert trip status options
+INSERT INTO STATUS (id, name) VALUES (STATUS_SEQ.NEXTVAL, 'Pending');
+INSERT INTO STATUS (id, name) VALUES (STATUS_SEQ.NEXTVAL, 'In Progress');
+INSERT INTO STATUS (id, name) VALUES (STATUS_SEQ.NEXTVAL, 'Completed');
+INSERT INTO STATUS (id, name) VALUES (STATUS_SEQ.NEXTVAL, 'Cancelled');
+
+-- Insert vehicle capacity options
+INSERT INTO MAXCAPACITY (id, capacity_number) VALUES (MAXCAPACITY_SEQ.NEXTVAL, 1);
+INSERT INTO MAXCAPACITY (id, capacity_number) VALUES (MAXCAPACITY_SEQ.NEXTVAL, 2);
+INSERT INTO MAXCAPACITY (id, capacity_number) VALUES (MAXCAPACITY_SEQ.NEXTVAL, 3);
+INSERT INTO MAXCAPACITY (id, capacity_number) VALUES (MAXCAPACITY_SEQ.NEXTVAL, 4);
+INSERT INTO MAXCAPACITY (id, capacity_number) VALUES (MAXCAPACITY_SEQ.NEXTVAL, 5);
+INSERT INTO MAXCAPACITY (id, capacity_number) VALUES (MAXCAPACITY_SEQ.NEXTVAL, 6);
+
+-- ===================================
+-- User records
+-- ===================================
+
+-- Register the first administrator
+INSERT INTO PERSON (
+    id, 
+    first_name, 
+    second_name, 
+    first_surname, 
+    second_surname, 
+    identification_number,
+    date_of_birth, 
+    gender_id, 
+    type_identification_id
+) VALUES (
+    PERSON_SEQ.NEXTVAL, 
+    'Mauricio', 
+    NULL, 
+    'Gonzalez',
+    'Prendas', 
+    '604890987', 
+    TO_DATE('2004-12-13', 'YYYY-MM-DD'), 
+    1, 
+    1
+);
+
+-- Assign administrator role to the first user
+INSERT INTO ADMIN (person_id) VALUES (1);
+
+-- Register the first regular user
+INSERT INTO PERSON (
+    id, 
+    first_name, 
+    second_name, 
+    first_surname, 
+    second_surname, 
+    identification_number,
+    date_of_birth, 
+    gender_id, 
+    type_identification_id
+) VALUES (
+    PERSON_SEQ.NEXTVAL, 
+    'Carmen', 
+    NULL, 
+    'Hidalgo',
+    'Paz', 
+    '604890987', 
+    TO_DATE('2004-12-13', 'YYYY-MM-DD'), 
+    2, 
+    1
+);
+
+-- Add phone number for the regular user
+INSERT INTO PU.PHONE (id, phone_number, type_phone_id) VALUES (PU.PHONE_SEQ.NEXTVAL, '8888-8888', 1);
+
+-- Add email for the regular user
+INSERT INTO PU.EMAIL (id, name, person_id, domain_id) VALUES (PU.EMAIL_SEQ.NEXTVAL, 'carmenhidalgopaz', 3, 2);
+
+-- Assign administrator role to the second user
+INSERT INTO ADMIN (person_id) VALUES (2);
+
+-- Register the second regular user
+INSERT INTO PERSON (
+    id, 
+    first_name, 
+    second_name, 
+    first_surname, 
+    second_surname, 
+    identification_number,
+    date_of_birth, 
+    gender_id, 
+    type_identification_id
+) VALUES (
+    PERSON_SEQ.NEXTVAL, 
+    'Dylan', 
+    NULL, 
+    'Meza',
+    'Marin', 
+    '305390923', 
+    TO_DATE('2002-07-16', 'YYYY-MM-DD'), 
+    1, 
+    1
+);
+
+-- Add phone number for the regular user
+INSERT INTO PU.PHONE (id, phone_number, type_phone_id) VALUES (PU.PHONE_SEQ.NEXTVAL, '8888-8888', 1);
+
+-- Add email for the regular user
+INSERT INTO PU.EMAIL (id, name, person_id, domain_id) VALUES (PU.EMAIL_SEQ.NEXTVAL, 'dilanmezamarin', 3, 2);
+
+-- Assign administrator role to the second user
+INSERT INTO ADMIN (person_id) VALUES (3);
+
+
+INSERT INTO PERSON (
+    id, 
+    first_name, 
+    second_name, 
+    first_surname, 
+    second_surname, 
+    identification_number,
+    date_of_birth, 
+    gender_id, 
+    type_identification_id
+) VALUES (
+    PERSON_SEQ.NEXTVAL, 
+    'Jhon', 
+    NULL, 
+    'Doe',
+    'Doe', 
+    '101230123', 
+    TO_DATE('2000-01-01', 'YYYY-MM-DD'), 
+    1, 
+    1
+);
+
+-- Add email for the regular user
+-- Add email for the regular user
+INSERT INTO PU.EMAIL (id, name, person_id, domain_id) VALUES (PU.EMAIL_SEQ.NEXTVAL, 'jhondoe@itcr.ac.cr', 4, 2);
+
+INSERT INTO PU.PERSONUSER(ID, USERNAME, PASSWORD, PERSON_ID) VALUES(PU.PERSONUSER_SEQ.NEXTVAL,'jhondoe','password',4)

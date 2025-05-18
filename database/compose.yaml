@@ -30,7 +30,6 @@ services:
       ORACLE_PASSWORD: "carpooling"
     volumes:
       - ./data/:/u01/app/oracle/oradata
-      - ./tablespaces/:/tablespaces
     networks:
       db-carpooling:
         ipv4_address: 172.99.0.2

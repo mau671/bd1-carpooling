@@ -742,7 +742,31 @@ END;
 /
 
 -- ============================================
--- 12. Trigger for table PU.PASSENGER
+-- 12. Trigger for table PU.WAYPOINTXTRIP
+-- (No own ID with sequence)
+-- ============================================
+CREATE OR REPLACE TRIGGER PU.trg_waypointxtrip_audit
+BEFORE INSERT OR UPDATE ON PU.WAYPOINTXTRIP
+FOR EACH ROW
+BEGIN
+    IF INSERTING THEN
+        :NEW.creator := USER;
+        :NEW.creation_date := SYSDATE;
+        :NEW.modifier := USER;
+        :NEW.modification_date := SYSDATE;
+        INSERT INTO ADM.LOGS (id, description, creator, creation_date, modifier, modification_date, log_date)
+        VALUES (ADM.LOGS_SEQ.NEXTVAL, 'INSERT in PU.WAYPOINTXTRIP (TripID:'||:NEW.trip_id||', WaypointID:'||:NEW.waypoint_id||')', USER, SYSDATE, USER, SYSDATE, SYSDATE);
+    ELSIF UPDATING THEN
+        :NEW.modifier := USER;
+        :NEW.modification_date := SYSDATE;
+        INSERT INTO ADM.LOGS (id, description, creator, creation_date, modifier, modification_date, log_date)
+        VALUES (ADM.LOGS_SEQ.NEXTVAL, 'UPDATE in PU.WAYPOINTXTRIP (TripID:'||:NEW.trip_id||', WaypointID:'||:NEW.waypoint_id||')', USER, SYSDATE, USER, SYSDATE, SYSDATE);
+    END IF;
+END;
+/
+
+-- ============================================
+-- 13. Trigger for table PU.PASSENGER
 -- (No own ID with sequence, inherits person_id)
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_passenger_audit
@@ -766,7 +790,7 @@ END;
 /
 
 -- ============================================
--- 13. Trigger for table PU.DRIVER
+-- 14. Trigger for table PU.DRIVER
 -- (No own ID with sequence, inherits person_id)
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_driver_audit
@@ -790,7 +814,7 @@ END;
 /
 
 -- ============================================
--- 14. Trigger for table PU.PASSENGERXWAYPOINT
+-- 15. Trigger for table PU.PASSENGERXWAYPOINT
 -- (No own ID with sequence)
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_passengerxwaypoint_audit
@@ -814,7 +838,7 @@ END;
 /
 
 -- ============================================
--- 15. Trigger for table PU.VEHICLEXROUTE
+-- 16. Trigger for table PU.VEHICLEXROUTE
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_vehiclexroute_audit
 BEFORE INSERT OR UPDATE ON PU.VEHICLEXROUTE
@@ -840,7 +864,7 @@ END;
 /
 
 -- ============================================
--- 16. Trigger for table PU.DRIVERXVEHICLE
+-- 17. Trigger for table PU.DRIVERXVEHICLE
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_driverxvehicle_audit
 BEFORE INSERT OR UPDATE ON PU.DRIVERXVEHICLE
@@ -866,7 +890,7 @@ END;
 /
 
 -- ============================================
--- 17. Trigger for table PU.MAXCAPACITYXVEHICLE
+-- 18. Trigger for table PU.MAXCAPACITYXVEHICLE
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_maxcapacityxvehicle_audit
 BEFORE INSERT OR UPDATE ON PU.MAXCAPACITYXVEHICLE
@@ -892,7 +916,7 @@ END;
 /
 
 -- ============================================
--- 18. Trigger for table PU.PASSENGERXTRIP
+-- 19. Trigger for table PU.PASSENGERXTRIP
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_passengerxtrip_audit
 BEFORE INSERT OR UPDATE ON PU.PASSENGERXTRIP
@@ -918,7 +942,7 @@ END;
 /
 
 -- ============================================
--- 19. Trigger for table PU.PASSENGERXTRIPXPAYMENT
+-- 20. Trigger for table PU.PASSENGERXTRIPXPAYMENT
 -- ============================================
 CREATE OR REPLACE TRIGGER PU.trg_passxtripxpaY_audit
 BEFORE INSERT OR UPDATE ON PU.PASSENGERXTRIPXPAYMENT
