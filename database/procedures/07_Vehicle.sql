@@ -27,7 +27,8 @@ END PU_VEHICLE_MGMT_PKG;
 CREATE OR REPLACE PACKAGE BODY PU.PU_VEHICLE_MGMT_PKG AS
 
     -- Procedure to add a vehicle
-    PROCEDURE create_vehicle (p_plate IN PU.VEHICLE.plate%TYPE) AS
+    PROCEDURE create_vehicle (p_plate      IN PU.VEHICLE.plate%TYPE,
+                              o_vehicle_id OUT PU.VEHICLE.id%TYPE) AS
     BEGIN
         -- Insert into VEHICLE table
         -- Assuming sequence/trigger for ID and auditing

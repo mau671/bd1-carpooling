@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -16,13 +18,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ViewTrip extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form Trips
      */
-    public ViewTrip(String role) {
+    public ViewTrip(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
         DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
         // Add sample rows if needed
@@ -194,7 +198,7 @@ public class ViewTrip extends javax.swing.JFrame {
             Object valorColumna1 = tableTrips.getValueAt(row, 0); // Columna 0
             Object valorColumna2 = tableTrips.getValueAt(row, 1); // Columna 1
             javax.swing.SwingUtilities.invokeLater(() -> {
-                ModifyTrip modify = new ModifyTrip(userRole);
+                ModifyTrip modify = new ModifyTrip(userRole, user);
                 modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 modify.setVisible(true);
 
@@ -207,7 +211,7 @@ public class ViewTrip extends javax.swing.JFrame {
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            ScheduleTrip add = new ScheduleTrip(userRole);
+            ScheduleTrip add = new ScheduleTrip(userRole, user);
             add.setExtendedState(JFrame.MAXIMIZED_BOTH);
             add.setVisible(true);
 
@@ -246,9 +250,11 @@ public class ViewTrip extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new ViewTrip(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new ViewTrip(userRole, user).setVisible(true);
             }
         });
     }

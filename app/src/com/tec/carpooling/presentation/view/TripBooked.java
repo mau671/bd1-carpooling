@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import javax.swing.JCheckBox;
 
@@ -17,13 +19,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TripBooked extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form TripBooked
      */
-    public TripBooked(String role) {
+    public TripBooked(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
         DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
         // Add sample rows if needed
@@ -192,7 +196,7 @@ public class TripBooked extends javax.swing.JFrame {
 
     private void buttonBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBookActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            SearchTrip search = new SearchTrip(userRole);
+            SearchTrip search = new SearchTrip(userRole, user);
             search.setExtendedState(JFrame.MAXIMIZED_BOTH);
             search.setVisible(true);
 
@@ -249,9 +253,11 @@ public class TripBooked extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new TripBooked(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new TripBooked(userRole, user).setVisible(true);
             }
         });
     }

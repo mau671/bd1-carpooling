@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
@@ -24,13 +26,15 @@ import javax.swing.JToolBar;
  */
 public class ModifyProfile extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form ModificarPerfil
      */
-    public ModifyProfile(String role) {
+    public ModifyProfile(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         customizeDatePicker();
         
         textID.addKeyListener(new KeyAdapter() {
@@ -794,7 +798,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         }
         JOptionPane.showMessageDialog(null, "Changes applied successfully!");
         javax.swing.SwingUtilities.invokeLater(() -> {
-            UserProfile profile = new UserProfile(userRole);
+            UserProfile profile = new UserProfile(userRole, user);
             profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
             profile.setVisible(true);
 
@@ -927,9 +931,11 @@ public class ModifyProfile extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new ModifyProfile(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new ModifyProfile(userRole, user).setVisible(true);
             }
         });
     }

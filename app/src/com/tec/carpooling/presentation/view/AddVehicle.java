@@ -4,9 +4,17 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.data.dao.MaxCapacityDAO;
+import com.tec.carpooling.domain.entity.MaxCapacity;
+import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.business.service.VehicleService;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import java.util.List;
+import java.sql.SQLException;
 
 /**
  *
@@ -14,13 +22,15 @@ import javax.swing.*;
  */
 public class AddVehicle extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form AgregarVehiculo
      */
-    public AddVehicle(String role) {
+    public AddVehicle(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         // Load the image
         ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/carro.png"));
 
@@ -38,6 +48,16 @@ public class AddVehicle extends javax.swing.JFrame {
                 }
             }
         });
+        
+        try {
+            List<MaxCapacity> capacityList = new MaxCapacityDAO().getAllCapacities();
+            boxCapacity.removeAllItems(); // Clear default values
+            for (MaxCapacity cap : capacityList) {
+                boxCapacity.addItem(cap); // toString() will be used
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Failed to load capacities: " + e.getMessage());
+        }
         
     }
 
@@ -71,6 +91,7 @@ public class AddVehicle extends javax.swing.JFrame {
         setBackground(new java.awt.Color(204, 255, 51));
         setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
 
+        panelAddVehicle.setBackground(new java.awt.Color(225, 239, 255));
         panelAddVehicle.setLayout(new java.awt.GridLayout(1, 2, 2, 0));
 
         jPanel1.setBackground(new java.awt.Color(225, 239, 255));
@@ -165,7 +186,6 @@ public class AddVehicle extends javax.swing.JFrame {
         panelCapacity.setPreferredSize(new java.awt.Dimension(201, 60));
         panelCapacity.setLayout(new java.awt.GridBagLayout());
 
-        boxCapacity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -217,21 +237,37 @@ public class AddVehicle extends javax.swing.JFrame {
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         String plate = textPlate.getText().trim();
+        MaxCapacity selected = (MaxCapacity) boxCapacity.getSelectedItem();
 
         // Check if any field is empty
         if (plate.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
             return;
         }
-        JOptionPane.showMessageDialog(null, "Vehicle added successfully!");
-        // Go back to vehicle registration screen
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            RegisteredVehicle registry = new RegisteredVehicle(userRole);
-            registry.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            registry.setVisible(true);
+        try {
+            VehicleService vs = new VehicleService();
 
-            AddVehicle.this.dispose();
-        });
+            long vehicleId = vs.addVehicle(plate);
+            vs.assignCapacity(vehicleId, selected.getId());
+            vs.assignToDriver(vehicleId, user.getPersonId());
+
+            JOptionPane.showMessageDialog(null, "Vehicle added successfully!");
+
+            // Go to registered vehicle screen
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                RegisteredVehicle registry = new RegisteredVehicle(userRole, user);
+                registry.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                registry.setVisible(true);
+                AddVehicle.this.dispose();
+            });
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Unexpected error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_buttonAddActionPerformed
 
     private void textPlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPlateActionPerformed
@@ -269,15 +305,17 @@ public class AddVehicle extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new AddVehicle(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new AddVehicle(userRole, user).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> boxCapacity;
+    private javax.swing.JComboBox<MaxCapacity> boxCapacity;
     private javax.swing.JButton buttonAdd;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;

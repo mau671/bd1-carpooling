@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,13 +17,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class RegisteredVehicle extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form RegisteredVehicle
      */
-    public RegisteredVehicle(String role) {
+    public RegisteredVehicle(String role, User user) {
         this.userRole = role;
+        this.user = user;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
         DefaultTableModel model = (DefaultTableModel) tableVehicles.getModel();
         // Add sample rows if needed
@@ -158,7 +162,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            AddVehicle add = new AddVehicle(userRole);
+            AddVehicle add = new AddVehicle(userRole, user);
             add.setExtendedState(JFrame.MAXIMIZED_BOTH);
             add.setVisible(true);
 
@@ -172,7 +176,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
             Object valorColumna1 = tableVehicles.getValueAt(row, 0); // Columna 0
             Object valorColumna2 = tableVehicles.getValueAt(row, 1); // Columna 1
             javax.swing.SwingUtilities.invokeLater(() -> {
-            ModifyVehicle modify = new ModifyVehicle(userRole);
+            ModifyVehicle modify = new ModifyVehicle(userRole, user);
             modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
             modify.setVisible(true);
 
@@ -213,9 +217,11 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new RegisteredVehicle(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new RegisteredVehicle(userRole, user).setVisible(true);
             }
         });
     }

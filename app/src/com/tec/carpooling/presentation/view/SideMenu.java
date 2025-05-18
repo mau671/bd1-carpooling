@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import javax.swing.*;
 import java.awt.*;
 /**
@@ -12,7 +14,7 @@ import java.awt.*;
  */
 public class SideMenu {
 
-    public static JToolBar createToolbar(JFrame parentFrame, String userRole) {
+    public static JToolBar createToolbar(JFrame parentFrame, String userRole, User user) {
         Color menuBlue = new Color(18, 102, 160);
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
         toolBar.setFloatable(false);
@@ -55,42 +57,42 @@ public class SideMenu {
 
         // ActionListeners
         profileButton.addActionListener(e -> {
-            UserProfile profile = new UserProfile(userRole);
+            UserProfile profile = new UserProfile(userRole, user);
             profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
             profile.setVisible(true);
             parentFrame.dispose();
         });
 
         tripBookedButton.addActionListener(e -> {
-            TripBooked search = new TripBooked(userRole);
+            TripBooked search = new TripBooked(userRole, user);
             search.setExtendedState(JFrame.MAXIMIZED_BOTH);
             search.setVisible(true);
             parentFrame.dispose();
         });
 
         searchTripButton.addActionListener(e -> {
-            SearchTrip search = new SearchTrip(userRole);
+            SearchTrip search = new SearchTrip(userRole, user);
             search.setExtendedState(JFrame.MAXIMIZED_BOTH);
             search.setVisible(true);
             parentFrame.dispose();
         });
 
         vehicleInfoButton.addActionListener(e -> {
-            RegisteredVehicle vehicle = new RegisteredVehicle(userRole);
+            RegisteredVehicle vehicle = new RegisteredVehicle(userRole, user);
             vehicle.setExtendedState(JFrame.MAXIMIZED_BOTH);
             vehicle.setVisible(true);
             parentFrame.dispose();
         });
 
         tripButton.addActionListener(e -> {
-            ViewTrip trips = new ViewTrip(userRole);
+            ViewTrip trips = new ViewTrip(userRole, user);
             trips.setExtendedState(JFrame.MAXIMIZED_BOTH);
             trips.setVisible(true);
             parentFrame.dispose();
         });
 
         logButton.addActionListener(e -> {
-            UserLog log = new UserLog(userRole);
+            UserLog log = new UserLog(userRole, user);
             log.setExtendedState(JFrame.MAXIMIZED_BOTH);
             log.setVisible(true);
             parentFrame.dispose();
@@ -105,7 +107,7 @@ public class SideMenu {
 
         switchRoleButton.addActionListener(e -> {
             String newRole = userRole.equals("Passenger") ? "Driver" : "Passenger";
-            UserProfile profile = new UserProfile(newRole);
+            UserProfile profile = new UserProfile(newRole, user);
             profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
             profile.setVisible(true);
             parentFrame.dispose();

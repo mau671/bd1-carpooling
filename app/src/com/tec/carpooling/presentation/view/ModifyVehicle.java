@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
@@ -18,13 +20,15 @@ import javax.swing.JFrame;
  */
 public class ModifyVehicle extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form AddVehicle
      */
-    public ModifyVehicle(String role) {
+    public ModifyVehicle(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         // Load the image
         ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/carro.png"));
 
@@ -214,7 +218,7 @@ public class ModifyVehicle extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Changes saved successfully!");
         // Go back to vehicle registration screen
         javax.swing.SwingUtilities.invokeLater(() -> {
-            RegisteredVehicle registry = new RegisteredVehicle(userRole);
+            RegisteredVehicle registry = new RegisteredVehicle(userRole, user);
             registry.setExtendedState(JFrame.MAXIMIZED_BOTH);
             registry.setVisible(true);
 
@@ -255,9 +259,11 @@ public class ModifyVehicle extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new ModifyVehicle(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new ModifyVehicle(userRole, user).setVisible(true);
             }
         });
     }
