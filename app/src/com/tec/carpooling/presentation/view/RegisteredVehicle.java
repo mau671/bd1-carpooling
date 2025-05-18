@@ -7,6 +7,7 @@ package com.tec.carpooling.presentation.view;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,6 +22,10 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         this.userRole = role;
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        
+        DefaultTableModel model = (DefaultTableModel) tableVehicles.getModel();
+        // Add sample rows if needed
+        model.setRowCount(0);  // This removes all rows
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }

@@ -28,10 +28,7 @@ public class TripBooked extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
         // Add sample rows if needed
         model.setRowCount(0);  // This removes all rows
-        model.addRow(new Object[]{"May 12, 2025", "Trip D", "09:00 AM", "zdfh","Scheduled", "More Info"});
-        model.addRow(new Object[]{"May 11, 2025", "Trip C", "11:00 AM", "holaaa", "Ongoing", "More Info"});
-        model.addRow(new Object[]{"April 24, 2025", "Trip B", "08:00 PM", "QUE", "Canceled", "More Info"});
-        model.addRow(new Object[]{"January 11, 2025", "Trip A", "05:00 PM", "loco", "Completed", "More Info"});
+        model.addRow(new Object[]{"May 12, 2025", "Trip D", "09:00 AM", "zdfh","hellooo", "Pending", "More Info"});
         
         // Assign custom renderer/editor to the "More Info" column
         int infoColumn = tableTrips.getColumnCount() - 1;
@@ -91,13 +88,13 @@ public class TripBooked extends javax.swing.JFrame {
 
         tableTrips.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Date of Trip", "Start Point", "Destination Point", "Vehicle Plate", "Status", "More Info"
+                "Date of Trip", "Start Point", "Destination Point", "Pick Up Point", "Vehicle Plate", "Status", "More Info"
             }
         ));
         scrollTrips.setViewportView(tableTrips);
@@ -208,14 +205,14 @@ public class TripBooked extends javax.swing.JFrame {
 
         if (row != -1) {
             // Check the "Status" column (adjust index if needed)
-            Object statusObj = tableTrips.getValueAt(row, 4); // Check Status Column
+            Object statusObj = tableTrips.getValueAt(row, 5); // Check Status Column
             String status = statusObj != null ? statusObj.toString() : "";
 
-            if (status.equals("Scheduled")) {
-                // Continue only if status is "Scheduled"
+            if (status.equals("Pending")) {
+                // Continue only if status is "Pending"
                 JOptionPane.showMessageDialog(this, "Booking canceled successfully!");
             } else {
-                JOptionPane.showMessageDialog(this, "Only trips with status 'Scheduled' can be canceled.");
+                JOptionPane.showMessageDialog(this, "Only trips with status 'Pending' can be canceled.");
             }
         } else {
             JOptionPane.showMessageDialog(this, "A row must be selected.");

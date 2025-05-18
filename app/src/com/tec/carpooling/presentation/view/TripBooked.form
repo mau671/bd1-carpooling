@@ -84,10 +84,11 @@
                 <Component class="javax.swing.JTable" name="tableTrips">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="6" rowCount="4">
+                      <Table columnCount="7" rowCount="4">
                         <Column editable="true" title="Date of Trip" type="java.lang.Object"/>
                         <Column editable="true" title="Start Point" type="java.lang.Object"/>
                         <Column editable="true" title="Destination Point" type="java.lang.Object"/>
+                        <Column editable="true" title="Pick Up Point" type="java.lang.Object"/>
                         <Column editable="true" title="Vehicle Plate" type="java.lang.Object"/>
                         <Column editable="true" title="Status" type="java.lang.Object"/>
                         <Column editable="true" title="More Info" type="java.lang.Object"/>

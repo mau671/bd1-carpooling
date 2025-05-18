@@ -27,10 +27,6 @@ public class ViewTrip extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
         // Add sample rows if needed
         model.setRowCount(0);  // This removes all rows
-        model.addRow(new Object[]{"May 12, 2025", "Trip D", "09:00 AM", "zdfh","Scheduled", "More Info"});
-        model.addRow(new Object[]{"May 11, 2025", "Trip C", "11:00 AM", "holaaa", "Ongoing", "More Info"});
-        model.addRow(new Object[]{"April 24, 2025", "Trip B", "08:00 PM", "QUE", "Canceled", "More Info"});
-        model.addRow(new Object[]{"January 11, 2025", "Trip A", "05:00 PM", "loco", "Completed", "More Info"});
         
         // Assign custom renderer/editor to the "More Info" column
         int infoColumn = tableTrips.getColumnCount() - 1;
