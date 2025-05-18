@@ -29,9 +29,24 @@
             <Property name="text" type="java.lang.String" value="Catalogs"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManageGenres">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Manage Genres"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManageIdentificationTypes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Manage ID Types"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManagePhoneTypes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Manage Phone Types"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManageCurrencys">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Manage Currencys"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -41,14 +56,19 @@
             <Property name="text" type="java.lang.String" value="System"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemParameters">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Parameters"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemLogs">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Logs"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemStadistics">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Stadistics"/>
               </Properties>
             </MenuItem>
           </SubComponents>

@@ -4,18 +4,68 @@
  */
 package com.tec.carpooling.presentation.view.admin;
 
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author mauricio
  */
 public class Domains extends javax.swing.JDialog {
+    private final int institutionId;
+    private final String institutionName;
+    private final DefaultTableModel tableModel;
+    private int selectedDomainId = -1;
+    private String selectedDomainName = "";
 
     /**
      * Creates new form Domains
      */
-    public Domains(java.awt.Frame parent, boolean modal) {
+    public Domains(javax.swing.JFrame parent, boolean modal, int institutionId, String institutionName) {
         super(parent, modal);
+        this.institutionId = institutionId;
+        this.institutionName = institutionName;
+        this.tableModel = new DefaultTableModel(
+            new Object [][] {},
+            new String [] {
+                "ID", "Domain", "Enabled"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        
         initComponents();
+        setLocationRelativeTo(parent);
+        setTitle("Manage Domains - " + institutionName);
+        loadDomains();
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
     }
 
     /**
@@ -31,6 +81,11 @@ public class Domains extends javax.swing.JDialog {
         jTableVerServicios = new javax.swing.JTable();
         jButtonAceptar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
+        jLabelDomainName = new javax.swing.JLabel();
+        jTextFieldDomainName = new javax.swing.JTextField();
+        jButtonDomainSave = new javax.swing.JButton();
+        jButtonDomainUpdate = new javax.swing.JButton();
+        jButtonDomainDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -73,46 +128,297 @@ public class Domains extends javax.swing.JDialog {
             }
         });
 
+        jLabelDomainName.setText("Name");
+
+        jButtonDomainSave.setText("Save");
+        jButtonDomainSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDomainSaveActionPerformed(evt);
+            }
+        });
+
+        jButtonDomainUpdate.setText("Update");
+        jButtonDomainUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDomainUpdateActionPerformed(evt);
+            }
+        });
+
+        jButtonDomainDelete.setText("Delete");
+        jButtonDomainDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDomainDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(35, 35, 35)
+                            .addComponent(jButtonAceptar)
+                            .addGap(28, 28, 28)
+                            .addComponent(jButtonCancelar))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
-                        .addComponent(jButtonAceptar)
-                        .addGap(28, 28, 28)
-                        .addComponent(jButtonCancelar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(72, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(65, 65, 65)
+                                .addComponent(jLabelDomainName)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldDomainName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jButtonDomainUpdate)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonDomainDelete)
+                            .addComponent(jButtonDomainSave))))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelDomainName)
+                    .addComponent(jTextFieldDomainName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonDomainSave))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonDomainUpdate)
+                    .addComponent(jButtonDomainDelete))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAceptar)
                     .addComponent(jButtonCancelar))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+    private void loadDomains() {
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("{ ? = call ADM.ADM_INST_DOM_PKG.get_avail_dom(?) }")) {
+            
+            stmt.registerOutParameter(1, java.sql.Types.REF_CURSOR);
+            stmt.setInt(2, institutionId);
+            stmt.execute();
+            
+            ResultSet rs = (ResultSet) stmt.getObject(1);
+            tableModel.setRowCount(0);
+            
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getInt("enabled") == 1
+                });
+            }
+            
+            jTableVerServicios.setModel(tableModel);
+            jTableVerServicios.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableVerServicios.getColumnModel().getColumn(1).setPreferredWidth(200);
+            jTableVerServicios.getColumnModel().getColumn(2).setPreferredWidth(80);
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error loading domains: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-        dispose();
-    }//GEN-LAST:event_jButtonAceptarActionPerformed
+    private void saveDomainChanges() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                int domainId = (int) tableModel.getValueAt(i, 0);
+                boolean enabled = (boolean) tableModel.getValueAt(i, 2);
+                
+                CallableStatement stmt;
+                if (enabled) {
+                    stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.add_dom_to_inst(?, ?) }");
+                } else {
+                    stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.rem_dom_from_inst(?, ?) }");
+                }
+                
+                stmt.setInt(1, institutionId);
+                stmt.setInt(2, domainId);
+                stmt.execute();
+            }
+            
+            JOptionPane.showMessageDialog(this,
+                "Domain associations updated successfully.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error saving domain changes: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
-        // Cerrar la ventana sin hacer nada
+    private void addNewDomain() {
+        String domainName = jTextFieldDomainName.getText().trim();
+        if (domainName.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Domain name cannot be empty.",
+                "Invalid Input",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+            
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.create_dom(?, ?) }")) {
+            
+            stmt.setString(1, domainName);
+            stmt.registerOutParameter(2, java.sql.Types.INTEGER);
+            stmt.execute();
+            
+            int newDomainId = stmt.getInt(2);
+            tableModel.addRow(new Object[]{newDomainId, domainName, false});
+            jTextFieldDomainName.setText("");
+            
+            JOptionPane.showMessageDialog(this,
+                "Domain added successfully.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error adding domain: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void editSelectedDomain() {
+        if (selectedDomainId == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select a domain to edit.",
+                "No Selection",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String newName = jTextFieldDomainName.getText().trim();
+        if (newName.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Domain name cannot be empty.",
+                "Invalid Input",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+            
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.update_dom(?, ?) }")) {
+            
+            stmt.setInt(1, selectedDomainId);
+            stmt.setString(2, newName);
+            stmt.execute();
+            
+            // Update the table
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                if ((int) tableModel.getValueAt(i, 0) == selectedDomainId) {
+                    tableModel.setValueAt(newName, i, 1);
+                    break;
+                }
+            }
+            
+            jTextFieldDomainName.setText("");
+            selectedDomainId = -1;
+            selectedDomainName = "";
+            
+            JOptionPane.showMessageDialog(this,
+                "Domain updated successfully.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error updating domain: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void deleteSelectedDomain() {
+        if (selectedDomainId == -1) {
+            JOptionPane.showMessageDialog(this,
+                "Please select a domain to delete.",
+                "No Selection",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to delete this domain?",
+            "Confirm Delete",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+            
+        if (confirm == JOptionPane.YES_OPTION) {
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.delete_dom(?) }")) {
+                
+                stmt.setInt(1, selectedDomainId);
+                stmt.execute();
+                
+                // Remove from table
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    if ((int) tableModel.getValueAt(i, 0) == selectedDomainId) {
+                        tableModel.removeRow(i);
+                        break;
+                    }
+                }
+                
+                jTextFieldDomainName.setText("");
+                selectedDomainId = -1;
+                selectedDomainName = "";
+                
+                JOptionPane.showMessageDialog(this,
+                    "Domain deleted successfully.",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this,
+                    "Error deleting domain: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {
+        saveDomainChanges();
         dispose();
-    }//GEN-LAST:event_jButtonCancelarActionPerformed
+    }
+
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {
+        dispose();
+    }
+
+    private void jButtonDomainSaveActionPerformed(java.awt.event.ActionEvent evt) {
+        addNewDomain();
+    }
+
+    private void jButtonDomainUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+        editSelectedDomain();
+    }
+
+    private void jButtonDomainDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+        deleteSelectedDomain();
+    }
 
     /**
      * @param args the command line arguments
@@ -144,7 +450,8 @@ public class Domains extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Domains dialog = new Domains(new javax.swing.JFrame(), true);
+                javax.swing.JFrame parentFrame = new javax.swing.JFrame();
+                Domains dialog = new Domains(parentFrame, true, 1, "Test Institution");
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -159,7 +466,12 @@ public class Domains extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAceptar;
     private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonDomainDelete;
+    private javax.swing.JButton jButtonDomainSave;
+    private javax.swing.JButton jButtonDomainUpdate;
+    private javax.swing.JLabel jLabelDomainName;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVerServicios;
+    private javax.swing.JTextField jTextFieldDomainName;
     // End of variables declaration//GEN-END:variables
 }

@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Gender {
     private long id;
     private String name;
-    
+
     /**
      * Default constructor.
      */
@@ -66,7 +66,7 @@ public class Gender {
     public String toString() {
         return name;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

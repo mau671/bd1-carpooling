@@ -311,22 +311,26 @@ public class Institutions extends javax.swing.JPanel {
     }//GEN-LAST:event_jTableInstitutionMouseClicked
 
     private void jButtonEditDomainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditDomainsActionPerformed
-       if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
-            return;
-       }
-
-       // Obtener la ventana padre
-        java.awt.Window owner = SwingUtilities.getWindowAncestor(this);
-        // Crear y mostrar el diálogo, pasando el ID
-        DomainsDialog dialog = new DomainsDialog((Frame) owner, true, selectedInstitutionId);
-        dialog.setVisible(true);
+        editDomainsButtonActionPerformed(evt);
 
         // El diálogo se encarga de guardar los cambios, no necesitamos hacer nada aquí después de que cierre.
         // Si necesitaras refrescar algo en ESTE panel después de que el diálogo cierre,
         // podrías añadir un listener al diálogo o hacer que devuelva un valor.
     }//GEN-LAST:event_jButtonEditDomainsActionPerformed
 
+    private void editDomainsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editDomainsButtonActionPerformed
+        if (selectedInstitutionId == null) {
+            JOptionPane.showMessageDialog(this,
+                "Please select an institution first.",
+                "No Selection",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        javax.swing.JFrame parentFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+        Domains domainsDialog = new Domains(parentFrame, true, selectedInstitutionId.intValue(), jTextFieldInstitutionName.getText());
+        domainsDialog.setVisible(true);
+    }//GEN-LAST:event_editDomainsButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonEditDomains;

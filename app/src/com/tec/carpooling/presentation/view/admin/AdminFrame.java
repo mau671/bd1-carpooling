@@ -31,10 +31,14 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenuItemManagementInstitutions = new javax.swing.JMenuItem();
         jMenuItemManagementUsers = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItemManageGenres = new javax.swing.JMenuItem();
+        jMenuItemManageIdentificationTypes = new javax.swing.JMenuItem();
+        jMenuItemManagePhoneTypes = new javax.swing.JMenuItem();
+        jMenuItemManageCurrencys = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItemParameters = new javax.swing.JMenuItem();
+        jMenuItemLogs = new javax.swing.JMenuItem();
+        jMenuItemStadistics = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,18 +59,30 @@ public class AdminFrame extends javax.swing.JFrame {
 
         jMenu3.setText("Catalogs");
 
-        jMenuItem4.setText("Manage Genres");
-        jMenu3.add(jMenuItem4);
+        jMenuItemManageGenres.setText("Manage Genres");
+        jMenu3.add(jMenuItemManageGenres);
+
+        jMenuItemManageIdentificationTypes.setText("Manage ID Types");
+        jMenu3.add(jMenuItemManageIdentificationTypes);
+
+        jMenuItemManagePhoneTypes.setText("Manage Phone Types");
+        jMenu3.add(jMenuItemManagePhoneTypes);
+
+        jMenuItemManageCurrencys.setText("Manage Currencys");
+        jMenu3.add(jMenuItemManageCurrencys);
 
         jMenuBar1.add(jMenu3);
 
         jMenu2.setText("System");
 
-        jMenuItem2.setText("Parameters");
-        jMenu2.add(jMenuItem2);
+        jMenuItemParameters.setText("Parameters");
+        jMenu2.add(jMenuItemParameters);
 
-        jMenuItem3.setText("Logs");
-        jMenu2.add(jMenuItem3);
+        jMenuItemLogs.setText("Logs");
+        jMenu2.add(jMenuItemLogs);
+
+        jMenuItemStadistics.setText("Stadistics");
+        jMenu2.add(jMenuItemStadistics);
 
         jMenuBar1.add(jMenu2);
 
@@ -145,10 +161,14 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItemLogs;
+    private javax.swing.JMenuItem jMenuItemManageCurrencys;
+    private javax.swing.JMenuItem jMenuItemManageGenres;
+    private javax.swing.JMenuItem jMenuItemManageIdentificationTypes;
+    private javax.swing.JMenuItem jMenuItemManagePhoneTypes;
     private javax.swing.JMenuItem jMenuItemManagementInstitutions;
     private javax.swing.JMenuItem jMenuItemManagementUsers;
+    private javax.swing.JMenuItem jMenuItemParameters;
+    private javax.swing.JMenuItem jMenuItemStadistics;
     // End of variables declaration//GEN-END:variables
 }

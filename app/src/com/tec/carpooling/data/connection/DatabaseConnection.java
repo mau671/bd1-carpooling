@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * This class provides methods to obtain database connections.
  */
 public class DatabaseConnection {
-
+    
     /**
      * Establishes and returns a connection to the database.
      * 
@@ -27,9 +27,9 @@ public class DatabaseConnection {
         
         // Return connection using configuration parameters
         return DriverManager.getConnection(
-                DatabaseConfig.getDbUrl(),
-                DatabaseConfig.getDbUsername(),
-                DatabaseConfig.getDbPassword()
+            DatabaseConfig.getDbUrl(),
+            DatabaseConfig.getDbUsername(),
+            DatabaseConfig.getDbPassword()
         );
     }
     

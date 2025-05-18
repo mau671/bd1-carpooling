@@ -90,7 +90,7 @@ public class GenderDAOImpl implements GenderDAO {
             throw new CatalogRegistrationException(String.format(ERROR_DUPLICATE, name), e);
         } else if (e.getErrorCode() == 20201) {
             throw new CatalogRegistrationException(ERROR_EMPTY_NAME, e);
-        } else {
+         } else {
             throw e;
         }
     }
