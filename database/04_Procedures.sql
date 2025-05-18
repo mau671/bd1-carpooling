@@ -21,6 +21,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.TYPE_IDENTIFICATION TO PU;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.TYPE_PHONE TO PU;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.DOMAIN TO PU;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.INSTITUTION_DOMAIN TO PU;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.ADMIN TO PU;
 
 -- Grants de tablas para PU
 GRANT SELECT, INSERT, UPDATE, DELETE ON PU.PERSONUSER TO ADM;
@@ -28,6 +29,8 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON PU.PHONE TO ADM;
 GRANT SELECT, INSERT, UPDATE, DELETE ON PU.EMAIL TO ADM;
 GRANT SELECT, INSERT, UPDATE, DELETE ON PU.PHONE_PERSON TO ADM;
 GRANT SELECT, INSERT, UPDATE, DELETE ON PU.INSTITUTION_PERSON TO ADM;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PU.DRIVER TO ADM;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PU.PASSENGER TO ADM;
 
 -- Grants de secuencias
 GRANT SELECT ON ADM.GENDER_SEQ TO PU;
@@ -759,6 +762,195 @@ END ADM_USER_AUTH_PKG;
 /
 
 -- ============================================================================
+-- PACKAGE: ADM_USER_TYPE_PKG
+-- Purpose: Gestiona operaciones relacionadas con el tipo de usuario
+-- ============================================================================
+/**
+ * Paquete para la gestión del tipo de usuario en el sistema.
+ * Proporciona funcionalidades para registrar y consultar el tipo de usuario.
+ */
+CREATE OR REPLACE PACKAGE ADM.ADM_USER_TYPE_PKG AS
+    /**
+     * Registra un usuario como conductor
+     * 
+     * @param p_user_id ID del usuario a registrar como conductor
+     */
+    PROCEDURE register_as_driver(p_user_id IN NUMBER);
+    
+    /**
+     * Registra un usuario como pasajero
+     * 
+     * @param p_user_id ID del usuario a registrar como pasajero
+     */
+    PROCEDURE register_as_passenger(p_user_id IN NUMBER);
+    
+    /**
+     * Verifica si un usuario es administrador
+     * 
+     * @param p_user_id ID del usuario a verificar
+     * @param p_is_admin OUT 1 si es administrador, 0 si no lo es
+     */
+    PROCEDURE is_admin(p_user_id IN NUMBER, p_is_admin OUT NUMBER);
+    
+    /**
+     * Obtiene el tipo de usuario actual
+     * 
+     * @param p_user_id ID del usuario
+     * @param p_user_type OUT Tipo de usuario (ADMIN, DRIVER, PASSENGER)
+     */
+    PROCEDURE get_user_type(p_user_id IN NUMBER, p_user_type OUT VARCHAR2);
+END ADM_USER_TYPE_PKG;
+/
+
+CREATE OR REPLACE PACKAGE BODY ADM.ADM_USER_TYPE_PKG AS
+    PROCEDURE register_as_driver(p_user_id IN NUMBER) IS
+        v_person_id NUMBER;
+    BEGIN
+        -- Obtener el person_id del usuario
+        SELECT person_id INTO v_person_id
+        FROM PU.PERSONUSER
+        WHERE id = p_user_id;
+        
+        -- Eliminar registro anterior si existe
+        DELETE FROM PU.PASSENGER WHERE person_id = v_person_id;
+        
+        -- Verificar si ya es conductor
+        DECLARE
+            v_count NUMBER;
+        BEGIN
+            SELECT COUNT(*) INTO v_count
+            FROM PU.DRIVER
+            WHERE person_id = v_person_id;
+            
+            IF v_count > 0 THEN
+                RETURN; -- Ya es conductor, no necesita hacer nada
+            END IF;
+        END;
+        
+        -- Insertar como conductor
+        INSERT INTO PU.DRIVER (person_id)
+        VALUES (v_person_id);
+        
+        COMMIT;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20003, 'User not found.');
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END register_as_driver;
+    
+    PROCEDURE register_as_passenger(p_user_id IN NUMBER) IS
+        v_person_id NUMBER;
+    BEGIN
+        -- Obtener el person_id del usuario
+        SELECT person_id INTO v_person_id
+        FROM PU.PERSONUSER
+        WHERE id = p_user_id;
+        
+        -- Eliminar registro anterior si existe
+        DELETE FROM PU.DRIVER WHERE person_id = v_person_id;
+        
+        -- Verificar si ya es pasajero
+        DECLARE
+            v_count NUMBER;
+        BEGIN
+            SELECT COUNT(*) INTO v_count
+            FROM PU.PASSENGER
+            WHERE person_id = v_person_id;
+            
+            IF v_count > 0 THEN
+                RETURN; -- Ya es pasajero, no necesita hacer nada
+            END IF;
+        END;
+        
+        -- Insertar como pasajero
+        INSERT INTO PU.PASSENGER (person_id)
+        VALUES (v_person_id);
+        
+        COMMIT;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20006, 'User not found.');
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END register_as_passenger;
+    
+    PROCEDURE is_admin(p_user_id IN NUMBER, p_is_admin OUT NUMBER) IS
+        v_person_id NUMBER;
+        v_count NUMBER;
+    BEGIN
+        -- Obtener el person_id del usuario
+        SELECT person_id INTO v_person_id
+        FROM PU.PERSONUSER
+        WHERE id = p_user_id;
+        
+        -- Verificar si es administrador
+        SELECT COUNT(*) INTO v_count
+        FROM ADM.ADMIN
+        WHERE person_id = v_person_id;
+        
+        p_is_admin := CASE WHEN v_count > 0 THEN 1 ELSE 0 END;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            p_is_admin := 0;
+        WHEN OTHERS THEN
+            RAISE;
+    END is_admin;
+    
+    PROCEDURE get_user_type(p_user_id IN NUMBER, p_user_type OUT VARCHAR2) IS
+        v_person_id NUMBER;
+        v_is_admin NUMBER;
+        v_is_driver NUMBER;
+        v_is_passenger NUMBER;
+    BEGIN
+        -- Obtener el person_id del usuario
+        SELECT person_id INTO v_person_id
+        FROM PU.PERSONUSER
+        WHERE id = p_user_id;
+        
+        -- Verificar si es admin
+        SELECT COUNT(*) INTO v_is_admin
+        FROM ADM.ADMIN
+        WHERE person_id = v_person_id;
+        
+        IF v_is_admin > 0 THEN
+            p_user_type := 'ADMIN';
+            RETURN;
+        END IF;
+        
+        -- Verificar si es conductor
+        SELECT COUNT(*) INTO v_is_driver
+        FROM PU.DRIVER
+        WHERE person_id = v_person_id;
+        
+        IF v_is_driver > 0 THEN
+            p_user_type := 'DRIVER';
+            RETURN;
+        END IF;
+        
+        -- Verificar si es pasajero
+        SELECT COUNT(*) INTO v_is_passenger
+        FROM PU.PASSENGER
+        WHERE person_id = v_person_id;
+        
+        IF v_is_passenger > 0 THEN
+            p_user_type := 'PASSENGER';
+            RETURN;
+        END IF;
+        
+        p_user_type := NULL;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            p_user_type := NULL;
+        WHEN OTHERS THEN
+            RAISE;
+    END get_user_type;
+END ADM_USER_TYPE_PKG;
+/
+
+-- ============================================================================
 -- GRANTS
 -- ============================================================================
 -- Package execution grants
@@ -794,3 +986,6 @@ GRANT EXECUTE ON ADM.ADM_USER_REGISTRATION_PKG TO PU;
 
 -- Package execution grants
 GRANT EXECUTE ON ADM.ADM_USER_AUTH_PKG TO PU;
+
+-- Grants para el paquete de tipo de usuario
+GRANT EXECUTE ON ADM.ADM_USER_TYPE_PKG TO PU;

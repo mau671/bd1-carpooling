@@ -12,39 +12,36 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import com.tec.carpooling.business.service.UserTypeService;
+import com.tec.carpooling.business.service.impl.UserTypeServiceImpl;
+import com.tec.carpooling.domain.entity.User;
+import java.sql.SQLException;
+
 /**
- *
- * @author hidal
+ * Window for selecting user type (driver or passenger)
  */
 public class UserType extends javax.swing.JFrame {
+    private final UserTypeService userTypeService;
+    private final User user;
 
     /**
      * Creates new form UserType
      */
-    public UserType() {
-        initComponents();
-        panelPassenger.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panelPassenger.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                UserProfile profile = new UserProfile("Passenger");
-                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                profile.setVisible(true);
-                
-                UserType.this.dispose();
-            }
-        });
-
-        panelDriver.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panelDriver.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                UserProfile profile = new UserProfile("Driver");
-                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                profile.setVisible(true);
-                
-                UserType.this.dispose();
-            }
-        });
+    public UserType(User user) {
+        this.userTypeService = new UserTypeServiceImpl();
+        this.user = user;
         
+        initComponents();
+        setupUI();
+        setupEventListeners();
+    }
+
+    private void setupUI() {
+        panelPassenger.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panelDriver.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Load and scale images
         ImageIcon passengerIcon = new ImageIcon(getClass().getResource("/Assets/passenger.jpg"));
         Image scaledPassenger = passengerIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
         photoPassenger.setIcon(new ImageIcon(scaledPassenger));
@@ -54,6 +51,85 @@ public class UserType extends javax.swing.JFrame {
         photoDriver.setIcon(new ImageIcon(scaledDriver));
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    private void setupEventListeners() {
+        panelPassenger.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                handlePassengerSelection();
+            }
+        });
+
+        panelDriver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                handleDriverSelection();
+            }
+        });
+    }
+
+    private void handlePassengerSelection() {
+        try {
+            String currentType = userTypeService.getUserType(user.getId());
+            
+            if ("DRIVER".equals(currentType)) {
+                int response = JOptionPane.showConfirmDialog(
+                    this,
+                    "You are currently registered as a driver. Do you want to change to passenger?",
+                    "Change User Type",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                
+                if (response == JOptionPane.YES_OPTION) {
+                    userTypeService.registerAsPassenger(user.getId());
+                    openUserProfile("Passenger");
+                }
+            } else {
+                userTypeService.registerAsPassenger(user.getId());
+                openUserProfile("Passenger");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error registering as passenger: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void handleDriverSelection() {
+        try {
+            String currentType = userTypeService.getUserType(user.getId());
+            
+            if ("PASSENGER".equals(currentType)) {
+                int response = JOptionPane.showConfirmDialog(
+                    this,
+                    "You are currently registered as a passenger. Do you want to change to driver?",
+                    "Change User Type",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                
+                if (response == JOptionPane.YES_OPTION) {
+                    userTypeService.registerAsDriver(user.getId());
+                    openUserProfile("Driver");
+                }
+            } else {
+                userTypeService.registerAsDriver(user.getId());
+                openUserProfile("Driver");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Error registering as driver: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void openUserProfile(String userType) {
+        UserProfile profile = new UserProfile(userType);
+        profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        profile.setVisible(true);
+        this.dispose();
     }
 
     /**
@@ -177,7 +253,12 @@ public class UserType extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UserType().setVisible(true);
+                // Este método main no debería ser llamado directamente
+                // La ventana debe ser creada desde otra clase que tenga el usuario
+                JOptionPane.showMessageDialog(null,
+                    "Esta ventana debe ser abierta desde otra clase que tenga el usuario.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             }
         });
     }
