@@ -5,6 +5,8 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.presentation.view.InitialPage;
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,13 +19,15 @@ import javax.swing.JOptionPane;
  */
 public class UserProfile extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form InfoUsuario
      */
-    public UserProfile(String role) {
+    public UserProfile(String role, User user) {
         this.userRole = role;
+        this.user = user;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
     }
 
     /**
@@ -829,7 +833,7 @@ public class UserProfile extends javax.swing.JFrame {
 
     private void buttonModifyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyProfileActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            ModifyProfile modify = new ModifyProfile(userRole);
+            ModifyProfile modify = new ModifyProfile(userRole, user);
             modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
             modify.setVisible(true);
 
@@ -904,9 +908,11 @@ public class UserProfile extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new UserProfile(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new UserProfile(userRole, user).setVisible(true);
             }
         });
     }

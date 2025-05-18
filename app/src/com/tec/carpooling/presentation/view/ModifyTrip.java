@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
@@ -30,13 +32,15 @@ import javax.swing.event.DocumentListener;
  */
 public class ModifyTrip extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form ModifyTrip
      */
-    public ModifyTrip(String role) {
+    public ModifyTrip(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         customizeDatePicker();
         textPrice.setToolTipText("Write 0 for no charge.");
         textPrice.addKeyListener(new KeyAdapter() {
@@ -509,7 +513,7 @@ public class ModifyTrip extends javax.swing.JFrame {
             return;
         }
         javax.swing.SwingUtilities.invokeLater(() -> {
-            ModifyRoute route = new ModifyRoute(userRole);
+            ModifyRoute route = new ModifyRoute(userRole, user);
             route.setExtendedState(JFrame.MAXIMIZED_BOTH);
             route.setVisible(true);
 
@@ -560,9 +564,11 @@ public class ModifyTrip extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new ModifyTrip(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new ModifyTrip(userRole, user).setVisible(true);
             }
         });
     }

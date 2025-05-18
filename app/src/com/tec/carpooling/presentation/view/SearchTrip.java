@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.*;
 import java.net.URL;
 import javax.swing.*;
@@ -20,14 +22,16 @@ import java.time.format.DateTimeFormatter;
  */
 public class SearchTrip extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form SearchTrip
      */
-    public SearchTrip(String role) {
+    public SearchTrip(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
         customizeDatePicker();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
         // Para el panel con card layout
         cardPanel.add(panelDriver, "Driver Information");
@@ -724,9 +728,11 @@ public class SearchTrip extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                SearchTrip trips = new SearchTrip(userRole);
+                user = new User(1, "testuser", 101);
+                SearchTrip trips = new SearchTrip(userRole, user);
                 trips.setVisible(true);
                 
                 List<double[]> coords = new ArrayList<>();

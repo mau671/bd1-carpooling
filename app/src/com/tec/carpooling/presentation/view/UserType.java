@@ -82,11 +82,11 @@ public class UserType extends javax.swing.JFrame {
                 
                 if (response == JOptionPane.YES_OPTION) {
                     userTypeService.registerAsPassenger(user.getId());
-                    openUserProfile("Passenger");
+                    openUserProfile("Passenger", user);
                 }
             } else {
                 userTypeService.registerAsPassenger(user.getId());
-                openUserProfile("Passenger");
+                openUserProfile("Passenger", user);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
@@ -111,11 +111,11 @@ public class UserType extends javax.swing.JFrame {
                 
                 if (response == JOptionPane.YES_OPTION) {
                     userTypeService.registerAsDriver(user.getId());
-                    openUserProfile("Driver");
+                    openUserProfile("Driver", user);
                 }
             } else {
                 userTypeService.registerAsDriver(user.getId());
-                openUserProfile("Driver");
+                openUserProfile("Driver", user);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
@@ -125,8 +125,8 @@ public class UserType extends javax.swing.JFrame {
         }
     }
 
-    private void openUserProfile(String userType) {
-        UserProfile profile = new UserProfile(userType);
+    private void openUserProfile(String userType, User user) {
+        UserProfile profile = new UserProfile(userType, user);
         profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
         profile.setVisible(true);
         this.dispose();

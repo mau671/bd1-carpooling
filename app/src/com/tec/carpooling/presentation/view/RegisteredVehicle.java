@@ -4,10 +4,16 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.data.dao.VehicleDAO;
+import com.tec.carpooling.domain.entity.VehicleInfo;
+
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
+import java.util.List;
 
 /**
  *
@@ -15,17 +21,45 @@ import javax.swing.table.DefaultTableModel;
  */
 public class RegisteredVehicle extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form RegisteredVehicle
      */
-    public RegisteredVehicle(String role) {
+    public RegisteredVehicle(String role, User user) {
         this.userRole = role;
+        this.user = user;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
-        DefaultTableModel model = (DefaultTableModel) tableVehicles.getModel();
-        // Add sample rows if needed
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{"ID", "Plate Number", "Max Capacity", "Trips Made"});
+
+        tableVehicles.setModel(model);
+
+        // Hide the ID column (index 0)
+        tableVehicles.getColumnModel().getColumn(0).setMinWidth(0);
+        tableVehicles.getColumnModel().getColumn(0).setMaxWidth(0);
+        tableVehicles.getColumnModel().getColumn(0).setWidth(0);
         model.setRowCount(0);  // This removes all rows
+        
+        try {
+            VehicleDAO dao = new VehicleDAO();
+            List<VehicleInfo> vehicles = dao.getVehiclesByDriver(user.getPersonId());
+            
+            for (VehicleInfo v : vehicles) {
+                model.addRow(new Object[]{
+                    v.getId(),            // hidden
+                    v.getPlateNumber(),
+                    v.getMaxCapacity(),
+                    v.getTripCount()
+                });
+            }
+
+            tableVehicles.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load vehicles: " + e.getMessage());
+        }
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -158,7 +192,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
-            AddVehicle add = new AddVehicle(userRole);
+            AddVehicle add = new AddVehicle(userRole, user);
             add.setExtendedState(JFrame.MAXIMIZED_BOTH);
             add.setVisible(true);
 
@@ -169,10 +203,11 @@ public class RegisteredVehicle extends javax.swing.JFrame {
     private void buttonModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyActionPerformed
         int row = tableVehicles.getSelectedRow();
         if (row != -1) {
-            Object valorColumna1 = tableVehicles.getValueAt(row, 0); // Columna 0
-            Object valorColumna2 = tableVehicles.getValueAt(row, 1); // Columna 1
+            long vehicleId = Long.parseLong(tableVehicles.getValueAt(row, 0).toString());
+            String plate = tableVehicles.getValueAt(row, 1).toString();
+            int capacity = Integer.parseInt(tableVehicles.getValueAt(row, 2).toString());
             javax.swing.SwingUtilities.invokeLater(() -> {
-            ModifyVehicle modify = new ModifyVehicle(userRole);
+            ModifyVehicle modify = new ModifyVehicle(userRole, user, vehicleId, plate, capacity);
             modify.setExtendedState(JFrame.MAXIMIZED_BOTH);
             modify.setVisible(true);
 
@@ -213,9 +248,11 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new RegisteredVehicle(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new RegisteredVehicle(userRole, user).setVisible(true);
             }
         });
     }

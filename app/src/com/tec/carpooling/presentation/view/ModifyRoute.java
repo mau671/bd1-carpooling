@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -55,14 +57,16 @@ import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 public class ModifyRoute extends javax.swing.JFrame {
     private String userRole;
     private JMapViewer map;
+    private final User user;
     /**
      * Creates new form CrearRuta
      */
-    public ModifyRoute(String role) {
+    public ModifyRoute(String role, User user) {
+        this.user = user;
         this.userRole = role;
         System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CarpoolingApp/1.0");
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
         scrollPanelList.setPreferredSize(new Dimension(200, 200));
         scrollPanelList.setMaximumSize(new Dimension (200, Integer.MAX_VALUE));
@@ -697,7 +701,7 @@ public class ModifyRoute extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Trip modified successfully!");
         // Go back to View Trip window
         javax.swing.SwingUtilities.invokeLater(() -> {
-            ViewTrip trip = new ViewTrip(userRole);
+            ViewTrip trip = new ViewTrip(userRole, user);
             trip.setExtendedState(JFrame.MAXIMIZED_BOTH);
             trip.setVisible(true);
 
@@ -735,9 +739,11 @@ public class ModifyRoute extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new ModifyRoute(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new ModifyRoute(userRole, user).setVisible(true);
             }
         });
     }

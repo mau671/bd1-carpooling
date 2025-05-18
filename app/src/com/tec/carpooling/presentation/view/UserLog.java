@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.User;
+
 import java.awt.BorderLayout;
 
 /**
@@ -12,13 +14,15 @@ import java.awt.BorderLayout;
  */
 public class UserLog extends javax.swing.JFrame {
     private String userRole;
+    private final User user;
     /**
      * Creates new form UserLog
      */
-    public UserLog(String role) {
+    public UserLog(String role, User user) {
+        this.user = user;
         this.userRole = role;
         initComponents();
-        getContentPane().add(SideMenu.createToolbar(this, userRole), BorderLayout.WEST);
+        getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
     }
 
     /**
@@ -161,9 +165,11 @@ public class UserLog extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             private String userRole;
+            private User user;
             public void run() {
                 userRole = "Driver";
-                new UserLog(userRole).setVisible(true);
+                user = new User(1, "testuser", 101);
+                new UserLog(userRole, user).setVisible(true);
             }
         });
     }
