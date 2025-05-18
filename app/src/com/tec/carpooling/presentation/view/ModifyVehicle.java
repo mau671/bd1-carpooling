@@ -5,6 +5,10 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.domain.entity.MaxCapacity;
+import com.tec.carpooling.data.dao.MaxCapacityDAO;
+import com.tec.carpooling.data.dao.VehicleDAO;
+import com.tec.carpooling.business.service.VehicleService;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -13,6 +17,10 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -21,11 +29,17 @@ import javax.swing.JFrame;
 public class ModifyVehicle extends javax.swing.JFrame {
     private String userRole;
     private final User user;
+    private final long vehicleId;
+    private final String originalPlate;
+    private final int originalCapacity;
     /**
      * Creates new form AddVehicle
      */
-    public ModifyVehicle(String role, User user) {
+    public ModifyVehicle(String role, User user, long vehicleId, String plate, int capacity) {
         this.user = user;
+        this.vehicleId = vehicleId;
+        this.originalPlate = plate;
+        this.originalCapacity = capacity;
         this.userRole = role;
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
@@ -37,6 +51,28 @@ public class ModifyVehicle extends javax.swing.JFrame {
 
         // Set the scaled image as icon
         labelImage.setIcon(new ImageIcon(scaledImage));
+        
+        // Fill the combo box
+        try {
+            List<MaxCapacity> capacities = new MaxCapacityDAO().getAllCapacities();
+            for (MaxCapacity c : capacities) {
+                boxCapacity.addItem(c);
+            }
+
+            // Select current capacity
+            for (int i = 0; i < boxCapacity.getItemCount(); i++) {
+                if (boxCapacity.getItemAt(i).getCapacity() == originalCapacity) {
+                    boxCapacity.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error loading capacities: " + e.getMessage());
+        }
+            // Set plate in text field
+            textPlate.setText(plate);
+        
     }
 
     /**
@@ -157,7 +193,6 @@ public class ModifyVehicle extends javax.swing.JFrame {
         panelCapacity.setPreferredSize(new java.awt.Dimension(201, 60));
         panelCapacity.setLayout(new java.awt.GridBagLayout());
 
-        boxCapacity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -208,22 +243,33 @@ public class ModifyVehicle extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyActionPerformed
-        String plate = textPlate.getText().trim();
+        String newPlate = textPlate.getText().trim();
+        MaxCapacity selected = (MaxCapacity) boxCapacity.getSelectedItem();
 
-        // Check if any field is empty
-        if (plate.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
+        if (newPlate.isEmpty() || selected == null) {
+            JOptionPane.showMessageDialog(this, "Please fill in all required fields.");
             return;
         }
-        JOptionPane.showMessageDialog(null, "Changes saved successfully!");
-        // Go back to vehicle registration screen
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            RegisteredVehicle registry = new RegisteredVehicle(userRole, user);
-            registry.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            registry.setVisible(true);
 
-            ModifyVehicle.this.dispose();
-        });
+        try {
+            VehicleService vs = new VehicleService();
+
+            vs.updatePlate(vehicleId, newPlate);
+            vs.updateCapacity(vehicleId, selected.getId());
+
+            JOptionPane.showMessageDialog(this, "Changes saved successfully!");
+
+            SwingUtilities.invokeLater(() -> {
+                RegisteredVehicle registry = new RegisteredVehicle(userRole, user);
+                registry.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                registry.setVisible(true);
+                ModifyVehicle.this.dispose();
+            });
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Update failed: " + e.getMessage());
+        }
     }//GEN-LAST:event_buttonModifyActionPerformed
 
     /**
@@ -263,13 +309,13 @@ public class ModifyVehicle extends javax.swing.JFrame {
             public void run() {
                 userRole = "Driver";
                 user = new User(1, "testuser", 101);
-                new ModifyVehicle(userRole, user).setVisible(true);
+                new ModifyVehicle(userRole, user, 1, "ABC123", 2).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> boxCapacity;
+    private javax.swing.JComboBox<MaxCapacity> boxCapacity;
     private javax.swing.JButton buttonModify;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;

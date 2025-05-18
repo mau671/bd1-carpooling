@@ -32,12 +32,28 @@ public class VehicleService {
         stmt.setLong(2, capacityId);
         stmt.execute();
     }
+    
+    public void updateCapacity(long vehicleId, long newCapacityId) throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        CallableStatement stmt = conn.prepareCall("{ call PU_VEHICLECAPACITY_PKG.update_vehicle_capacity(?, ?) }");
+        stmt.setLong(1, vehicleId);
+        stmt.setLong(2, newCapacityId);
+        stmt.execute();
+    }
 
     public void assignToDriver(long vehicleId, long driverId) throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
         CallableStatement stmt = conn.prepareCall("{ call PU_VEHICLE_DRIVER_PKG.assign_vehicle_to_driver(?, ?) }");
         stmt.setLong(1, driverId);
         stmt.setLong(2, vehicleId);
+        stmt.execute();
+    }
+    
+    public void updatePlate(long vehicleId, String newPlate) throws SQLException {
+        Connection conn = DatabaseConnection.getConnection();
+        CallableStatement stmt = conn.prepareCall("{ call PU_VEHICLE_MGMT_PKG.update_vehicle(?, ?) }");
+        stmt.setLong(1, vehicleId);
+        stmt.setString(2, newPlate);
         stmt.execute();
     }
 }

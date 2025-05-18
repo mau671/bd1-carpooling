@@ -31,10 +31,11 @@ public class VehicleDAO {
 
         ResultSet rs = (ResultSet) stmt.getObject(1);
         while (rs.next()) {
+            long id = rs.getLong("vehicle_id");
             String plate = rs.getString("plate_number");
             int capacity = rs.getInt("max_capacity");
             int trips = rs.getInt("trip_count"); // always 0 for now
-            vehicles.add(new VehicleInfo(plate, capacity, trips));
+            vehicles.add(new VehicleInfo(id, plate, capacity, trips));
         }
 
         return vehicles;

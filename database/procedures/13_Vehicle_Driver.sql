@@ -33,6 +33,7 @@ CREATE OR REPLACE PACKAGE BODY PU.PU_VEHICLE_DRIVER_PKG AS
     BEGIN
         OPEN v_cursor FOR
             SELECT
+                v.id AS vehicle_id,
                 v.plate AS plate_number,
                 mc.capacity_number AS max_capacity,
                 0 AS trip_count -- placeholder
