@@ -1,7 +1,11 @@
 /*
 -- Initial INSERTS for the application parameters
-INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_NAME', 'BUDDY_RIDE');
-');
+INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_NAME', 'BUDDYRIDE');
+INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_VERSION', '1.0.0');
+INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_URL', 'https://www.buddyrides.com');
+INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_LOGO' 'logo.png');
+INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_BANNER', 'banner.png');
+INSERT INTO ADM.PARAMETER (id, name, value) VALUES (ADM.PARAMETER_SEQ.NEXTVAL, 'APP_BACKGROUND', 'background.png');
 */
 
 -- ===================================

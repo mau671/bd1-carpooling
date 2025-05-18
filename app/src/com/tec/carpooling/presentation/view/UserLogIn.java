@@ -309,9 +309,13 @@ public class UserLogIn extends javax.swing.JFrame {
                     "Bienvenido",
                     JOptionPane.INFORMATION_MESSAGE);
                 
-                // TODO: Abrir la ventana principal de la aplicación
-                // this.dispose();
-                // new MainWindow(user).setVisible(true);
+                // Redirigir a la ventana de selección de tipo de usuario
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    UserType userType = new UserType(user);
+                    userType.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    userType.setVisible(true);
+                    this.dispose();
+                });
             } else {
                 JOptionPane.showMessageDialog(this,
                     "Nombre de usuario o contraseña incorrectos.",
