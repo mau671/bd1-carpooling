@@ -1,4 +1,4 @@
-package com.tec.carpooling.data.impl;
+package com.tec.carpooling.data.dao.impl;
 
 import com.tec.carpooling.data.connection.DatabaseConnection;
 import com.tec.carpooling.data.dao.CatalogDAO;

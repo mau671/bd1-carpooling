@@ -2,7 +2,7 @@ package com.tec.carpooling.business.service.impl;
 
 import com.tec.carpooling.business.service.CatalogService;
 import com.tec.carpooling.data.dao.CatalogDAO;
-import com.tec.carpooling.data.impl.CatalogDAOImpl;
+import com.tec.carpooling.data.dao.impl.CatalogDAOImpl;
 import com.tec.carpooling.domain.entity.Gender;
 import com.tec.carpooling.domain.entity.Institution;
 import com.tec.carpooling.domain.entity.IdType;
