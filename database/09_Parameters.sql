@@ -1,11 +1,5 @@
+/*
 -- Initial INSERTS for the application parameters
-INSERT INTO parameters (id, name, value) VALUES (1, 'app_name', 'BuddyRide');
-INSERT INTO parameters (id, name, value) VALUES (2, 'app_version', '1.0.0');
-INSERT INTO parameters (id, name, value) VALUES (3, 'app_description', 'This is a sample application.');
-INSERT INTO parameters (id, name, value) VALUES (4, 'app_author', 'Mauricio Gonzalez, Carmen Hidalgo, Dylan Meza');
-INSERT INTO parameters (id, name, value) VALUES (5, 'app_license', 'MIT');
-INSERT INTO parameters (id, name, value) VALUES (6, 'app_website', 'https://example.com');
-COMMIT;
 
 -- ===================================
 -- Institution related data
@@ -181,3 +175,4 @@ INSERT INTO PU.PERSONUSER (
     2
 );
 COMMIT;
+*/
