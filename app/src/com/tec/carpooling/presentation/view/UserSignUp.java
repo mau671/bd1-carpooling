@@ -916,7 +916,7 @@ public class UserSignUp extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
                 
                 // Volver a la página inicial
-                this.dispose();
+            this.dispose();
                 new InitialPage().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this,

@@ -9,13 +9,13 @@ public class Domain {
     private long id;
     private String name;
     private long institutionId;
-    
+
     /**
      * Default constructor.
      */
     public Domain() {
     }
-    
+
     /**
      * Constructor with parameters.
      * 
@@ -64,7 +64,7 @@ public class Domain {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * Gets the institution ID.
      * 

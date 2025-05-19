@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view.admin;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author mauricio
@@ -26,17 +28,33 @@ public class AdminFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanelMain = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItemManagementInstitutions = new javax.swing.JMenuItem();
         jMenuItemManagementUsers = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItemManageGenres = new javax.swing.JMenuItem();
+        jMenuItemManageIdentificationTypes = new javax.swing.JMenuItem();
+        jMenuItemManagePhoneTypes = new javax.swing.JMenuItem();
+        jMenuItemManageCurrencys = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItemParameters = new javax.swing.JMenuItem();
+        jMenuItemLogs = new javax.swing.JMenuItem();
+        jMenuItemStadistics = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
+        jPanelMain.setLayout(jPanelMainLayout);
+        jPanelMainLayout.setHorizontalGroup(
+            jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        jPanelMainLayout.setVerticalGroup(
+            jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 576, Short.MAX_VALUE)
+        );
 
         jMenu1.setText("Management");
 
@@ -55,18 +73,30 @@ public class AdminFrame extends javax.swing.JFrame {
 
         jMenu3.setText("Catalogs");
 
-        jMenuItem4.setText("Manage Genres");
-        jMenu3.add(jMenuItem4);
+        jMenuItemManageGenres.setText("Manage Genres");
+        jMenu3.add(jMenuItemManageGenres);
+
+        jMenuItemManageIdentificationTypes.setText("Manage ID Types");
+        jMenu3.add(jMenuItemManageIdentificationTypes);
+
+        jMenuItemManagePhoneTypes.setText("Manage Phone Types");
+        jMenu3.add(jMenuItemManagePhoneTypes);
+
+        jMenuItemManageCurrencys.setText("Manage Currencys");
+        jMenu3.add(jMenuItemManageCurrencys);
 
         jMenuBar1.add(jMenu3);
 
         jMenu2.setText("System");
 
-        jMenuItem2.setText("Parameters");
-        jMenu2.add(jMenuItem2);
+        jMenuItemParameters.setText("Parameters");
+        jMenu2.add(jMenuItemParameters);
 
-        jMenuItem3.setText("Logs");
-        jMenu2.add(jMenuItem3);
+        jMenuItemLogs.setText("Logs");
+        jMenu2.add(jMenuItemLogs);
+
+        jMenuItemStadistics.setText("Stadistics");
+        jMenu2.add(jMenuItemStadistics);
 
         jMenuBar1.add(jMenu2);
 
@@ -76,14 +106,15 @@ public class AdminFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addComponent(jPanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 576, Short.MAX_VALUE)
+            .addComponent(jPanelMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemManagementInstitutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementInstitutionsActionPerformed
@@ -95,14 +126,29 @@ public class AdminFrame extends javax.swing.JFrame {
      */
     private void displayInstitutionsPanel() {
         Institutions institutionsPanel = new Institutions();
-        institutionsPanel.setSize(getWidth(), getHeight());
-        institutionsPanel.setLocation(0, 0);
-        institutionsPanel.setVisible(true);
+        showPanel(institutionsPanel);
+    }
+
+    private void showPanel(JPanel panel) {
+        // Limpiar el panel principal
+        jPanelMain.removeAll();
         
-        getContentPane().removeAll();
-        getContentPane().add(institutionsPanel);
-        revalidate();
-        repaint();
+        // Configurar el layout del panel principal para centrar
+        jPanelMain.setLayout(new java.awt.BorderLayout());
+        
+        // Crear un panel contenedor con GridBagLayout para centrar
+        JPanel centerPanel = new JPanel(new java.awt.GridBagLayout());
+        centerPanel.setBackground(jPanelMain.getBackground());
+        
+        // Agregar el panel al centro
+        centerPanel.add(panel);
+        
+        // Agregar el panel centrado al panel principal
+        jPanelMain.add(centerPanel, java.awt.BorderLayout.CENTER);
+        
+        // Actualizar la interfaz
+        jPanelMain.revalidate();
+        jPanelMain.repaint();
     }
 
     /**
@@ -145,10 +191,15 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItemLogs;
+    private javax.swing.JMenuItem jMenuItemManageCurrencys;
+    private javax.swing.JMenuItem jMenuItemManageGenres;
+    private javax.swing.JMenuItem jMenuItemManageIdentificationTypes;
+    private javax.swing.JMenuItem jMenuItemManagePhoneTypes;
     private javax.swing.JMenuItem jMenuItemManagementInstitutions;
     private javax.swing.JMenuItem jMenuItemManagementUsers;
+    private javax.swing.JMenuItem jMenuItemParameters;
+    private javax.swing.JMenuItem jMenuItemStadistics;
+    private javax.swing.JPanel jPanelMain;
     // End of variables declaration//GEN-END:variables
 }

@@ -29,9 +29,24 @@
             <Property name="text" type="java.lang.String" value="Catalogs"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManageGenres">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Manage Genres"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManageIdentificationTypes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Manage ID Types"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManagePhoneTypes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Manage Phone Types"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemManageCurrencys">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Manage Currencys"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -41,14 +56,19 @@
             <Property name="text" type="java.lang.String" value="System"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemParameters">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Parameters"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemLogs">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Logs"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemStadistics">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Stadistics"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -62,7 +82,7 @@
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -79,13 +99,30 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="800" max="32767" attributes="0"/>
+          <Component id="jPanelMain" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="576" max="32767" attributes="0"/>
+          <Component id="jPanelMain" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanelMain">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="800" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="576" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+  </SubComponents>
 </Form>

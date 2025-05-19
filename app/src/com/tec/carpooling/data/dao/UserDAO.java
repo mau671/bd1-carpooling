@@ -36,7 +36,7 @@ public interface UserDAO {
      * @throws SQLException Si ocurre un error de base de datos
      */
     boolean isDriver(long personId) throws SQLException;
-    
+
     /**
      * Verifica si un usuario es pasajero
      * @param personId El ID de la persona

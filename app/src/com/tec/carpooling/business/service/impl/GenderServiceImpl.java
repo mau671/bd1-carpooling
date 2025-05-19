@@ -57,7 +57,7 @@ public class GenderServiceImpl implements GenderService {
             List<Gender> genders = genderDAO.findAll();
             return genders.stream()
                          .map(this::mapToGenderDTO)
-                         .collect(Collectors.toList());
+                          .collect(Collectors.toList());
         } catch (Exception e) {
             throw new Exception(ERROR_RETRIEVING, e);
         }

@@ -37,9 +37,28 @@ public class Institutions extends javax.swing.JPanel {
     }
 
     private void initTableModel() {
-        institutionTableModel = (DefaultTableModel) jTableInstitution.getModel();
-        // Asegurarse de que las columnas no sean editables si no se definió en el editor
-        jTableInstitution.setDefaultEditor(Object.class, null);
+        institutionTableModel = new DefaultTableModel(
+            new Object [][] {},
+            new String [] {
+                "ID", "Name"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Long.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        jTableInstitution.setModel(institutionTableModel);
     }
 
     private void loadInstitutions() {
@@ -51,8 +70,10 @@ public class Institutions extends javax.swing.JPanel {
             }
              clearSelectionAndFields();
         } catch (Exception e) {
-            // Loggear
-            JOptionPane.showMessageDialog(this, "Error al cargar instituciones: " + e.getMessage(), "Error de Carga", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "Error al cargar instituciones: " + e.getMessage(), 
+                "Error de Carga", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -288,45 +309,44 @@ public class Institutions extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonInstitutionDeleteActionPerformed
 
-    private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableInstitutionMouseClicked
+    private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
        int selectedRow = jTableInstitution.getSelectedRow();
        if (selectedRow >= 0) {
-           // Obtener datos de la fila seleccionada
-           // Columna 0 es ID (Long), Columna 1 es Nombre (String)
            selectedInstitutionId = (Long) institutionTableModel.getValueAt(selectedRow, 0);
            String selectedName = (String) institutionTableModel.getValueAt(selectedRow, 1);
 
-           // Actualizar campo de texto
            jTextFieldInstitutionName.setText(selectedName);
 
-           // Habilitar/deshabilitar botones
-           jButtonInstitutionSave.setEnabled(false); // No guardar nuevo si hay selección
+            jButtonInstitutionSave.setEnabled(false);
            jButtonInstitutionUpdate.setEnabled(true);
            jButtonInstitutionDelete.setEnabled(true);
            jButtonEditDomains.setEnabled(true);
-
        } else {
-           clearSelectionAndFields(); // Limpiar si no hay fila válida
+            clearSelectionAndFields();
+        }
        }
-    }//GEN-LAST:event_jTableInstitutionMouseClicked
 
     private void jButtonEditDomainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditDomainsActionPerformed
-       if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
-            return;
-       }
-
-       // Obtener la ventana padre
-        java.awt.Window owner = SwingUtilities.getWindowAncestor(this);
-        // Crear y mostrar el diálogo, pasando el ID
-        DomainsDialog dialog = new DomainsDialog((Frame) owner, true, selectedInstitutionId);
-        dialog.setVisible(true);
+        editDomainsButtonActionPerformed(evt);
 
         // El diálogo se encarga de guardar los cambios, no necesitamos hacer nada aquí después de que cierre.
         // Si necesitaras refrescar algo en ESTE panel después de que el diálogo cierre,
         // podrías añadir un listener al diálogo o hacer que devuelva un valor.
     }//GEN-LAST:event_jButtonEditDomainsActionPerformed
 
+    private void editDomainsButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedInstitutionId == null) {
+            JOptionPane.showMessageDialog(this,
+                "Por favor seleccione una institución primero.",
+                "Sin Selección",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        javax.swing.JFrame parentFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
+        Domains domainsDialog = new Domains(parentFrame, true, selectedInstitutionId.intValue(), jTextFieldInstitutionName.getText());
+        domainsDialog.setVisible(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonEditDomains;
