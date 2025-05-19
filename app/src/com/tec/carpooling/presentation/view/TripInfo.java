@@ -98,8 +98,6 @@ public class TripInfo extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         panelPrices = new javax.swing.JPanel();
         panelPayment = new javax.swing.JPanel();
-        labelMethodChosen = new javax.swing.JLabel();
-        labelPaymentMethod = new javax.swing.JLabel();
         panelPrice = new javax.swing.JPanel();
         labelPrice = new javax.swing.JLabel();
         labelPricePay = new javax.swing.JLabel();
@@ -340,20 +338,6 @@ public class TripInfo extends javax.swing.JFrame {
 
         panelPayment.setBackground(new java.awt.Color(225, 239, 255));
         panelPayment.setLayout(new java.awt.GridBagLayout());
-
-        labelMethodChosen.setText("MethodChosen");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        panelPayment.add(labelMethodChosen, gridBagConstraints);
-
-        labelPaymentMethod.setText("Payment Method:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panelPayment.add(labelPaymentMethod, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -899,10 +883,8 @@ public class TripInfo extends javax.swing.JFrame {
     private javax.swing.JLabel labelGender;
     private javax.swing.JLabel labelGenderDriver;
     private javax.swing.JLabel labelMaxSeats;
-    private javax.swing.JLabel labelMethodChosen;
     private javax.swing.JLabel labelName;
     private javax.swing.JLabel labelNameDriver;
-    private javax.swing.JLabel labelPaymentMethod;
     private javax.swing.JLabel labelPlate;
     private javax.swing.JLabel labelPlateNumber;
     private javax.swing.JLabel labelPrice;

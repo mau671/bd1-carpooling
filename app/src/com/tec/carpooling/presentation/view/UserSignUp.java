@@ -78,7 +78,68 @@ public class UserSignUp extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JFrame termsFrame = new JFrame("Terms and Conditions");
-                JTextArea textArea = new JTextArea("Terms and conditions go here...");
+                String termsText = """
+                Buddy Ride – Terms and Conditions
+
+                1. Acceptance of Terms
+                By creating an account or using the Buddy Ride platform, you agree to these Terms and Conditions and our Privacy Policy.
+
+                2. Eligibility
+                - Users must be at least 18 years old.
+                - Drivers must have a valid driver's license, registration, and insurance.
+                - Passengers must be legally able to enter into agreements.
+
+                3. User Responsibilities
+                Drivers:
+                - Ensure your vehicle is roadworthy, registered, and insured.
+                - Be punctual and respectful to passengers.
+
+                Passengers:
+                - Be on time and courteous.
+                - Respect the driver’s vehicle and rules.
+
+                4. Trip Scheduling and Booking
+                - Trips must include accurate details (time, location, price, etc).
+                - Bookings are confirmed only when they appear on the passenger's Trips dashboard.
+
+                5. Cancellations and No-shows
+                - Cancel trips in advance if needed.
+                - Repeated no-shows may result in account suspension.
+
+                6. Payments and Fees
+                - Payments are to be handled directly between users.
+                - Service fees may apply.
+
+                7. For Help ore Complaints
+                - For any complaints or inquiries contact the support team.
+                - Feedback must be respectful and truthful.
+
+                8. Prohibited Conduct
+                - No illegal behavior, harassment, or discrimination.
+                - No impersonation or sharing of others' information.
+
+                9. Liability
+                - Buddy Ride is not a transport provider.
+                - We are not responsible for accidents or disputes between users.
+
+                10. Insurance
+                - Drivers must have personal vehicle insurance.
+                - Passengers ride at their own risk.
+
+                11. Privacy
+                - We collect and store data per our Privacy Policy.
+                - Location data may be used to improve service.
+
+                12. Account Suspension
+                - We may suspend accounts for rule violations or abuse.
+
+                13. Modifications
+                - Terms may change. Continued use means you accept updates.
+
+                14. Governing Law
+                - These terms are governed by the laws of the country of Costa Rica.
+                """;
+                JTextArea textArea = new JTextArea(termsText);
                 textArea.setWrapStyleWord(true);
                 textArea.setLineWrap(true);
                 textArea.setEditable(false);

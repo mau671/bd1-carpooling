@@ -9,6 +9,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import java.awt.Font;
 /**
  *
  * @author hidal
@@ -236,8 +238,29 @@ public class InitialPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSignUpActionPerformed
 
     private void jButtonAboutUsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAboutUsActionPerformed
+        String aboutText = 
+        "🚗 About Buddy Ride\n" +
+        "\n" +
+        "Buddy Ride is your trusted carpooling companion. We connect drivers with empty seats\n" +
+        "to passengers heading the same way — making travel smarter, cheaper, and more sustainable.\n" +
+        "\n" +
+        "Whether you're commuting to work, going to university, or planning a weekend getaway,\n" +
+        "Buddy Ride helps you save on costs, reduce traffic, and make new friends along the way.\n" +
+        "\n" +
+        "🌍 Our Mission:\n" +
+        "To make everyday travel more accessible, efficient, and eco-friendly by building a\n" +
+        "community of reliable carpoolers who value convenience and safety.\n" +
+        "\n" +
+        "🤝 How It Works:\n" +
+        "- Drivers post trips with stops along the way.\n" +
+        "- Passengers search for available rides and choose the best match.\n" +
+        "- Everything is coordinated in one place — easy, secure, and community-driven.\n" +
+        "\n" +
+        "Thank you for choosing Buddy Ride — where every ride has a purpose!";
+        
         JFrame about = new JFrame("About Us");
-        JTextArea textArea = new JTextArea("About us info go here...");
+        JTextArea textArea = new JTextArea(aboutText);
+        textArea.setFont(new Font("Dialog", Font.PLAIN, 14));
         textArea.setWrapStyleWord(true);
         textArea.setLineWrap(true);
         textArea.setEditable(false);

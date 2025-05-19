@@ -58,6 +58,23 @@ public class ScheduleTrip extends javax.swing.JFrame {
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         customizeDatePicker();
         textPrice.setToolTipText("Write 0 for no charge.");
+        textPrice.addKeyListener(new KeyAdapter() {
+             @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+
+                // Allow digits and one dot
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                    return;
+                }
+
+                // Prevent more than one dot
+                if (c == '.' && textPrice.getText().contains(".")) {
+                    e.consume();
+                }
+            }
+        });
         textPrice.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
