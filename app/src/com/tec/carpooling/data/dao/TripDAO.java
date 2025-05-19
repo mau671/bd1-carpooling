@@ -18,18 +18,20 @@ import java.math.BigDecimal;
  * @author hidal
  */
 public class TripDAO {
-    public void createTrip(long vehicleId, long routeId, BigDecimal price, Long currencyId, Connection conn) throws SQLException {
-        String sql = "{ call PU_TRIP_MGMT_PKG.create_trip(?, ?, ?, ?) }";
+    public long createTrip(long vehicleId, long routeId, BigDecimal price, Long currencyId, Connection conn) throws SQLException {
+        String sql = "{ call PU_TRIP_MGMT_PKG.create_trip(?, ?, ?, ?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
-            stmt.setLong(1, vehicleId);     // p_vehicle_id
-            stmt.setLong(2, routeId);       // p_route_id
-            stmt.setBigDecimal(3, price);   // p_price
+            stmt.setLong(1, vehicleId);
+            stmt.setLong(2, routeId);
+            stmt.setBigDecimal(3, price);
             if (currencyId != null) {
-                stmt.setLong(4, currencyId); // p_currency_id
+                stmt.setLong(4, currencyId);
             } else {
                 stmt.setNull(4, Types.NUMERIC);
             }
+            stmt.registerOutParameter(5, Types.NUMERIC); // OUT parameter for trip ID
             stmt.execute();
+            return stmt.getLong(5);
         }
     }
 }

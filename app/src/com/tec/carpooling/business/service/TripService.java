@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Date;
 import java.util.List;
+import java.sql.CallableStatement;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
@@ -62,8 +63,13 @@ public class TripService {
             chosenCapacityDAO.saveChosenCapacity(vehicleRouteId, chosenCapacity, conn);
 
             // 4. Create Trip
-            tripDAO.createTrip(vehicleId, routeId, pricePerPassenger, currencyId, conn);
-
+            long tripId = tripDAO.createTrip(vehicleId, routeId, pricePerPassenger, currencyId, conn);
+            String sql = "{ call PU_TRIP_STATUS_PKG.assign_initial_status(?) }";
+            try (CallableStatement stmt = conn.prepareCall(sql)) {
+                stmt.setLong(1, tripId);
+                stmt.execute();
+            }
+            
             // 5. Add Waypoints: Start and End Districts
             waypointDAO.createWaypointWithDistrict(routeId, startDistrictId, conn);
             waypointDAO.createWaypointWithDistrict(routeId, endDistrictId, conn);

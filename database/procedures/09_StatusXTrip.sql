@@ -2,108 +2,130 @@
 -- PACKAGE: ADM_STATUSXTRIP_PKG
 -- Description: Manages operations related to trip statuses in the system
 -- ============================================================================
-CREATE OR REPLACE PACKAGE ADM.ADM_TRIP_STATUS_PKG AS
+CREATE OR REPLACE PACKAGE PU.PU_TRIP_STATUS_PKG AS
     TYPE ref_cursor_type IS REF CURSOR;
-    
+
     -- Assign initial status (Pending)
-    PROCEDURE assign_initial_status(p_trip_id IN PU.TRIP.id%TYPE);
-    
+    PROCEDURE assign_initial_status(p_trip_id IN NUMBER);
+
     -- Manually cancel a trip (only if Pending)
-    PROCEDURE cancel_trip(p_trip_id IN PU.TRIP.id%TYPE);
-    
+    PROCEDURE cancel_trip(p_trip_id IN NUMBER);
+
     -- Update status based on current date/time
-    PROCEDURE auto_update_status(p_trip_id IN PU.TRIP.id%TYPE);
-    
+    PROCEDURE auto_update_status(p_trip_id IN NUMBER);
+
     -- Update all trips' statuses
     PROCEDURE update_all_trip_statuses;
-    
-    -- Get current status of a trip
-    FUNCTION get_trip_status(p_trip_id IN PU.TRIP.id%TYPE) RETURN SYS_REFCURSOR;
 
-END ADM_TRIP_STATUS_PKG;
+    -- Get current status of a trip
+    FUNCTION get_trip_status(p_trip_id IN NUMBER) RETURN SYS_REFCURSOR;
+
+END PU_TRIP_STATUS_PKG;
 /
 
-CREATE OR REPLACE PACKAGE BODY ADM.ADM_TRIP_STATUS_PKG AS
-    -- When a trip is created, say that its pending
-    PROCEDURE assign_initial_status(p_trip_id IN PU.TRIP.id%TYPE) AS
-                                    v_status_id ADM.STATUS.id%TYPE;
-      BEGIN
+CREATE OR REPLACE PACKAGE BODY PU.PU_TRIP_STATUS_PKG AS
+
+    -- Assigns 'Pending' status to a trip
+    PROCEDURE assign_initial_status(p_trip_id IN NUMBER) AS
+        v_status_id NUMBER;
+    BEGIN
         SELECT id INTO v_status_id FROM ADM.STATUS WHERE UPPER(name) = 'PENDING';
-    
+
         INSERT INTO PU.STATUSXTRIP (trip_id, status_id)
         VALUES (p_trip_id, v_status_id);
-        COMMIT;
-      END assign_initial_status;
-    
-    -- Update status to in progress and completed of a trip 
-    PROCEDURE auto_update_status(p_trip_id IN PU.TRIP.id%TYPE) AS
-        v_in_progress_id ADM.STATUS.id%TYPE;
-        v_completed_id ADM.STATUS.id%TYPE;
-        v_pending_id ADM.STATUS.id%TYPE;
-        v_trip_start TIMESTAMP;
-        v_trip_end TIMESTAMP;
-        v_current_status PU.STATUSXTRIP.status_id%TYPE;
-      BEGIN
-        -- Get status IDs
+    END assign_initial_status;
+
+    -- Manually cancels a trip (only if it's still 'Pending')
+    PROCEDURE cancel_trip(p_trip_id IN NUMBER) AS
+        v_pending_id   NUMBER;
+        v_cancelled_id NUMBER;
+        v_current_id   NUMBER;
+    BEGIN
+        SELECT id INTO v_pending_id FROM ADM.STATUS WHERE UPPER(name) = 'PENDING';
+        SELECT id INTO v_cancelled_id FROM ADM.STATUS WHERE UPPER(name) = 'CANCELLED';
+
+        SELECT status_id INTO v_current_id
+        FROM PU.STATUSXTRIP
+        WHERE trip_id = p_trip_id;
+
+        IF v_current_id = v_pending_id THEN
+            UPDATE PU.STATUSXTRIP
+            SET status_id = v_cancelled_id
+            WHERE trip_id = p_trip_id;
+        ELSE
+            RAISE_APPLICATION_ERROR(-20001, 'Trip cannot be cancelled. Not in PENDING state.');
+        END IF;
+    END cancel_trip;
+
+    -- Automatically updates status based on current time
+    PROCEDURE auto_update_status(p_trip_id IN NUMBER) AS
+        v_in_progress_id NUMBER;
+        v_completed_id   NUMBER;
+        v_pending_id     NUMBER;
+        v_trip_start     TIMESTAMP;
+        v_trip_end       TIMESTAMP;
+        v_current_status NUMBER;
+    BEGIN
+        -- Get relevant status IDs
         SELECT id INTO v_pending_id FROM ADM.STATUS WHERE UPPER(name) = 'PENDING';
         SELECT id INTO v_in_progress_id FROM ADM.STATUS WHERE UPPER(name) = 'IN PROGRESS';
         SELECT id INTO v_completed_id FROM ADM.STATUS WHERE UPPER(name) = 'COMPLETED';
-    
+
         -- Get trip times
         SELECT R.start_time, R.end_time
         INTO v_trip_start, v_trip_end
         FROM PU.TRIP T
         JOIN PU.ROUTE R ON T.route_id = R.id
         WHERE T.id = p_trip_id;
-    
+
         -- Get current status
         SELECT status_id INTO v_current_status
         FROM PU.STATUSXTRIP
         WHERE trip_id = p_trip_id;
-    
-        -- Compare times
+
+        -- Determine new status
         IF v_current_status = v_pending_id AND SYSDATE >= v_trip_start AND SYSDATE < v_trip_end THEN
-          -- Set to In Progress
-          UPDATE PU.STATUSXTRIP
-          SET status_id = v_in_progress_id
-          WHERE trip_id = p_trip_id;
-    
+            UPDATE PU.STATUSXTRIP
+            SET status_id = v_in_progress_id
+            WHERE trip_id = p_trip_id;
+
         ELSIF v_current_status = v_in_progress_id AND SYSDATE >= v_trip_end THEN
-          -- Set to Completed
-          UPDATE PU.STATUSXTRIP
-          SET status_id = v_completed_id
-          WHERE trip_id = p_trip_id;
+            UPDATE PU.STATUSXTRIP
+            SET status_id = v_completed_id
+            WHERE trip_id = p_trip_id;
         END IF;
-    
-        COMMIT;
     END auto_update_status;
-    
-    -- Updates statuses of all trips
+
+    -- Updates all active trips (pending or in progress)
     PROCEDURE update_all_trip_statuses IS
-      CURSOR c_trips IS
-        SELECT trip_id
-        FROM PU.STATUSXTRIP SX
-        WHERE SX.status_id IN (
-          SELECT id FROM ADM.STATUS WHERE UPPER(name) IN ('PENDING', 'IN PROGRESS')
-        );
-    
+        CURSOR c_trips IS
+            SELECT trip_id
+            FROM PU.STATUSXTRIP SX
+            WHERE SX.status_id IN (
+                SELECT id FROM ADM.STATUS WHERE UPPER(name) IN ('PENDING', 'IN PROGRESS')
+            );
     BEGIN
-      FOR trip_rec IN c_trips LOOP
-        PU.STATUSXTRIP_MGMT_PKG.auto_update_status(trip_rec.trip_id);
-      END LOOP;
+        FOR trip_rec IN c_trips LOOP
+            PU.PU_TRIP_STATUS_PKG.auto_update_status(trip_rec.trip_id);
+        END LOOP;
     END update_all_trip_statuses;
-    
-    -- Get status of a trip
-    FUNCTION get_trip_status(p_trip_id IN PU.TRIP.id%TYPE) RETURN SYS_REFCURSOR IS
+
+    -- Returns the current status of a trip
+    FUNCTION get_trip_status(p_trip_id IN NUMBER) RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
-      BEGIN
+    BEGIN
         OPEN v_cursor FOR
-          SELECT S.id, S.name
-          FROM PU.STATUSXTRIP SX
-          JOIN ADM.STATUS S ON S.id = SX.status_id
-          WHERE SX.trip_id = p_trip_id;
+            SELECT S.id, S.name
+            FROM PU.STATUSXTRIP SX
+            JOIN ADM.STATUS S ON S.id = SX.status_id
+            WHERE SX.trip_id = p_trip_id;
+
         RETURN v_cursor;
-      END get_trip_status;
-    
-END ADM_TRIP_STATUS_PKG;
+    END get_trip_status;
+
+END PU_TRIP_STATUS_PKG;
 /
+
+GRANT SELECT, INSERT, UPDATE ON PU.TRIP TO ADM;
+GRANT SELECT, INSERT, UPDATE ON PU.ROUTE TO ADM;
+GRANT SELECT, INSERT, UPDATE ON PU.STATUSXTRIP TO ADM;
