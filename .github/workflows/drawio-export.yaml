@@ -1,6 +1,7 @@
 name: Keep draw.io export synchronized
 
 on:
+  workflow_dispatch: # Permite la ejecución manual desde la interfaz de GitHub
   push:
     branches:
       - main
