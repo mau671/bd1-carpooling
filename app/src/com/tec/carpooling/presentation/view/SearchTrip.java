@@ -228,8 +228,6 @@ public class SearchTrip extends javax.swing.JFrame {
         boxMethod = new javax.swing.JComboBox<>();
         labelMethod = new javax.swing.JLabel();
         panelCurrency = new javax.swing.JPanel();
-        labelCurrency = new javax.swing.JLabel();
-        boxCurrency = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -702,20 +700,6 @@ public class SearchTrip extends javax.swing.JFrame {
 
         panelCurrency.setBackground(new java.awt.Color(225, 239, 255));
         panelCurrency.setLayout(new java.awt.GridBagLayout());
-
-        labelCurrency.setText("<html>Currency: <span style='color:red'>*</span></html>");
-        labelCurrency.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.ipadx = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 57, 0, 0);
-        panelCurrency.add(labelCurrency, gridBagConstraints);
-
-        boxCurrency.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        panelCurrency.add(boxCurrency, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -803,7 +787,6 @@ public class SearchTrip extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> boxCurrency;
     private javax.swing.JComboBox<String> boxInfo;
     private javax.swing.JComboBox<String> boxMethod;
     private javax.swing.JComboBox<String> boxStops;
@@ -845,7 +828,6 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAge;
     private javax.swing.JLabel labelChosenCapacity;
-    private javax.swing.JLabel labelCurrency;
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelGender;
