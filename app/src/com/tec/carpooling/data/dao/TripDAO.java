@@ -21,16 +21,14 @@ public class TripDAO {
     public void createTrip(long vehicleId, long routeId, BigDecimal price, Long currencyId, Connection conn) throws SQLException {
         String sql = "{ call PU_TRIP_MGMT_PKG.create_trip(?, ?, ?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
-            stmt.setLong(1, vehicleId);
-            stmt.setLong(2, routeId);
-
+            stmt.setLong(1, vehicleId);     // p_vehicle_id
+            stmt.setLong(2, routeId);       // p_route_id
+            stmt.setBigDecimal(3, price);   // p_price
             if (currencyId != null) {
-                stmt.setLong(3, currencyId);
+                stmt.setLong(4, currencyId); // p_currency_id
             } else {
-                stmt.setNull(3, Types.NUMERIC);
+                stmt.setNull(4, Types.NUMERIC);
             }
-
-            stmt.setBigDecimal(4, price);
             stmt.execute();
         }
     }

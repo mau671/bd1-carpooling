@@ -567,6 +567,7 @@ public class ScheduleTrip extends javax.swing.JFrame {
             java.sql.Date sqlTripDate = java.sql.Date.valueOf(tripDate);
             
             final Long finalCurrencyId = currencyId;
+            System.out.println("Currency ID selected: " + finalCurrencyId);
             final java.sql.Date finalTripDate = sqlTripDate;
             
             // 5. Get start and end time from combo boxes

@@ -5,6 +5,20 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.business.service.TripService;
+import com.tec.carpooling.data.dao.CountryDAO;
+import com.tec.carpooling.domain.entity.Country;
+import com.tec.carpooling.data.dao.ProvinceDAO;
+import com.tec.carpooling.domain.entity.Province;
+import com.tec.carpooling.data.dao.CantonDAO;
+import com.tec.carpooling.domain.entity.Canton;
+import com.tec.carpooling.data.dao.DistrictDAO;
+import com.tec.carpooling.domain.entity.District;
+
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import javax.swing.SwingUtilities;
+import java.util.List;
+import java.sql.Connection;
 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
@@ -13,8 +27,11 @@ import javax.swing.JButton;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
+import javax.swing.JComboBox;
 import javax.swing.BoxLayout;
 import javax.swing.JToolBar;
+import java.util.List;
+import java.util.ArrayList;
 
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -29,10 +46,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Date;
+import java.sql.SQLException;
 
 import java.net.URI;
 import java.net.URL;
@@ -84,6 +104,15 @@ public class CreateRoute extends javax.swing.JFrame {
         this.pricePerPassenger = pricePerPassenger;
         this.currencyId = currencyId;
         this.vehicleId = vehicleId;
+        
+        System.out.println("start selected: " + startTime);
+        System.out.println("end selected: " + endTime);
+        System.out.println("date selected: " + tripDate);
+        System.out.println("passengers selected: " + amountOfPassengers);
+        System.out.println("price selected: " + pricePerPassenger);
+        System.out.println("Currency ID selected: " + currencyId);
+        System.out.println("vehicle ID selected: " + vehicleId);
+        
         System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CarpoolingApp/1.0");
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
@@ -96,7 +125,153 @@ public class CreateRoute extends javax.swing.JFrame {
         panelStops.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         loadMap();     // Llamas aquí o desde algún botón
+        loadCountries();
+        
+        boxStartP.setEnabled(false);
+        boxEndP.setEnabled(false);
+        boxStartC.setEnabled(false);
+        boxEndC.setEnabled(false);
+        boxStartD.setEnabled(false);
+        boxEndD.setEnabled(false);
+        
+        boxStartP.removeAllItems();
+        boxEndP.removeAllItems();
+        boxStartC.removeAllItems();
+        boxEndC.removeAllItems();
+        boxStartD.removeAllItems();
+        boxEndD.removeAllItems();
+        
+        boxCountry.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Country selected = (Country) boxCountry.getSelectedItem();
+                if (selected != null && selected.getId() != 0) {
+                    boxStartP.setEnabled(true);
+                    boxEndP.setEnabled(true);
+                    loadProvinces(selected.getId(), boxStartP);
+                    loadProvinces(selected.getId(), boxEndP);
+                    boxStartC.setEnabled(false);
+                    boxEndC.setEnabled(false);
+                    boxStartD.setEnabled(false);
+                    boxEndD.setEnabled(false);
+                    
+                    boxStartC.removeAllItems();
+                    boxEndC.removeAllItems();
+                    boxStartD.removeAllItems();
+                    boxEndD.removeAllItems();
+                }
+            }
+        });
+        
+        boxStartP.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Province selected = (Province) boxStartP.getSelectedItem();
+                if (selected != null && selected.getId() != 0) {
+                    boxStartC.setEnabled(true);
+                    boxEndC.setEnabled(true);
+                    loadCantons(selected.getId(), boxStartC);
+                    boxStartD.setEnabled(false);
+                    boxEndD.setEnabled(false);
+                    
+                    boxStartD.removeAllItems();
+                    boxEndD.removeAllItems();
+                }
+            }
+        });
+        
+        boxStartC.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Canton selected = (Canton) boxStartC.getSelectedItem();
+                if (selected != null && selected.getId() != 0) {
+                    boxStartD.setEnabled(true);
+                    boxEndD.setEnabled(true);
+                    loadDistricts(selected.getId(), boxStartD);
+                }
+            }
+        });
+        
+        boxEndP.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Province selected = (Province) boxEndP.getSelectedItem();
+                if (selected != null && selected.getId() != 0) {
+                    loadCantons(selected.getId(), boxEndC);
+                }
+            }
+        });
+        
+        boxEndC.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Canton selected = (Canton) boxEndC.getSelectedItem();
+                if (selected != null && selected.getId() != 0) {
+                    loadDistricts(selected.getId(), boxEndD);
+                }
+            }
+        });
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void loadCountries() {
+        try {
+            CountryDAO countryDAO = new CountryDAO();
+            List<Country> countries = countryDAO.getAllCountries();
+            boxCountry.removeAllItems();
+            boxCountry.addItem(new Country(0, "Select Country")); // Default
+
+            for (Country c : countries) {
+                boxCountry.addItem(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load countries: " + e.getMessage());
+        }
+    }
+    
+    private void loadProvinces(long id, JComboBox<Province> boxP) {
+        try {
+            ProvinceDAO provinceDAO = new ProvinceDAO();
+            List<Province> provinces = provinceDAO.getProvincesByCountry(id);
+            boxP.removeAllItems();
+            boxP.addItem(new Province(0, "Select Province", id)); // Default
+
+            for (Province p : provinces) {
+                boxP.addItem(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load provinces: " + e.getMessage());
+        }
+    }
+    
+    private void loadCantons(long id, JComboBox<Canton> boxP) {
+        try {
+            CantonDAO cantonDAO = new CantonDAO();
+            List<Canton> cantons = cantonDAO.getCantonsByProvince(id);
+            boxP.removeAllItems();
+            boxP.addItem(new Canton(0, "Select Canton", id)); // Default
+
+            for (Canton c : cantons) {
+                boxP.addItem(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load cantons: " + e.getMessage());
+        }
+    }
+    
+    private void loadDistricts(long id, JComboBox<District> boxP) {
+        try {
+            DistrictDAO districtDAO = new DistrictDAO();
+            List<District> districts = districtDAO.getDistrictsByCanton(id);
+            boxP.removeAllItems();
+            boxP.addItem(new District(0, "Select District", id)); // Default
+
+            for (District d : districts) {
+                boxP.addItem(d);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to load districts: " + e.getMessage());
+        }
     }
     
     private void loadMap() {
@@ -332,7 +507,7 @@ public class CreateRoute extends javax.swing.JFrame {
         labelStartP = new javax.swing.JLabel();
         buttonAddTrip = new javax.swing.JButton();
         panelCountry = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        boxCountry = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -457,7 +632,6 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panelEndD.add(labelEndD, gridBagConstraints);
 
-        boxEndD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -482,7 +656,6 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panelEndP.add(labelEndP, gridBagConstraints);
 
-        boxEndP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -507,7 +680,6 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panelEndC.add(labelEndC, gridBagConstraints);
 
-        boxEndC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -546,7 +718,6 @@ public class CreateRoute extends javax.swing.JFrame {
         panelStartD.setBackground(new java.awt.Color(225, 239, 255));
         panelStartD.setLayout(new java.awt.GridBagLayout());
 
-        boxStartD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -582,7 +753,6 @@ public class CreateRoute extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         panelStartC.add(labelStartC, gridBagConstraints);
 
-        boxStartC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -610,7 +780,6 @@ public class CreateRoute extends javax.swing.JFrame {
         panelStartP.setBackground(new java.awt.Color(225, 239, 255));
         panelStartP.setLayout(new java.awt.GridBagLayout());
 
-        boxStartP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -675,12 +844,11 @@ public class CreateRoute extends javax.swing.JFrame {
         panelCountry.setBackground(new java.awt.Color(225, 239, 255));
         panelCountry.setLayout(new java.awt.GridBagLayout());
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 30);
-        panelCountry.add(jComboBox1, gridBagConstraints);
+        panelCountry.add(boxCountry, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("<html>Country: <span style='color:red'>*</span></html>");
@@ -705,20 +873,69 @@ public class CreateRoute extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAddTripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddTripActionPerformed
-        // Check if at least one stop was added
-        if (panelStops.getComponentCount() == 0) {
-            JOptionPane.showMessageDialog(null, "Please add at least one stop.");
-            return;
-        }
-        JOptionPane.showMessageDialog(null, "Trip scheduled successfully!");
-        // Go back to vehicle registration screen
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            ViewTrip trip = new ViewTrip(userRole, user);
-            trip.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            trip.setVisible(true);
+        try {
+            // 1. Validate start and end districts
+            District startDistrict = (District) boxStartD.getSelectedItem();
+            District endDistrict = (District) boxEndD.getSelectedItem();
+            if (startDistrict == null || startDistrict.getId() == 0 ||
+                endDistrict == null || endDistrict.getId() == 0) {
+                JOptionPane.showMessageDialog(this, "Please select start and end districts.");
+                return;
+            }
 
-            CreateRoute.this.dispose();
-        });
+            // 2. Validate and collect intermediate stop coordinates
+            if (panelStops.getComponentCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Please add at least one stop.");
+                return;
+            }
+
+            List<Coordinate> stopCoords = new ArrayList<>();
+            for (Component comp : panelStops.getComponents()) {
+                if (comp instanceof JPanel row) {
+                    for (Component inner : row.getComponents()) {
+                        if (inner instanceof JLabel label) {
+                            String[] parts = label.getText().split(",");
+                            double lat = Double.parseDouble(parts[0].replace("Lat:", "").trim());
+                            double lon = Double.parseDouble(parts[1].replace("Lon:", "").trim());
+                            stopCoords.add(new Coordinate(lat, lon));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 3. Save everything using TripService
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                TripService service = new TripService();
+                service.createFullTripWithWaypoints(
+                    startTime,
+                    endTime,
+                    tripDate,
+                    vehicleId,
+                    amountOfPassengers,
+                    pricePerPassenger,
+                    currencyId,
+                    startDistrict.getId(),
+                    endDistrict.getId(),
+                    stopCoords,
+                    conn
+                );
+            }
+
+            // 4. Show confirmation and return
+            JOptionPane.showMessageDialog(this, "Trip scheduled successfully!");
+
+            SwingUtilities.invokeLater(() -> {
+                ViewTrip trip = new ViewTrip(userRole, user);
+                trip.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                trip.setVisible(true);
+                CreateRoute.this.dispose();
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving trip: " + e.getMessage());
+    }
     }//GEN-LAST:event_buttonAddTripActionPerformed
 
     private void textSearchPlaceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSearchPlaceKeyPressed
@@ -777,16 +994,16 @@ public class CreateRoute extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> boxEndC;
-    private javax.swing.JComboBox<String> boxEndD;
-    private javax.swing.JComboBox<String> boxEndP;
-    private javax.swing.JComboBox<String> boxStartC;
-    private javax.swing.JComboBox<String> boxStartD;
-    private javax.swing.JComboBox<String> boxStartP;
+    private javax.swing.JComboBox<Country> boxCountry;
+    private javax.swing.JComboBox<Canton> boxEndC;
+    private javax.swing.JComboBox<District> boxEndD;
+    private javax.swing.JComboBox<Province> boxEndP;
+    private javax.swing.JComboBox<Canton> boxStartC;
+    private javax.swing.JComboBox<District> boxStartD;
+    private javax.swing.JComboBox<Province> boxStartP;
     private javax.swing.JButton buttonAddTrip;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JLabel labelCreateRoute;
