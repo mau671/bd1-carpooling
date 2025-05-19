@@ -114,7 +114,6 @@ public class AdminFrame extends javax.swing.JFrame {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemManagementInstitutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementInstitutionsActionPerformed
@@ -126,7 +125,14 @@ public class AdminFrame extends javax.swing.JFrame {
      */
     private void displayInstitutionsPanel() {
         Institutions institutionsPanel = new Institutions();
-        showPanel(institutionsPanel);
+        institutionsPanel.setSize(getWidth(), getHeight());
+        institutionsPanel.setLocation(0, 0);
+        institutionsPanel.setVisible(true);
+        
+        getContentPane().removeAll();
+        getContentPane().add(institutionsPanel);
+        revalidate();
+        repaint();
     }
 
     private void showPanel(JPanel panel) {

@@ -46,7 +46,7 @@ public class UserProfile extends javax.swing.JFrame {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        jLabel9 = new javax.swing.JLabel();
+        jLabelPhoto = new javax.swing.JLabel();
         jPanel29 = new javax.swing.JPanel();
         buttonAddNumber = new javax.swing.JButton();
         buttonAddInstitution = new javax.swing.JButton();
@@ -58,28 +58,28 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabelFirstSurname = new javax.swing.JLabel();
         jPanel20 = new javax.swing.JPanel();
         name_label3 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabelSecondSurname = new javax.swing.JLabel();
         jPanel22 = new javax.swing.JPanel();
         name_label4 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
         name_label2 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelSecondName = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabelFirstName = new javax.swing.JLabel();
         jPanel38 = new javax.swing.JPanel();
         name_label12 = new javax.swing.JLabel();
         jPanel23 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        jLabelDateOfBirth = new javax.swing.JLabel();
         jPanel24 = new javax.swing.JPanel();
         name_label5 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        jLabelGender = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jPanel32 = new javax.swing.JPanel();
         name_label9 = new javax.swing.JLabel();
@@ -87,10 +87,10 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel19 = new javax.swing.JPanel();
         name_label7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablePhoneNumbers = new javax.swing.JTable();
         jPanel21 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        jListEmails = new javax.swing.JList<>();
         jPanel36 = new javax.swing.JPanel();
         name_label11 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -99,16 +99,16 @@ public class UserProfile extends javax.swing.JFrame {
         name_label8 = new javax.swing.JLabel();
         jPanel31 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListInstitutionsYouBelongs = new javax.swing.JList<>();
         jPanel17 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
+        jLabelIDNumber = new javax.swing.JLabel();
         jPanel40 = new javax.swing.JPanel();
         name_label13 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         name_label = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabelTypeofID = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,9 +146,9 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         jPanel1.add(filler4, gridBagConstraints);
 
-        jLabel9.setToolTipText("");
-        jLabel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel9.setPreferredSize(new java.awt.Dimension(200, 200));
+        jLabelPhoto.setToolTipText("");
+        jLabelPhoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelPhoto.setPreferredSize(new java.awt.Dimension(200, 200));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
@@ -157,7 +157,7 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        jPanel1.add(jLabel9, gridBagConstraints);
+        jPanel1.add(jLabelPhoto, gridBagConstraints);
 
         jPanel29.setBackground(new java.awt.Color(225, 239, 255));
         jPanel29.setLayout(new java.awt.GridBagLayout());
@@ -306,18 +306,18 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel10.setBackground(new java.awt.Color(225, 239, 255));
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setText("jLabel3");
+        jLabelFirstSurname.setText("jLabel3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel10.add(jLabel3, gridBagConstraints);
+        jPanel10.add(jLabelFirstSurname, gridBagConstraints);
 
         jPanel20.setBackground(new java.awt.Color(225, 239, 255));
         jPanel20.setLayout(new java.awt.GridBagLayout());
 
         name_label3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        name_label3.setText("First Surame:");
+        name_label3.setText("First Surname:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -342,18 +342,18 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel11.setBackground(new java.awt.Color(225, 239, 255));
         jPanel11.setLayout(new java.awt.GridBagLayout());
 
-        jLabel4.setText("jLabel4");
+        jLabelSecondSurname.setText("jLabel4");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel11.add(jLabel4, gridBagConstraints);
+        jPanel11.add(jLabelSecondSurname, gridBagConstraints);
 
         jPanel22.setBackground(new java.awt.Color(225, 239, 255));
         jPanel22.setLayout(new java.awt.GridBagLayout());
 
         name_label4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        name_label4.setText("Second Surame:");
+        name_label4.setText("Second Surname:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -404,12 +404,12 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         jPanel9.add(jPanel18, gridBagConstraints);
 
-        jLabel2.setText("jLabel2");
+        jLabelSecondName.setText("jLabel2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel9.add(jLabel2, gridBagConstraints);
+        jPanel9.add(jLabelSecondName, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -420,12 +420,12 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel8.setBackground(new java.awt.Color(225, 239, 255));
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("jLabel1");
+        jLabelFirstName.setText("jLabel1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel8.add(jLabel1, gridBagConstraints);
+        jPanel8.add(jLabelFirstName, gridBagConstraints);
 
         jPanel38.setBackground(new java.awt.Color(225, 239, 255));
         jPanel38.setLayout(new java.awt.GridBagLayout());
@@ -460,13 +460,13 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel13.setBackground(new java.awt.Color(225, 239, 255));
         jPanel13.setLayout(new java.awt.GridBagLayout());
 
-        jLabel6.setText("jLabel6");
+        jLabelDateOfBirth.setText("jLabel6");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel13.add(jLabel6, gridBagConstraints);
+        jPanel13.add(jLabelDateOfBirth, gridBagConstraints);
 
         jPanel24.setBackground(new java.awt.Color(225, 239, 255));
         jPanel24.setLayout(new java.awt.GridBagLayout());
@@ -497,12 +497,12 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel12.setBackground(new java.awt.Color(225, 239, 255));
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        jLabel5.setText("jLabel5");
+        jLabelGender.setText("jLabel5");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel12.add(jLabel5, gridBagConstraints);
+        jPanel12.add(jLabelGender, gridBagConstraints);
 
         jPanel7.setBackground(new java.awt.Color(225, 239, 255));
         jPanel7.setLayout(new java.awt.GridBagLayout());
@@ -570,7 +570,7 @@ public class UserProfile extends javax.swing.JFrame {
         jScrollPane2.setBackground(new java.awt.Color(225, 239, 255));
         jScrollPane2.setPreferredSize(new java.awt.Dimension(400, 400));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePhoneNumbers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null}
@@ -579,7 +579,7 @@ public class UserProfile extends javax.swing.JFrame {
                 "Phone Type", "Phone Number"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTablePhoneNumbers);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -606,12 +606,12 @@ public class UserProfile extends javax.swing.JFrame {
 
         jScrollPane3.setBackground(new java.awt.Color(225, 239, 255));
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+        jListEmails.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList2);
+        jScrollPane3.setViewportView(jListEmails);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -693,12 +693,12 @@ public class UserProfile extends javax.swing.JFrame {
 
         jScrollPane1.setBackground(new java.awt.Color(225, 239, 255));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        jListInstitutionsYouBelongs.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListInstitutionsYouBelongs);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -722,12 +722,12 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel17.setBackground(new java.awt.Color(225, 239, 255));
         jPanel17.setLayout(new java.awt.GridBagLayout());
 
-        jLabel8.setText("jLabel8");
+        jLabelIDNumber.setText("jLabel8");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel17.add(jLabel8, gridBagConstraints);
+        jPanel17.add(jLabelIDNumber, gridBagConstraints);
 
         jPanel40.setBackground(new java.awt.Color(225, 239, 255));
         jPanel40.setLayout(new java.awt.GridBagLayout());
@@ -787,12 +787,12 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel16.add(jPanel2, gridBagConstraints);
 
-        jLabel7.setText("jLabel7");
+        jLabelTypeofID.setText("jLabel7");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel16.add(jLabel7, gridBagConstraints);
+        jPanel16.add(jLabelTypeofID, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -927,17 +927,17 @@ public class UserProfile extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
+    private javax.swing.JLabel jLabelDateOfBirth;
+    private javax.swing.JLabel jLabelFirstName;
+    private javax.swing.JLabel jLabelFirstSurname;
+    private javax.swing.JLabel jLabelGender;
+    private javax.swing.JLabel jLabelIDNumber;
+    private javax.swing.JLabel jLabelPhoto;
+    private javax.swing.JLabel jLabelSecondName;
+    private javax.swing.JLabel jLabelSecondSurname;
+    private javax.swing.JLabel jLabelTypeofID;
+    private javax.swing.JList<String> jListEmails;
+    private javax.swing.JList<String> jListInstitutionsYouBelongs;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -974,7 +974,7 @@ public class UserProfile extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTablePhoneNumbers;
     private javax.swing.JLabel labelProfile;
     private javax.swing.JLabel name_label;
     private javax.swing.JLabel name_label11;

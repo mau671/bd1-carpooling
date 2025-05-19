@@ -303,7 +303,7 @@ public class Domains extends javax.swing.JDialog {
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-            
+
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.create_dom(?, ?) }")) {
             
@@ -345,7 +345,7 @@ public class Domains extends javax.swing.JDialog {
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-            
+
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.update_dom(?, ?) }")) {
             
@@ -392,7 +392,7 @@ public class Domains extends javax.swing.JDialog {
             "Confirm Delete",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.WARNING_MESSAGE);
-            
+
         if (confirm == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
                  CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.delete_dom(?) }")) {
