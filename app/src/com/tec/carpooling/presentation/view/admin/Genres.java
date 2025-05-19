@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.tec.carpooling.presentation.view.admin;
 
 import com.tec.carpooling.business.service.InstitutionService;
@@ -9,6 +5,7 @@ import com.tec.carpooling.business.service.impl.InstitutionServiceImpl;
 import com.tec.carpooling.dto.InstitutionDTO;
 import com.tec.carpooling.exception.InstitutionManagementException;
 import java.awt.Frame;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -31,8 +28,8 @@ public class Genres extends javax.swing.JPanel {
         initComponents();
         initTableModel();
         loadInstitutions(); // Cargar datos al iniciar
-        jButtonInstitutionUpdate.setEnabled(false);
-        jButtonInstitutionDelete.setEnabled(false);
+        jButtonGenresUpdate.setEnabled(false);
+        jButtonGenresDelete.setEnabled(false);
     }
 
     private void initTableModel() {
@@ -57,7 +54,7 @@ public class Genres extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         };
-        jTableInstitution.setModel(institutionTableModel);
+        jTableGenres.setModel(institutionTableModel);
     }
 
     private void loadInstitutions() {
@@ -77,12 +74,12 @@ public class Genres extends javax.swing.JPanel {
     }
     
    private void clearSelectionAndFields() {
-        jTableInstitution.clearSelection();
-        jTextFieldInstitutionName.setText("");
+        jTableGenres.clearSelection();
+        jTextFieldGenresName.setText("");
         selectedInstitutionId = null;
-        jButtonInstitutionUpdate.setEnabled(false);
-        jButtonInstitutionDelete.setEnabled(false);
-        jButtonInstitutionSave.setEnabled(true); // Habilitar Guardar
+        jButtonGenresUpdate.setEnabled(false);
+        jButtonGenresDelete.setEnabled(false);
+        jButtonGenresSave.setEnabled(true); // Habilitar Guardar
     }
 
     /**
@@ -94,46 +91,46 @@ public class Genres extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabelInstitutionName = new javax.swing.JLabel();
-        jTextFieldInstitutionName = new javax.swing.JTextField();
-        jButtonInstitutionSave = new javax.swing.JButton();
-        jButtonInstitutionUpdate = new javax.swing.JButton();
-        jButtonInstitutionDelete = new javax.swing.JButton();
-        jScrollPaneInstitution = new javax.swing.JScrollPane();
-        jTableInstitution = new javax.swing.JTable();
+        jLabelGenresName = new javax.swing.JLabel();
+        jTextFieldGenresName = new javax.swing.JTextField();
+        jButtonGenresSave = new javax.swing.JButton();
+        jButtonGenresUpdate = new javax.swing.JButton();
+        jButtonGenresDelete = new javax.swing.JButton();
+        jScrollPanelGenres = new javax.swing.JScrollPane();
+        jTableGenres = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jLabelInstitutionName.setText("Name");
+        jLabelGenresName.setText("Name");
 
-        jTextFieldInstitutionName.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldGenresName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldInstitutionNameActionPerformed(evt);
+                jTextFieldGenresNameActionPerformed(evt);
             }
         });
 
-        jButtonInstitutionSave.setText("Save");
-        jButtonInstitutionSave.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGenresSave.setText("Save");
+        jButtonGenresSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInstitutionSaveActionPerformed(evt);
+                jButtonGenresSaveActionPerformed(evt);
             }
         });
 
-        jButtonInstitutionUpdate.setText("Update");
-        jButtonInstitutionUpdate.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGenresUpdate.setText("Update");
+        jButtonGenresUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInstitutionUpdateActionPerformed(evt);
+                jButtonGenresUpdateActionPerformed(evt);
             }
         });
 
-        jButtonInstitutionDelete.setText("Delete");
-        jButtonInstitutionDelete.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGenresDelete.setText("Delete");
+        jButtonGenresDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInstitutionDeleteActionPerformed(evt);
+                jButtonGenresDeleteActionPerformed(evt);
             }
         });
 
-        jTableInstitution.setModel(new javax.swing.table.DefaultTableModel(
+        jTableGenres.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -156,15 +153,15 @@ public class Genres extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jTableInstitution.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTableGenres.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableInstitutionMouseClicked(evt);
+                jTableGenresMouseClicked(evt);
             }
         });
-        jScrollPaneInstitution.setViewportView(jTableInstitution);
-        if (jTableInstitution.getColumnModel().getColumnCount() > 0) {
-            jTableInstitution.getColumnModel().getColumn(0).setPreferredWidth(50);
-            jTableInstitution.getColumnModel().getColumn(1).setPreferredWidth(200);
+        jScrollPanelGenres.setViewportView(jTableGenres);
+        if (jTableGenres.getColumnModel().getColumnCount() > 0) {
+            jTableGenres.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableGenres.getColumnModel().getColumn(1).setPreferredWidth(200);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -175,16 +172,16 @@ public class Genres extends javax.swing.JPanel {
                 .addContainerGap(107, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButtonInstitutionUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonInstitutionDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonInstitutionSave))
+                        .addComponent(jButtonGenresUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonGenresDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonGenresSave))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPanelGenres, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelInstitutionName)
+                                .addComponent(jLabelGenresName)
                                 .addGap(38, 38, 38)
-                                .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jTextFieldGenresName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26)))
                 .addGap(103, 103, 103))
         );
@@ -194,30 +191,30 @@ public class Genres extends javax.swing.JPanel {
                 .addGap(105, 105, 105)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonInstitutionSave)
+                        .addComponent(jButtonGenresSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonInstitutionUpdate)
+                        .addComponent(jButtonGenresUpdate)
                         .addGap(12, 12, 12)
-                        .addComponent(jButtonInstitutionDelete))
+                        .addComponent(jButtonGenresDelete))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jLabelInstitutionName))
-                            .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabelGenresName))
+                            .addComponent(jTextFieldGenresName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(48, 48, 48)
-                .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPanelGenres, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(140, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldInstitutionNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldInstitutionNameActionPerformed
+    private void jTextFieldGenresNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldGenresNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldInstitutionNameActionPerformed
+    }//GEN-LAST:event_jTextFieldGenresNameActionPerformed
 
-    private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionSaveActionPerformed
-        String name = jTextFieldInstitutionName.getText().trim();
+    private void jButtonGenresSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenresSaveActionPerformed
+        String name = jTextFieldGenresName.getText().trim();
         if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
             return;
@@ -233,14 +230,14 @@ public class Genres extends javax.swing.JPanel {
             // Loggear
              JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButtonInstitutionSaveActionPerformed
+    }//GEN-LAST:event_jButtonGenresSaveActionPerformed
 
-    private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionUpdateActionPerformed
+    private void jButtonGenresUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenresUpdateActionPerformed
         if (selectedInstitutionId == null) {
              JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
             return;
         }
-         String newName = jTextFieldInstitutionName.getText().trim();
+         String newName = jTextFieldGenresName.getText().trim();
         if (newName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
             return;
@@ -260,16 +257,16 @@ public class Genres extends javax.swing.JPanel {
              JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    }//GEN-LAST:event_jButtonInstitutionUpdateActionPerformed
+    }//GEN-LAST:event_jButtonGenresUpdateActionPerformed
 
-    private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionDeleteActionPerformed
+    private void jButtonGenresDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenresDeleteActionPerformed
         if (selectedInstitutionId == null) {
              JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirmation = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
+                "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldGenresName.getText() + ")\n¡Esta acción no se puede deshacer!",
                 "Confirmar Eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
@@ -290,45 +287,31 @@ public class Genres extends javax.swing.JPanel {
                  JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jButtonInstitutionDeleteActionPerformed
+    }//GEN-LAST:event_jButtonGenresDeleteActionPerformed
 
-    private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-       int selectedRow = jTableInstitution.getSelectedRow();
+    private void jTableGenresMouseClicked(java.awt.event.MouseEvent evt) {
+       int selectedRow = jTableGenres.getSelectedRow();
        if (selectedRow >= 0) {
            selectedInstitutionId = (Long) institutionTableModel.getValueAt(selectedRow, 0);
            String selectedName = (String) institutionTableModel.getValueAt(selectedRow, 1);
 
-           jTextFieldInstitutionName.setText(selectedName);
+           jTextFieldGenresName.setText(selectedName);
 
-            jButtonInstitutionSave.setEnabled(false);
-           jButtonInstitutionUpdate.setEnabled(true);
-           jButtonInstitutionDelete.setEnabled(true);
+            jButtonGenresSave.setEnabled(false);
+           jButtonGenresUpdate.setEnabled(true);
+           jButtonGenresDelete.setEnabled(true);
        } else {
             clearSelectionAndFields();
         }
        }
 
-    private void editDomainsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this,
-                "Por favor seleccione una institución primero.",
-                "Sin Selección",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        javax.swing.JFrame parentFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
-        Domains domainsDialog = new Domains(parentFrame, true, selectedInstitutionId.intValue(), jTextFieldInstitutionName.getText());
-        domainsDialog.setVisible(true);
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonInstitutionDelete;
-    private javax.swing.JButton jButtonInstitutionSave;
-    private javax.swing.JButton jButtonInstitutionUpdate;
-    private javax.swing.JLabel jLabelInstitutionName;
-    private javax.swing.JScrollPane jScrollPaneInstitution;
-    private javax.swing.JTable jTableInstitution;
-    private javax.swing.JTextField jTextFieldInstitutionName;
+    private javax.swing.JButton jButtonGenresDelete;
+    private javax.swing.JButton jButtonGenresSave;
+    private javax.swing.JButton jButtonGenresUpdate;
+    private javax.swing.JLabel jLabelGenresName;
+    private javax.swing.JScrollPane jScrollPanelGenres;
+    private javax.swing.JTable jTableGenres;
+    private javax.swing.JTextField jTextFieldGenresName;
     // End of variables declaration//GEN-END:variables
 }

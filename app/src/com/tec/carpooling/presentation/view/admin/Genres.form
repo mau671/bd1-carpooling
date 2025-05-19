@@ -25,17 +25,17 @@
               <EmptySpace pref="107" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jButtonInstitutionUpdate" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jButtonInstitutionDelete" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jButtonInstitutionSave" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonGenresUpdate" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jButtonGenresDelete" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jButtonGenresSave" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPaneInstitution" min="-2" pref="564" max="-2" attributes="0"/>
+                          <Component id="jScrollPanelGenres" min="-2" pref="564" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelGenresName" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                              <Component id="jTextFieldInstitutionName" min="-2" pref="137" max="-2" attributes="0"/>
+                              <Component id="jTextFieldGenresName" min="-2" pref="137" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -51,73 +51,73 @@
               <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jButtonInstitutionSave" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonGenresSave" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jButtonInstitutionUpdate" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonGenresUpdate" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="jButtonInstitutionDelete" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonGenresDelete" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                              <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelGenresName" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jTextFieldInstitutionName" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldGenresName" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-              <Component id="jScrollPaneInstitution" min="-2" pref="214" max="-2" attributes="0"/>
+              <Component id="jScrollPanelGenres" min="-2" pref="214" max="-2" attributes="0"/>
               <EmptySpace pref="140" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabelInstitutionName">
+    <Component class="javax.swing.JLabel" name="jLabelGenresName">
       <Properties>
         <Property name="text" type="java.lang.String" value="Name"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldInstitutionName">
+    <Component class="javax.swing.JTextField" name="jTextFieldGenresName">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldInstitutionNameActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldGenresNameActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonInstitutionSave">
+    <Component class="javax.swing.JButton" name="jButtonGenresSave">
       <Properties>
         <Property name="text" type="java.lang.String" value="Save"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInstitutionSaveActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGenresSaveActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonInstitutionUpdate">
+    <Component class="javax.swing.JButton" name="jButtonGenresUpdate">
       <Properties>
         <Property name="text" type="java.lang.String" value="Update"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInstitutionUpdateActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGenresUpdateActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonInstitutionDelete">
+    <Component class="javax.swing.JButton" name="jButtonGenresDelete">
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInstitutionDeleteActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGenresDeleteActionPerformed"/>
       </Events>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPaneInstitution">
+    <Container class="javax.swing.JScrollPane" name="jScrollPanelGenres">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTableInstitution">
+        <Component class="javax.swing.JTable" name="jTableGenres">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="2" rowCount="0">
@@ -144,7 +144,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableInstitutionMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableGenresMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>
