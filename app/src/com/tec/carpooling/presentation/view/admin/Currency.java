@@ -18,20 +18,19 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author mauricio
  */
-public class Institutions extends javax.swing.JPanel {
+public class Currency extends javax.swing.JPanel {
 
     private final InstitutionService institutionService; // Inyectar!
     private DefaultTableModel institutionTableModel;
     private Long selectedInstitutionId = null; // Para guardar el ID seleccionado
 
-    public Institutions() {
+    public Currency() {
         // --- ¡¡MEJORAR ESTO CON INYECCIÓN DE DEPENDENCIAS!! ---
         this.institutionService = new InstitutionServiceImpl();
         // ---
         initComponents();
         initTableModel();
         loadInstitutions(); // Cargar datos al iniciar
-        jButtonEditDomains.setEnabled(false); // Deshabilitar hasta seleccionar
         jButtonInstitutionUpdate.setEnabled(false);
         jButtonInstitutionDelete.setEnabled(false);
     }
@@ -81,7 +80,6 @@ public class Institutions extends javax.swing.JPanel {
         jTableInstitution.clearSelection();
         jTextFieldInstitutionName.setText("");
         selectedInstitutionId = null;
-        jButtonEditDomains.setEnabled(false);
         jButtonInstitutionUpdate.setEnabled(false);
         jButtonInstitutionDelete.setEnabled(false);
         jButtonInstitutionSave.setEnabled(true); // Habilitar Guardar
@@ -103,8 +101,6 @@ public class Institutions extends javax.swing.JPanel {
         jButtonInstitutionDelete = new javax.swing.JButton();
         jScrollPaneInstitution = new javax.swing.JScrollPane();
         jTableInstitution = new javax.swing.JTable();
-        jLabelInstitutionDomains = new javax.swing.JLabel();
-        jButtonEditDomains = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -146,7 +142,7 @@ public class Institutions extends javax.swing.JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.Long.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false
@@ -166,15 +162,10 @@ public class Institutions extends javax.swing.JPanel {
             }
         });
         jScrollPaneInstitution.setViewportView(jTableInstitution);
-
-        jLabelInstitutionDomains.setText("Domains");
-
-        jButtonEditDomains.setText("See/Change");
-        jButtonEditDomains.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditDomainsActionPerformed(evt);
-            }
-        });
+        if (jTableInstitution.getColumnModel().getColumnCount() > 0) {
+            jTableInstitution.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableInstitution.getColumnModel().getColumn(1).setPreferredWidth(200);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -191,13 +182,9 @@ public class Institutions extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelInstitutionName)
-                                    .addComponent(jLabelInstitutionDomains, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonEditDomains, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabelInstitutionName)
+                                .addGap(38, 38, 38)
+                                .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26)))
                 .addGap(103, 103, 103))
         );
@@ -218,11 +205,7 @@ public class Institutions extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabelInstitutionName))
-                            .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonEditDomains)
-                            .addComponent(jLabelInstitutionDomains))))
+                            .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(48, 48, 48)
                 .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(140, Short.MAX_VALUE))
@@ -320,19 +303,10 @@ public class Institutions extends javax.swing.JPanel {
             jButtonInstitutionSave.setEnabled(false);
            jButtonInstitutionUpdate.setEnabled(true);
            jButtonInstitutionDelete.setEnabled(true);
-           jButtonEditDomains.setEnabled(true);
        } else {
             clearSelectionAndFields();
         }
        }
-
-    private void jButtonEditDomainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditDomainsActionPerformed
-        editDomainsButtonActionPerformed(evt);
-
-        // El diálogo se encarga de guardar los cambios, no necesitamos hacer nada aquí después de que cierre.
-        // Si necesitaras refrescar algo en ESTE panel después de que el diálogo cierre,
-        // podrías añadir un listener al diálogo o hacer que devuelva un valor.
-    }//GEN-LAST:event_jButtonEditDomainsActionPerformed
 
     private void editDomainsButtonActionPerformed(java.awt.event.ActionEvent evt) {
         if (selectedInstitutionId == null) {
@@ -349,11 +323,9 @@ public class Institutions extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonEditDomains;
     private javax.swing.JButton jButtonInstitutionDelete;
     private javax.swing.JButton jButtonInstitutionSave;
     private javax.swing.JButton jButtonInstitutionUpdate;
-    private javax.swing.JLabel jLabelInstitutionDomains;
     private javax.swing.JLabel jLabelInstitutionName;
     private javax.swing.JScrollPane jScrollPaneInstitution;
     private javax.swing.JTable jTableInstitution;

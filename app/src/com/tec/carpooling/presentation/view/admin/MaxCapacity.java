@@ -18,13 +18,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author mauricio
  */
-public class Institutions extends javax.swing.JPanel {
+public class MaxCapacity extends javax.swing.JPanel {
 
     private final InstitutionService institutionService; // Inyectar!
     private DefaultTableModel institutionTableModel;
     private Long selectedInstitutionId = null; // Para guardar el ID seleccionado
 
-    public Institutions() {
+    public MaxCapacity() {
         // --- ¡¡MEJORAR ESTO CON INYECCIÓN DE DEPENDENCIAS!! ---
         this.institutionService = new InstitutionServiceImpl();
         // ---
@@ -146,7 +146,7 @@ public class Institutions extends javax.swing.JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.Long.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false
@@ -166,6 +166,10 @@ public class Institutions extends javax.swing.JPanel {
             }
         });
         jScrollPaneInstitution.setViewportView(jTableInstitution);
+        if (jTableInstitution.getColumnModel().getColumnCount() > 0) {
+            jTableInstitution.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableInstitution.getColumnModel().getColumn(1).setPreferredWidth(200);
+        }
 
         jLabelInstitutionDomains.setText("Domains");
 
