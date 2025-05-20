@@ -59,42 +59,69 @@ CREATE OR REPLACE PACKAGE BODY PU.PU_TRIP_STATUS_PKG AS
 
     -- Automatically updates status based on current time
     PROCEDURE auto_update_status(p_trip_id IN NUMBER) AS
-        v_in_progress_id NUMBER;
-        v_completed_id   NUMBER;
-        v_pending_id     NUMBER;
-        v_trip_start     TIMESTAMP;
-        v_trip_end       TIMESTAMP;
-        v_current_status NUMBER;
-    BEGIN
-        -- Get relevant status IDs
-        SELECT id INTO v_pending_id FROM ADM.STATUS WHERE UPPER(name) = 'PENDING';
-        SELECT id INTO v_in_progress_id FROM ADM.STATUS WHERE UPPER(name) = 'IN PROGRESS';
-        SELECT id INTO v_completed_id FROM ADM.STATUS WHERE UPPER(name) = 'COMPLETED';
-
-        -- Get trip times
-        SELECT R.start_time, R.end_time
-        INTO v_trip_start, v_trip_end
-        FROM PU.TRIP T
-        JOIN PU.ROUTE R ON T.route_id = R.id
-        WHERE T.id = p_trip_id;
-
-        -- Get current status
-        SELECT status_id INTO v_current_status
-        FROM PU.STATUSXTRIP
-        WHERE trip_id = p_trip_id;
-
-        -- Determine new status
-        IF v_current_status = v_pending_id AND SYSDATE >= v_trip_start AND SYSDATE < v_trip_end THEN
-            UPDATE PU.STATUSXTRIP
-            SET status_id = v_in_progress_id
+            v_in_progress_id   NUMBER;
+            v_completed_id     NUMBER;
+            v_pending_id       NUMBER;
+            v_trip_start       TIMESTAMP;
+            v_trip_end         TIMESTAMP;
+            v_programming_date DATE;
+            v_current_status   NUMBER;
+        BEGIN
+            -- Get status IDs
+            SELECT id INTO v_pending_id FROM ADM.STATUS WHERE UPPER(name) = 'PENDING';
+            SELECT id INTO v_in_progress_id FROM ADM.STATUS WHERE UPPER(name) = 'IN PROGRESS';
+            SELECT id INTO v_completed_id FROM ADM.STATUS WHERE UPPER(name) = 'COMPLETED';
+        
+            -- Get trip data
+            SELECT R.start_time, R.end_time, R.programming_date
+            INTO v_trip_start, v_trip_end, v_programming_date
+            FROM PU.TRIP T
+            JOIN PU.ROUTE R ON T.route_id = R.id
+            WHERE T.id = p_trip_id;
+        
+            -- Get current trip status
+            SELECT status_id INTO v_current_status
+            FROM PU.STATUSXTRIP
             WHERE trip_id = p_trip_id;
-
-        ELSIF v_current_status = v_in_progress_id AND SYSDATE >= v_trip_end THEN
-            UPDATE PU.STATUSXTRIP
-            SET status_id = v_completed_id
-            WHERE trip_id = p_trip_id;
-        END IF;
-    END auto_update_status;
+        
+            -- Switch from Pending → In Progress
+            IF v_current_status = v_pending_id
+               AND TRUNC(SYSDATE) = v_programming_date
+               AND SYSDATE >= v_trip_start AND SYSDATE < v_trip_end THEN
+        
+                UPDATE PU.STATUSXTRIP
+                SET status_id = v_in_progress_id
+                WHERE trip_id = p_trip_id;
+        
+            -- Switch from In Progress → Completed (same day and after end)
+            ELSIF v_current_status = v_in_progress_id
+               AND TRUNC(SYSDATE) = v_programming_date
+               AND SYSDATE >= v_trip_end THEN
+        
+                UPDATE PU.STATUSXTRIP
+                SET status_id = v_completed_id
+                WHERE trip_id = p_trip_id;
+        
+            -- Force Completed if trip date already passed and still in progress
+            ELSIF v_current_status = v_in_progress_id
+               AND TRUNC(SYSDATE) > v_programming_date THEN
+        
+                UPDATE PU.STATUSXTRIP
+                SET status_id = v_completed_id
+                WHERE trip_id = p_trip_id;
+        
+            -- ✅ NEW: Force Completed if trip date already passed and still pending
+            ELSIF v_current_status = v_pending_id
+               AND TRUNC(SYSDATE) > v_programming_date THEN
+        
+                UPDATE PU.STATUSXTRIP
+                SET status_id = v_completed_id
+                WHERE trip_id = p_trip_id;
+        
+            END IF;
+        
+            COMMIT;
+        END auto_update_status;
 
     -- Updates all active trips (pending or in progress)
     PROCEDURE update_all_trip_statuses IS
@@ -108,6 +135,7 @@ CREATE OR REPLACE PACKAGE BODY PU.PU_TRIP_STATUS_PKG AS
         FOR trip_rec IN c_trips LOOP
             PU.PU_TRIP_STATUS_PKG.auto_update_status(trip_rec.trip_id);
         END LOOP;
+        COMMIT;
     END update_all_trip_statuses;
 
     -- Returns the current status of a trip
@@ -129,3 +157,14 @@ END PU_TRIP_STATUS_PKG;
 GRANT SELECT, INSERT, UPDATE ON PU.TRIP TO ADM;
 GRANT SELECT, INSERT, UPDATE ON PU.ROUTE TO ADM;
 GRANT SELECT, INSERT, UPDATE ON PU.STATUSXTRIP TO ADM;
+
+SELECT id, name FROM ADM.STATUS;
+
+SELECT SX.trip_id, SX.status_id, S.name
+FROM PU.STATUSXTRIP SX
+JOIN ADM.STATUS S ON S.id = SX.status_id;
+
+SELECT R.start_time, R.end_time, R.programming_date
+FROM PU.TRIP T
+JOIN PU.ROUTE R ON T.route_id = R.id
+WHERE T.id = 22;

@@ -826,11 +826,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         if (row != -1) {
             //Object valorColumna1 = tablePhones.getValueAt(row, 0); // Columna 0
             //Object valorColumna2 = tablePhones.getValueAt(row, 1); // Columna 1
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                PhonePage phone = new PhonePage();
-                phone.setVisible(true);
-                phone.setLocationRelativeTo(null); // center on screen
-            });
+            JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "A row must be selected.");
         }
@@ -840,11 +836,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         int index = listInstitutions.getSelectedIndex();
         if (index != -1) {
             //Object selectedValue = listInstitutions.getSelectedValue();
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                PhonePage phone = new PhonePage();
-                phone.setVisible(true);
-                phone.setLocationRelativeTo(null); // center on screen
-            });
+            JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");
         }
@@ -855,9 +847,9 @@ public class ModifyProfile extends javax.swing.JFrame {
         if (index != -1) {
             //Object selectedValue = listInstitutions.getSelectedValue();
             javax.swing.SwingUtilities.invokeLater(() -> {
-                PhonePage phone = new PhonePage();
-                phone.setVisible(true);
-                phone.setLocationRelativeTo(null); // center on screen
+                InstitutionPage institution = new InstitutionPage();
+                institution.setVisible(true);
+                institution.setLocationRelativeTo(null); // center on screen
             });
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");
@@ -868,11 +860,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         int index = listEmails.getSelectedIndex();
         if (index != -1) {
             //Object selectedValue = listInstitutions.getSelectedValue();
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                EmailPage email = new EmailPage();
-                email.setVisible(true);
-                email.setLocationRelativeTo(null); // center on screen
-            });
+            JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");
         }
