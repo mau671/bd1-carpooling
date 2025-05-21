@@ -1,8 +1,30 @@
 package com.tec.carpooling.domain.entity;
 
-import java.util.Objects;
 
+/**
+ *
+ * @author hidal
+ */
 public class PassengerXWaypoint {
+    private long passengerId;
+    private long waypointId;
+
+    public PassengerXWaypoint() {}
+
+    public PassengerXWaypoint(long passengerId, long waypointId) {
+        this.passengerId = passengerId;
+        this.waypointId = waypointId;
+    }
+
+    public long getPassengerId() { return passengerId; }
+    public void setPassengerId(long passengerId) { this.passengerId = passengerId; }
+
+    public long getWaypointId() { return waypointId; }
+    public void setWaypointId(long waypointId) { this.waypointId = waypointId; }
+}
+
+
+/*public class PassengerXWaypoint {
     private long passengerId; // Corresponde a PU.PASSENGER.person_id
     private long waypointId;
 
@@ -24,4 +46,4 @@ public class PassengerXWaypoint {
     public int hashCode() { return Objects.hash(passengerId, waypointId); }
     @Override
     public String toString() { return "PassengerXWaypoint{passengerId=" + passengerId + ", waypointId=" + waypointId + "}"; }
-}
+}*/

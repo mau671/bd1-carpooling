@@ -84,11 +84,10 @@
                 <Component class="javax.swing.JTable" name="tableTrips">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="7" rowCount="4">
+                      <Table columnCount="6" rowCount="4">
                         <Column editable="true" title="Date of Trip" type="java.lang.Object"/>
                         <Column editable="true" title="Start Point" type="java.lang.Object"/>
                         <Column editable="true" title="Destination Point" type="java.lang.Object"/>
-                        <Column editable="true" title="Pick Up Point" type="java.lang.Object"/>
                         <Column editable="true" title="Vehicle Plate" type="java.lang.Object"/>
                         <Column editable="true" title="Status" type="java.lang.Object"/>
                         <Column editable="true" title="More Info" type="java.lang.Object"/>
@@ -232,10 +231,11 @@
             <Component class="javax.swing.JComboBox" name="boxOrder">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="Start Point"/>
-                    <StringItem index="1" value="Destination Point"/>
-                    <StringItem index="2" value="Status"/>
+                  <StringArray count="4">
+                    <StringItem index="0" value="Choose organization option"/>
+                    <StringItem index="1" value="Start Point"/>
+                    <StringItem index="2" value="Destination Point"/>
+                    <StringItem index="3" value="Status"/>
                   </StringArray>
                 </Property>
               </Properties>

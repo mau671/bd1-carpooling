@@ -5,6 +5,25 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.domain.entity.TripSummary;
+import com.tec.carpooling.domain.entity.Institution;
+import com.tec.carpooling.domain.entity.PaymentMethod;
+import com.tec.carpooling.domain.entity.Waypoint;
+import com.tec.carpooling.domain.entity.Province;
+import com.tec.carpooling.domain.entity.Canton;
+import com.tec.carpooling.domain.entity.District;
+import com.tec.carpooling.data.dao.TripSummaryDAO;
+import com.tec.carpooling.data.dao.PassengerXTripDAO;
+import com.tec.carpooling.data.dao.PassengerTripPaymentDAO;
+import com.tec.carpooling.data.dao.PassengerWaypointDAO;
+
+import com.tec.carpooling.data.connection.DatabaseConnection;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 
 import java.awt.*;
 import java.net.URL;
@@ -23,6 +42,7 @@ import java.time.format.DateTimeFormatter;
 public class SearchTrip extends javax.swing.JFrame {
     private String userRole;
     private final User user;
+    private List<TripSummary> availableTrips;
     /**
      * Creates new form SearchTrip
      */
@@ -33,6 +53,9 @@ public class SearchTrip extends javax.swing.JFrame {
         customizeDatePicker();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
+        loadInstitutions();
+        loadPaymentMethods();
+        
         // Para el panel con card layout
         cardPanel.add(panelDriver, "Driver Information");
         cardPanel.add(panelVehicle, "Vehicle Information");
@@ -42,7 +65,28 @@ public class SearchTrip extends javax.swing.JFrame {
         ImageIcon photo = new ImageIcon(getClass().getResource("/Assets/passenger.jpg"));
         Image scaledPassenger = photo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         photoDriver.setIcon(new ImageIcon(scaledPassenger));
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void loadTripsForInstitution(Institution selectedInstitution) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            TripSummaryDAO tripSummaryDAO = new TripSummaryDAO();
+            List<TripSummary> trips = tripSummaryDAO.getAvailableTripsByInstitution(selectedInstitution.getId(), user.getPersonId(), conn);
+
+            DefaultListModel<String> model = new DefaultListModel<>();
+            for (TripSummary trip : trips) {
+                model.addElement(trip.getStartPoint() + " - " + trip.getTripDate());
+            }
+            listTrips.setModel(model);
+
+            // Optional: save the list for future reference on booking
+            this.availableTrips = trips;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading trips: " + e.getMessage());
+        }
     }
     
     private void filterAvailableTimes(JComboBox<String> comboTime) {
@@ -151,6 +195,74 @@ public class SearchTrip extends javax.swing.JFrame {
         panelList.revalidate();
         panelList.repaint();
     }
+    
+    private void loadWaypointsForTrip(long tripId) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            TripSummaryDAO tripDAO = new TripSummaryDAO();
+            List<Waypoint> stops = tripDAO.getWaypointsByTripId(tripId, conn);
+
+            DefaultComboBoxModel<Waypoint> model = new DefaultComboBoxModel<>();
+            for (Waypoint wp : stops) {
+                // Skip waypoints with null lat or lon
+                if (wp.getLatitude() != null && wp.getLongitude() != null) {
+                    String label = String.format("Lat: %.5f, Lon: %.5f", wp.getLatitude(), wp.getLongitude());
+                    // You can either override toString() in Waypoint to return this label,
+                    // or store the label elsewhere and display it manually
+                    model.addElement(wp);
+                }
+            }
+            boxStops.setModel(model);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading stops: " + e.getMessage());
+        }
+    }
+    
+    private void loadInstitutions() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT id, name FROM ADM.INSTITUTION ORDER BY name";
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+
+                boxInstitutions.removeAllItems(); // Clear previous entries
+                boxInstitutions.addItem(new Institution(0, "Select Institution"));
+
+                while (rs.next()) {
+                    long id = rs.getLong("id");
+                    String name = rs.getString("name");
+                    boxInstitutions.addItem(new Institution(id, name));
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading institutions: " + e.getMessage());
+        }
+    }
+    
+    private void loadPaymentMethods() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT id, name FROM ADM.PAYMENTMETHOD ORDER BY name";
+
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+
+                boxMethod.removeAllItems();
+                boxMethod.addItem(new PaymentMethod(0, "Payment Method"));
+
+                while (rs.next()) {
+                    long id = rs.getLong("id");
+                    String name = rs.getString("name");
+                    boxMethod.addItem(new PaymentMethod(id, name));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading payment methods: " + e.getMessage());
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -214,13 +326,15 @@ public class SearchTrip extends javax.swing.JFrame {
         labelTimeArrival = new javax.swing.JLabel();
         boxTime = new javax.swing.JComboBox<>();
         panelDatePlace = new javax.swing.JPanel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        boxProvince = new javax.swing.JComboBox<>();
+        boxCanton = new javax.swing.JComboBox<>();
+        boxDistrict = new javax.swing.JComboBox<>();
         jLabel24 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         datePicker = new com.github.lgooddatepicker.components.DatePicker();
         labelDate = new javax.swing.JLabel();
+        labelInstitution = new javax.swing.JLabel();
+        boxInstitutions = new javax.swing.JComboBox<>();
         panelChooseStop = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         boxStops = new javax.swing.JComboBox<>();
@@ -233,6 +347,9 @@ public class SearchTrip extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(225, 239, 255));
         jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(10, 16));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(30, 146));
 
         listTrips.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -251,7 +368,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         labelSearchTrips.setText("SEARCH TRIPS");
@@ -271,7 +388,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 130);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 100);
         jPanel1.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -289,7 +406,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 130);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 100);
         jPanel1.add(boxInfo, gridBagConstraints);
 
         cardPanel.setBackground(new java.awt.Color(225, 239, 255));
@@ -543,7 +660,8 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 130);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 100);
         jPanel1.add(cardPanel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
@@ -552,11 +670,11 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
 
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel19.setText("Search Trip By: ");
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
         jPanel1.add(jLabel19, gridBagConstraints);
 
@@ -571,10 +689,10 @@ public class SearchTrip extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 15;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 20);
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.insets = new java.awt.Insets(120, 0, 0, 20);
         jPanel1.add(buttonTrip, gridBagConstraints);
 
         panelTime.setBackground(new java.awt.Color(225, 239, 255));
@@ -592,38 +710,51 @@ public class SearchTrip extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         jPanel1.add(panelTime, gridBagConstraints);
 
         panelDatePlace.setBackground(new java.awt.Color(225, 239, 255));
         panelDatePlace.setLayout(new java.awt.GridBagLayout());
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxProvince.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxProvinceActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        panelDatePlace.add(jComboBox3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panelDatePlace.add(boxProvince, gridBagConstraints);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxCanton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxCantonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        panelDatePlace.add(jComboBox2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panelDatePlace.add(boxCanton, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxDistrict.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxDistrictActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        panelDatePlace.add(jComboBox1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panelDatePlace.add(boxDistrict, gridBagConstraints);
 
         jLabel24.setText("Destination: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panelDatePlace.add(jLabel24, gridBagConstraints);
 
         jPanel2.setBackground(new java.awt.Color(225, 239, 255));
@@ -648,12 +779,30 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
         panelDatePlace.add(jPanel2, gridBagConstraints);
 
+        labelInstitution.setText("Institution:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        panelDatePlace.add(labelInstitution, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 0);
+        jPanel1.add(panelDatePlace, gridBagConstraints);
+
+        boxInstitutions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxInstitutionsActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
-        jPanel1.add(panelDatePlace, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
+        jPanel1.add(boxInstitutions, gridBagConstraints);
 
         panelChooseStop.setBackground(new java.awt.Color(225, 239, 255));
         panelChooseStop.setLayout(new java.awt.GridBagLayout());
@@ -667,7 +816,11 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 33, 0, 0);
         panelChooseStop.add(jLabel26, gridBagConstraints);
 
-        boxStops.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxStops.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxStopsActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -676,7 +829,11 @@ public class SearchTrip extends javax.swing.JFrame {
         panelPayment.setBackground(new java.awt.Color(225, 239, 255));
         panelPayment.setLayout(new java.awt.GridBagLayout());
 
-        boxMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxMethod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxMethodActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -708,7 +865,7 @@ public class SearchTrip extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(20, 30, 10, 0);
@@ -720,7 +877,13 @@ public class SearchTrip extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void listTripsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listTripsValueChanged
-        // TODO add your handling code here:
+        if (!evt.getValueIsAdjusting()) {
+            int selectedIndex = listTrips.getSelectedIndex();
+            if (selectedIndex != -1) {
+                TripSummary selectedTrip = availableTrips.get(selectedIndex);
+                loadWaypointsForTrip(selectedTrip.getTripId());
+            }
+        }
     }//GEN-LAST:event_listTripsValueChanged
 
     private void boxInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxInfoActionPerformed
@@ -731,14 +894,90 @@ public class SearchTrip extends javax.swing.JFrame {
 
     private void buttonTripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTripActionPerformed
         int selectedIndex = listTrips.getSelectedIndex();
-        if (selectedIndex != -1) {
-            // ✅ An item is selected
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "You must select a trip from the list first.");
+            return;
+        }
+
+        // Get selected trip
+        TripSummary selectedTrip = availableTrips.get(selectedIndex);
+        long tripId = selectedTrip.getTripId(); // You MUST store tripId in TripDisplay
+
+        // Get selected payment method
+        PaymentMethod selectedMethod = (PaymentMethod) boxMethod.getSelectedItem();
+        if (selectedMethod == null || selectedMethod.getId() == 0) {
+            JOptionPane.showMessageDialog(this, "You must select a payment method.");
+            return;
+        }
+
+        // Get selected stop
+        Waypoint selectedStop = (Waypoint) boxStops.getSelectedItem();
+        if (selectedStop == null) {
+            JOptionPane.showMessageDialog(this, "You must select a pickup stop.");
+            return;
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Step 1: Insert into PASSENGERXTRIP
+            PassengerXTripDAO passengerXTripDAO = new PassengerXTripDAO();
+            long pxTripId = passengerXTripDAO.bookTrip(user.getPersonId(), tripId, conn); // returns ID
+
+            // Step 2: Insert into PASSENGERXTRIPXPAYMENT
+            PassengerTripPaymentDAO payDAO = new PassengerTripPaymentDAO();
+            payDAO.assignPaymentMethod(pxTripId, selectedMethod.getId(), conn);
+
+            // Step 3: Insert into PASSENGERXWAYPOINT
+            PassengerWaypointDAO waypointDAO = new PassengerWaypointDAO();
+            waypointDAO.addPassengerWaypoint(user.getPersonId(), selectedStop.getId(), conn);
+
+            conn.commit();
             JOptionPane.showMessageDialog(this, "Trip booked successfully!");
-        } else {
-            // ❌ No selection
-            JOptionPane.showMessageDialog(null, "You must select a trip from the list first.");
+            
+            SwingUtilities.invokeLater(() -> {
+                TripBooked bookTrip = new TripBooked(userRole, user);
+                bookTrip.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                bookTrip.setVisible(true);
+                SearchTrip.this.dispose();
+            });
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error booking trip: " + ex.getMessage());
         }
     }//GEN-LAST:event_buttonTripActionPerformed
+
+    private void boxInstitutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxInstitutionsActionPerformed
+        Institution selected = (Institution) boxInstitutions.getSelectedItem();
+            if (selected != null) {
+                loadTripsForInstitution(selected);
+            }
+    }//GEN-LAST:event_boxInstitutionsActionPerformed
+
+    private void boxStopsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxStopsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxStopsActionPerformed
+
+    private void boxProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxProvinceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxProvinceActionPerformed
+
+    private void boxCantonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxCantonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxCantonActionPerformed
+
+    private void boxDistrictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxDistrictActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxDistrictActionPerformed
+
+    private void boxMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxMethodActionPerformed
+        PaymentMethod selectedMethod = (PaymentMethod) boxMethod.getSelectedItem();
+        if (selectedMethod != null) {
+            // ✅ Do something with the selected payment method
+            long paymentMethodId = selectedMethod.getId();
+        }
+    }//GEN-LAST:event_boxMethodActionPerformed
 
     /**
      * @param args the command line arguments
@@ -787,18 +1026,19 @@ public class SearchTrip extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<Canton> boxCanton;
+    private javax.swing.JComboBox<District> boxDistrict;
     private javax.swing.JComboBox<String> boxInfo;
-    private javax.swing.JComboBox<String> boxMethod;
-    private javax.swing.JComboBox<String> boxStops;
+    private javax.swing.JComboBox<Institution> boxInstitutions;
+    private javax.swing.JComboBox<PaymentMethod> boxMethod;
+    private javax.swing.JComboBox<Province> boxProvince;
+    private javax.swing.JComboBox<Waypoint> boxStops;
     private javax.swing.JComboBox<String> boxTime;
     private javax.swing.JButton buttonTrip;
     private javax.swing.JPanel cardPanel;
     private com.github.lgooddatepicker.components.DatePicker datePicker;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -831,6 +1071,7 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelGender;
+    private javax.swing.JLabel labelInstitution;
     private javax.swing.JLabel labelMethod;
     private javax.swing.JLabel labelName;
     private javax.swing.JLabel labelPlate;
