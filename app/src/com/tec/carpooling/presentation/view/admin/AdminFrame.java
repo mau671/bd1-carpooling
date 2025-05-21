@@ -38,6 +38,9 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenuItemManageIdentificationTypes = new javax.swing.JMenuItem();
         jMenuItemManagePhoneTypes = new javax.swing.JMenuItem();
         jMenuItemManageCurrencys = new javax.swing.JMenuItem();
+        jMenuItemManageLocations = new javax.swing.JMenuItem();
+        jMenuItemManageMaxCapacity = new javax.swing.JMenuItem();
+        jMenuItemManagePaymentMethods = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItemParameters = new javax.swing.JMenuItem();
         jMenuItemLogs = new javax.swing.JMenuItem();
@@ -80,22 +83,71 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenu3.setText("Catalogs");
 
         jMenuItemManageGenres.setText("Manage Genres");
+        jMenuItemManageGenres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManageGenresActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemManageGenres);
 
         jMenuItemManageIdentificationTypes.setText("Manage ID Types");
+        jMenuItemManageIdentificationTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManageIdentificationTypesActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemManageIdentificationTypes);
 
         jMenuItemManagePhoneTypes.setText("Manage Phone Types");
+        jMenuItemManagePhoneTypes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManagePhoneTypesActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemManagePhoneTypes);
 
         jMenuItemManageCurrencys.setText("Manage Currencys");
+        jMenuItemManageCurrencys.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManageCurrencysActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemManageCurrencys);
+
+        jMenuItemManageLocations.setText("Manage Locations");
+        jMenuItemManageLocations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManageLocationsActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemManageLocations);
+
+        jMenuItemManageMaxCapacity.setText("Manage Max Capacity");
+        jMenuItemManageMaxCapacity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManageMaxCapacityActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemManageMaxCapacity);
+
+        jMenuItemManagePaymentMethods.setText("Manage Payment Methods");
+        jMenuItemManagePaymentMethods.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManagePaymentMethodsActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemManagePaymentMethods);
 
         jMenuBar1.add(jMenu3);
 
         jMenu2.setText("System");
 
         jMenuItemParameters.setText("Parameters");
+        jMenuItemParameters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemParametersActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemParameters);
 
         jMenuItemLogs.setText("Logs");
@@ -141,8 +193,41 @@ public class AdminFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemQuerysActionPerformed
 
     private void jMenuItemManagementUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementUsersActionPerformed
-        // TODO add your handling code here:
+       showPanel(new Users());
     }//GEN-LAST:event_jMenuItemManagementUsersActionPerformed
+
+    private void jMenuItemManageIdentificationTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManageIdentificationTypesActionPerformed
+        showPanel(new IDTypes());
+    }//GEN-LAST:event_jMenuItemManageIdentificationTypesActionPerformed
+
+    private void jMenuItemManageGenresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManageGenresActionPerformed
+        showPanel(new Genres());
+    }//GEN-LAST:event_jMenuItemManageGenresActionPerformed
+
+    private void jMenuItemManagePhoneTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagePhoneTypesActionPerformed
+        showPanel(new PhoneTypes());
+    }//GEN-LAST:event_jMenuItemManagePhoneTypesActionPerformed
+
+    private void jMenuItemManageMaxCapacityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManageMaxCapacityActionPerformed
+        showPanel(new MaxCapacity());
+    }//GEN-LAST:event_jMenuItemManageMaxCapacityActionPerformed
+
+    private void jMenuItemManageCurrencysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManageCurrencysActionPerformed
+        showPanel(new Currency());
+    }//GEN-LAST:event_jMenuItemManageCurrencysActionPerformed
+
+    private void jMenuItemManageLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManageLocationsActionPerformed
+         showPanel(new Locations());
+    }//GEN-LAST:event_jMenuItemManageLocationsActionPerformed
+
+    private void jMenuItemParametersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemParametersActionPerformed
+       showPanel(new Parameters());
+    }//GEN-LAST:event_jMenuItemParametersActionPerformed
+
+    private void jMenuItemManagePaymentMethodsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagePaymentMethodsActionPerformed
+        showPanel(new PaymentMethods());
+    }//GEN-LAST:event_jMenuItemManagePaymentMethodsActionPerformed
+    
     
 
     private void showPanel(JPanel panel) {
@@ -211,6 +296,9 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemManageCurrencys;
     private javax.swing.JMenuItem jMenuItemManageGenres;
     private javax.swing.JMenuItem jMenuItemManageIdentificationTypes;
+    private javax.swing.JMenuItem jMenuItemManageLocations;
+    private javax.swing.JMenuItem jMenuItemManageMaxCapacity;
+    private javax.swing.JMenuItem jMenuItemManagePaymentMethods;
     private javax.swing.JMenuItem jMenuItemManagePhoneTypes;
     private javax.swing.JMenuItem jMenuItemManagementInstitutions;
     private javax.swing.JMenuItem jMenuItemManagementUsers;
