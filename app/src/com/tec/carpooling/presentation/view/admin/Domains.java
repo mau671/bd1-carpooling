@@ -17,6 +17,8 @@ import javax.swing.table.DefaultTableModel;
 import oracle.jdbc.OracleTypes;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -215,10 +217,9 @@ public class Domains extends javax.swing.JDialog {
 
     private void loadDomains() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("{ ? = call ADM.ADM_INST_DOM_PKG.get_avail_dom(?) }")) {
+             CallableStatement stmt = conn.prepareCall("{ ? = call ADM.ADM_DOMAIN_MGMT_PKG.find_all_domains_cursor }")) {
             
             stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.setInt(2, institutionId);
             stmt.execute();
             
             ResultSet rs = (ResultSet) stmt.getObject(1);
@@ -228,8 +229,27 @@ public class Domains extends javax.swing.JDialog {
                 tableModel.addRow(new Object[]{
                     rs.getInt("id"),
                     rs.getString("name"),
-                    rs.getInt("enabled") == 1
+                    false // Por defecto no está habilitado
                 });
+            }
+            
+            // Verificar qué dominios están habilitados para esta institución
+            try (CallableStatement stmt2 = conn.prepareCall("{ ? = call ADM.ADM_INSTITUTION_MGMT_PKG.get_assoc_domain_ids_cur(?) }")) {
+                stmt2.registerOutParameter(1, OracleTypes.CURSOR);
+                stmt2.setInt(2, institutionId);
+                stmt2.execute();
+                
+                ResultSet rs2 = (ResultSet) stmt2.getObject(1);
+                while (rs2.next()) {
+                    int domainId = rs2.getInt("domain_id");
+                    // Marcar como habilitado en la tabla
+                    for (int i = 0; i < tableModel.getRowCount(); i++) {
+                        if ((int)tableModel.getValueAt(i, 0) == domainId) {
+                            tableModel.setValueAt(true, i, 2);
+                            break;
+                        }
+                    }
+                }
             }
             
             jTableSeeDomains.setModel(tableModel);
@@ -247,45 +267,28 @@ public class Domains extends javax.swing.JDialog {
 
     private void saveDomainChanges() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Primero obtenemos el estado actual de los dominios
-            Map<Integer, Boolean> currentState = new HashMap<>();
-            try (CallableStatement stmt = conn.prepareCall("{ ? = call ADM.ADM_INST_DOM_PKG.get_avail_dom(?) }")) {
-                stmt.registerOutParameter(1, OracleTypes.CURSOR);
-                stmt.setInt(2, institutionId);
+            // Crear una tabla de IDs de dominios habilitados
+            List<Integer> enabledDomainIds = new ArrayList<>();
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                if ((boolean)tableModel.getValueAt(i, 2)) {
+                    enabledDomainIds.add((int)tableModel.getValueAt(i, 0));
+                }
+            }
+            
+            // Convertir la lista a un array
+            Integer[] domainIds = enabledDomainIds.toArray(new Integer[0]);
+            
+            // Crear el tipo de tabla para Oracle
+            try (CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_INSTITUTION_MGMT_PKG.update_institution_domains(?, ?) }")) {
+                stmt.setInt(1, institutionId);
+                stmt.setArray(2, conn.createArrayOf("NUMBER", domainIds));
                 stmt.execute();
                 
-                ResultSet rs = (ResultSet) stmt.getObject(1);
-                while (rs.next()) {
-                    currentState.put(rs.getInt("id"), rs.getInt("enabled") == 1);
-                }
+                JOptionPane.showMessageDialog(this,
+                    "Asociaciones de dominios actualizadas exitosamente.",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
             }
-            
-            // Ahora procesamos solo los cambios
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                int domainId = (int) tableModel.getValueAt(i, 0);
-                boolean newEnabled = (boolean) tableModel.getValueAt(i, 2);
-                boolean oldEnabled = currentState.getOrDefault(domainId, false);
-                
-                // Solo procesamos si el estado cambió
-                if (newEnabled != oldEnabled) {
-                    CallableStatement stmt;
-                    if (newEnabled) {
-                        stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.add_dom_to_inst(?, ?) }");
-                    } else {
-                        stmt = conn.prepareCall("{ call ADM.ADM_INST_DOM_PKG.rem_dom_from_inst(?, ?) }");
-                    }
-                    
-                    stmt.setInt(1, institutionId);
-                    stmt.setInt(2, domainId);
-                    stmt.execute();
-                }
-            }
-            
-            JOptionPane.showMessageDialog(this,
-                "Asociaciones de dominios actualizadas exitosamente.",
-                "Éxito",
-                JOptionPane.INFORMATION_MESSAGE);
-            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
                 "Error al guardar cambios de dominios: " + ex.getMessage(),
@@ -298,14 +301,14 @@ public class Domains extends javax.swing.JDialog {
         String domainName = jTextFieldDomainName.getText().trim();
         if (domainName.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Domain name cannot be empty.",
-                "Invalid Input",
+                "El nombre del dominio no puede estar vacío.",
+                "Entrada Inválida",
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.create_dom(?, ?) }")) {
+             CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOMAIN_MGMT_PKG.register_domain(?, ?) }")) {
             
             stmt.setString(1, domainName);
             stmt.registerOutParameter(2, java.sql.Types.INTEGER);
@@ -316,15 +319,23 @@ public class Domains extends javax.swing.JDialog {
             jTextFieldDomainName.setText("");
             
             JOptionPane.showMessageDialog(this,
-                "Domain added successfully.",
-                "Success",
+                "Dominio agregado exitosamente.",
+                "Éxito",
                 JOptionPane.INFORMATION_MESSAGE);
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,
-                "Error adding domain: " + ex.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+            String errorMessage = ex.getMessage();
+            if (errorMessage.contains("ORA-20102")) {
+                JOptionPane.showMessageDialog(this,
+                    "El dominio '" + domainName + "' ya existe.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Error al agregar dominio: " + errorMessage,
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -381,26 +392,26 @@ public class Domains extends javax.swing.JDialog {
     private void deleteSelectedDomain() {
         if (selectedDomainId == -1) {
             JOptionPane.showMessageDialog(this,
-                "Please select a domain to delete.",
-                "No Selection",
+                "Por favor seleccione un dominio para eliminar.",
+                "Sin Selección",
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to delete this domain?",
-            "Confirm Delete",
+            "¿Está seguro que desea eliminar este dominio?",
+            "Confirmar Eliminación",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.WARNING_MESSAGE);
 
         if (confirm == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOM_PKG.delete_dom(?) }")) {
+                 CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_DOMAIN_MGMT_PKG.delete_domain(?) }")) {
                 
                 stmt.setInt(1, selectedDomainId);
                 stmt.execute();
                 
-                // Remove from table
+                // Remover de la tabla
                 for (int i = 0; i < tableModel.getRowCount(); i++) {
                     if ((int) tableModel.getValueAt(i, 0) == selectedDomainId) {
                         tableModel.removeRow(i);
@@ -413,15 +424,28 @@ public class Domains extends javax.swing.JDialog {
                 selectedDomainName = "";
                 
                 JOptionPane.showMessageDialog(this,
-                    "Domain deleted successfully.",
-                    "Success",
+                    "Dominio eliminado exitosamente.",
+                    "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
                 
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this,
-                    "Error deleting domain: " + ex.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                String errorMessage = ex.getMessage();
+                if (errorMessage.contains("ORA-20112")) {
+                    JOptionPane.showMessageDialog(this,
+                        "No se puede eliminar el dominio porque está asociado con instituciones.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                } else if (errorMessage.contains("ORA-20111")) {
+                    JOptionPane.showMessageDialog(this,
+                        "No se encontró el dominio con ID " + selectedDomainId,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                        "Error al eliminar dominio: " + errorMessage,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
