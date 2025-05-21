@@ -1,4 +1,11 @@
 -- =====================================================================
+-- Grants necesarios antes de crear los procedimientos
+-- =====================================================================
+
+-- Grants para que ADM pueda acceder a las tablas de PU
+GRANT SELECT ON PU.MAXCAPACITYXVEHICLE TO ADM;
+
+-- =====================================================================
 -- Procedures for Max Capacity Management
 -- =====================================================================
 /*
@@ -19,7 +26,7 @@ CREATE OR REPLACE PROCEDURE ADM.INSERT_MAX_CAPACITY (
 ) AS
 BEGIN
     INSERT INTO ADM.MAXCAPACITY (
-        capacity
+        capacity_number
     ) VALUES (
         p_capacity
     );
@@ -38,7 +45,7 @@ CREATE OR REPLACE PROCEDURE ADM.UPDATE_MAX_CAPACITY (
 ) AS
 BEGIN
     UPDATE ADM.MAXCAPACITY
-    SET capacity = p_capacity
+    SET capacity_number = p_capacity
     WHERE id = p_id;
     
     IF SQL%ROWCOUNT = 0 THEN
@@ -59,13 +66,13 @@ CREATE OR REPLACE PROCEDURE ADM.DELETE_MAX_CAPACITY (
 ) AS
     v_count NUMBER;
 BEGIN
-    -- Check if max capacity is used in trips
+    -- Check if max capacity is used in vehicle-capacity relationships
     SELECT COUNT(*) INTO v_count
-    FROM PU.TRIP
+    FROM PU.MAXCAPACITYXVEHICLE
     WHERE max_capacity_id = p_id;
     
     IF v_count > 0 THEN
-        RAISE_APPLICATION_ERROR(-20074, 'Cannot delete max capacity that is used in trips');
+        RAISE_APPLICATION_ERROR(-20074, 'Cannot delete max capacity that is used in vehicle-capacity relationships');
     END IF;
     
     DELETE FROM ADM.MAXCAPACITY
@@ -90,7 +97,7 @@ CREATE OR REPLACE PROCEDURE ADM.GET_MAX_CAPACITY (
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT id, capacity, creator, creation_date, modifier, modification_date
+        SELECT id, capacity_number, creator, creation_date, modifier, modification_date
         FROM ADM.MAXCAPACITY
         WHERE id = p_id;
 EXCEPTION
@@ -105,9 +112,9 @@ CREATE OR REPLACE PROCEDURE ADM.LIST_MAX_CAPACITIES (
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT id, capacity, creator, creation_date, modifier, modification_date
+        SELECT id, capacity_number, creator, creation_date, modifier, modification_date
         FROM ADM.MAXCAPACITY
-        ORDER BY capacity;
+        ORDER BY capacity_number;
 EXCEPTION
     WHEN OTHERS THEN
         RAISE_APPLICATION_ERROR(-20078, 'Error listing max capacities: ' || SQLERRM);

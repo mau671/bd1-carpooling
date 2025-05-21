@@ -4,15 +4,15 @@
  */
 package com.tec.carpooling.presentation.view.admin;
 
-import com.tec.carpooling.business.service.InstitutionService;
-import com.tec.carpooling.business.service.impl.InstitutionServiceImpl;
-import com.tec.carpooling.dto.InstitutionDTO;
-import com.tec.carpooling.exception.InstitutionManagementException;
-import java.awt.Frame;
-import java.util.List;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -20,31 +20,26 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MaxCapacity extends javax.swing.JPanel {
 
-    private final InstitutionService institutionService; // Inyectar!
-    private DefaultTableModel institutionTableModel;
-    private Long selectedInstitutionId = null; // Para guardar el ID seleccionado
+    private DefaultTableModel maxCapacityTableModel;
+    private Long selectedMaxCapacityId = null;
 
     public MaxCapacity() {
-        // --- ¡¡MEJORAR ESTO CON INYECCIÓN DE DEPENDENCIAS!! ---
-        this.institutionService = new InstitutionServiceImpl();
-        // ---
         initComponents();
         initTableModel();
-        loadInstitutions(); // Cargar datos al iniciar
-        jButtonEditDomains.setEnabled(false); // Deshabilitar hasta seleccionar
+        loadMaxCapacities();
         jButtonInstitutionUpdate.setEnabled(false);
         jButtonInstitutionDelete.setEnabled(false);
     }
 
     private void initTableModel() {
-        institutionTableModel = new DefaultTableModel(
+        maxCapacityTableModel = new DefaultTableModel(
             new Object [][] {},
             new String [] {
-                "ID", "Name"
+                "ID", "Capacidad"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.String.class
+                java.lang.Long.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false
@@ -58,33 +53,47 @@ public class MaxCapacity extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         };
-        jTableInstitution.setModel(institutionTableModel);
+        jTableInstitution.setModel(maxCapacityTableModel);
+        
+        // Ajustar el ancho de las columnas
+        if (jTableInstitution.getColumnModel().getColumnCount() > 0) {
+            jTableInstitution.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableInstitution.getColumnModel().getColumn(1).setPreferredWidth(200);
+        }
     }
 
-    private void loadInstitutions() {
-        try {
-            List<InstitutionDTO> institutions = institutionService.getAllInstitutions();
-            institutionTableModel.setRowCount(0); // Limpiar tabla antes de cargar
-            for (InstitutionDTO inst : institutions) {
-                institutionTableModel.addRow(new Object[]{inst.getId(), inst.getName()});
+    private void loadMaxCapacities() {
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_MAX_CAPACITIES(?) }")) {
+            
+            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+            cstmt.execute();
+            
+            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+                maxCapacityTableModel.setRowCount(0);
+                while (rs.next()) {
+                    maxCapacityTableModel.addRow(new Object[]{
+                        rs.getLong("id"),
+                        rs.getInt("capacity_number")
+                    });
+                }
             }
-             clearSelectionAndFields();
-        } catch (Exception e) {
+            clearSelectionAndFields();
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error al cargar instituciones: " + e.getMessage(), 
+                "Error al cargar las capacidades máximas: " + e.getMessage(), 
                 "Error de Carga", 
                 JOptionPane.ERROR_MESSAGE);
         }
     }
     
-   private void clearSelectionAndFields() {
+    private void clearSelectionAndFields() {
         jTableInstitution.clearSelection();
         jTextFieldInstitutionName.setText("");
-        selectedInstitutionId = null;
-        jButtonEditDomains.setEnabled(false);
+        selectedMaxCapacityId = null;
         jButtonInstitutionUpdate.setEnabled(false);
         jButtonInstitutionDelete.setEnabled(false);
-        jButtonInstitutionSave.setEnabled(true); // Habilitar Guardar
+        jButtonInstitutionSave.setEnabled(true);
     }
 
     /**
@@ -103,8 +112,6 @@ public class MaxCapacity extends javax.swing.JPanel {
         jButtonInstitutionDelete = new javax.swing.JButton();
         jScrollPaneInstitution = new javax.swing.JScrollPane();
         jTableInstitution = new javax.swing.JTable();
-        jLabelInstitutionDomains = new javax.swing.JLabel();
-        jButtonEditDomains = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -171,15 +178,6 @@ public class MaxCapacity extends javax.swing.JPanel {
             jTableInstitution.getColumnModel().getColumn(1).setPreferredWidth(200);
         }
 
-        jLabelInstitutionDomains.setText("Domains");
-
-        jButtonEditDomains.setText("See/Change");
-        jButtonEditDomains.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditDomainsActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,13 +193,9 @@ public class MaxCapacity extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelInstitutionName)
-                                    .addComponent(jLabelInstitutionDomains, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonEditDomains, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabelInstitutionName)
+                                .addGap(38, 38, 38)
+                                .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26)))
                 .addGap(103, 103, 103))
         );
@@ -222,11 +216,7 @@ public class MaxCapacity extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabelInstitutionName))
-                            .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonEditDomains)
-                            .addComponent(jLabelInstitutionDomains))))
+                            .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(48, 48, 48)
                 .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(140, Short.MAX_VALUE))
@@ -237,127 +227,167 @@ public class MaxCapacity extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldInstitutionNameActionPerformed
 
-    private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionSaveActionPerformed
-        String name = jTextFieldInstitutionName.getText().trim();
-        if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+    private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {
+        String capacityStr = jTextFieldInstitutionName.getText().trim();
+        if (capacityStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La capacidad no puede estar vacía.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
-            InstitutionDTO newInstitution = institutionService.registerInstitution(name);
-            JOptionPane.showMessageDialog(this, "Institución '" + newInstitution.getName() + "' registrada con ID: " + newInstitution.getId());
-            loadInstitutions(); // Recargar la tabla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButtonInstitutionSaveActionPerformed
-
-    private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionUpdateActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-         String newName = jTextFieldInstitutionName.getText().trim();
-        if (newName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        try {
-            boolean success = institutionService.updateInstitutionName(selectedInstitutionId, newName);
-             if (success) {
-                JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
-                loadInstitutions(); // Recargar tabla
+            int capacity = Integer.parseInt(capacityStr);
+            if (capacity <= 0) {
+                JOptionPane.showMessageDialog(this, "La capacidad debe ser mayor que 0.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+                return;
             }
-            // El servicio debería lanzar excepción si falla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error de Actualización", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-             // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_MAX_CAPACITY(?) }")) {
+                
+                cstmt.setInt(1, capacity);
+                cstmt.execute();
+                
+                JOptionPane.showMessageDialog(this, "Capacidad máxima '" + capacity + "' registrada exitosamente.");
+                loadMaxCapacities();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido para la capacidad.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+        } catch (SQLException e) {
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("ORA-20071")) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al insertar la capacidad máxima: " + errorMessage.substring(errorMessage.indexOf(":") + 1), 
+                    "Error de Guardado", 
+                    JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al guardar la capacidad máxima: " + errorMessage, 
+                    "Error de Guardado", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedMaxCapacityId == null) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione una capacidad máxima de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
-    }//GEN-LAST:event_jButtonInstitutionUpdateActionPerformed
+        String capacityStr = jTextFieldInstitutionName.getText().trim();
+        if (capacityStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La capacidad no puede estar vacía.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionDeleteActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+        try {
+            int capacity = Integer.parseInt(capacityStr);
+            if (capacity <= 0) {
+                JOptionPane.showMessageDialog(this, "La capacidad debe ser mayor que 0.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_MAX_CAPACITY(?, ?) }")) {
+                
+                cstmt.setLong(1, selectedMaxCapacityId);
+                cstmt.setInt(2, capacity);
+                cstmt.execute();
+                
+                JOptionPane.showMessageDialog(this, "Capacidad máxima actualizada exitosamente.");
+                loadMaxCapacities();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido para la capacidad.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+        } catch (SQLException e) {
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("ORA-20072")) {
+                JOptionPane.showMessageDialog(this, 
+                    "No se encontró la capacidad máxima con ID: " + selectedMaxCapacityId, 
+                    "Error de Actualización", 
+                    JOptionPane.ERROR_MESSAGE);
+            } else if (errorMessage.contains("ORA-20073")) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al actualizar la capacidad máxima: " + errorMessage.substring(errorMessage.indexOf(":") + 1), 
+                    "Error de Actualización", 
+                    JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al actualizar la capacidad máxima: " + errorMessage, 
+                    "Error de Actualización", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedMaxCapacityId == null) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione una capacidad máxima de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirmation = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
+                "¿Está seguro que desea eliminar la capacidad máxima seleccionada?\n(ID: " + selectedMaxCapacityId + " - Capacidad: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
                 "Confirmar Eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
 
         if (confirmation == JOptionPane.YES_OPTION) {
-             try {
-                boolean success = institutionService.deleteInstitution(selectedInstitutionId);
-                 if (success) {
-                    JOptionPane.showMessageDialog(this, "Institución eliminada.");
-                    loadInstitutions(); // Recargar tabla
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_MAX_CAPACITY(?) }")) {
+                
+                cstmt.setLong(1, selectedMaxCapacityId);
+                cstmt.execute();
+                
+                JOptionPane.showMessageDialog(this, "Capacidad máxima eliminada exitosamente.");
+                loadMaxCapacities();
+            } catch (SQLException e) {
+                String errorMessage = e.getMessage();
+                if (errorMessage.contains("ORA-20074")) {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se puede eliminar la capacidad máxima porque está siendo utilizada en relaciones vehículo-capacidad.", 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
+                } else if (errorMessage.contains("ORA-20075")) {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se encontró la capacidad máxima con ID: " + selectedMaxCapacityId, 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
+                } else if (errorMessage.contains("ORA-20076")) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Error al eliminar la capacidad máxima: " + errorMessage.substring(errorMessage.indexOf(":") + 1), 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "Error al eliminar la capacidad máxima: " + errorMessage, 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
                 }
-                // El servicio debería lanzar excepción si falla
-            } catch (InstitutionManagementException e) { // Capturar error específico si existe FK constraint
-                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage() + "\n(Posiblemente está asociada a usuarios u otros datos).", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
-            }
-             catch (Exception e) {
-                 // Loggear
-                 JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jButtonInstitutionDeleteActionPerformed
+    }
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-       int selectedRow = jTableInstitution.getSelectedRow();
-       if (selectedRow >= 0) {
-           selectedInstitutionId = (Long) institutionTableModel.getValueAt(selectedRow, 0);
-           String selectedName = (String) institutionTableModel.getValueAt(selectedRow, 1);
+        int selectedRow = jTableInstitution.getSelectedRow();
+        if (selectedRow >= 0) {
+            selectedMaxCapacityId = (Long) maxCapacityTableModel.getValueAt(selectedRow, 0);
+            Integer selectedCapacity = (Integer) maxCapacityTableModel.getValueAt(selectedRow, 1);
 
-           jTextFieldInstitutionName.setText(selectedName);
+            jTextFieldInstitutionName.setText(selectedCapacity.toString());
 
             jButtonInstitutionSave.setEnabled(false);
-           jButtonInstitutionUpdate.setEnabled(true);
-           jButtonInstitutionDelete.setEnabled(true);
-           jButtonEditDomains.setEnabled(true);
-       } else {
+            jButtonInstitutionUpdate.setEnabled(true);
+            jButtonInstitutionDelete.setEnabled(true);
+        } else {
             clearSelectionAndFields();
         }
-       }
-
-    private void jButtonEditDomainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditDomainsActionPerformed
-        editDomainsButtonActionPerformed(evt);
-
-        // El diálogo se encarga de guardar los cambios, no necesitamos hacer nada aquí después de que cierre.
-        // Si necesitaras refrescar algo en ESTE panel después de que el diálogo cierre,
-        // podrías añadir un listener al diálogo o hacer que devuelva un valor.
-    }//GEN-LAST:event_jButtonEditDomainsActionPerformed
-
-    private void editDomainsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this,
-                "Por favor seleccione una institución primero.",
-                "Sin Selección",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        javax.swing.JFrame parentFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
-        Domains domainsDialog = new Domains(parentFrame, true, selectedInstitutionId.intValue(), jTextFieldInstitutionName.getText());
-        domainsDialog.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonEditDomains;
     private javax.swing.JButton jButtonInstitutionDelete;
     private javax.swing.JButton jButtonInstitutionSave;
     private javax.swing.JButton jButtonInstitutionUpdate;
-    private javax.swing.JLabel jLabelInstitutionDomains;
     private javax.swing.JLabel jLabelInstitutionName;
     private javax.swing.JScrollPane jScrollPaneInstitution;
     private javax.swing.JTable jTableInstitution;

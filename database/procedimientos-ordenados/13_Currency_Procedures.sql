@@ -15,16 +15,13 @@
 
 -- 1.1 Insert Currency
 CREATE OR REPLACE PROCEDURE ADM.INSERT_CURRENCY (
-    p_name IN VARCHAR2,
-    p_symbol IN VARCHAR2
+    p_name IN VARCHAR2
 ) AS
 BEGIN
     INSERT INTO ADM.CURRENCY (
-        name,
-        symbol
+        name
     ) VALUES (
-        p_name,
-        p_symbol
+        p_name
     );
     COMMIT;
 EXCEPTION
@@ -37,13 +34,11 @@ END INSERT_CURRENCY;
 -- 1.2 Update Currency
 CREATE OR REPLACE PROCEDURE ADM.UPDATE_CURRENCY (
     p_id IN NUMBER,
-    p_name IN VARCHAR2,
-    p_symbol IN VARCHAR2
+    p_name IN VARCHAR2
 ) AS
 BEGIN
     UPDATE ADM.CURRENCY
-    SET name = p_name,
-        symbol = p_symbol
+    SET name = p_name
     WHERE id = p_id;
     
     IF SQL%ROWCOUNT = 0 THEN
@@ -64,13 +59,13 @@ CREATE OR REPLACE PROCEDURE ADM.DELETE_CURRENCY (
 ) AS
     v_count NUMBER;
 BEGIN
-    -- Check if currency is used in payments
+    -- Check if currency is used in trips
     SELECT COUNT(*) INTO v_count
-    FROM PU.PAYMENT
-    WHERE currency_id = p_id;
+    FROM PU.TRIP
+    WHERE id_currency = p_id;
     
     IF v_count > 0 THEN
-        RAISE_APPLICATION_ERROR(-20090, 'Cannot delete currency that is used in payments');
+        RAISE_APPLICATION_ERROR(-20090, 'Cannot delete currency that is used in trips');
     END IF;
     
     DELETE FROM ADM.CURRENCY
@@ -95,7 +90,7 @@ CREATE OR REPLACE PROCEDURE ADM.GET_CURRENCY (
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT id, name, symbol, creator, creation_date, modifier, modification_date
+        SELECT id, name, creator, creation_date, modifier, modification_date
         FROM ADM.CURRENCY
         WHERE id = p_id;
 EXCEPTION
@@ -110,7 +105,7 @@ CREATE OR REPLACE PROCEDURE ADM.LIST_CURRENCIES (
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT id, name, symbol, creator, creation_date, modifier, modification_date
+        SELECT id, name, creator, creation_date, modifier, modification_date
         FROM ADM.CURRENCY
         ORDER BY name;
 EXCEPTION

@@ -1,15 +1,14 @@
 package com.tec.carpooling.presentation.view.admin;
 
-import com.tec.carpooling.business.service.InstitutionService;
-import com.tec.carpooling.business.service.impl.InstitutionServiceImpl;
-import com.tec.carpooling.dto.InstitutionDTO;
-import com.tec.carpooling.exception.InstitutionManagementException;
-import java.awt.Frame;
-import java.awt.event.MouseEvent;
-import java.util.List;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -17,23 +16,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Genres extends javax.swing.JPanel {
 
-    private final InstitutionService institutionService; // Inyectar!
-    private DefaultTableModel institutionTableModel;
-    private Long selectedInstitutionId = null; // Para guardar el ID seleccionado
+    private DefaultTableModel genderTableModel;
+    private Long selectedGenderId = null;
 
     public Genres() {
-        // --- ¡¡MEJORAR ESTO CON INYECCIÓN DE DEPENDENCIAS!! ---
-        this.institutionService = new InstitutionServiceImpl();
-        // ---
         initComponents();
         initTableModel();
-        loadInstitutions(); // Cargar datos al iniciar
+        loadGenders();
         jButtonGenresUpdate.setEnabled(false);
         jButtonGenresDelete.setEnabled(false);
     }
 
     private void initTableModel() {
-        institutionTableModel = new DefaultTableModel(
+        genderTableModel = new DefaultTableModel(
             new Object [][] {},
             new String [] {
                 "ID", "Name"
@@ -54,32 +49,41 @@ public class Genres extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         };
-        jTableGenres.setModel(institutionTableModel);
+        jTableGenres.setModel(genderTableModel);
     }
 
-    private void loadInstitutions() {
-        try {
-            List<InstitutionDTO> institutions = institutionService.getAllInstitutions();
-            institutionTableModel.setRowCount(0); // Limpiar tabla antes de cargar
-            for (InstitutionDTO inst : institutions) {
-                institutionTableModel.addRow(new Object[]{inst.getId(), inst.getName()});
+    private void loadGenders() {
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_GENDERS(?) }")) {
+            
+            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+            cstmt.execute();
+            
+            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+                genderTableModel.setRowCount(0);
+                while (rs.next()) {
+                    genderTableModel.addRow(new Object[]{
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    });
+                }
             }
-             clearSelectionAndFields();
-        } catch (Exception e) {
+            clearSelectionAndFields();
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error al cargar instituciones: " + e.getMessage(), 
-                "Error de Carga", 
+                "Error loading genders: " + e.getMessage(), 
+                "Load Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
     }
     
-   private void clearSelectionAndFields() {
+    private void clearSelectionAndFields() {
         jTableGenres.clearSelection();
         jTextFieldGenresName.setText("");
-        selectedInstitutionId = null;
+        selectedGenderId = null;
         jButtonGenresUpdate.setEnabled(false);
         jButtonGenresDelete.setEnabled(false);
-        jButtonGenresSave.setEnabled(true); // Habilitar Guardar
+        jButtonGenresSave.setEnabled(true);
     }
 
     /**
@@ -213,97 +217,103 @@ public class Genres extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldGenresNameActionPerformed
 
-    private void jButtonGenresSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenresSaveActionPerformed
+    private void jButtonGenresSaveActionPerformed(java.awt.event.ActionEvent evt) {
         String name = jTextFieldGenresName.getText().trim();
         if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Gender name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            InstitutionDTO newInstitution = institutionService.registerInstitution(name);
-            JOptionPane.showMessageDialog(this, "Institución '" + newInstitution.getName() + "' registrada con ID: " + newInstitution.getId());
-            loadInstitutions(); // Recargar la tabla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_GENDER(?) }")) {
+            
+            cstmt.setString(1, name);
+            cstmt.execute();
+            
+            JOptionPane.showMessageDialog(this, "Gender '" + name + "' registered successfully.");
+            loadGenders();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error saving gender: " + e.getMessage(), 
+                "Save Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButtonGenresSaveActionPerformed
+    }
 
-    private void jButtonGenresUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenresUpdateActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+    private void jButtonGenresUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedGenderId == null) {
+            JOptionPane.showMessageDialog(this, "Please select a gender from the table to update.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
-         String newName = jTextFieldGenresName.getText().trim();
+
+        String newName = jTextFieldGenresName.getText().trim();
         if (newName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Gender name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            boolean success = institutionService.updateInstitutionName(selectedInstitutionId, newName);
-             if (success) {
-                JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
-                loadInstitutions(); // Recargar tabla
-            }
-            // El servicio debería lanzar excepción si falla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error de Actualización", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-             // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_GENDER(?, ?) }")) {
+            
+            cstmt.setLong(1, selectedGenderId);
+            cstmt.setString(2, newName);
+            cstmt.execute();
+            
+            JOptionPane.showMessageDialog(this, "Gender updated successfully.");
+            loadGenders();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error updating gender: " + e.getMessage(), 
+                "Update Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
+    }
 
-    }//GEN-LAST:event_jButtonGenresUpdateActionPerformed
-
-    private void jButtonGenresDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenresDeleteActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+    private void jButtonGenresDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedGenderId == null) {
+            JOptionPane.showMessageDialog(this, "Please select a gender from the table to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirmation = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldGenresName.getText() + ")\n¡Esta acción no se puede deshacer!",
-                "Confirmar Eliminación",
+                "Are you sure you want to delete the selected gender?\n(ID: " + selectedGenderId + " - Name: " + jTextFieldGenresName.getText() + ")\nThis action cannot be undone!",
+                "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
 
         if (confirmation == JOptionPane.YES_OPTION) {
-             try {
-                boolean success = institutionService.deleteInstitution(selectedInstitutionId);
-                 if (success) {
-                    JOptionPane.showMessageDialog(this, "Institución eliminada.");
-                    loadInstitutions(); // Recargar tabla
-                }
-                // El servicio debería lanzar excepción si falla
-            } catch (InstitutionManagementException e) { // Capturar error específico si existe FK constraint
-                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage() + "\n(Posiblemente está asociada a usuarios u otros datos).", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
-            }
-             catch (Exception e) {
-                 // Loggear
-                 JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_GENDER(?) }")) {
+                
+                cstmt.setLong(1, selectedGenderId);
+                cstmt.execute();
+                
+                JOptionPane.showMessageDialog(this, "Gender deleted successfully.");
+                loadGenders();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error deleting gender: " + e.getMessage() + "\n(Possibly associated with persons or other data).", 
+                    "Delete Error", 
+                    JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jButtonGenresDeleteActionPerformed
+    }
 
     private void jTableGenresMouseClicked(java.awt.event.MouseEvent evt) {
-       int selectedRow = jTableGenres.getSelectedRow();
-       if (selectedRow >= 0) {
-           selectedInstitutionId = (Long) institutionTableModel.getValueAt(selectedRow, 0);
-           String selectedName = (String) institutionTableModel.getValueAt(selectedRow, 1);
+        int selectedRow = jTableGenres.getSelectedRow();
+        if (selectedRow >= 0) {
+            selectedGenderId = (Long) genderTableModel.getValueAt(selectedRow, 0);
+            String selectedName = (String) genderTableModel.getValueAt(selectedRow, 1);
 
-           jTextFieldGenresName.setText(selectedName);
+            jTextFieldGenresName.setText(selectedName);
 
             jButtonGenresSave.setEnabled(false);
-           jButtonGenresUpdate.setEnabled(true);
-           jButtonGenresDelete.setEnabled(true);
-       } else {
+            jButtonGenresUpdate.setEnabled(true);
+            jButtonGenresDelete.setEnabled(true);
+        } else {
             clearSelectionAndFields();
         }
-       }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGenresDelete;

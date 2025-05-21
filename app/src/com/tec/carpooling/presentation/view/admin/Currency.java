@@ -4,15 +4,15 @@
  */
 package com.tec.carpooling.presentation.view.admin;
 
-import com.tec.carpooling.business.service.InstitutionService;
-import com.tec.carpooling.business.service.impl.InstitutionServiceImpl;
-import com.tec.carpooling.dto.InstitutionDTO;
-import com.tec.carpooling.exception.InstitutionManagementException;
-import java.awt.Frame;
-import java.util.List;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -20,23 +20,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Currency extends javax.swing.JPanel {
 
-    private final InstitutionService institutionService; // Inyectar!
-    private DefaultTableModel institutionTableModel;
-    private Long selectedInstitutionId = null; // Para guardar el ID seleccionado
+    private DefaultTableModel currencyTableModel;
+    private Long selectedCurrencyId = null;
 
     public Currency() {
-        // --- ¡¡MEJORAR ESTO CON INYECCIÓN DE DEPENDENCIAS!! ---
-        this.institutionService = new InstitutionServiceImpl();
-        // ---
         initComponents();
         initTableModel();
-        loadInstitutions(); // Cargar datos al iniciar
+        loadCurrencies();
         jButtonInstitutionUpdate.setEnabled(false);
         jButtonInstitutionDelete.setEnabled(false);
     }
 
     private void initTableModel() {
-        institutionTableModel = new DefaultTableModel(
+        currencyTableModel = new DefaultTableModel(
             new Object [][] {},
             new String [] {
                 "ID", "Name"
@@ -57,32 +53,41 @@ public class Currency extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         };
-        jTableInstitution.setModel(institutionTableModel);
+        jTableInstitution.setModel(currencyTableModel);
     }
 
-    private void loadInstitutions() {
-        try {
-            List<InstitutionDTO> institutions = institutionService.getAllInstitutions();
-            institutionTableModel.setRowCount(0); // Limpiar tabla antes de cargar
-            for (InstitutionDTO inst : institutions) {
-                institutionTableModel.addRow(new Object[]{inst.getId(), inst.getName()});
+    private void loadCurrencies() {
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_CURRENCIES(?) }")) {
+            
+            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+            cstmt.execute();
+            
+            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+                currencyTableModel.setRowCount(0);
+                while (rs.next()) {
+                    currencyTableModel.addRow(new Object[]{
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    });
+                }
             }
-             clearSelectionAndFields();
-        } catch (Exception e) {
+            clearSelectionAndFields();
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error al cargar instituciones: " + e.getMessage(), 
-                "Error de Carga", 
+                "Error loading currencies: " + e.getMessage(), 
+                "Load Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
     }
     
-   private void clearSelectionAndFields() {
+    private void clearSelectionAndFields() {
         jTableInstitution.clearSelection();
         jTextFieldInstitutionName.setText("");
-        selectedInstitutionId = null;
+        selectedCurrencyId = null;
         jButtonInstitutionUpdate.setEnabled(false);
         jButtonInstitutionDelete.setEnabled(false);
-        jButtonInstitutionSave.setEnabled(true); // Habilitar Guardar
+        jButtonInstitutionSave.setEnabled(true);
     }
 
     /**
@@ -216,110 +221,102 @@ public class Currency extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldInstitutionNameActionPerformed
 
-    private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionSaveActionPerformed
+    private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {
         String name = jTextFieldInstitutionName.getText().trim();
         if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Currency name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            InstitutionDTO newInstitution = institutionService.registerInstitution(name);
-            JOptionPane.showMessageDialog(this, "Institución '" + newInstitution.getName() + "' registrada con ID: " + newInstitution.getId());
-            loadInstitutions(); // Recargar la tabla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_CURRENCY(?) }")) {
+            
+            cstmt.setString(1, name);
+            cstmt.execute();
+            
+            JOptionPane.showMessageDialog(this, "Currency '" + name + "' registered successfully.");
+            loadCurrencies();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error saving currency: " + e.getMessage(), 
+                "Save Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButtonInstitutionSaveActionPerformed
+    }
 
-    private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionUpdateActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+    private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedCurrencyId == null) {
+            JOptionPane.showMessageDialog(this, "Please select a currency from the table to update.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
-         String newName = jTextFieldInstitutionName.getText().trim();
-        if (newName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+
+        String name = jTextFieldInstitutionName.getText().trim();
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Currency name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            boolean success = institutionService.updateInstitutionName(selectedInstitutionId, newName);
-             if (success) {
-                JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
-                loadInstitutions(); // Recargar tabla
-            }
-            // El servicio debería lanzar excepción si falla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error de Actualización", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-             // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_CURRENCY(?, ?) }")) {
+            
+            cstmt.setLong(1, selectedCurrencyId);
+            cstmt.setString(2, name);
+            cstmt.execute();
+            
+            JOptionPane.showMessageDialog(this, "Currency updated successfully.");
+            loadCurrencies();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error updating currency: " + e.getMessage(), 
+                "Update Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
+    }
 
-    }//GEN-LAST:event_jButtonInstitutionUpdateActionPerformed
-
-    private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionDeleteActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+    private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedCurrencyId == null) {
+            JOptionPane.showMessageDialog(this, "Please select a currency from the table to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirmation = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
-                "Confirmar Eliminación",
+                "Are you sure you want to delete the selected currency?\n(ID: " + selectedCurrencyId + " - Name: " + jTextFieldInstitutionName.getText() + ")\nThis action cannot be undone!",
+                "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
 
         if (confirmation == JOptionPane.YES_OPTION) {
-             try {
-                boolean success = institutionService.deleteInstitution(selectedInstitutionId);
-                 if (success) {
-                    JOptionPane.showMessageDialog(this, "Institución eliminada.");
-                    loadInstitutions(); // Recargar tabla
-                }
-                // El servicio debería lanzar excepción si falla
-            } catch (InstitutionManagementException e) { // Capturar error específico si existe FK constraint
-                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage() + "\n(Posiblemente está asociada a usuarios u otros datos).", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
-            }
-             catch (Exception e) {
-                 // Loggear
-                 JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_CURRENCY(?) }")) {
+                
+                cstmt.setLong(1, selectedCurrencyId);
+                cstmt.execute();
+                
+                JOptionPane.showMessageDialog(this, "Currency deleted successfully.");
+                loadCurrencies();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error deleting currency: " + e.getMessage() + "\n(Possibly associated with payments or other data).", 
+                    "Delete Error", 
+                    JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jButtonInstitutionDeleteActionPerformed
+    }
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-       int selectedRow = jTableInstitution.getSelectedRow();
-       if (selectedRow >= 0) {
-           selectedInstitutionId = (Long) institutionTableModel.getValueAt(selectedRow, 0);
-           String selectedName = (String) institutionTableModel.getValueAt(selectedRow, 1);
+        int selectedRow = jTableInstitution.getSelectedRow();
+        if (selectedRow >= 0) {
+            selectedCurrencyId = (Long) currencyTableModel.getValueAt(selectedRow, 0);
+            String selectedName = (String) currencyTableModel.getValueAt(selectedRow, 1);
 
-           jTextFieldInstitutionName.setText(selectedName);
+            jTextFieldInstitutionName.setText(selectedName);
 
             jButtonInstitutionSave.setEnabled(false);
-           jButtonInstitutionUpdate.setEnabled(true);
-           jButtonInstitutionDelete.setEnabled(true);
-       } else {
+            jButtonInstitutionUpdate.setEnabled(true);
+            jButtonInstitutionDelete.setEnabled(true);
+        } else {
             clearSelectionAndFields();
         }
-       }
-
-    private void editDomainsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this,
-                "Por favor seleccione una institución primero.",
-                "Sin Selección",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        javax.swing.JFrame parentFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
-        Domains domainsDialog = new Domains(parentFrame, true, selectedInstitutionId.intValue(), jTextFieldInstitutionName.getText());
-        domainsDialog.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

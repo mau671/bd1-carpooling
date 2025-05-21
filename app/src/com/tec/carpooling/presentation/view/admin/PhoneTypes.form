@@ -33,15 +33,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPaneInstitution" min="-2" pref="564" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabelInstitutionDomains" min="-2" pref="66" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jButtonEditDomains" min="-2" pref="137" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldInstitutionName" min="-2" pref="137" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                              <Component id="jTextFieldInstitutionName" min="-2" pref="137" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -71,11 +65,6 @@
                               <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jTextFieldInstitutionName" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jButtonEditDomains" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelInstitutionDomains" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -160,18 +149,5 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabelInstitutionDomains">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Domains"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButtonEditDomains">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="See/Change"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditDomainsActionPerformed"/>
-      </Events>
-    </Component>
   </SubComponents>
 </Form>
