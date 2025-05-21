@@ -41,8 +41,8 @@ public class TripInfo extends javax.swing.JFrame {
         labelEndTime.setText(tripDetails.getEndTime().toString());
         labelPlate.setText(tripDetails.getPlate());
         labelCurrentStatus.setText(tripDetails.getStatus());
-        labelSeatAmount.setText(String.valueOf(tripDetails.getChosenSeats()));
-        labelAvailableSeats.setText(String.valueOf(tripDetails.getMaxSeats()));
+        labelSeatAmount.setText(String.valueOf(tripDetails.getMaxSeats()));
+        labelAvailableSeats.setText(String.valueOf(tripDetails.getChosenSeats()));
         labelName.setText(tripDetails.getDriverName());
         labelGender.setText(tripDetails.getGender());
         labelAge.setText(String.valueOf(tripDetails.getAge()));

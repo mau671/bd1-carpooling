@@ -178,7 +178,7 @@ public class TripBooked extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         panelOrder.add(labelOrder, gridBagConstraints);
 
-        boxOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Start Point", "Destination Point", "Status" }));
+        boxOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choose organization option", "Start Point", "Destination Point", "Status" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

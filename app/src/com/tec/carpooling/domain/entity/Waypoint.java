@@ -54,4 +54,9 @@ public class Waypoint {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("Lat: %.5f, Lon: %.5f", latitude, longitude);
+    }
 }
