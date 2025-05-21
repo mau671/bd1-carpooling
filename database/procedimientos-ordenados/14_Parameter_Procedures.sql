@@ -85,7 +85,7 @@ CREATE OR REPLACE PROCEDURE ADM.GET_PARAMETER (
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT id, name, value, creator, creation_date, modifier, modification_date
+        SELECT id, name, value
         FROM ADM.PARAMETER
         WHERE id = p_id;
 EXCEPTION
@@ -100,7 +100,7 @@ CREATE OR REPLACE PROCEDURE ADM.LIST_PARAMETERS (
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT id, name, value, creator, creation_date, modifier, modification_date
+        SELECT id, name, value
         FROM ADM.PARAMETER
         ORDER BY name;
 EXCEPTION
@@ -116,7 +116,7 @@ CREATE OR REPLACE PROCEDURE ADM.GET_PARAMETER_BY_NAME (
 ) AS
 BEGIN
     OPEN p_cursor FOR
-        SELECT id, name, value, creator, creation_date, modifier, modification_date
+        SELECT id, name, value
         FROM ADM.PARAMETER
         WHERE name = p_name;
 EXCEPTION

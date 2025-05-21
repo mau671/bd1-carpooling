@@ -10,18 +10,33 @@
  */
 
 -- ============================================
+-- 0. Grants necesarios antes de crear los procedimientos
+-- ============================================
+
+-- Grants para que PU pueda acceder a las tablas de ADM
+GRANT SELECT, REFERENCES ON ADM.PAYMENTMETHOD TO PU;
+
+-- Grants para que ADM pueda acceder a las tablas de PU
+GRANT SELECT ON PU.PASSENGERXTRIPXPAYMENT TO ADM;
+
+-- ============================================
 -- 1. Payment Method Procedures
 -- ============================================
 
 -- 1.1 Insert Payment Method
 CREATE OR REPLACE PROCEDURE ADM.INSERT_PAYMENT_METHOD (
-    p_name IN VARCHAR2
+    p_name IN VARCHAR2,
+    p_creator IN VARCHAR2 DEFAULT NULL
 ) AS
 BEGIN
     INSERT INTO ADM.PAYMENTMETHOD (
-        name
+        name,
+        creator,
+        creation_date
     ) VALUES (
-        p_name
+        p_name,
+        p_creator,
+        SYSDATE
     );
     COMMIT;
 EXCEPTION
@@ -34,11 +49,14 @@ END INSERT_PAYMENT_METHOD;
 -- 1.2 Update Payment Method
 CREATE OR REPLACE PROCEDURE ADM.UPDATE_PAYMENT_METHOD (
     p_id IN NUMBER,
-    p_name IN VARCHAR2
+    p_name IN VARCHAR2,
+    p_modifier IN VARCHAR2 DEFAULT NULL
 ) AS
 BEGIN
     UPDATE ADM.PAYMENTMETHOD
-    SET name = p_name
+    SET name = p_name,
+        modifier = p_modifier,
+        modification_date = SYSDATE
     WHERE id = p_id;
     
     IF SQL%ROWCOUNT = 0 THEN
@@ -61,7 +79,7 @@ CREATE OR REPLACE PROCEDURE ADM.DELETE_PAYMENT_METHOD (
 BEGIN
     -- Check if payment method is used in payments
     SELECT COUNT(*) INTO v_count
-    FROM PU.PAYMENT
+    FROM PU.PASSENGERXTRIPXPAYMENT
     WHERE payment_method_id = p_id;
     
     IF v_count > 0 THEN
