@@ -35,7 +35,7 @@ public class MaxCapacity extends javax.swing.JPanel {
         maxCapacityTableModel = new DefaultTableModel(
             new Object [][] {},
             new String [] {
-                "ID", "Capacity"
+                "ID", "Capacidad"
             }
         ) {
             Class[] types = new Class [] {
@@ -54,6 +54,12 @@ public class MaxCapacity extends javax.swing.JPanel {
             }
         };
         jTableInstitution.setModel(maxCapacityTableModel);
+        
+        // Ajustar el ancho de las columnas
+        if (jTableInstitution.getColumnModel().getColumnCount() > 0) {
+            jTableInstitution.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTableInstitution.getColumnModel().getColumn(1).setPreferredWidth(200);
+        }
     }
 
     private void loadMaxCapacities() {
@@ -68,15 +74,15 @@ public class MaxCapacity extends javax.swing.JPanel {
                 while (rs.next()) {
                     maxCapacityTableModel.addRow(new Object[]{
                         rs.getLong("id"),
-                        rs.getInt("capacity")
+                        rs.getInt("capacity_number")
                     });
                 }
             }
             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error loading max capacities: " + e.getMessage(), 
-                "Load Error", 
+                "Error al cargar las capacidades máximas: " + e.getMessage(), 
+                "Error de Carga", 
                 JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -224,14 +230,14 @@ public class MaxCapacity extends javax.swing.JPanel {
     private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {
         String capacityStr = jTextFieldInstitutionName.getText().trim();
         if (capacityStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Capacity cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La capacidad no puede estar vacía.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
             int capacity = Integer.parseInt(capacityStr);
             if (capacity <= 0) {
-                JOptionPane.showMessageDialog(this, "Capacity must be greater than 0.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "La capacidad debe ser mayor que 0.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -241,35 +247,43 @@ public class MaxCapacity extends javax.swing.JPanel {
                 cstmt.setInt(1, capacity);
                 cstmt.execute();
                 
-                JOptionPane.showMessageDialog(this, "Max capacity '" + capacity + "' registered successfully.");
+                JOptionPane.showMessageDialog(this, "Capacidad máxima '" + capacity + "' registrada exitosamente.");
                 loadMaxCapacities();
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid number for capacity.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido para la capacidad.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error saving max capacity: " + e.getMessage(), 
-                "Save Error", 
-                JOptionPane.ERROR_MESSAGE);
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("ORA-20071")) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al insertar la capacidad máxima: " + errorMessage.substring(errorMessage.indexOf(":") + 1), 
+                    "Error de Guardado", 
+                    JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al guardar la capacidad máxima: " + errorMessage, 
+                    "Error de Guardado", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
     private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {
         if (selectedMaxCapacityId == null) {
-            JOptionPane.showMessageDialog(this, "Please select a max capacity from the table to update.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor seleccione una capacidad máxima de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String capacityStr = jTextFieldInstitutionName.getText().trim();
         if (capacityStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Capacity cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La capacidad no puede estar vacía.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
             int capacity = Integer.parseInt(capacityStr);
             if (capacity <= 0) {
-                JOptionPane.showMessageDialog(this, "Capacity must be greater than 0.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "La capacidad debe ser mayor que 0.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -280,28 +294,41 @@ public class MaxCapacity extends javax.swing.JPanel {
                 cstmt.setInt(2, capacity);
                 cstmt.execute();
                 
-                JOptionPane.showMessageDialog(this, "Max capacity updated successfully.");
+                JOptionPane.showMessageDialog(this, "Capacidad máxima actualizada exitosamente.");
                 loadMaxCapacities();
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid number for capacity.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido para la capacidad.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error updating max capacity: " + e.getMessage(), 
-                "Update Error", 
-                JOptionPane.ERROR_MESSAGE);
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("ORA-20072")) {
+                JOptionPane.showMessageDialog(this, 
+                    "No se encontró la capacidad máxima con ID: " + selectedMaxCapacityId, 
+                    "Error de Actualización", 
+                    JOptionPane.ERROR_MESSAGE);
+            } else if (errorMessage.contains("ORA-20073")) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al actualizar la capacidad máxima: " + errorMessage.substring(errorMessage.indexOf(":") + 1), 
+                    "Error de Actualización", 
+                    JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al actualizar la capacidad máxima: " + errorMessage, 
+                    "Error de Actualización", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
     private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {
         if (selectedMaxCapacityId == null) {
-            JOptionPane.showMessageDialog(this, "Please select a max capacity from the table to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor seleccione una capacidad máxima de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirmation = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete the selected max capacity?\n(ID: " + selectedMaxCapacityId + " - Capacity: " + jTextFieldInstitutionName.getText() + ")\nThis action cannot be undone!",
-                "Confirm Deletion",
+                "¿Está seguro que desea eliminar la capacidad máxima seleccionada?\n(ID: " + selectedMaxCapacityId + " - Capacidad: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
+                "Confirmar Eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
 
@@ -312,13 +339,31 @@ public class MaxCapacity extends javax.swing.JPanel {
                 cstmt.setLong(1, selectedMaxCapacityId);
                 cstmt.execute();
                 
-                JOptionPane.showMessageDialog(this, "Max capacity deleted successfully.");
+                JOptionPane.showMessageDialog(this, "Capacidad máxima eliminada exitosamente.");
                 loadMaxCapacities();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, 
-                    "Error deleting max capacity: " + e.getMessage() + "\n(Possibly associated with trips or other data).", 
-                    "Delete Error", 
-                    JOptionPane.ERROR_MESSAGE);
+                String errorMessage = e.getMessage();
+                if (errorMessage.contains("ORA-20074")) {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se puede eliminar la capacidad máxima porque está siendo utilizada en relaciones vehículo-capacidad.", 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
+                } else if (errorMessage.contains("ORA-20075")) {
+                    JOptionPane.showMessageDialog(this, 
+                        "No se encontró la capacidad máxima con ID: " + selectedMaxCapacityId, 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
+                } else if (errorMessage.contains("ORA-20076")) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Error al eliminar la capacidad máxima: " + errorMessage.substring(errorMessage.indexOf(":") + 1), 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "Error al eliminar la capacidad máxima: " + errorMessage, 
+                        "Error de Eliminación", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
