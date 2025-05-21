@@ -277,17 +277,17 @@ public class Domains extends javax.swing.JDialog {
             
             // Convertir la lista a un array
             Integer[] domainIds = enabledDomainIds.toArray(new Integer[0]);
-            
+                
             // Crear el tipo de tabla para Oracle
             try (CallableStatement stmt = conn.prepareCall("{ call ADM.ADM_INSTITUTION_MGMT_PKG.update_institution_domains(?, ?) }")) {
-                stmt.setInt(1, institutionId);
+                    stmt.setInt(1, institutionId);
                 stmt.setArray(2, conn.createArrayOf("NUMBER", domainIds));
-                stmt.execute();
-                
-                JOptionPane.showMessageDialog(this,
-                    "Asociaciones de dominios actualizadas exitosamente.",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    stmt.execute();
+            
+            JOptionPane.showMessageDialog(this,
+                "Asociaciones de dominios actualizadas exitosamente.",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
@@ -331,10 +331,10 @@ public class Domains extends javax.swing.JDialog {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(this,
                     "Error al agregar dominio: " + errorMessage,
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -441,10 +441,10 @@ public class Domains extends javax.swing.JDialog {
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(this,
+                JOptionPane.showMessageDialog(this,
                         "Error al eliminar dominio: " + errorMessage,
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
                 }
             }
         }

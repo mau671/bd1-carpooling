@@ -72,7 +72,7 @@ public class Currency extends javax.swing.JPanel {
                     });
                 }
             }
-            clearSelectionAndFields();
+             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading currencies: " + e.getMessage(), 
@@ -81,7 +81,7 @@ public class Currency extends javax.swing.JPanel {
         }
     }
     
-    private void clearSelectionAndFields() {
+   private void clearSelectionAndFields() {
         jTableInstitution.clearSelection();
         jTextFieldInstitutionName.setText("");
         selectedCurrencyId = null;
@@ -304,17 +304,17 @@ public class Currency extends javax.swing.JPanel {
     }
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-        int selectedRow = jTableInstitution.getSelectedRow();
-        if (selectedRow >= 0) {
+       int selectedRow = jTableInstitution.getSelectedRow();
+       if (selectedRow >= 0) {
             selectedCurrencyId = (Long) currencyTableModel.getValueAt(selectedRow, 0);
             String selectedName = (String) currencyTableModel.getValueAt(selectedRow, 1);
 
-            jTextFieldInstitutionName.setText(selectedName);
+           jTextFieldInstitutionName.setText(selectedName);
 
             jButtonInstitutionSave.setEnabled(false);
-            jButtonInstitutionUpdate.setEnabled(true);
-            jButtonInstitutionDelete.setEnabled(true);
-        } else {
+           jButtonInstitutionUpdate.setEnabled(true);
+           jButtonInstitutionDelete.setEnabled(true);
+       } else {
             clearSelectionAndFields();
         }
     }

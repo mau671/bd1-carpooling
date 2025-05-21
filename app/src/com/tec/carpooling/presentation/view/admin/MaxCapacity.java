@@ -78,7 +78,7 @@ public class MaxCapacity extends javax.swing.JPanel {
                     });
                 }
             }
-            clearSelectionAndFields();
+             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error al cargar las capacidades máximas: " + e.getMessage(), 
@@ -87,7 +87,7 @@ public class MaxCapacity extends javax.swing.JPanel {
         }
     }
     
-    private void clearSelectionAndFields() {
+   private void clearSelectionAndFields() {
         jTableInstitution.clearSelection();
         jTextFieldInstitutionName.setText("");
         selectedMaxCapacityId = null;
@@ -363,23 +363,23 @@ public class MaxCapacity extends javax.swing.JPanel {
                         "Error al eliminar la capacidad máxima: " + errorMessage, 
                         "Error de Eliminación", 
                         JOptionPane.ERROR_MESSAGE);
-                }
             }
+        }
         }
     }
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-        int selectedRow = jTableInstitution.getSelectedRow();
-        if (selectedRow >= 0) {
+       int selectedRow = jTableInstitution.getSelectedRow();
+       if (selectedRow >= 0) {
             selectedMaxCapacityId = (Long) maxCapacityTableModel.getValueAt(selectedRow, 0);
             Integer selectedCapacity = (Integer) maxCapacityTableModel.getValueAt(selectedRow, 1);
 
             jTextFieldInstitutionName.setText(selectedCapacity.toString());
 
             jButtonInstitutionSave.setEnabled(false);
-            jButtonInstitutionUpdate.setEnabled(true);
-            jButtonInstitutionDelete.setEnabled(true);
-        } else {
+           jButtonInstitutionUpdate.setEnabled(true);
+           jButtonInstitutionDelete.setEnabled(true);
+       } else {
             clearSelectionAndFields();
         }
     }

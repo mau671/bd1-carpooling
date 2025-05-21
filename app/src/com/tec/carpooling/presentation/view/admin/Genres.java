@@ -68,7 +68,7 @@ public class Genres extends javax.swing.JPanel {
                     });
                 }
             }
-            clearSelectionAndFields();
+             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading genders: " + e.getMessage(), 
@@ -77,7 +77,7 @@ public class Genres extends javax.swing.JPanel {
         }
     }
     
-    private void clearSelectionAndFields() {
+   private void clearSelectionAndFields() {
         jTableGenres.clearSelection();
         jTextFieldGenresName.setText("");
         selectedGenderId = null;
@@ -246,7 +246,7 @@ public class Genres extends javax.swing.JPanel {
             return;
         }
 
-        String newName = jTextFieldGenresName.getText().trim();
+         String newName = jTextFieldGenresName.getText().trim();
         if (newName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Gender name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
@@ -300,20 +300,20 @@ public class Genres extends javax.swing.JPanel {
     }
 
     private void jTableGenresMouseClicked(java.awt.event.MouseEvent evt) {
-        int selectedRow = jTableGenres.getSelectedRow();
-        if (selectedRow >= 0) {
+       int selectedRow = jTableGenres.getSelectedRow();
+       if (selectedRow >= 0) {
             selectedGenderId = (Long) genderTableModel.getValueAt(selectedRow, 0);
             String selectedName = (String) genderTableModel.getValueAt(selectedRow, 1);
 
-            jTextFieldGenresName.setText(selectedName);
+           jTextFieldGenresName.setText(selectedName);
 
             jButtonGenresSave.setEnabled(false);
-            jButtonGenresUpdate.setEnabled(true);
-            jButtonGenresDelete.setEnabled(true);
-        } else {
+           jButtonGenresUpdate.setEnabled(true);
+           jButtonGenresDelete.setEnabled(true);
+       } else {
             clearSelectionAndFields();
         }
-    }
+       }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGenresDelete;

@@ -73,7 +73,7 @@ public class IDTypes extends javax.swing.JPanel {
                     });
                 }
             }
-            clearSelectionAndFields();
+             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading identification types: " + e.getMessage(), 
@@ -82,7 +82,7 @@ public class IDTypes extends javax.swing.JPanel {
         }
     }
     
-    private void clearSelectionAndFields() {
+   private void clearSelectionAndFields() {
         jTableInstitution.clearSelection();
         jTextFieldIDTypesName.setText("");
         selectedIdTypeId = null;
@@ -251,7 +251,7 @@ public class IDTypes extends javax.swing.JPanel {
             return;
         }
 
-        String newName = jTextFieldIDTypesName.getText().trim();
+         String newName = jTextFieldIDTypesName.getText().trim();
         if (newName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Identification type name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
@@ -305,17 +305,17 @@ public class IDTypes extends javax.swing.JPanel {
     }
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-        int selectedRow = jTableInstitution.getSelectedRow();
-        if (selectedRow >= 0) {
+       int selectedRow = jTableInstitution.getSelectedRow();
+       if (selectedRow >= 0) {
             selectedIdTypeId = (Long) idTypeTableModel.getValueAt(selectedRow, 0);
             String selectedName = (String) idTypeTableModel.getValueAt(selectedRow, 1);
 
-            jTextFieldIDTypesName.setText(selectedName);
+           jTextFieldIDTypesName.setText(selectedName);
 
             jButtonIDTypeSave.setEnabled(false);
-            jButtonIDTypeUpdate.setEnabled(true);
-            jButtonIDTypeDelete.setEnabled(true);
-        } else {
+           jButtonIDTypeUpdate.setEnabled(true);
+           jButtonIDTypeDelete.setEnabled(true);
+       } else {
             clearSelectionAndFields();
         }
     }

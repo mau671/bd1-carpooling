@@ -72,7 +72,7 @@ public class PhoneTypes extends javax.swing.JPanel {
                     });
                 }
             }
-            clearSelectionAndFields();
+             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading phone types: " + e.getMessage(), 
@@ -81,7 +81,7 @@ public class PhoneTypes extends javax.swing.JPanel {
         }
     }
     
-    private void clearSelectionAndFields() {
+   private void clearSelectionAndFields() {
         jTableInstitution.clearSelection();
         jTextFieldInstitutionName.setText("");
         selectedPhoneTypeId = null;
@@ -250,7 +250,7 @@ public class PhoneTypes extends javax.swing.JPanel {
             return;
         }
 
-        String newName = jTextFieldInstitutionName.getText().trim();
+         String newName = jTextFieldInstitutionName.getText().trim();
         if (newName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Phone type name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
@@ -304,17 +304,17 @@ public class PhoneTypes extends javax.swing.JPanel {
     }
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-        int selectedRow = jTableInstitution.getSelectedRow();
-        if (selectedRow >= 0) {
+       int selectedRow = jTableInstitution.getSelectedRow();
+       if (selectedRow >= 0) {
             selectedPhoneTypeId = (Long) phoneTypeTableModel.getValueAt(selectedRow, 0);
             String selectedName = (String) phoneTypeTableModel.getValueAt(selectedRow, 1);
 
-            jTextFieldInstitutionName.setText(selectedName);
+           jTextFieldInstitutionName.setText(selectedName);
 
             jButtonInstitutionSave.setEnabled(false);
-            jButtonInstitutionUpdate.setEnabled(true);
-            jButtonInstitutionDelete.setEnabled(true);
-        } else {
+           jButtonInstitutionUpdate.setEnabled(true);
+           jButtonInstitutionDelete.setEnabled(true);
+       } else {
             clearSelectionAndFields();
         }
     }

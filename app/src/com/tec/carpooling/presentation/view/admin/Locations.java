@@ -135,19 +135,50 @@ public class Locations extends javax.swing.JPanel {
         jComboBoxCantonProvince = new javax.swing.JComboBox<>();
         jComboBoxDistrictCanton = new javax.swing.JComboBox<>();
 
-        // Agregar ComboBoxes a los paneles
-        jPanelProvinces.add(jComboBoxProvinceCountry, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 200, -1));
-        jPanelCantons.add(jComboBoxCantonProvince, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 200, -1));
-        jPanelDistricts.add(jComboBoxDistrictCanton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 200, -1));
-
-        // Agregar etiquetas
+        // Agregar etiquetas y ComboBoxes a los paneles
         javax.swing.JLabel jLabelProvinceCountry = new javax.swing.JLabel("País:");
         javax.swing.JLabel jLabelCantonProvince = new javax.swing.JLabel("Provincia:");
         javax.swing.JLabel jLabelDistrictCanton = new javax.swing.JLabel("Cantón:");
 
+        // Panel de Provincias
         jPanelProvinces.add(jLabelProvinceCountry, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
+        jPanelProvinces.add(jComboBoxProvinceCountry, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 200, -1));
+        jPanelProvinces.add(jLabelProvinceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
+        jPanelProvinces.add(jTextFieldProvinceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 320, 200, -1));
+        jPanelProvinces.add(jButtonProvinceSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, 100, 30));
+        jPanelProvinces.add(jButtonProvinceUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 100, 30));
+        jPanelProvinces.add(jButtonProvinceDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 320, 100, 30));
+
+        // Panel de Cantones
         jPanelCantons.add(jLabelCantonProvince, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
+        jPanelCantons.add(jComboBoxCantonProvince, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 200, -1));
+        jPanelCantons.add(jLabelCantonName, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
+        jPanelCantons.add(jTextFieldCantonName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 320, 200, -1));
+        jPanelCantons.add(jButtonCantonSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, 100, 30));
+        jPanelCantons.add(jButtonCantonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 100, 30));
+        jPanelCantons.add(jButtonCantonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 320, 100, 30));
+
+        // Panel de Distritos
         jPanelDistricts.add(jLabelDistrictCanton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
+        jPanelDistricts.add(jComboBoxDistrictCanton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 200, -1));
+        jPanelDistricts.add(jLabelDistrictName, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
+        jPanelDistricts.add(jTextFieldDistrictName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 320, 200, -1));
+        jPanelDistricts.add(jButtonDistrictSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, 100, 30));
+        jPanelDistricts.add(jButtonDistrictUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 100, 30));
+        jPanelDistricts.add(jButtonDistrictDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 320, 100, 30));
+
+        // Agregar listeners para actualizar los ComboBoxes dependientes
+        jComboBoxProvinceCountry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadProvinceComboBox();
+            }
+        });
+
+        jComboBoxCantonProvince.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadCantonComboBox();
+            }
+        });
     }
 
     private void loadAllData() {
@@ -155,6 +186,7 @@ public class Locations extends javax.swing.JPanel {
         loadProvinces();
         loadCantons();
         loadDistricts();
+        loadComboBoxes();
     }
 
     private void loadCountries() {
@@ -270,6 +302,7 @@ public class Locations extends javax.swing.JPanel {
         jButtonProvinceUpdate.setEnabled(false);
         jButtonProvinceDelete.setEnabled(false);
         jButtonProvinceSave.setEnabled(true);
+        jComboBoxProvinceCountry.setSelectedIndex(-1);
     }
 
     private void clearCantonFields() {
@@ -278,6 +311,7 @@ public class Locations extends javax.swing.JPanel {
         jButtonCantonUpdate.setEnabled(false);
         jButtonCantonDelete.setEnabled(false);
         jButtonCantonSave.setEnabled(true);
+        jComboBoxCantonProvince.setSelectedIndex(-1);
     }
 
     private void clearDistrictFields() {
@@ -286,6 +320,7 @@ public class Locations extends javax.swing.JPanel {
         jButtonDistrictUpdate.setEnabled(false);
         jButtonDistrictDelete.setEnabled(false);
         jButtonDistrictSave.setEnabled(true);
+        jComboBoxDistrictCanton.setSelectedIndex(-1);
     }
 
     @SuppressWarnings("unchecked")
@@ -1093,13 +1128,17 @@ public class Locations extends javax.swing.JPanel {
 
     private void loadProvinceComboBox() {
         jComboBoxCantonProvince.removeAllItems();
+        String selectedCountry = (String) jComboBoxProvinceCountry.getSelectedItem();
+        if (selectedCountry == null) return;
+
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_PROVINCES(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_PROVINCES_BY_COUNTRY(?, ?) }")) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+            cstmt.setString(1, selectedCountry);
+            cstmt.registerOutParameter(2, OracleTypes.CURSOR);
             cstmt.execute();
             
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+            try (ResultSet rs = (ResultSet) cstmt.getObject(2)) {
                 while (rs.next()) {
                     jComboBoxCantonProvince.addItem(rs.getString("name"));
                 }
@@ -1114,13 +1153,17 @@ public class Locations extends javax.swing.JPanel {
 
     private void loadCantonComboBox() {
         jComboBoxDistrictCanton.removeAllItems();
+        String selectedProvince = (String) jComboBoxCantonProvince.getSelectedItem();
+        if (selectedProvince == null) return;
+
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_CANTONS(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_CANTONS_BY_PROVINCE(?, ?) }")) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+            cstmt.setString(1, selectedProvince);
+            cstmt.registerOutParameter(2, OracleTypes.CURSOR);
             cstmt.execute();
             
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+            try (ResultSet rs = (ResultSet) cstmt.getObject(2)) {
                 while (rs.next()) {
                     jComboBoxDistrictCanton.addItem(rs.getString("name"));
                 }

@@ -26,8 +26,20 @@
 GRANT SELECT ON ADM.PARAMETER TO PU;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ADM.INSTITUTION_REPORT TO PU;
 GRANT SELECT ON PU.INSTITUTION_PERSON TO ADM;
+
 -- 1.2 Grant privileges on sequences used in the procedure
 GRANT SELECT ON ADM.INSTITUTION_REPORT_SEQ TO PU;
+
+-- 1.3 Grants for system privileges (for execution by SYSTEM user)
+BEGIN
+    EXECUTE IMMEDIATE 'GRANT CREATE JOB TO ADM WITH ADMIN OPTION';
+    EXECUTE IMMEDIATE 'GRANT MANAGE SCHEDULER TO ADM WITH ADMIN OPTION';
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON DBMS_SCHEDULER TO ADM WITH GRANT OPTION';
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Note: Some grants may require SYSDBA privileges. Error: ' || SQLERRM);
+END;
+/
 
 -- ============================================
 -- 2. Initial Parameters for Report Generation
@@ -193,23 +205,81 @@ GRANT EXECUTE ON ADM.GENERATE_INSTITUTION_REPORTS TO PU;
  * - Status: Enabled by default
  */
 
--- First, grant necessary privileges for job scheduling
-GRANT CREATE JOB TO PU;
-GRANT MANAGE SCHEDULER TO PU;
-GRANT EXECUTE ON SYS.DBMS_SCHEDULER TO PU;
-
--- Then create the job
+-- Create the job (with replacement if exists)
+DECLARE
+    v_job_exists NUMBER := 0;
+    v_job_name VARCHAR2(100) := 'ADM.GEN_INST_REPORTS_JOB';
 BEGIN
+    -- Check if job already exists - try different views based on privileges
+    BEGIN
+        SELECT COUNT(*) INTO v_job_exists
+        FROM DBA_SCHEDULER_JOBS
+        WHERE OWNER = 'ADM' AND JOB_NAME = 'GEN_INST_REPORTS_JOB';
+    EXCEPTION
+        WHEN OTHERS THEN
+            BEGIN
+                -- Try with ALL_SCHEDULER_JOBS if user doesn't have DBA view access
+                SELECT COUNT(*) INTO v_job_exists
+                FROM ALL_SCHEDULER_JOBS
+                WHERE OWNER = 'ADM' AND JOB_NAME = 'GEN_INST_REPORTS_JOB';
+            EXCEPTION
+                WHEN OTHERS THEN
+                    v_job_exists := 0;
+                    DBMS_OUTPUT.PUT_LINE('Warning: Could not check for existing jobs. Will attempt to drop anyway.');
+            END;
+    END;
+    
+    -- If job exists or if we couldn't check, try to drop it first
+    BEGIN
+        DBMS_SCHEDULER.DROP_JOB(
+            job_name => v_job_name,
+            force => TRUE
+        );
+        DBMS_OUTPUT.PUT_LINE('Existing job dropped successfully');
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE != -27475 THEN  -- Job doesn't exist error
+                DBMS_OUTPUT.PUT_LINE('Warning when dropping job: ' || SQLERRM);
+            END IF;
+    END;
+    
     -- Create the scheduled job
-    DBMS_SCHEDULER.CREATE_JOB (
-        job_name        => 'ADM.GEN_INST_REPORTS_JOB',
-        job_type        => 'STORED_PROCEDURE',
-        job_action      => 'ADM.GENERATE_INSTITUTION_REPORTS',
-        start_date      => SYSTIMESTAMP,
-        repeat_interval => 'FREQ=DAILY; BYHOUR=0; BYMINUTE=0',
-        enabled         => TRUE,
-        comments        => 'Job to generate daily institution reports'
-    );
+    BEGIN
+        DBMS_SCHEDULER.CREATE_JOB (
+            job_name        => v_job_name,
+            job_type        => 'STORED_PROCEDURE',
+            job_action      => 'ADM.GENERATE_INSTITUTION_REPORTS',
+            start_date      => SYSTIMESTAMP,
+            repeat_interval => 'FREQ=DAILY; BYHOUR=0; BYMINUTE=0',
+            enabled         => TRUE,
+            comments        => 'Job to generate daily institution reports'
+        );
+        DBMS_OUTPUT.PUT_LINE('Job ' || v_job_name || ' created successfully');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error creating job: ' || SQLERRM);
+            -- Try creating with current schema
+            BEGIN
+                DBMS_OUTPUT.PUT_LINE('Attempting to create job in current schema...');
+                DBMS_SCHEDULER.CREATE_JOB (
+                    job_name        => 'GEN_INST_REPORTS_JOB',
+                    job_type        => 'STORED_PROCEDURE',
+                    job_action      => 'ADM.GENERATE_INSTITUTION_REPORTS',
+                    start_date      => SYSTIMESTAMP,
+                    repeat_interval => 'FREQ=DAILY; BYHOUR=0; BYMINUTE=0',
+                    enabled         => TRUE,
+                    comments        => 'Job to generate daily institution reports'
+                );
+                DBMS_OUTPUT.PUT_LINE('Job created in current schema successfully');
+            EXCEPTION
+                WHEN OTHERS THEN
+                    DBMS_OUTPUT.PUT_LINE('Error creating job in current schema: ' || SQLERRM);
+                    RAISE;
+            END;
+    END;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Fatal error in job creation: ' || SQLERRM);
 END;
 /
 
