@@ -333,8 +333,6 @@ public class SearchTrip extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         datePicker = new com.github.lgooddatepicker.components.DatePicker();
         labelDate = new javax.swing.JLabel();
-        labelInstitution = new javax.swing.JLabel();
-        boxInstitutions = new javax.swing.JComboBox<>();
         panelChooseStop = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         boxStops = new javax.swing.JComboBox<>();
@@ -342,6 +340,9 @@ public class SearchTrip extends javax.swing.JFrame {
         boxMethod = new javax.swing.JComboBox<>();
         labelMethod = new javax.swing.JLabel();
         panelCurrency = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        boxInstitutions = new javax.swing.JComboBox<>();
+        labelInstitution = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -779,30 +780,12 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
         panelDatePlace.add(jPanel2, gridBagConstraints);
 
-        labelInstitution.setText("Institution:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        panelDatePlace.add(labelInstitution, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 0);
         jPanel1.add(panelDatePlace, gridBagConstraints);
-
-        boxInstitutions.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boxInstitutionsActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
-        jPanel1.add(boxInstitutions, gridBagConstraints);
 
         panelChooseStop.setBackground(new java.awt.Color(225, 239, 255));
         panelChooseStop.setLayout(new java.awt.GridBagLayout());
@@ -868,8 +851,35 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(20, 30, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 0);
         jPanel1.add(panelChooseStop, gridBagConstraints);
+
+        jPanel5.setBackground(new java.awt.Color(225, 239, 255));
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        boxInstitutions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxInstitutionsActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
+        jPanel5.add(boxInstitutions, gridBagConstraints);
+
+        labelInstitution.setText("Institution:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        jPanel5.add(labelInstitution, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        jPanel1.add(jPanel5, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -1065,6 +1075,7 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAge;
     private javax.swing.JLabel labelChosenCapacity;

@@ -27,7 +27,6 @@ public class SideMenu {
         JButton tripButton = createStyledButton("📅 Trips Created", menuBlue);
         JButton searchTripButton = createStyledButton("🔍 Search for Trips", menuBlue);
         JButton tripBookedButton = createStyledButton("🎫 Trips Booked", menuBlue);
-        JButton logButton = createStyledButton("📄 Activity Log", menuBlue);
         JButton switchRoleButton = createStyledButton("", menuBlue);
         JButton logoutButton = createStyledButton("🔒 Log Out", menuBlue);
 
@@ -48,12 +47,10 @@ public class SideMenu {
             toolBar.add(Box.createVerticalStrut(10));
             switchRoleButton.setText("🔁 Switch to Passenger");
         }
-
-        toolBar.add(logButton);
-        toolBar.add(Box.createVerticalStrut(10));
         toolBar.add(switchRoleButton);
         toolBar.add(Box.createVerticalStrut(10));
         toolBar.add(logoutButton);
+        
 
         // ActionListeners
         profileButton.addActionListener(e -> {
@@ -88,13 +85,6 @@ public class SideMenu {
             ViewTrip trips = new ViewTrip(userRole, user);
             trips.setExtendedState(JFrame.MAXIMIZED_BOTH);
             trips.setVisible(true);
-            parentFrame.dispose();
-        });
-
-        logButton.addActionListener(e -> {
-            UserLog log = new UserLog(userRole, user);
-            log.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            log.setVisible(true);
             parentFrame.dispose();
         });
 

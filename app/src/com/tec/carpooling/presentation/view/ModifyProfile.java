@@ -4,9 +4,24 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.data.connection.DatabaseConnection;
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.domain.entity.Gender;
+import com.tec.carpooling.domain.entity.IdType;
+import com.tec.carpooling.data.dao.PersonDAO;
+import com.tec.carpooling.data.dao.GenderInfoDAO;
+import com.tec.carpooling.data.dao.TypeIdInfoDAO;
+import com.tec.carpooling.domain.entity.Person;
 
 import java.awt.BorderLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JToolBar;
+import javax.swing.JOptionPane;
+
+import java.sql.SQLException;
+import java.sql.Connection;
+
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -46,6 +61,40 @@ public class ModifyProfile extends javax.swing.JFrame {
                 }
             }
         });
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PersonDAO personDAO = new PersonDAO();
+            GenderInfoDAO genderDAO = new GenderInfoDAO();
+            TypeIdInfoDAO typeDAO = new TypeIdInfoDAO();
+
+            Person person = personDAO.getPersonProfile(user.getPersonId(), conn);
+            if (person != null) {
+                String genderName = genderDAO.getGenderName(person.getGenderId(), conn);
+                String typeIdName = typeDAO.getTypeName(person.getTypeIdentificationId(), conn);
+
+                textName1.setText(person.getFirstName());
+                textName2.setText(person.getSecondName());
+                textSurname1.setText(person.getFirstSurname());
+                textSurname2.setText(person.getSecondSurname());
+                textID.setText(person.getIdentificationNumber());
+                dateOfBirthPicker.setText(person.getDateOfBirth().toString());
+                // Clear any previous items
+                boxGender.removeAllItems();
+                boxID.removeAllItems();
+
+                // Add the new item
+                boxGender.addItem(genderName);
+                boxID.addItem(typeIdName);
+
+                // Optionally select the added item (redundant if only one)
+                boxGender.setSelectedItem(genderName);
+                boxID.setSelectedItem(typeIdName);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+        }
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
@@ -208,7 +257,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         panelGender.add(jPanel32, gridBagConstraints);
 
-        boxGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         boxGender.setPreferredSize(new java.awt.Dimension(90, 40));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -744,10 +792,10 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 120, 31, 0);
         jPanel9.add(buttonModify, gridBagConstraints);
 
+        buttonPassword.setText("Change Password");
         buttonPassword.setBackground(new java.awt.Color(255, 90, 90));
         buttonPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonPassword.setForeground(new java.awt.Color(255, 255, 255));
-        buttonPassword.setText("Change Password");
         buttonPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonPasswordActionPerformed(evt);

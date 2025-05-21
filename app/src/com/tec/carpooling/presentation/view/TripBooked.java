@@ -124,7 +124,6 @@ public class TripBooked extends javax.swing.JFrame {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel3 = new javax.swing.JPanel();
-        buttonCancel = new javax.swing.JButton();
         buttonBook = new javax.swing.JButton();
         panelOrder = new javax.swing.JPanel();
         labelOrder = new javax.swing.JLabel();
@@ -195,21 +194,6 @@ public class TripBooked extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        buttonCancel.setBackground(new java.awt.Color(18, 102, 160));
-        buttonCancel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonCancel.setForeground(new java.awt.Color(255, 255, 255));
-        buttonCancel.setText("Cancel Booking");
-        buttonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonCancelActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipady = 30;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
-        jPanel3.add(buttonCancel, gridBagConstraints);
-
         buttonBook.setBackground(new java.awt.Color(246, 172, 30));
         buttonBook.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonBook.setForeground(new java.awt.Color(255, 255, 255));
@@ -267,25 +251,6 @@ public class TripBooked extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_buttonBookActionPerformed
 
-    private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
-        int row = tableTrips.getSelectedRow();
-
-        if (row != -1) {
-            // Check the "Status" column (adjust index if needed)
-            Object statusObj = tableTrips.getValueAt(row, 5); // Check Status Column
-            String status = statusObj != null ? statusObj.toString() : "";
-
-            if (status.equals("Pending")) {
-                // Continue only if status is "Pending"
-                JOptionPane.showMessageDialog(this, "Booking canceled successfully!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Only trips with status 'Pending' can be canceled.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "A row must be selected.");
-        }
-    }//GEN-LAST:event_buttonCancelActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -328,7 +293,6 @@ public class TripBooked extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxOrder;
     private javax.swing.JButton buttonBook;
-    private javax.swing.JButton buttonCancel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
