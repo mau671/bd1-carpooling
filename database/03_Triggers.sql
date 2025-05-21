@@ -943,6 +943,67 @@ BEGIN
 END;
 /
 
+-- =====================================================================
+-- Trigger para registrar errores en ADM.LOGS
+-- =====================================================================
+CREATE OR REPLACE TRIGGER ADM.LOG_ERRORS
+AFTER SERVERERROR ON DATABASE
+DECLARE
+    PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+    INSERT INTO ADM.LOGS (id, description, creator, creation_date, log_date)
+    VALUES (
+        ADM.LOGS_SEQ.NEXTVAL,
+        SUBSTR('Error: ' || DBMS_UTILITY.FORMAT_ERROR_STACK, 1, 100),
+        USER,
+        SYSDATE,
+        SYSDATE
+    );
+    COMMIT;
+END;
+/
+
+
+-- ============================================
+-- 20. Trigger for table ADM.INSTITUTION_REPORT
+-- ============================================
+CREATE OR REPLACE TRIGGER ADM.trg_institution_report_audit
+BEFORE INSERT OR UPDATE ON ADM.INSTITUTION_REPORT
+FOR EACH ROW
+BEGIN
+    IF INSERTING THEN
+        IF :NEW.id IS NULL THEN
+            SELECT ADM.INSTITUTION_REPORT_SEQ.NEXTVAL INTO :NEW.id FROM DUAL;
+        END IF;
+        :NEW.creator := NVL(:NEW.creator, USER);
+        :NEW.creation_date := SYSDATE;
+        :NEW.modifier := USER;
+        :NEW.modification_date := SYSDATE;
+        INSERT INTO ADM.LOGS (id, description, creator, creation_date, modifier, modification_date, log_date)
+        VALUES (ADM.LOGS_SEQ.NEXTVAL, 'INSERT in ADM.INSTITUTION_REPORT (ID: ' || :NEW.id || ')', USER, SYSDATE, USER, SYSDATE, SYSDATE);
+    ELSIF UPDATING THEN
+        :NEW.modifier := USER;
+        :NEW.modification_date := SYSDATE;
+        INSERT INTO ADM.LOGS (id, description, creator, creation_date, modifier, modification_date, log_date)
+        VALUES (ADM.LOGS_SEQ.NEXTVAL, 'UPDATE in ADM.INSTITUTION_REPORT (ID: ' || :NEW.id || ')', USER, SYSDATE, USER, SYSDATE, SYSDATE);
+    END IF;
+END;
+/
+
+-- ============================================
+-- 21. Trigger for logging errors from GENERATE_INSTITUTION_REPORTS
+-- ============================================
+CREATE OR REPLACE TRIGGER ADM.trg_gen_reports_error
+AFTER SERVERERROR ON DATABASE
+WHEN (ORA_SERVER_ERROR_MSG LIKE '%Error generating institution reports%')
+DECLARE
+    PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+    INSERT INTO ADM.LOGS (id, description, creator, creation_date, modifier, modification_date, log_date)
+    VALUES (ADM.LOGS_SEQ.NEXTVAL, 'ERROR: ' || ORA_SERVER_ERROR_MSG, USER, SYSDATE, USER, SYSDATE, SYSDATE);
+    COMMIT;
+END;
+/
 
 -- ============================================
 -- Required permissions for triggers to work
