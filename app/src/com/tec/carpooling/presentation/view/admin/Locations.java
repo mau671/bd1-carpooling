@@ -146,8 +146,8 @@ public class Locations extends javax.swing.JPanel {
         jPanelProvinces.add(jLabelProvinceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
         jPanelProvinces.add(jTextFieldProvinceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 320, 200, -1));
         jPanelProvinces.add(jButtonProvinceSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, 100, 30));
-        jPanelProvinces.add(jButtonProvinceUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 100, 30));
-        jPanelProvinces.add(jButtonProvinceDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 320, 100, 30));
+        jPanelProvinces.add(jButtonProvinceUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 100, 30));
+        jPanelProvinces.add(jButtonProvinceDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 360, 100, 30));
 
         // Panel de Cantones
         jPanelCantons.add(jLabelCantonProvince, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
@@ -155,8 +155,8 @@ public class Locations extends javax.swing.JPanel {
         jPanelCantons.add(jLabelCantonName, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
         jPanelCantons.add(jTextFieldCantonName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 320, 200, -1));
         jPanelCantons.add(jButtonCantonSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, 100, 30));
-        jPanelCantons.add(jButtonCantonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 100, 30));
-        jPanelCantons.add(jButtonCantonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 320, 100, 30));
+        jPanelCantons.add(jButtonCantonUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 100, 30));
+        jPanelCantons.add(jButtonCantonDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 360, 100, 30));
 
         // Panel de Distritos
         jPanelDistricts.add(jLabelDistrictCanton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
@@ -164,8 +164,8 @@ public class Locations extends javax.swing.JPanel {
         jPanelDistricts.add(jLabelDistrictName, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, -1, -1));
         jPanelDistricts.add(jTextFieldDistrictName, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 320, 200, -1));
         jPanelDistricts.add(jButtonDistrictSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, 100, 30));
-        jPanelDistricts.add(jButtonDistrictUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, 100, 30));
-        jPanelDistricts.add(jButtonDistrictDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 320, 100, 30));
+        jPanelDistricts.add(jButtonDistrictUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 360, 100, 30));
+        jPanelDistricts.add(jButtonDistrictDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 360, 100, 30));
 
         // Agregar listeners para actualizar los ComboBoxes dependientes
         jComboBoxProvinceCountry.addActionListener(new java.awt.event.ActionListener() {
@@ -817,8 +817,17 @@ public class Locations extends javax.swing.JPanel {
             return;
         }
 
-        // TODO: Agregar selección de país
-        Long countryId = 1L; // Temporal, debe ser seleccionado por el usuario
+        String countryName = (String) jComboBoxProvinceCountry.getSelectedItem();
+        if (countryName == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un país.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Long countryId = getCountryIdByName(countryName);
+        if (countryId == null) {
+            JOptionPane.showMessageDialog(this, "Error al obtener el ID del país seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_PROVINCE(?, ?, ?) }")) {
@@ -830,6 +839,7 @@ public class Locations extends javax.swing.JPanel {
             
             JOptionPane.showMessageDialog(this, "Provincia actualizada exitosamente.");
             loadProvinces();
+            loadProvinceComboBox();
             clearProvinceFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -928,8 +938,17 @@ public class Locations extends javax.swing.JPanel {
             return;
         }
 
-        // TODO: Agregar selección de provincia
-        Long provinceId = 1L; // Temporal, debe ser seleccionado por el usuario
+        String provinceName = (String) jComboBoxCantonProvince.getSelectedItem();
+        if (provinceName == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una provincia.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Long provinceId = getProvinceIdByName(provinceName);
+        if (provinceId == null) {
+            JOptionPane.showMessageDialog(this, "Error al obtener el ID de la provincia seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_CANTON(?, ?, ?) }")) {
@@ -941,6 +960,7 @@ public class Locations extends javax.swing.JPanel {
             
             JOptionPane.showMessageDialog(this, "Cantón actualizado exitosamente.");
             loadCantons();
+            loadCantonComboBox();
             clearCantonFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -1038,8 +1058,17 @@ public class Locations extends javax.swing.JPanel {
             return;
         }
 
-        // TODO: Agregar selección de cantón
-        Long cantonId = 1L; // Temporal, debe ser seleccionado por el usuario
+        String cantonName = (String) jComboBoxDistrictCanton.getSelectedItem();
+        if (cantonName == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un cantón.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Long cantonId = getCantonIdByName(cantonName);
+        if (cantonId == null) {
+            JOptionPane.showMessageDialog(this, "Error al obtener el ID del cantón seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_DISTRICT(?, ?, ?) }")) {

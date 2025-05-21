@@ -115,6 +115,22 @@ EXCEPTION
 END LIST_COUNTRIES;
 /
 
+-- 2.6 Get Country by Name
+CREATE OR REPLACE PROCEDURE ADM.GET_COUNTRY_BY_NAME (
+    p_name IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT id, name, creator, creation_date, modifier, modification_date
+        FROM ADM.COUNTRY
+        WHERE name = p_name;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20039, 'Error getting country by name: ' || SQLERRM);
+END GET_COUNTRY_BY_NAME;
+/
+
 -- ============================================
 -- 3. Province Procedures
 -- ============================================
@@ -251,6 +267,45 @@ EXCEPTION
 END LIST_PROVINCES;
 /
 
+-- 3.6 Get Province by Name
+CREATE OR REPLACE PROCEDURE ADM.GET_PROVINCE_BY_NAME (
+    p_name IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT p.id, p.country_id, c.name as country_name, 
+               p.name, p.creator, p.creation_date, 
+               p.modifier, p.modification_date
+        FROM ADM.PROVINCE p
+        JOIN ADM.COUNTRY c ON p.country_id = c.id
+        WHERE p.name = p_name;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20040, 'Error getting province by name: ' || SQLERRM);
+END GET_PROVINCE_BY_NAME;
+/
+
+-- 3.7 List Provinces by Country
+CREATE OR REPLACE PROCEDURE ADM.LIST_PROVINCES_BY_COUNTRY (
+    p_country_name IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT p.id, p.country_id, c.name as country_name, 
+               p.name, p.creator, p.creation_date, 
+               p.modifier, p.modification_date
+        FROM ADM.PROVINCE p
+        JOIN ADM.COUNTRY c ON p.country_id = c.id
+        WHERE c.name = p_country_name
+        ORDER BY p.name;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20041, 'Error listing provinces by country: ' || SQLERRM);
+END LIST_PROVINCES_BY_COUNTRY;
+/
+
 -- ============================================
 -- 4. Canton Procedures
 -- ============================================
@@ -385,6 +440,45 @@ EXCEPTION
     WHEN OTHERS THEN
         RAISE_APPLICATION_ERROR(-20028, 'Error listing cantons: ' || SQLERRM);
 END LIST_CANTONS;
+/
+
+-- 4.6 Get Canton by Name
+CREATE OR REPLACE PROCEDURE ADM.GET_CANTON_BY_NAME (
+    p_name IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT c.id, c.province_id, p.name as province_name,
+               c.name, c.creator, c.creation_date,
+               c.modifier, c.modification_date
+        FROM ADM.CANTON c
+        JOIN ADM.PROVINCE p ON c.province_id = p.id
+        WHERE c.name = p_name;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20042, 'Error getting canton by name: ' || SQLERRM);
+END GET_CANTON_BY_NAME;
+/
+
+-- 4.7 List Cantons by Province
+CREATE OR REPLACE PROCEDURE ADM.LIST_CANTONS_BY_PROVINCE (
+    p_province_name IN VARCHAR2,
+    p_cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT c.id, c.province_id, p.name as province_name,
+               c.name, c.creator, c.creation_date,
+               c.modifier, c.modification_date
+        FROM ADM.CANTON c
+        JOIN ADM.PROVINCE p ON c.province_id = p.id
+        WHERE p.name = p_province_name
+        ORDER BY c.name;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20043, 'Error listing cantons by province: ' || SQLERRM);
+END LIST_CANTONS_BY_PROVINCE;
 /
 
 -- ============================================
@@ -548,4 +642,11 @@ GRANT EXECUTE ON ADM.INSERT_DISTRICT TO PU;
 GRANT EXECUTE ON ADM.UPDATE_DISTRICT TO PU;
 GRANT EXECUTE ON ADM.DELETE_DISTRICT TO PU;
 GRANT EXECUTE ON ADM.GET_DISTRICT TO PU;
-GRANT EXECUTE ON ADM.LIST_DISTRICTS TO PU; 
+GRANT EXECUTE ON ADM.LIST_DISTRICTS TO PU;
+
+-- Grants for new procedures
+GRANT EXECUTE ON ADM.GET_COUNTRY_BY_NAME TO PU;
+GRANT EXECUTE ON ADM.GET_PROVINCE_BY_NAME TO PU;
+GRANT EXECUTE ON ADM.LIST_PROVINCES_BY_COUNTRY TO PU;
+GRANT EXECUTE ON ADM.GET_CANTON_BY_NAME TO PU;
+GRANT EXECUTE ON ADM.LIST_CANTONS_BY_PROVINCE TO PU; 
