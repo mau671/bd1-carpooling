@@ -5,13 +5,26 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.domain.entity.PassengerTripDisplay;
+import com.tec.carpooling.data.dao.PassengerTripDAO;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -29,17 +42,67 @@ public class TripBooked extends javax.swing.JFrame {
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
-        DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
-        // Add sample rows if needed
-        model.setRowCount(0);  // This removes all rows
-        model.addRow(new Object[]{"May 12, 2025", "Trip D", "09:00 AM", "zdfh","hellooo", "Pending", "More Info"});
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PassengerTripDAO dao = new PassengerTripDAO();
+            List<PassengerTripDisplay> trips = dao.getBookedTrips(user.getPersonId(), conn);
+            populateBookedTripTable(trips);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading booked trips: " + ex.getMessage());
+        }
         
         // Assign custom renderer/editor to the "More Info" column
         int infoColumn = tableTrips.getColumnCount() - 1;
         tableTrips.getColumnModel().getColumn(infoColumn).setCellRenderer(new ButtonRenderer());
         tableTrips.getColumnModel().getColumn(infoColumn).setCellEditor(new ButtonEditor(new JCheckBox(), tableTrips));
         
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableTrips.getModel());
+        tableTrips.setRowSorter(sorter);
+        tableTrips.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        boxOrder.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                String selected = (String) boxOrder.getSelectedItem();
+                TableRowSorter<? extends TableModel> sorter = (TableRowSorter<? extends TableModel>) tableTrips.getRowSorter();
+
+                if (sorter != null) {
+                    int columnIndex = getColumnIndexFromLabel(selected);
+                    if (columnIndex != -1) {
+                        sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING)));
+                        sorter.sort();
+                    }
+                }
+            }
+        });
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void populateBookedTripTable(List<PassengerTripDisplay> trips) {
+        DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
+        model.setRowCount(0);
+
+        for (PassengerTripDisplay trip : trips) {
+            model.addRow(new Object[]{
+                trip.getTripDate(),
+                trip.getStartPoint(),
+                trip.getEndPoint(),
+                trip.getPlate(),
+                trip.getStatus(),
+                "More Info"
+            });
+        }
+    }
+    
+    private int getColumnIndexFromLabel(String label) {
+        switch (label) {
+            case "Date of Trip": return 0;
+            case "Start Point": return 1;
+            case "Destination Point": return 2;
+            case "Vehicle Plate": return 3;
+            case "Status": return 4;
+            default: return -1;
+        }
     }
 
     /**
@@ -92,13 +155,13 @@ public class TripBooked extends javax.swing.JFrame {
 
         tableTrips.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Date of Trip", "Start Point", "Destination Point", "Pick Up Point", "Vehicle Plate", "Status", "More Info"
+                "Date of Trip", "Start Point", "Destination Point", "Vehicle Plate", "Status", "More Info"
             }
         ));
         scrollTrips.setViewportView(tableTrips);
