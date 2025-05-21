@@ -72,6 +72,11 @@ CREATE SEQUENCE PU.PASSENGERXTRIP_SEQ START WITH 1 INCREMENT BY 1 CACHE 20 NOCYC
 -- 13. PASSENGER_X_TRIP_X_PAYMENT - Stores passenger trip payment information
 CREATE SEQUENCE PU.PASSENGERXTRIPXPAYMENT_SEQ START WITH 1 INCREMENT BY 1 CACHE 20 NOCYCLE;
 
+--==============================================
+-- Creation of sequences for ADM tables (continued)
+--==============================================
+-- 15. INSTITUTION_REPORT - Stores institution report information
+CREATE SEQUENCE ADM.INSTITUTION_REPORT_SEQ START WITH 1 INCREMENT BY 1 CACHE 20 NOCYCLE;
 
 --==============================================
 -- Required Permissions

@@ -42,6 +42,7 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenuItemParameters = new javax.swing.JMenuItem();
         jMenuItemLogs = new javax.swing.JMenuItem();
         jMenuItemStadistics = new javax.swing.JMenuItem();
+        jMenuItemQuerys = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,6 +68,11 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenu1.add(jMenuItemManagementInstitutions);
 
         jMenuItemManagementUsers.setText("Users");
+        jMenuItemManagementUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemManagementUsersActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItemManagementUsers);
 
         jMenuBar1.add(jMenu1);
@@ -98,6 +104,14 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenuItemStadistics.setText("Stadistics");
         jMenu2.add(jMenuItemStadistics);
 
+        jMenuItemQuerys.setText("Querys");
+        jMenuItemQuerys.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuerysActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemQuerys);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -117,23 +131,19 @@ public class AdminFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemManagementInstitutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementInstitutionsActionPerformed
-        displayInstitutionsPanel();
-    }//GEN-LAST:event_jMenuItemManagementInstitutionsActionPerformed
-    
-    /**
-     * Displays the Institutions panel within the current frame
-     */
-    private void displayInstitutionsPanel() {
         Institutions institutionsPanel = new Institutions();
-        institutionsPanel.setSize(getWidth(), getHeight());
-        institutionsPanel.setLocation(0, 0);
-        institutionsPanel.setVisible(true);
-        
-        getContentPane().removeAll();
-        getContentPane().add(institutionsPanel);
-        revalidate();
-        repaint();
-    }
+        showPanel(institutionsPanel);
+    }//GEN-LAST:event_jMenuItemManagementInstitutionsActionPerformed
+
+    private void jMenuItemQuerysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuerysActionPerformed
+        NewQueries newQueryPanel = new NewQueries();
+        showPanel(newQueryPanel);
+    }//GEN-LAST:event_jMenuItemQuerysActionPerformed
+
+    private void jMenuItemManagementUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementUsersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemManagementUsersActionPerformed
+    
 
     private void showPanel(JPanel panel) {
         // Limpiar el panel principal
@@ -205,6 +215,7 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemManagementInstitutions;
     private javax.swing.JMenuItem jMenuItemManagementUsers;
     private javax.swing.JMenuItem jMenuItemParameters;
+    private javax.swing.JMenuItem jMenuItemQuerys;
     private javax.swing.JMenuItem jMenuItemStadistics;
     private javax.swing.JPanel jPanelMain;
     // End of variables declaration//GEN-END:variables

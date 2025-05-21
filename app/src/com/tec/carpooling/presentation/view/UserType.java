@@ -74,8 +74,8 @@ public class UserType extends javax.swing.JFrame {
             if ("DRIVER".equals(currentType)) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "You are currently registered as a driver. Do you want to change to passenger?",
-                    "Change User Type",
+                    "Would you like to register as a passenger? You are already registered as a driver.",
+                    "Register as Passenger",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );
@@ -103,8 +103,8 @@ public class UserType extends javax.swing.JFrame {
             if ("PASSENGER".equals(currentType)) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "You are currently registered as a passenger. Do you want to change to driver?",
-                    "Change User Type",
+                    "Would you like to register as a driver? You are already registered as a passenger.",
+                    "Register as Driver",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );

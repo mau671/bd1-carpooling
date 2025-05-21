@@ -1264,3 +1264,44 @@ COMMENT ON COLUMN ADM.CHOSENCAPACITY.creator IS 'User who created the record';
 COMMENT ON COLUMN ADM.CHOSENCAPACITY.creation_date IS 'Record creation date';
 COMMENT ON COLUMN ADM.CHOSENCAPACITY.modifier IS 'User who modified the record';
 COMMENT ON COLUMN ADM.CHOSENCAPACITY.modification_date IS 'Record modification date';
+
+-- ============================================
+-- 39. INSTITUTION_REPORT Table
+-- ============================================
+CREATE TABLE ADM.INSTITUTION_REPORT (
+    id                NUMBER CONSTRAINT pk_INSTITUTION_REPORT PRIMARY KEY
+                         USING INDEX TABLESPACE ADM_Index
+                         STORAGE (
+                             INITIAL 10K NEXT 10K MINEXTENTS 1 
+                             MAXEXTENTS UNLIMITED PCTINCREASE 0
+                         ),
+    institution_id    NUMBER NOT NULL,
+    report_date       DATE NOT NULL,
+    total_trips       NUMBER NOT NULL,
+    total_passengers  NUMBER NOT NULL,
+    total_revenue     NUMBER(10,2) NOT NULL,
+    creator           VARCHAR2(50),
+    creation_date     DATE,
+    modifier          VARCHAR2(50),
+    modification_date DATE,
+    
+    CONSTRAINT fk_INST_REPORT_INSTITUTION
+        FOREIGN KEY (institution_id)
+        REFERENCES ADM.INSTITUTION(id)
+)
+TABLESPACE ADM_Data
+STORAGE (
+    INITIAL 6144 NEXT 6144 MINEXTENTS 1 MAXEXTENTS 5
+);
+
+COMMENT ON TABLE ADM.INSTITUTION_REPORT IS 'Table that stores daily institution trip reports';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.id IS 'Unique identifier for report';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.institution_id IS 'Foreign key to INSTITUTION table';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.report_date IS 'Date of the report';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.total_trips IS 'Total number of trips for the institution';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.total_passengers IS 'Total number of passengers for the institution';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.total_revenue IS 'Total revenue generated for the institution';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.creator IS 'User who created the record';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.creation_date IS 'Record creation date';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.modifier IS 'User who modified the record';
+COMMENT ON COLUMN ADM.INSTITUTION_REPORT.modification_date IS 'Record modification date';

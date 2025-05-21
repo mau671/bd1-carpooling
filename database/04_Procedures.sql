@@ -811,9 +811,6 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_USER_TYPE_PKG AS
         FROM PU.PERSONUSER
         WHERE id = p_user_id;
         
-        -- Eliminar registro anterior si existe
-        DELETE FROM PU.PASSENGER WHERE person_id = v_person_id;
-        
         -- Verificar si ya es conductor
         DECLARE
             v_count NUMBER;
@@ -847,9 +844,6 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_USER_TYPE_PKG AS
         SELECT person_id INTO v_person_id
         FROM PU.PERSONUSER
         WHERE id = p_user_id;
-        
-        -- Eliminar registro anterior si existe
-        DELETE FROM PU.DRIVER WHERE person_id = v_person_id;
         
         -- Verificar si ya es pasajero
         DECLARE
