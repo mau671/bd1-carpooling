@@ -12,6 +12,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class RegisteredVehicle extends javax.swing.JFrame {
         model.setColumnIdentifiers(new Object[]{"ID", "Plate Number", "Max Capacity", "Trips Made"});
 
         tableVehicles.setModel(model);
+        tableVehicles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Hide the ID column (index 0)
         tableVehicles.getColumnModel().getColumn(0).setMinWidth(0);
