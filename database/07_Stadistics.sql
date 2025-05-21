@@ -1,4 +1,17 @@
 -- ============================================================================
+-- Grants necesarios antes de crear los paquetes
+-- ============================================================================
+
+-- Grants para que ADM pueda acceder a las tablas de PU
+GRANT SELECT ON PU.DRIVER TO ADM;
+GRANT SELECT ON PU.PASSENGER TO ADM;
+GRANT SELECT ON PU.INSTITUTION_PERSON TO ADM;
+
+-- Grants para que PU pueda acceder a las tablas de ADM
+GRANT SELECT ON ADM.PERSON TO PU;
+GRANT SELECT ON ADM.GENDER TO PU;
+
+-- ============================================================================
 -- PACKAGE: ADM_STATISTICS_PKG
 -- Purpose: Gestiona las estadísticas del sistema para administradores
 -- ============================================================================
@@ -158,5 +171,16 @@ CREATE OR REPLACE PACKAGE BODY ADM.ADM_STATISTICS_PKG AS
 END ADM_STATISTICS_PKG;
 /
 
--- Grants necesarios
+-- ============================================================================
+-- Grants necesarios después de crear los paquetes
+-- ============================================================================
+
+-- Grant para ejecutar el paquete
 GRANT EXECUTE ON ADM.ADM_STATISTICS_PKG TO PU;
+
+-- Grants adicionales para las tablas que se usan en las consultas
+GRANT SELECT ON ADM.PERSON TO PU;
+GRANT SELECT ON ADM.GENDER TO PU;
+GRANT SELECT ON PU.DRIVER TO PU;
+GRANT SELECT ON PU.PASSENGER TO PU;
+GRANT SELECT ON PU.INSTITUTION_PERSON TO PU;
