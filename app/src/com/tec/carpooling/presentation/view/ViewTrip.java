@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,10 @@ import javax.swing.SortOrder;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  *
@@ -59,6 +64,7 @@ public class ViewTrip extends javax.swing.JFrame {
         
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableTrips.getModel());
         tableTrips.setRowSorter(sorter);
+        tableTrips.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         boxOrder.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -104,6 +110,59 @@ public class ViewTrip extends javax.swing.JFrame {
             default: return -1;
         }
     }
+    
+    private void cancelSelectedTrip() {
+        int row = tableTrips.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a trip to cancel.");
+            return;
+        }
+        String status = (String) tableTrips.getValueAt(row, 4);  // column 4 = Status
+        if (!"Pending".equalsIgnoreCase(status)) {
+            JOptionPane.showMessageDialog(this, "Only trips with status 'Pending' can be cancelled.");
+            return;
+        }
+
+        // Get vehicle plate and date of trip from table
+        String plate = (String) tableTrips.getValueAt(row, 3);
+        Date tripDate = (Date) tableTrips.getValueAt(row, 0);
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Get trip ID based on plate and date
+            String findTripIdSQL = "SELECT T.id FROM PU.TRIP T " +
+                       "JOIN PU.ROUTE R ON T.route_id = R.id " +
+                       "JOIN PU.VEHICLEXROUTE VR ON VR.route_id = R.id " +
+                       "JOIN PU.VEHICLE VEH ON VEH.id = VR.vehicle_id " +
+                       "WHERE VEH.plate = ? AND R.programming_date = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(findTripIdSQL)) {
+                stmt.setString(1, plate);
+                stmt.setDate(2, new java.sql.Date(tripDate.getTime()));
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        long tripId = rs.getLong(1);
+
+                        // Call the cancel_trip procedure
+                        try (CallableStatement callStmt = conn.prepareCall("{ call PU_TRIP_STATUS_PKG.cancel_trip(?) }")) {
+                            callStmt.setLong(1, tripId);
+                            callStmt.execute();
+                            JOptionPane.showMessageDialog(this, "Trip cancelled successfully.");
+                        }
+
+                        // Refresh table
+                        TripDAO dao = new TripDAO();
+                        List<TripDisplay> trips = dao.getTripsByDriver(user.getPersonId(), conn);
+                        populateTripTable(trips);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Trip ID not found for selected row.");
+                    }
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error cancelling trip: " + ex.getMessage());
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -125,6 +184,7 @@ public class ViewTrip extends javax.swing.JFrame {
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel3 = new javax.swing.JPanel();
         buttonModify = new javax.swing.JButton();
+        buttonCancel = new javax.swing.JButton();
         buttonAdd = new javax.swing.JButton();
         panelOrder = new javax.swing.JPanel();
         labelOrder = new javax.swing.JLabel();
@@ -210,6 +270,21 @@ public class ViewTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
         jPanel3.add(buttonModify, gridBagConstraints);
 
+        buttonCancel.setBackground(new java.awt.Color(255, 90, 90));
+        buttonCancel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonCancel.setForeground(new java.awt.Color(255, 255, 255));
+        buttonCancel.setText("Cancel Trip");
+        buttonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCancelActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 30;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
+        jPanel3.add(buttonCancel, gridBagConstraints);
+
         buttonAdd.setBackground(new java.awt.Color(246, 172, 30));
         buttonAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonAdd.setForeground(new java.awt.Color(255, 255, 255));
@@ -284,6 +359,10 @@ public class ViewTrip extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_buttonAddActionPerformed
 
+    private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
+        cancelSelectedTrip();
+    }//GEN-LAST:event_buttonCancelActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -327,6 +406,7 @@ public class ViewTrip extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxOrder;
     private javax.swing.JButton buttonAdd;
+    private javax.swing.JButton buttonCancel;
     private javax.swing.JButton buttonModify;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;

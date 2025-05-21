@@ -4,6 +4,8 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.domain.entity.TripDetails;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -16,6 +18,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.DefaultListModel;
+import java.sql.Date;
+import java.math.BigDecimal;
 /**
  *
  * @author hidal
@@ -25,10 +30,37 @@ public class TripInfo extends javax.swing.JFrame {
     /**
      * Creates new form TripInfo
      */
-    public TripInfo() {
+    public TripInfo(TripDetails tripDetails) {
         initComponents();
         setSize(800, 700);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Set values in your labels using tripDetails
+        labelDateTrip.setText(tripDetails.getTripDate().toString());
+        labelStartTime.setText(tripDetails.getStartTime().toString());
+        labelEndTime.setText(tripDetails.getEndTime().toString());
+        labelPlate.setText(tripDetails.getPlate());
+        labelCurrentStatus.setText(tripDetails.getStatus());
+        labelSeatAmount.setText(String.valueOf(tripDetails.getChosenSeats()));
+        labelAvailableSeats.setText(String.valueOf(tripDetails.getMaxSeats()));
+        labelName.setText(tripDetails.getDriverName());
+        labelGender.setText(tripDetails.getGender());
+        labelAge.setText(String.valueOf(tripDetails.getAge()));
+        labelPricePay.setText(tripDetails.getPricePerPassenger() + "");
+        labelCurrencyChosen.setText(tripDetails.getCurrencyName());
+        // Set full location names
+        labelStartName.setText(tripDetails.getStartLocation());
+        labelEndName.setText(tripDetails.getEndLocation());
+
+        // Populate phone number list
+        DefaultListModel<String> phoneModel = new DefaultListModel<>();
+        for (String phone : tripDetails.getDriverPhones()) {
+            phoneModel.addElement(phone);
+        }
+        listNumbers.setModel(phoneModel);
+
+        // Show coordinates
+        showCoordinatesList(tripDetails.getCoordinates());
     }
     
     private void showCoordinatesList(List<double[]> coordenates) {
@@ -121,7 +153,7 @@ public class TripInfo extends javax.swing.JFrame {
         labelStart = new javax.swing.JLabel();
         labelStartTime = new javax.swing.JLabel();
         panelStatus = new javax.swing.JPanel();
-        labelSatus = new javax.swing.JLabel();
+        labelStatus = new javax.swing.JLabel();
         labelCurrentStatus = new javax.swing.JLabel();
         labelTitleTime = new javax.swing.JLabel();
         panelMiddleL = new javax.swing.JPanel();
@@ -533,13 +565,13 @@ public class TripInfo extends javax.swing.JFrame {
         panelStatus.setBackground(new java.awt.Color(225, 239, 255));
         panelStatus.setLayout(new java.awt.GridBagLayout());
 
-        labelSatus.setText("Current Status:");
+        labelStatus.setText("Current Status:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        panelStatus.add(labelSatus, gridBagConstraints);
+        panelStatus.add(labelStatus, gridBagConstraints);
 
         labelCurrentStatus.setText("Status");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -741,11 +773,6 @@ public class TripInfo extends javax.swing.JFrame {
 
         scrollNumbers.setBackground(new java.awt.Color(225, 239, 255));
 
-        listNumbers.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         scrollNumbers.setViewportView(listNumbers);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -820,10 +847,6 @@ public class TripInfo extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -831,29 +854,37 @@ public class TripInfo extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TripInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TripInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TripInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TripInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                TripInfo trips = new TripInfo();
-                trips.setVisible(true);
-                
-                List<double[]> coords = new ArrayList<>();
-                coords.add(new double[]{9.9281, -84.0907});
-                coords.add(new double[]{10.0021, -84.1111});
+        java.awt.EventQueue.invokeLater(() -> {
+            // Mocked trip details for testing
+            TripDetails details = new TripDetails();
+            details.setTripDate(new java.sql.Date(System.currentTimeMillis()));
+            details.setStartTime(java.sql.Timestamp.valueOf("2025-05-20 08:00:00"));
+            details.setEndTime(java.sql.Timestamp.valueOf("2025-05-20 09:30:00"));
+            details.setPlate("ABC123");
+            details.setStatus("Pending");
+            details.setChosenSeats(3);
+            details.setMaxSeats(5);
+            details.setDriverName("Ana González");
+            details.setGender("Female");
+            details.setAge(28);
+            details.setPricePerPassenger(new BigDecimal("3500.00"));
+            details.setCurrencyName("CRC");
 
-                trips.showCoordinatesList(coords);
-            }
+            // Sample coordinates
+            List<double[]> coords = new ArrayList<>();
+            coords.add(new double[]{9.9281, -84.0907});
+            coords.add(new double[]{10.0021, -84.1111});
+            details.setCoordinates(coords);
+
+            // Launch frame
+            TripInfo tripFrame = new TripInfo(details);
+            tripFrame.setVisible(true);
+            tripFrame.setLocationRelativeTo(null); // center on screen
         });
     }
 
@@ -889,13 +920,13 @@ public class TripInfo extends javax.swing.JFrame {
     private javax.swing.JLabel labelPlateNumber;
     private javax.swing.JLabel labelPrice;
     private javax.swing.JLabel labelPricePay;
-    private javax.swing.JLabel labelSatus;
     private javax.swing.JLabel labelSeatAmount;
     private javax.swing.JLabel labelSeatsLeft;
     private javax.swing.JLabel labelStart;
     private javax.swing.JLabel labelStartName;
     private javax.swing.JLabel labelStartPoint;
     private javax.swing.JLabel labelStartTime;
+    private javax.swing.JLabel labelStatus;
     private javax.swing.JLabel labelStops;
     private javax.swing.JLabel labelTitlePricing;
     private javax.swing.JLabel labelTitleRoute;
