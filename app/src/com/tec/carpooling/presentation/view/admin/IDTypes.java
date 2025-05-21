@@ -4,15 +4,16 @@
  */
 package com.tec.carpooling.presentation.view.admin;
 
-import com.tec.carpooling.business.service.InstitutionService;
-import com.tec.carpooling.business.service.impl.InstitutionServiceImpl;
-import com.tec.carpooling.dto.InstitutionDTO;
-import com.tec.carpooling.exception.InstitutionManagementException;
-import java.awt.Frame;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -20,24 +21,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class IDTypes extends javax.swing.JPanel {
 
-    private final InstitutionService institutionService; // Inyectar!
-    private DefaultTableModel institutionTableModel;
-    private Long selectedInstitutionId = null; // Para guardar el ID seleccionado
+    private DefaultTableModel idTypeTableModel;
+    private Long selectedIdTypeId = null;
 
     public IDTypes() {
-        // --- ¡¡MEJORAR ESTO CON INYECCIÓN DE DEPENDENCIAS!! ---
-        this.institutionService = new InstitutionServiceImpl();
-        // ---
         initComponents();
         initTableModel();
-        loadInstitutions(); // Cargar datos al iniciar
-        jButtonEditDomains.setEnabled(false); // Deshabilitar hasta seleccionar
-        jButtonInstitutionUpdate.setEnabled(false);
-        jButtonInstitutionDelete.setEnabled(false);
+        loadIdTypes();
+        jButtonIDTypeUpdate.setEnabled(false);
+        jButtonIDTypeDelete.setEnabled(false);
     }
 
     private void initTableModel() {
-        institutionTableModel = new DefaultTableModel(
+        idTypeTableModel = new DefaultTableModel(
             new Object [][] {},
             new String [] {
                 "ID", "Name"
@@ -58,33 +54,41 @@ public class IDTypes extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         };
-        jTableInstitution.setModel(institutionTableModel);
+        jTableInstitution.setModel(idTypeTableModel);
     }
 
-    private void loadInstitutions() {
-        try {
-            List<InstitutionDTO> institutions = institutionService.getAllInstitutions();
-            institutionTableModel.setRowCount(0); // Limpiar tabla antes de cargar
-            for (InstitutionDTO inst : institutions) {
-                institutionTableModel.addRow(new Object[]{inst.getId(), inst.getName()});
+    private void loadIdTypes() {
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_TYPE_IDENTIFICATIONS(?) }")) {
+            
+            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+            cstmt.execute();
+            
+            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
+                idTypeTableModel.setRowCount(0);
+                while (rs.next()) {
+                    idTypeTableModel.addRow(new Object[]{
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    });
+                }
             }
-             clearSelectionAndFields();
-        } catch (Exception e) {
+            clearSelectionAndFields();
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
-                "Error al cargar instituciones: " + e.getMessage(), 
-                "Error de Carga", 
+                "Error loading identification types: " + e.getMessage(), 
+                "Load Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
     }
     
-   private void clearSelectionAndFields() {
+    private void clearSelectionAndFields() {
         jTableInstitution.clearSelection();
-        jTextFieldInstitutionName.setText("");
-        selectedInstitutionId = null;
-        jButtonEditDomains.setEnabled(false);
-        jButtonInstitutionUpdate.setEnabled(false);
-        jButtonInstitutionDelete.setEnabled(false);
-        jButtonInstitutionSave.setEnabled(true); // Habilitar Guardar
+        jTextFieldIDTypesName.setText("");
+        selectedIdTypeId = null;
+        jButtonIDTypeUpdate.setEnabled(false);
+        jButtonIDTypeDelete.setEnabled(false);
+        jButtonIDTypeSave.setEnabled(true);
     }
 
     /**
@@ -97,43 +101,41 @@ public class IDTypes extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabelInstitutionName = new javax.swing.JLabel();
-        jTextFieldInstitutionName = new javax.swing.JTextField();
-        jButtonInstitutionSave = new javax.swing.JButton();
-        jButtonInstitutionUpdate = new javax.swing.JButton();
-        jButtonInstitutionDelete = new javax.swing.JButton();
+        jTextFieldIDTypesName = new javax.swing.JTextField();
+        jButtonIDTypeSave = new javax.swing.JButton();
+        jButtonIDTypeUpdate = new javax.swing.JButton();
+        jButtonIDTypeDelete = new javax.swing.JButton();
         jScrollPaneInstitution = new javax.swing.JScrollPane();
         jTableInstitution = new javax.swing.JTable();
-        jLabelInstitutionDomains = new javax.swing.JLabel();
-        jButtonEditDomains = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
         jLabelInstitutionName.setText("Name");
 
-        jTextFieldInstitutionName.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldIDTypesName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldInstitutionNameActionPerformed(evt);
+                jTextFieldIDTypesNameActionPerformed(evt);
             }
         });
 
-        jButtonInstitutionSave.setText("Save");
-        jButtonInstitutionSave.addActionListener(new java.awt.event.ActionListener() {
+        jButtonIDTypeSave.setText("Save");
+        jButtonIDTypeSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInstitutionSaveActionPerformed(evt);
+                jButtonIDTypeSaveActionPerformed(evt);
             }
         });
 
-        jButtonInstitutionUpdate.setText("Update");
-        jButtonInstitutionUpdate.addActionListener(new java.awt.event.ActionListener() {
+        jButtonIDTypeUpdate.setText("Update");
+        jButtonIDTypeUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInstitutionUpdateActionPerformed(evt);
+                jButtonIDTypeUpdateActionPerformed(evt);
             }
         });
 
-        jButtonInstitutionDelete.setText("Delete");
-        jButtonInstitutionDelete.addActionListener(new java.awt.event.ActionListener() {
+        jButtonIDTypeDelete.setText("Delete");
+        jButtonIDTypeDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInstitutionDeleteActionPerformed(evt);
+                jButtonIDTypeDeleteActionPerformed(evt);
             }
         });
 
@@ -171,15 +173,6 @@ public class IDTypes extends javax.swing.JPanel {
             jTableInstitution.getColumnModel().getColumn(1).setPreferredWidth(200);
         }
 
-        jLabelInstitutionDomains.setText("Domains");
-
-        jButtonEditDomains.setText("See/Change");
-        jButtonEditDomains.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditDomainsActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -188,20 +181,16 @@ public class IDTypes extends javax.swing.JPanel {
                 .addContainerGap(107, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButtonInstitutionUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonInstitutionDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonInstitutionSave))
+                        .addComponent(jButtonIDTypeUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonIDTypeDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonIDTypeSave))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelInstitutionName)
-                                    .addComponent(jLabelInstitutionDomains, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonEditDomains, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabelInstitutionName)
+                                .addGap(38, 38, 38)
+                                .addComponent(jTextFieldIDTypesName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26)))
                 .addGap(103, 103, 103))
         );
@@ -211,156 +200,133 @@ public class IDTypes extends javax.swing.JPanel {
                 .addGap(105, 105, 105)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonInstitutionSave)
+                        .addComponent(jButtonIDTypeSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonInstitutionUpdate)
+                        .addComponent(jButtonIDTypeUpdate)
                         .addGap(12, 12, 12)
-                        .addComponent(jButtonInstitutionDelete))
+                        .addComponent(jButtonIDTypeDelete))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabelInstitutionName))
-                            .addComponent(jTextFieldInstitutionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonEditDomains)
-                            .addComponent(jLabelInstitutionDomains))))
+                            .addComponent(jTextFieldIDTypesName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(48, 48, 48)
                 .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(140, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldInstitutionNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldInstitutionNameActionPerformed
+    private void jTextFieldIDTypesNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDTypesNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldInstitutionNameActionPerformed
+    }//GEN-LAST:event_jTextFieldIDTypesNameActionPerformed
 
-    private void jButtonInstitutionSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionSaveActionPerformed
-        String name = jTextFieldInstitutionName.getText().trim();
+    private void jButtonIDTypeSaveActionPerformed(java.awt.event.ActionEvent evt) {
+        String name = jTextFieldIDTypesName.getText().trim();
         if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Identification type name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            InstitutionDTO newInstitution = institutionService.registerInstitution(name);
-            JOptionPane.showMessageDialog(this, "Institución '" + newInstitution.getName() + "' registrada con ID: " + newInstitution.getId());
-            loadInstitutions(); // Recargar la tabla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_TYPE_IDENTIFICATION(?) }")) {
+            
+            cstmt.setString(1, name);
+            cstmt.execute();
+            
+            JOptionPane.showMessageDialog(this, "Identification type '" + name + "' registered successfully.");
+            loadIdTypes();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error saving identification type: " + e.getMessage(), 
+                "Save Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_jButtonInstitutionSaveActionPerformed
+    }
 
-    private void jButtonInstitutionUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionUpdateActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para actualizar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+    private void jButtonIDTypeUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedIdTypeId == null) {
+            JOptionPane.showMessageDialog(this, "Please select an identification type from the table to update.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
-         String newName = jTextFieldInstitutionName.getText().trim();
+
+        String newName = jTextFieldIDTypesName.getText().trim();
         if (newName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre de la institución no puede estar vacío.", "Entrada Inválida", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Identification type name cannot be empty.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            boolean success = institutionService.updateInstitutionName(selectedInstitutionId, newName);
-             if (success) {
-                JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
-                loadInstitutions(); // Recargar tabla
-            }
-            // El servicio debería lanzar excepción si falla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error de Actualización", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-             // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_TYPE_IDENTIFICATION(?, ?) }")) {
+            
+            cstmt.setLong(1, selectedIdTypeId);
+            cstmt.setString(2, newName);
+            cstmt.execute();
+            
+            JOptionPane.showMessageDialog(this, "Identification type updated successfully.");
+            loadIdTypes();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error updating identification type: " + e.getMessage(), 
+                "Update Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
+    }
 
-    }//GEN-LAST:event_jButtonInstitutionUpdateActionPerformed
-
-    private void jButtonInstitutionDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInstitutionDeleteActionPerformed
-        if (selectedInstitutionId == null) {
-             JOptionPane.showMessageDialog(this, "Por favor, seleccione una institución de la tabla para eliminar.", "Sin Selección", JOptionPane.WARNING_MESSAGE);
+    private void jButtonIDTypeDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedIdTypeId == null) {
+            JOptionPane.showMessageDialog(this, "Please select an identification type from the table to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         int confirmation = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
-                "Confirmar Eliminación",
+                "Are you sure you want to delete the selected identification type?\n(ID: " + selectedIdTypeId + " - Name: " + jTextFieldIDTypesName.getText() + ")\nThis action cannot be undone!",
+                "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
 
         if (confirmation == JOptionPane.YES_OPTION) {
-             try {
-                boolean success = institutionService.deleteInstitution(selectedInstitutionId);
-                 if (success) {
-                    JOptionPane.showMessageDialog(this, "Institución eliminada.");
-                    loadInstitutions(); // Recargar tabla
-                }
-                // El servicio debería lanzar excepción si falla
-            } catch (InstitutionManagementException e) { // Capturar error específico si existe FK constraint
-                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage() + "\n(Posiblemente está asociada a usuarios u otros datos).", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
-            }
-             catch (Exception e) {
-                 // Loggear
-                 JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_TYPE_IDENTIFICATION(?) }")) {
+                
+                cstmt.setLong(1, selectedIdTypeId);
+                cstmt.execute();
+                
+                JOptionPane.showMessageDialog(this, "Identification type deleted successfully.");
+                loadIdTypes();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error deleting identification type: " + e.getMessage() + "\n(Possibly associated with persons or other data).", 
+                    "Delete Error", 
+                    JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jButtonInstitutionDeleteActionPerformed
+    }
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {
-       int selectedRow = jTableInstitution.getSelectedRow();
-       if (selectedRow >= 0) {
-           selectedInstitutionId = (Long) institutionTableModel.getValueAt(selectedRow, 0);
-           String selectedName = (String) institutionTableModel.getValueAt(selectedRow, 1);
+        int selectedRow = jTableInstitution.getSelectedRow();
+        if (selectedRow >= 0) {
+            selectedIdTypeId = (Long) idTypeTableModel.getValueAt(selectedRow, 0);
+            String selectedName = (String) idTypeTableModel.getValueAt(selectedRow, 1);
 
-           jTextFieldInstitutionName.setText(selectedName);
+            jTextFieldIDTypesName.setText(selectedName);
 
-            jButtonInstitutionSave.setEnabled(false);
-           jButtonInstitutionUpdate.setEnabled(true);
-           jButtonInstitutionDelete.setEnabled(true);
-           jButtonEditDomains.setEnabled(true);
-       } else {
+            jButtonIDTypeSave.setEnabled(false);
+            jButtonIDTypeUpdate.setEnabled(true);
+            jButtonIDTypeDelete.setEnabled(true);
+        } else {
             clearSelectionAndFields();
         }
-       }
-
-    private void jButtonEditDomainsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditDomainsActionPerformed
-        editDomainsButtonActionPerformed(evt);
-
-        // El diálogo se encarga de guardar los cambios, no necesitamos hacer nada aquí después de que cierre.
-        // Si necesitaras refrescar algo en ESTE panel después de que el diálogo cierre,
-        // podrías añadir un listener al diálogo o hacer que devuelva un valor.
-    }//GEN-LAST:event_jButtonEditDomainsActionPerformed
-
-    private void editDomainsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        if (selectedInstitutionId == null) {
-            JOptionPane.showMessageDialog(this,
-                "Por favor seleccione una institución primero.",
-                "Sin Selección",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        javax.swing.JFrame parentFrame = (javax.swing.JFrame) SwingUtilities.getWindowAncestor(this);
-        Domains domainsDialog = new Domains(parentFrame, true, selectedInstitutionId.intValue(), jTextFieldInstitutionName.getText());
-        domainsDialog.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonEditDomains;
-    private javax.swing.JButton jButtonInstitutionDelete;
-    private javax.swing.JButton jButtonInstitutionSave;
-    private javax.swing.JButton jButtonInstitutionUpdate;
-    private javax.swing.JLabel jLabelInstitutionDomains;
+    private javax.swing.JButton jButtonIDTypeDelete;
+    private javax.swing.JButton jButtonIDTypeSave;
+    private javax.swing.JButton jButtonIDTypeUpdate;
     private javax.swing.JLabel jLabelInstitutionName;
     private javax.swing.JScrollPane jScrollPaneInstitution;
     private javax.swing.JTable jTableInstitution;
-    private javax.swing.JTextField jTextFieldInstitutionName;
+    private javax.swing.JTextField jTextFieldIDTypesName;
     // End of variables declaration//GEN-END:variables
 }

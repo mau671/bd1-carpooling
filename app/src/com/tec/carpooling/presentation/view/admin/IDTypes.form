@@ -25,23 +25,17 @@
               <EmptySpace pref="107" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jButtonInstitutionUpdate" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jButtonInstitutionDelete" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jButtonInstitutionSave" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonIDTypeUpdate" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jButtonIDTypeDelete" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jButtonIDTypeSave" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPaneInstitution" min="-2" pref="564" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabelInstitutionDomains" min="-2" pref="66" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jButtonEditDomains" min="-2" pref="137" max="-2" attributes="0"/>
-                                  <Component id="jTextFieldInstitutionName" min="-2" pref="137" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                              <Component id="jTextFieldIDTypesName" min="-2" pref="137" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -57,11 +51,11 @@
               <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jButtonInstitutionSave" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonIDTypeSave" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jButtonInstitutionUpdate" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonIDTypeUpdate" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="jButtonInstitutionDelete" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonIDTypeDelete" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
@@ -70,12 +64,7 @@
                               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                               <Component id="jLabelInstitutionName" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jTextFieldInstitutionName" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jButtonEditDomains" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabelInstitutionDomains" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextFieldIDTypesName" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -92,33 +81,33 @@
         <Property name="text" type="java.lang.String" value="Name"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldInstitutionName">
+    <Component class="javax.swing.JTextField" name="jTextFieldIDTypesName">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldInstitutionNameActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldIDTypesNameActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonInstitutionSave">
+    <Component class="javax.swing.JButton" name="jButtonIDTypeSave">
       <Properties>
         <Property name="text" type="java.lang.String" value="Save"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInstitutionSaveActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonIDTypeSaveActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonInstitutionUpdate">
+    <Component class="javax.swing.JButton" name="jButtonIDTypeUpdate">
       <Properties>
         <Property name="text" type="java.lang.String" value="Update"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInstitutionUpdateActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonIDTypeUpdateActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonInstitutionDelete">
+    <Component class="javax.swing.JButton" name="jButtonIDTypeDelete">
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInstitutionDeleteActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonIDTypeDeleteActionPerformed"/>
       </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPaneInstitution">
@@ -160,18 +149,5 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabelInstitutionDomains">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Domains"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButtonEditDomains">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="See/Change"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonEditDomainsActionPerformed"/>
-      </Events>
-    </Component>
   </SubComponents>
 </Form>
