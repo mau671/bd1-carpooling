@@ -5,13 +5,21 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.presentation.view.InitialPage;
+import com.tec.carpooling.data.connection.DatabaseConnection;
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.data.dao.PersonDAO;
+import com.tec.carpooling.data.dao.GenderInfoDAO;
+import com.tec.carpooling.data.dao.TypeIdInfoDAO;
+import com.tec.carpooling.domain.entity.Person;
 
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 import javax.swing.JOptionPane;
+
+import java.sql.SQLException;
+import java.sql.Connection;
 
 /**
  *
@@ -28,6 +36,30 @@ public class UserProfile extends javax.swing.JFrame {
         this.user = user;
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PersonDAO personDAO = new PersonDAO();
+            GenderInfoDAO genderDAO = new GenderInfoDAO();
+            TypeIdInfoDAO typeDAO = new TypeIdInfoDAO();
+
+            Person person = personDAO.getPersonProfile(user.getPersonId(), conn);
+            if (person != null) {
+                String genderName = genderDAO.getGenderName(person.getGenderId(), conn);
+                String typeIdName = typeDAO.getTypeName(person.getTypeIdentificationId(), conn);
+
+                jLabelFirstName.setText(person.getFirstName());
+                jLabelSecondName.setText(person.getSecondName());
+                jLabelFirstSurname.setText(person.getFirstSurname());
+                jLabelSecondSurname.setText(person.getSecondSurname());
+                jLabelIDNumber.setText(person.getIdentificationNumber());
+                jLabelDateOfBirth.setText(person.getDateOfBirth().toString());
+                jLabelGender.setText(genderName);
+                jLabelTypeofID.setText(typeIdName);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+        }
     }
 
     /**
