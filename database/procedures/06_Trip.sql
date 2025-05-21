@@ -71,7 +71,7 @@ CREATE OR REPLACE PACKAGE BODY PU.PU_TRIP_MGMT_PKG AS
                     R.programming_date AS trip_date,
                     D1.name AS start_point,
                     D2.name AS destination_point,
-                    VEH.plate_number,
+                    VEH.plate,
                     S.name AS status
                 FROM PU.TRIP T
                 JOIN PU.ROUTE R ON T.route_id = R.id
