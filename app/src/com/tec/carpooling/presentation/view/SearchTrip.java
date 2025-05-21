@@ -5,7 +5,19 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.domain.entity.TripDisplay;
+import com.tec.carpooling.domain.entity.Institution;
+import com.tec.carpooling.domain.entity.PaymentMethod;
+import com.tec.carpooling.domain.entity.Waypoint;
+import com.tec.carpooling.data.dao.TripDAO;
+import com.tec.carpooling.data.dao.PassengerXTripDAO;
+import com.tec.carpooling.data.dao.PassengerTripPaymentDAO;
+import com.tec.carpooling.data.dao.PassengerWaypointDAO;
 
+import com.tec.carpooling.data.connection.DatabaseConnection;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.awt.*;
 import java.net.URL;
 import javax.swing.*;
@@ -23,6 +35,7 @@ import java.time.format.DateTimeFormatter;
 public class SearchTrip extends javax.swing.JFrame {
     private String userRole;
     private final User user;
+    private List<TripDisplay> availableTrips;
     /**
      * Creates new form SearchTrip
      */
@@ -33,6 +46,7 @@ public class SearchTrip extends javax.swing.JFrame {
         customizeDatePicker();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
+        boxInstitutions.addItem(new Institution(0, "No Institution Selected"));
         // Para el panel con card layout
         cardPanel.add(panelDriver, "Driver Information");
         cardPanel.add(panelVehicle, "Vehicle Information");
@@ -43,6 +57,26 @@ public class SearchTrip extends javax.swing.JFrame {
         Image scaledPassenger = photo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         photoDriver.setIcon(new ImageIcon(scaledPassenger));
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void loadTripsForInstitution(Institution selectedInstitution) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            TripDAO tripDAO = new TripDAO();
+            List<TripDisplay> trips = tripDAO.getAvailableTripsByInstitution(selectedInstitution.getId(), conn);
+
+            DefaultListModel<String> model = new DefaultListModel<>();
+            for (TripDisplay trip : trips) {
+                model.addElement(trip.getStartPoint() + " - " + trip.getTripDate());
+            }
+            listTrips.setModel(model);
+
+            // Optional: save the list for future reference on booking
+            this.availableTrips = trips;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading trips: " + e.getMessage());
+        }
     }
     
     private void filterAvailableTimes(JComboBox<String> comboTime) {
@@ -214,13 +248,15 @@ public class SearchTrip extends javax.swing.JFrame {
         labelTimeArrival = new javax.swing.JLabel();
         boxTime = new javax.swing.JComboBox<>();
         panelDatePlace = new javax.swing.JPanel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        boxProvince = new javax.swing.JComboBox<>();
+        boxCanton = new javax.swing.JComboBox<>();
+        boxDistrict = new javax.swing.JComboBox<>();
         jLabel24 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         datePicker = new com.github.lgooddatepicker.components.DatePicker();
         labelDate = new javax.swing.JLabel();
+        labelInstitution = new javax.swing.JLabel();
+        boxInstitutions = new javax.swing.JComboBox<>();
         panelChooseStop = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         boxStops = new javax.swing.JComboBox<>();
@@ -251,7 +287,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         labelSearchTrips.setText("SEARCH TRIPS");
@@ -552,8 +588,8 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.1;
         jPanel1.add(filler2, gridBagConstraints);
 
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel19.setText("Search Trip By: ");
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -573,7 +609,8 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.ipadx = 15;
-        gridBagConstraints.ipady = 10;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 20);
         jPanel1.add(buttonTrip, gridBagConstraints);
 
@@ -599,31 +636,47 @@ public class SearchTrip extends javax.swing.JFrame {
         panelDatePlace.setBackground(new java.awt.Color(225, 239, 255));
         panelDatePlace.setLayout(new java.awt.GridBagLayout());
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxProvince.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxProvince.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxProvinceActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        panelDatePlace.add(jComboBox3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panelDatePlace.add(boxProvince, gridBagConstraints);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxCanton.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxCanton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxCantonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-        panelDatePlace.add(jComboBox2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panelDatePlace.add(boxCanton, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxDistrict.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxDistrict.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxDistrictActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        panelDatePlace.add(jComboBox1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        panelDatePlace.add(boxDistrict, gridBagConstraints);
 
         jLabel24.setText("Destination: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
         panelDatePlace.add(jLabel24, gridBagConstraints);
 
         jPanel2.setBackground(new java.awt.Color(225, 239, 255));
@@ -648,11 +701,27 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
         panelDatePlace.add(jPanel2, gridBagConstraints);
 
+        labelInstitution.setText("Institution:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        panelDatePlace.add(labelInstitution, gridBagConstraints);
+
+        boxInstitutions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxInstitutionsActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        panelDatePlace.add(boxInstitutions, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipadx = 20;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 0);
         jPanel1.add(panelDatePlace, gridBagConstraints);
 
         panelChooseStop.setBackground(new java.awt.Color(225, 239, 255));
@@ -668,6 +737,11 @@ public class SearchTrip extends javax.swing.JFrame {
         panelChooseStop.add(jLabel26, gridBagConstraints);
 
         boxStops.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        boxStops.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxStopsActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -731,14 +805,74 @@ public class SearchTrip extends javax.swing.JFrame {
 
     private void buttonTripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTripActionPerformed
         int selectedIndex = listTrips.getSelectedIndex();
-        if (selectedIndex != -1) {
-            // ✅ An item is selected
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "You must select a trip from the list first.");
+            return;
+        }
+
+        // Get selected trip
+        TripDisplay selectedTrip = availableTrips.get(selectedIndex);
+        long tripId = selectedTrip.getTripId(); // You MUST store tripId in TripDisplay
+
+        // Get selected payment method
+        PaymentMethod selectedMethod = (PaymentMethod) boxMethod.getSelectedItem();
+        if (selectedMethod == null) {
+            JOptionPane.showMessageDialog(this, "You must select a payment method.");
+            return;
+        }
+
+        // Get selected stop
+        Waypoint selectedStop = (Waypoint) boxStops.getSelectedItem();
+        if (selectedStop == null) {
+            JOptionPane.showMessageDialog(this, "You must select a pickup stop.");
+            return;
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+
+            // Step 1: Insert into PASSENGERXTRIP
+            PassengerXTripDAO passengerXTripDAO = new PassengerXTripDAO();
+            long pxTripId = passengerXTripDAO.bookTrip(user.getPersonId(), tripId, conn); // returns ID
+
+            // Step 2: Insert into PASSENGERXTRIPXPAYMENT
+            PassengerTripPaymentDAO payDAO = new PassengerTripPaymentDAO();
+            payDAO.assignPaymentMethod(pxTripId, selectedMethod.getId(), conn);
+
+            // Step 3: Insert into PASSENGERXWAYPOINT
+            PassengerWaypointDAO waypointDAO = new PassengerWaypointDAO();
+            //waypointDAO.assignPickup(user.getPersonId(), selectedStop.getId(), conn);
+
+            conn.commit();
             JOptionPane.showMessageDialog(this, "Trip booked successfully!");
-        } else {
-            // ❌ No selection
-            JOptionPane.showMessageDialog(null, "You must select a trip from the list first.");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error booking trip: " + ex.getMessage());
         }
     }//GEN-LAST:event_buttonTripActionPerformed
+
+    private void boxInstitutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxInstitutionsActionPerformed
+        Institution selected = (Institution) boxInstitutions.getSelectedItem();
+            if (selected != null) {
+                loadTripsForInstitution(selected);
+            }
+    }//GEN-LAST:event_boxInstitutionsActionPerformed
+
+    private void boxStopsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxStopsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxStopsActionPerformed
+
+    private void boxProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxProvinceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxProvinceActionPerformed
+
+    private void boxCantonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxCantonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxCantonActionPerformed
+
+    private void boxDistrictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxDistrictActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxDistrictActionPerformed
 
     /**
      * @param args the command line arguments
@@ -787,8 +921,12 @@ public class SearchTrip extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> boxCanton;
+    private javax.swing.JComboBox<String> boxDistrict;
     private javax.swing.JComboBox<String> boxInfo;
+    private javax.swing.JComboBox<Institution> boxInstitutions;
     private javax.swing.JComboBox<String> boxMethod;
+    private javax.swing.JComboBox<String> boxProvince;
     private javax.swing.JComboBox<String> boxStops;
     private javax.swing.JComboBox<String> boxTime;
     private javax.swing.JButton buttonTrip;
@@ -796,9 +934,6 @@ public class SearchTrip extends javax.swing.JFrame {
     private com.github.lgooddatepicker.components.DatePicker datePicker;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -831,6 +966,7 @@ public class SearchTrip extends javax.swing.JFrame {
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelEnd;
     private javax.swing.JLabel labelGender;
+    private javax.swing.JLabel labelInstitution;
     private javax.swing.JLabel labelMethod;
     private javax.swing.JLabel labelName;
     private javax.swing.JLabel labelPlate;
