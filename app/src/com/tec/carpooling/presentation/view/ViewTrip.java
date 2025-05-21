@@ -5,12 +5,26 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.domain.entity.TripDisplay;
+import com.tec.carpooling.data.dao.TripDAO;
+
+import com.tec.carpooling.data.connection.DatabaseConnection;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.table.TableModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+
+import java.util.List;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -28,16 +42,67 @@ public class ViewTrip extends javax.swing.JFrame {
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
-        DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
-        // Add sample rows if needed
-        model.setRowCount(0);  // This removes all rows
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            TripDAO tripDAO = new TripDAO();
+            List<TripDisplay> trips = tripDAO.getTripsByDriver(user.getPersonId(), conn);
+            populateTripTable(trips);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading trips: " + e.getMessage());
+        };
         
         // Assign custom renderer/editor to the "More Info" column
         int infoColumn = tableTrips.getColumnCount() - 1;
         tableTrips.getColumnModel().getColumn(infoColumn).setCellRenderer(new ButtonRenderer());
         tableTrips.getColumnModel().getColumn(infoColumn).setCellEditor(new ButtonEditor(new JCheckBox(), tableTrips));
         
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableTrips.getModel());
+        tableTrips.setRowSorter(sorter);
+        
+        boxOrder.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                String selected = (String) boxOrder.getSelectedItem();
+                TableRowSorter<? extends TableModel> sorter = (TableRowSorter<? extends TableModel>) tableTrips.getRowSorter();
+
+                if (sorter != null) {
+                    int columnIndex = getColumnIndexFromLabel(selected);
+                    if (columnIndex != -1) {
+                        sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING)));
+                        sorter.sort();
+                    }
+                }
+            }
+        });
+        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    public void populateTripTable(List<TripDisplay> trips) {
+        DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
+        model.setRowCount(0); // Clear table
+
+        for (TripDisplay trip : trips) {
+            model.addRow(new Object[] {
+                trip.getTripDate(),
+                trip.getStartPoint(),
+                trip.getDestinationPoint(),
+                trip.getPlate(),
+                trip.getStatus(),
+                "More Info"
+            });
+        }
+    }
+    
+    private int getColumnIndexFromLabel(String label) {
+        switch (label) {
+            case "Date of Trip": return 0;
+            case "Start Point": return 1;
+            case "Destination Point": return 2;
+            case "Vehicle Plate": return 3;
+            case "Status": return 4;
+            default: return -1;
+        }
     }
 
     /**
@@ -176,7 +241,7 @@ public class ViewTrip extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
         panelOrder.add(labelOrder, gridBagConstraints);
 
-        boxOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Start Point", "Destination Point", "Vehicle Plate", "Status" }));
+        boxOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choose organization option", "Start Point", "Destination Point", "Vehicle Plate", "Status" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

@@ -5,6 +5,7 @@
 package com.tec.carpooling.data.dao;
 
 import com.tec.carpooling.domain.entity.Trip;
+import com.tec.carpooling.domain.entity.TripDisplay;
 import com.tec.carpooling.data.connection.DatabaseConnection;
 
 import java.sql.*;
@@ -12,6 +13,7 @@ import java.util.*;
 import oracle.jdbc.OracleTypes;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 
 /**
  *
@@ -33,5 +35,32 @@ public class TripDAO {
             stmt.execute();
             return stmt.getLong(5);
         }
+    }
+    
+    public List<TripDisplay> getTripsByDriver(long userId, Connection conn) throws SQLException {
+        List<TripDisplay> trips = new ArrayList<>();
+        String sql = "{ ? = call PU_TRIP_MGMT_PKG.get_trips_by_driver(?) }";
+
+        try (CallableStatement stmt = conn.prepareCall(sql)) {
+            stmt.registerOutParameter(1, OracleTypes.CURSOR);
+            stmt.setLong(2, userId);
+            stmt.execute();
+
+            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+                int count = 0;
+                while (rs.next()) {
+                    count++;
+                    Date date = rs.getDate(1);
+                    String start = rs.getString(2);
+                    String end = rs.getString(3);
+                    String plate = rs.getString(4);
+                    String status = rs.getString(5);
+
+                    trips.add(new TripDisplay(date, start, end, plate, status));
+                }
+            }
+        }
+
+        return trips;
     }
 }
