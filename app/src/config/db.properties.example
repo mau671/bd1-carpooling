@@ -8,9 +8,7 @@
 #           jdbc:oracle:thin:@<host>:<port>:<SID>
 # - db.username: Username for database authentication
 # - db.password: Password for database authentication
-#
-# Note: In production environments, consider using a secure method for storing credentials.
-#
+##
 #   config/db.properties
 db.url      = jdbc:oracle:thin:@localhost:1521:LIGHTNING
 db.username = pu
