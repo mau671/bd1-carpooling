@@ -6,7 +6,7 @@
 # Properties:
 # - db.url: JDBC connection URL for the Oracle database in the format
 #           jdbc:oracle:thin:@<host>:<port>:<SID>
-# - db.user: Username for database authentication
+# - db.username: Username for database authentication
 # - db.password: Password for database authentication
 #
 # Note: In production environments, consider using a secure method for storing credentials.
