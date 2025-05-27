@@ -1,43 +1,184 @@
-# This docker-compose file defines the configuration for Oracle DB 11g R2 and specifies 
-# the volumes and networks needed for its operation.
+# Docker Compose Configuration for Carpooling Database Infrastructure
+# 
+# This docker-compose file defines a multi-database environment including:
+# - Oracle Express Edition 11g for main database operations
+# - MariaDB for additional database functionality
+# - Adminer for web-based database administration
 #
-# Service: oracle-db
-# - Image: gvenzl/oracle-xe:11 (Oracle Express Edition 11g)
-# - Container name: oracle-db-carpooling
-# - Restarts "unless-stopped"; the container will restart unless explicitly stopped.
-# - Runs under user "1000:1000".
-# - Environment variable:
-#   - ORACLE_PASSWORD: Sets the database password to "carpooling".
-# - Ports:
-#   - Maps local port 1521 to container port 1521, allowing connections to Oracle.
-# - Volume:
-#   - Mounts "./data/" to /u01/app/oracle/oradata for data persistence.
-# - Networks:
-#   - Associated with the "db-carpooling" network with static IP 172.99.0.2.
+# Services Configuration:
 #
+# 1. oracle-db:
+#    - Image: gvenzl/oracle-xe:11 (Oracle Express Edition 11g)
+#    - Container name: oracle-db-carpooling
+#    - Restart policy: unless-stopped (restarts automatically unless explicitly stopped)
+#    - User: 1000:1000 (runs with specific user/group IDs for file permissions)
+#    - Environment:
+#      * ORACLE_PASSWORD: "carpooling" (sets SYS and SYSTEM user passwords)
+#    - Volumes:
+#      * ./data/oracle/oradata:/u01/app/oracle/oradata (Oracle data files persistence)
+#      * ./data/oracle/tablespaces/:/u01/app/oracle/ (Oracle tablespaces persistence)
+#    - Network: db-carpooling with static IP 172.99.0.2
+#    - Note: No external ports exposed (internal access only)
 #
-# Networks:
-# - db-carpooling: Custom network with bridge driver.
-#   - IPAM (IP Address Management) configured with:
-#     - Subnet: 172.99.0.0/16, allowing static IP assignments for containers.
+# 2. mariadb:
+#    - Image: mariadb (latest MariaDB version)
+#    - Container name: mariadb-carpooling
+#    - Restart policy: unless-stopped
+#    - Environment:
+#      * MARIADB_ROOT_PASSWORD: "carpooling" (root user password)
+#    - Network: db-carpooling with static IP 172.99.0.3
+#    - Note: No external ports exposed (internal access only)
+#
+# 3. adminer:
+#    - Image: adminer (web-based database administration tool)
+#    - Container name: adminer-carpooling
+#    - Restart policy: unless-stopped
+#    - Ports: 8080:8080 (web interface accessible at http://localhost:8080)
+#    - Network: db-carpooling with static IP 172.99.0.10
+#    - Purpose: Provides web interface to manage both Oracle and MariaDB databases
+#
+# Network Configuration:
+# - db-carpooling: Custom bridge network
+#   * Name: db-carpooling
+#   * Driver: bridge
+#   * IPAM (IP Address Management):
+#     - Subnet: 172.99.0.0/16 (allows for static IP assignment)
+#     - Enables inter-container communication with predictable IP addresses
+#
+# Usage Instructions:
+# - Start all services: docker-compose up -d
+# - Stop all services: docker-compose down
+# - View logs: docker-compose logs [service-name]
+# - Access Adminer: http://localhost:8080
+#   * For Oracle: Server=172.99.0.2, Port=1521, Database=XE, Username=system, Password=carpooling
+#   * For MariaDB: Server=172.99.0.3, Port=3306, Username=root, Password=carpooling
 services:
+  # Oracle Database Service - Main database for the carpooling application
   oracle-db:
-    image: gvenzl/oracle-xe:11
-    container_name: oracle-db-carpooling
-    restart: unless-stopped
-    user: "1000:1000"
+    image: gvenzl/oracle-xe:11                    # Oracle Express Edition 11g
+    container_name: oracledb-carpooling          # Custom container name for easy identification
+    restart: unless-stopped                       # Auto-restart policy
+    user: "1000:1000"                            # Run as specific user for file permissions
     environment:
-      ORACLE_PASSWORD: "carpooling"
+      ORACLE_PASSWORD: "carpooling"              # Password for SYS and SYSTEM users
     volumes:
-      - ./data/:/u01/app/oracle/oradata
-      - ./tablespaces/:/tablespaces
+      # Oracle data files for persistence across container restarts
+      - ./data/oracle/oradata:/u01/app/oracle/oradata
+      # Oracle tablespaces for custom tablespace storage
+      - ./data/oracle/tablespaces/:/u01/app/oracle/tablespaces/
     networks:
       db-carpooling:
-        ipv4_address: 172.99.0.2
+        ipv4_address: 172.99.0.2                 # Static IP for consistent connectivity
 
+  # MariaDB Service - Secondary database for additional functionality
+  mariadb:
+    image: mariadb                                # Latest MariaDB image
+    restart: unless-stopped                       # Auto-restart policy
+    container_name: mariadb-carpooling           # Custom container name
+    networks:
+      db-carpooling:
+        ipv4_address: 172.99.0.3                 # Static IP assignment
+    environment:
+      MARIADB_ROOT_PASSWORD: carpooling          # Root password for MariaDB
+
+  # Adminer Service - Web-based database administration interface
+  adminer:
+    image: adminer                                # Latest Adminer image
+    restart: unless-stopped                       # Auto-restart policy
+    container_name: adminer-carpooling           # Custom container name
+    networks:
+      db-carpooling:
+        ipv4_address: 172.99.0.10                # Static IP assignment
+    ports:
+      - 8080:8080                                 # Expose web interface on localhost:8080
+
+# Network Configuration
 networks:
+  # Custom network for inter-container communication
   db-carpooling:
-    driver: bridge
-    ipam:
+    name: db-carpooling                          # Explicit network name
+    driver: bridge                               # Bridge driver for container isolation
+    ipam:                                        # IP Address Management configuration
       config:
-        - subnet: 172.99.0.0/16
+        - subnet: 172.99.0.0/16                  # Large subnet allowing up to 65,534 hosts
+                                                 # Enables static IP assignment for predictable networking
+
+# =============================================================================
+# ADDITIONAL INFORMATION AND USAGE EXAMPLES
+# =============================================================================
+#
+# Common Docker Compose Commands:
+# --------------------------------
+# Start all services in background:
+#   docker-compose up -d
+#
+# Stop all services:
+#   docker-compose down
+#
+# View real-time logs for all services:
+#   docker-compose logs -f
+#
+# View logs for specific service:
+#   docker-compose logs -f oracle-db
+#   docker-compose logs -f mariadb
+#   docker-compose logs -f adminer
+#
+# Restart specific service:
+#   docker-compose restart oracle-db
+#
+# Remove all containers and networks (preserves volumes):
+#   docker-compose down
+#
+# Remove everything including volumes (WARNING: data loss):
+#   docker-compose down -v
+#
+# Database Connection Information:
+# --------------------------------
+# Oracle Database:
+#   Host: 172.99.0.2 (or localhost if port mapping added)
+#   Port: 1521
+#   SID: XE
+#   Username: system
+#   Password: carpooling
+#   Connection String: system/carpooling@172.99.0.2:1521/XE
+#
+# MariaDB:
+#   Host: 172.99.0.3 (or localhost if port mapping added)
+#   Port: 3306
+#   Username: root
+#   Password: carpooling
+#   Connection String: mysql://root:carpooling@172.99.0.3:3306
+#
+# Adminer Web Interface:
+#   URL: http://localhost:8080
+#   Use the connection information above to connect to databases
+#
+# Volume Locations:
+# -----------------
+# Oracle data files: ./data/oracle/oradata/
+# Oracle tablespaces: ./data/oracle/tablespaces/
+#
+# Security Considerations:
+# ------------------------
+# - Database services are not exposed to external networks (no port mapping)
+# - Only Adminer web interface is exposed on port 8080
+# - Change default passwords in production environments
+# - Consider using Docker secrets for sensitive data in production
+#
+# Troubleshooting:
+# ----------------
+# If Oracle fails to start:
+#   1. Check if port 1521 is already in use: netstat -an | grep 1521
+#   2. Ensure proper file permissions on ./data/ directory
+#   3. Check available disk space for Oracle data files
+#   4. Review Oracle logs: docker-compose logs oracle-db
+#
+# If MariaDB fails to start:
+#   1. Check if port 3306 is already in use: netstat -an | grep 3306
+#   2. Review MariaDB logs: docker-compose logs mariadb
+#
+# If Adminer is not accessible:
+#   1. Verify port 8080 is not blocked by firewall
+#   2. Check if another service is using port 8080
+#   3. Ensure Adminer container is running: docker-compose ps
+#
