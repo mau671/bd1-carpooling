@@ -81,25 +81,16 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: carpooling          # Root password for MariaDB
 
-  # MySQL Service - Primary database for carpooling system migration
+  # MySQL Service 
   mysql:
     image: mysql:lts                              # Latest LTS MySQL image (8.4.5)
     restart: unless-stopped                       # Auto-restart policy
     container_name: mysql-carpooling             # Custom container name
     environment:
       MYSQL_ROOT_PASSWORD: carpooling             # Root password for MySQL
-      MYSQL_CHARACTER_SET_SERVER: utf8mb4        # Default character set
-      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci # Default collation
-    volumes:
-      # MySQL data files for persistence across container restarts
-      - ./data/mysql/data:/var/lib/mysql
-      # MySQL configuration files
-      - ./data/mysql/conf:/etc/mysql/conf.d
-    ports:
-      - "3306:3306"                               # Expose MySQL port for external connections
     networks:
       db-carpooling:
-        ipv4_address: 172.99.0.4                 # Static IP assignment
+        ipv4_address: 172.99.0.4
 
   # Adminer Service - Web-based database administration interface
   adminer:
