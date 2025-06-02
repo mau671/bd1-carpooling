@@ -182,14 +182,17 @@ CREATE TABLE MAXCAPACITY (
 -- ============================================
 CREATE TABLE LOGS (
     id                INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier for log',
-    description       VARCHAR(100) COMMENT 'Description of the recorded event',
+    schema_name       VARCHAR(10) COMMENT 'Name of the database schema',
+    table_name        VARCHAR(30) COMMENT 'Name of the table where the change occurred',
+    field_name        VARCHAR(30) COMMENT 'Name of the field that was modified',
+    previous_value    VARCHAR(100) COMMENT 'Previous value before the change',
+    current_value     VARCHAR(100) COMMENT 'Current value after the change',
     creator           VARCHAR(50) COMMENT 'User who created the record',
     creation_date     DATE COMMENT 'Record creation date',
     modifier          VARCHAR(50) COMMENT 'User who modified the record',
     modification_date DATE COMMENT 'Record modification date',
-    log_date          DATE COMMENT 'Date when the recorded event occurred',
     
-    INDEX idx_logs_date (log_date),
+    INDEX idx_logs_schema_table (schema_name, table_name),
     INDEX idx_logs_creation (creation_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='Table that stores system event logs';
