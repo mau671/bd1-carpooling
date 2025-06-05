@@ -182,7 +182,7 @@ CREATE TABLE MAXCAPACITY (
 -- ============================================
 CREATE TABLE LOGS (
     id                INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier for log',
-    schema_name       VARCHAR(10) COMMENT 'Name of the database schema',
+    schema_name       VARCHAR(20) COMMENT 'Name of the database schema',
     table_name        VARCHAR(30) COMMENT 'Name of the table where the change occurred',
     field_name        VARCHAR(30) COMMENT 'Name of the field that was modified',
     previous_value    VARCHAR(100) COMMENT 'Previous value before the change',
