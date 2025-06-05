@@ -3,6 +3,7 @@
 # This docker-compose file defines a multi-database environment including:
 # - Oracle Express Edition 11g for main database operations
 # - MariaDB for additional database functionality
+# - MySQL LTS for extended database testing and compatibility
 # - Adminer for web-based database administration
 #
 # Services Configuration:
@@ -29,13 +30,22 @@
 #    - Network: db-carpooling with static IP 172.99.0.3
 #    - Note: No external ports exposed (internal access only)
 #
-# 3. adminer:
+# 3. mysql:
+#    - Image: mysql:lts (MySQL Long Term Support version 8.4.5)
+#    - Container name: mysql-carpooling
+#    - Restart policy: unless-stopped
+#    - Environment:
+#      * MYSQL_ROOT_PASSWORD: "carpooling" (root user password)
+#    - Network: db-carpooling with static IP 172.99.0.4
+#    - Note: No external ports exposed (internal access only)
+#
+# 4. adminer:
 #    - Image: adminer (web-based database administration tool)
 #    - Container name: adminer-carpooling
 #    - Restart policy: unless-stopped
 #    - Ports: 8080:8080 (web interface accessible at http://localhost:8080)
 #    - Network: db-carpooling with static IP 172.99.0.10
-#    - Purpose: Provides web interface to manage both Oracle and MariaDB databases
+#    - Purpose: Provides web interface to manage Oracle, MariaDB, and MySQL databases
 #
 # Network Configuration:
 # - db-carpooling: Custom bridge network
@@ -52,6 +62,7 @@
 # - Access Adminer: http://localhost:8080
 #   * For Oracle: Server=172.99.0.2, Port=1521, Database=XE, Username=system, Password=carpooling
 #   * For MariaDB: Server=172.99.0.3, Port=3306, Username=root, Password=carpooling
+#   * For MySQL: Server=172.99.0.4, Port=3306, Username=root, Password=carpooling
 services:
   # Oracle Database Service - Main database for the carpooling application
   oracle-db:
@@ -132,6 +143,7 @@ networks:
 # View logs for specific service:
 #   docker-compose logs -f oracle-db
 #   docker-compose logs -f mariadb
+#   docker-compose logs -f mysql
 #   docker-compose logs -f adminer
 #
 # Restart specific service:
@@ -160,6 +172,13 @@ networks:
 #   Password: carpooling
 #   Connection String: mysql://root:carpooling@172.99.0.3:3306
 #
+# MySQL:
+#   Host: 172.99.0.4 (or localhost if port mapping added)
+#   Port: 3306
+#   Username: root
+#   Password: carpooling
+#   Connection String: mysql://root:carpooling@172.99.0.4:3306
+#
 # Adminer Web Interface:
 #   URL: http://localhost:8080
 #   Use the connection information above to connect to databases
@@ -175,6 +194,7 @@ networks:
 # - Only Adminer web interface is exposed on port 8080
 # - Change default passwords in production environments
 # - Consider using Docker secrets for sensitive data in production
+# - MariaDB and MySQL both use port 3306 but on different network IPs (172.99.0.3 and 172.99.0.4)
 #
 # Troubleshooting:
 # ----------------
@@ -187,6 +207,11 @@ networks:
 # If MariaDB fails to start:
 #   1. Check if port 3306 is already in use: netstat -an | grep 3306
 #   2. Review MariaDB logs: docker-compose logs mariadb
+#
+# If MySQL fails to start:
+#   1. Check if port 3306 is already in use (conflict with MariaDB): netstat -an | grep 3306
+#   2. Review MySQL logs: docker-compose logs mysql
+#   3. Note: Both MariaDB and MySQL use port 3306 internally but have different IPs
 #
 # If Adminer is not accessible:
 #   1. Verify port 8080 is not blocked by firewall
