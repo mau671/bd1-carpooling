@@ -37,6 +37,7 @@ END $$
 CREATE PROCEDURE update_currency_name(
     IN p_currency_id INT,
     IN p_new_name VARCHAR(50)
+)
 BEGIN
     DECLARE rows_affected INT;
     
