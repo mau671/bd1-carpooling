@@ -135,3 +135,36 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+--  Grants
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.assign_initial_status TO 'pu_user'@'%';
+GRANT INSERT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.STATUS TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.cancel_trip TO 'pu_user'@'%';
+GRANT UPDATE ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.auto_update_status TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.TRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+GRANT SELECT, UPDATE ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.update_all_trip_statuses TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.get_trip_status TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.STATUS TO 'pu_user'@'%';
+
+
+GRANT SELECT ON carpooling_pu.VEHICLE TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.VEHICLEXROUTE TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.CURRENCY TO 'pu_user'@'%';
+
+FLUSH PRIVILEGES;

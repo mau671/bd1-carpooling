@@ -1,6 +1,6 @@
 USE carpooling_pu;
 
--- Eliminar procedimientos existentes si ya están definidos
+
 DROP PROCEDURE IF EXISTS assign_initial_status;
 DROP PROCEDURE IF EXISTS cancel_trip;
 DROP PROCEDURE IF EXISTS auto_update_status;
@@ -9,20 +9,20 @@ DROP PROCEDURE IF EXISTS get_trip_status;
 
 DELIMITER $$
 
--- 1. Asignar estado inicial 'Pendiente' a un viaje
+
 CREATE PROCEDURE assign_initial_status(IN p_trip_id INT)
 BEGIN
     DECLARE v_status_id INT;
     
-    -- Obtener ID del estado 'PENDING'
+
     SELECT id INTO v_status_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'PENDING';
     
-    -- Insertar relación estado-viaje
+
     INSERT INTO STATUSXTRIP (trip_id, status_id)
     VALUES (p_trip_id, v_status_id);
 END $$
 
--- 2. Cancelar manualmente un viaje (solo si está 'Pendiente')
+
 CREATE PROCEDURE cancel_trip(IN p_trip_id INT)
 BEGIN
     DECLARE v_pending_id INT;
@@ -30,16 +30,16 @@ BEGIN
     DECLARE v_current_id INT;
     DECLARE rows_affected INT;
     
-    -- Obtener IDs de estados
+
     SELECT id INTO v_pending_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'PENDING';
     SELECT id INTO v_cancelled_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'CANCELLED';
     
-    -- Verificar estado actual
+
     SELECT status_id INTO v_current_id
     FROM STATUSXTRIP
     WHERE trip_id = p_trip_id;
     
-    -- Solo cancelar si está pendiente
+
     IF v_current_id = v_pending_id THEN
         UPDATE STATUSXTRIP
         SET status_id = v_cancelled_id
@@ -52,7 +52,7 @@ BEGIN
     END IF;
 END $$
 
--- 3. Actualizar estado automáticamente según fecha/hora
+
 CREATE PROCEDURE auto_update_status(IN p_trip_id INT)
 BEGIN
     DECLARE v_in_progress_id INT;
@@ -65,28 +65,28 @@ BEGIN
     DECLARE v_current_date DATE;
     DECLARE v_current_datetime DATETIME;
     
-    -- Obtener IDs de estados
+
     SELECT id INTO v_pending_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'PENDING';
     SELECT id INTO v_in_progress_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'IN PROGRESS';
     SELECT id INTO v_completed_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'COMPLETED';
     
-    -- Obtener fecha/hora actual
+
     SET v_current_date = CURDATE();
     SET v_current_datetime = NOW();
     
-    -- Obtener datos del viaje
+
     SELECT R.start_time, R.end_time, R.programming_date
     INTO v_trip_start, v_trip_end, v_programming_date
     FROM TRIP T
     JOIN ROUTE R ON T.route_id = R.id
     WHERE T.id = p_trip_id;
-    
-    -- Obtener estado actual
+
+
     SELECT status_id INTO v_current_status
     FROM STATUSXTRIP
     WHERE trip_id = p_trip_id;
     
-    -- Lógica de transición de estados
+
     IF v_current_status = v_pending_id
        AND v_current_date = v_programming_date
        AND v_current_datetime >= v_trip_start 
@@ -120,7 +120,7 @@ BEGIN
     END IF;
 END $$
 
--- 4. Actualizar estados de todos los viajes activos
+
 CREATE PROCEDURE update_all_trip_statuses()
 BEGIN
     DECLARE done INT DEFAULT FALSE;
@@ -147,7 +147,7 @@ BEGIN
     CLOSE cur;
 END $$
 
--- 5. Obtener el estado actual de un viaje
+
 CREATE PROCEDURE get_trip_status(IN p_trip_id INT)
 BEGIN
     SELECT S.id, S.name
@@ -157,3 +157,35 @@ BEGIN
 END $$
 
 DELIMITER ; 
+
+-- Privileges
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.assign_initial_status TO 'pu_user'@'%';
+GRANT INSERT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.STATUS TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.cancel_trip TO 'pu_user'@'%';
+GRANT UPDATE ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.auto_update_status TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.TRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+GRANT SELECT, UPDATE ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.update_all_trip_statuses TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.get_trip_status TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.STATUSXTRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.STATUS TO 'pu_user'@'%';
+
+
+GRANT SELECT ON carpooling_pu.VEHICLE TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.VEHICLEXROUTE TO 'pu_user'@'%';
+
+FLUSH PRIVILEGES;

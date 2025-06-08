@@ -73,3 +73,31 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Privilegios
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.create_waypoint_with_district TO 'pu_user'@'%';
+GRANT INSERT ON carpooling_pu.WAYPOINT TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.DISTRICT TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.create_waypoint_with_coords TO 'pu_user'@'%';
+GRANT INSERT ON carpooling_pu.WAYPOINT TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.get_waypoint_info TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.WAYPOINT TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.update_waypoint_district TO 'pu_user'@'%';
+GRANT UPDATE ON carpooling_pu.WAYPOINT TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.DISTRICT TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.delete_waypoint TO 'pu_user'@'%';
+GRANT DELETE ON carpooling_pu.WAYPOINT TO 'pu_user'@'%';
+
+
+GRANT SELECT ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+
+FLUSH PRIVILEGES;

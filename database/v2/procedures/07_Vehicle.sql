@@ -79,3 +79,30 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Permisos de ejecucion
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.create_vehicle TO 'pu_user'@'%';
+GRANT INSERT ON carpooling_pu.VEHICLE TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.get_vehicle_info TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.VEHICLE TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.update_vehicle TO 'pu_user'@'%';
+GRANT UPDATE ON carpooling_pu.VEHICLE TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.delete_vehicle TO 'pu_user'@'%';
+GRANT DELETE ON carpooling_pu.VEHICLE TO 'pu_user'@'%';
+GRANT DELETE ON carpooling_pu.DRIVERXVEHICLE TO 'pu_user'@'%';
+GRANT DELETE ON carpooling_pu.VEHICLEXROUTE TO 'pu_user'@'%';
+GRANT DELETE ON carpooling_pu.MAXCAPACITYXVEHICLE TO 'pu_user'@'%';
+
+
+GRANT SELECT ON carpooling_pu.DRIVER TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.MAXCAPACITY TO 'pu_user'@'%';
+
+FLUSH PRIVILEGES;

@@ -18,3 +18,17 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Grant Privileges
+
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_all_status TO 'adm_user'@'%';
+GRANT SELECT ON carpooling_adm.STATUS TO 'adm_user'@'%';
+
+
+GRANT SELECT ON carpooling_adm.STATUS TO 'pu_user'@'%';
+
+
+GRANT INSERT, UPDATE ON carpooling_adm.STATUS TO 'adm_user'@'localhost'; 
+GRANT DELETE ON carpooling_adm.STATUS TO 'adm_user'@'localhost' WITH GRANT OPTION; 
+
+FLUSH PRIVILEGES;

@@ -72,3 +72,26 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Permisos necesarios
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.create_route TO 'pu_user'@'%';
+GRANT INSERT ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.get_route_info TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.update_route TO 'pu_user'@'%';
+GRANT UPDATE ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+
+
+GRANT EXECUTE ON PROCEDURE carpooling_pu.delete_route TO 'pu_user'@'%';
+GRANT DELETE ON carpooling_pu.ROUTE TO 'pu_user'@'%';
+GRANT DELETE ON carpooling_pu.WAYPOINT TO 'pu_user'@'%';
+
+
+GRANT SELECT ON carpooling_adm.DISTRICT TO 'pu_user'@'%';
+
+FLUSH PRIVILEGES;
