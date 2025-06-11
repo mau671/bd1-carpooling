@@ -1,4 +1,6 @@
 
+USE carpooling_adm;
+
 -- 1. Trigger BEFORE INSERT and UPDATE on GENDER
 DELIMITER //
 
@@ -402,7 +404,10 @@ BEGIN
 END;//
 
 -- PU database triggers
--- 18. Trigger BEFORE INSERT and UPDATE on PHOTO
+USE carpooling_pu;
+
+DELIMITER //
+-- 19. Trigger BEFORE INSERT and UPDATE on PHOTO
 CREATE TRIGGER trg_photo_before_insert
 BEFORE INSERT ON PHOTO
 FOR EACH ROW
@@ -433,6 +438,8 @@ BEGIN
     SET NEW.modifier = NEW.creator;
     SET NEW.modification_date = NEW.creation_date;
 END;//
+
+DELIMITER //
 
 CREATE TRIGGER trg_phone_before_update
 BEFORE UPDATE ON PHONE
@@ -522,6 +529,8 @@ BEGIN
     SET NEW.modification_date = NEW.creation_date;
 END;
 //
+
+DELIMITER //
 
 CREATE TRIGGER trg_institution_person_before_update
 BEFORE UPDATE ON INSTITUTION_PERSON
@@ -647,6 +656,7 @@ BEGIN
 END;
 //
 
+DELIMITER //
 
 -- 30. STATUSXTRIP
 CREATE TRIGGER trg_statusxtrip_before_insert
@@ -831,6 +841,10 @@ BEGIN
 END;
 //
 
+USE carpooling_adm;
+
+DELIMITER //
+
 -- 38. CHOSENCAPACITY
 CREATE TRIGGER trg_chosencapacity_before_insert
 BEFORE INSERT ON CHOSENCAPACITY
@@ -876,3 +890,4 @@ END;
 //
 
 DELIMITER ;
+
