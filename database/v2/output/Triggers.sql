@@ -7,7 +7,7 @@
  Purpose: Complete set of audit triggers for all carpooling database tables
  Project: IC4301 Database I - Project 01
  Version: 2.0
- Generated: 2025-06-05 12:15:56
+ Generated: 2025-06-11 15:45:54
  
  Description:
    This script contains audit triggers for all tables in the carpooling system.
@@ -56,7 +56,7 @@ USE carpooling_adm;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.GENDER
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -111,7 +111,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.TYPE_IDENTIFICATION
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -166,7 +166,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.TYPE_PHONE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -221,7 +221,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.COUNTRY
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -276,7 +276,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.PROVINCE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -339,7 +339,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.CANTON
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -402,7 +402,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.DISTRICT
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -465,7 +465,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.STATUS
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -520,7 +520,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.MAXCAPACITY
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -575,7 +575,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.LOGS
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -662,7 +662,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.PERSON
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -773,7 +773,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.ADMIN
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -820,7 +820,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.PAYMENTMETHOD
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -875,7 +875,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.CURRENCY
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -930,7 +930,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.INSTITUTION
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -985,7 +985,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.DOMAIN
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1040,7 +1040,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.INSTITUTION_DOMAIN
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1095,7 +1095,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.CHOSENCAPACITY
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1158,7 +1158,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_adm.INSTITUTION_REPORT
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1253,7 +1253,7 @@ USE carpooling_pu;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PHOTO
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1316,7 +1316,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PHONE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1379,7 +1379,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.EMAIL
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1450,7 +1450,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.VEHICLE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1505,7 +1505,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PHONE_PERSON
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1560,7 +1560,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.INSTITUTION_PERSON
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1615,7 +1615,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PERSONUSER
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1686,7 +1686,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.ROUTE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1757,7 +1757,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.VEHICLEXROUTE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1820,7 +1820,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.WAYPOINT
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1899,7 +1899,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.TRIP
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -1978,7 +1978,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.STATUSXTRIP
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -2033,7 +2033,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PASSENGER
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -2080,7 +2080,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.DRIVER
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -2127,7 +2127,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PASSENGERXWAYPOINT
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -2182,7 +2182,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.DRIVERXVEHICLE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -2245,7 +2245,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.MAXCAPACITYXVEHICLE
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -2308,7 +2308,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PASSENGERXTRIP
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
@@ -2371,7 +2371,7 @@ DELIMITER ;
 
 -- ========================================
 -- AUDIT TRIGGERS FOR: carpooling_pu.PASSENGERXTRIPXPAYMENT
--- Generated: 2025-06-05 12:15:56
+-- Generated: 2025-06-11 15:45:54
 -- ========================================
 
 -- Step 1: Remove existing triggers
