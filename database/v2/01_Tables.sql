@@ -204,11 +204,14 @@ CREATE TABLE PARAMETER (
     id                INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier for parameter',
     name              VARCHAR(50) NOT NULL COMMENT 'Parameter name',
     value             VARCHAR(50) NOT NULL COMMENT 'Value of the parameter',
+    creator           VARCHAR(50) COMMENT 'User who created the record',
+    creation_date     DATE COMMENT 'Record creation date',
+    modifier          VARCHAR(50) COMMENT 'User who modified the record',
+    modification_date DATE COMMENT 'Record modification date',
     
     UNIQUE KEY uk_parameter_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='Table that stores system configuration parameters';
-
 -- ============================================
 -- 12. PERSON Table (Master)
 -- ============================================
