@@ -28,6 +28,13 @@ public class Locations extends javax.swing.JPanel {
         initTableModels();
         initComboBoxes();
         loadAllData();
+        // Recargar datos al cambiar de pestaña para reflejar cambios recientes
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent e) {
+                loadAllData();
+            }
+        });
     }
 
     private void initTableModels() {
