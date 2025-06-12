@@ -68,7 +68,10 @@ public class DatabaseConfig {
      * 
      * @return the database driver class name
      */
-    public static String getDbDriver() {
+    /*public static String getDbDriver() {
         return properties.getProperty("db.driver", "oracle.jdbc.driver.OracleDriver"); // Default value
+    }*/
+    public static String getDbDriver() {
+        return properties.getProperty("db.driver", "com.mysql.cj.jdbc.Driver");
     }
 }
