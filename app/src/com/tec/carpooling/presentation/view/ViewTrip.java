@@ -42,125 +42,114 @@ public class ViewTrip extends javax.swing.JFrame {
      * Creates new form Trips
      */
     public ViewTrip(String role, User user) {
-        this.user = user;
+        this.user     = user;
         this.userRole = role;
         initComponents();
+
+        // 1) Build the model with an “ID” column first
+        String[] cols = { "ID", "Date", "Start", "End", "Plate", "Status", "More Info" };
+        DefaultTableModel model = new DefaultTableModel(cols, 0);
+        tableTrips.setModel(model);
+
+        // 2) Hide the ID column
+        tableTrips.removeColumn(tableTrips.getColumnModel().getColumn(0));
+
+        // 3) Load rows
+        refreshTripTable();
+
+        // 4) “More Info” button integration
+        int infoCol = tableTrips.getColumnCount() - 1;
+        tableTrips.getColumnModel().getColumn(infoCol)
+                  .setCellRenderer(new ButtonRenderer());
+        tableTrips.getColumnModel().getColumn(infoCol)
+                  .setCellEditor(new ButtonEditor(new JCheckBox(), tableTrips));
+
+        // 5) Sorting combobox listener
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableTrips.getModel());
+        tableTrips.setRowSorter(sorter);
+        tableTrips.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        boxOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                String selected = (String) boxOrder.getSelectedItem();
+                int colIndex = getColumnIndexFromLabel(selected);
+                if (colIndex >= 0) {
+                    sorter.setSortKeys(
+                        List.of(new RowSorter.SortKey(colIndex + 1, SortOrder.ASCENDING))
+                        // +1 because column 0 is hidden ID
+                    );
+                }
+            }
+        });
+
+        // Add sidebar, maximize, etc.
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
-        
-        try {
-            Connection conn = DatabaseConnection.getConnection();
-            TripDAO tripDAO = new TripDAO();
-            List<TripDisplay> trips = tripDAO.getTripsByDriver(user.getPersonId(), conn);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    private void refreshTripTable() {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            TripDAO dao = new TripDAO();
+            List<TripDisplay> trips = dao.getTripsByDriver(user.getPersonId(), conn);
             populateTripTable(trips);
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading trips: " + e.getMessage());
-        };
-        
-        // Assign custom renderer/editor to the "More Info" column
-        int infoColumn = tableTrips.getColumnCount() - 1;
-        tableTrips.getColumnModel().getColumn(infoColumn).setCellRenderer(new ButtonRenderer());
-        tableTrips.getColumnModel().getColumn(infoColumn).setCellEditor(new ButtonEditor(new JCheckBox(), tableTrips));
-        
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableTrips.getModel());
-        tableTrips.setRowSorter(sorter);
-        tableTrips.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        boxOrder.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                String selected = (String) boxOrder.getSelectedItem();
-                TableRowSorter<? extends TableModel> sorter = (TableRowSorter<? extends TableModel>) tableTrips.getRowSorter();
-
-                if (sorter != null) {
-                    int columnIndex = getColumnIndexFromLabel(selected);
-                    if (columnIndex != -1) {
-                        sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING)));
-                        sorter.sort();
-                    }
-                }
-            }
-        });
-        
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }
     }
-    
+
     public void populateTripTable(List<TripDisplay> trips) {
         DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
-        model.setRowCount(0); // Clear table
-
-        for (TripDisplay trip : trips) {
-            model.addRow(new Object[] {
-                trip.getTripDate(),
-                trip.getStartPoint(),
-                trip.getDestinationPoint(),
-                trip.getPlate(),
-                trip.getStatus(),
+        model.setRowCount(0);
+        for (TripDisplay t : trips) {
+            model.addRow(new Object[]{
+                t.getTripId(),          // hidden ID
+                t.getTripDate(),
+                t.getStartPoint(),
+                t.getDestinationPoint(),
+                t.getPlate(),
+                t.getStatus(),
                 "More Info"
             });
         }
     }
-    
+
     private int getColumnIndexFromLabel(String label) {
+        // note: these indices correspond to the VISIBLE columns
         switch (label) {
-            case "Date of Trip": return 0;
-            case "Start Point": return 1;
-            case "Destination Point": return 2;
-            case "Vehicle Plate": return 3;
-            case "Status": return 4;
+            case "Date of Trip":       return 0;
+            case "Start Point":        return 1;
+            case "Destination Point":  return 2;
+            case "Vehicle Plate":      return 3;
+            case "Status":             return 4;
             default: return -1;
         }
     }
-    
+
     private void cancelSelectedTrip() {
-        int row = tableTrips.getSelectedRow();
-        if (row == -1) {
+        int viewRow = tableTrips.getSelectedRow();
+        if (viewRow < 0) {
             JOptionPane.showMessageDialog(this, "Please select a trip to cancel.");
             return;
         }
-        String status = (String) tableTrips.getValueAt(row, 4);  // column 4 = Status
+        int modelRow = tableTrips.convertRowIndexToModel(viewRow);
+
+        long tripId  = (Long) tableTrips.getModel().getValueAt(modelRow, 0);
+        String status= (String) tableTrips.getModel().getValueAt(modelRow, 5);
+
         if (!"Pending".equalsIgnoreCase(status)) {
-            JOptionPane.showMessageDialog(this, "Only trips with status 'Pending' can be cancelled.");
+            JOptionPane.showMessageDialog(this, "Only Pending trips can be cancelled.");
             return;
         }
 
-        // Get vehicle plate and date of trip from table
-        String plate = (String) tableTrips.getValueAt(row, 3);
-        Date tripDate = (Date) tableTrips.getValueAt(row, 0);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cs = conn.prepareCall("{CALL carpooling_pu.cancel_trip(?)}")) {
 
-        String findTripIdSQL =
-            "SELECT T.id " +
-            "FROM carpooling_pu.TRIP T " +
-            "JOIN carpooling_pu.ROUTE R ON T.route_id = R.id " +
-            "JOIN carpooling_pu.VEHICLEXROUTE VR ON VR.route_id = R.id " +
-            "JOIN carpooling_pu.VEHICLE V ON V.id = VR.vehicle_id " +
-            "WHERE V.plate = ? AND R.programming_date = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            // 1) Look up the trip ID
-            long tripId;
-            try (PreparedStatement stmt = conn.prepareStatement(findTripIdSQL)) {
-                stmt.setString(1, plate);
-                stmt.setDate(2, new java.sql.Date(tripDate.getTime()));
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (!rs.next()) {
-                        JOptionPane.showMessageDialog(this, "Trip ID not found for selected row.");
-                        return;
-                    }
-                    tripId = rs.getLong("id");
-                }
-            }
-
-            // 2) Call the MySQL cancel_trip procedure
-            try (CallableStatement callStmt = conn.prepareCall("{ CALL carpooling_pu.cancel_trip(?) }")) {
-                callStmt.setInt(1, (int) tripId);
-                callStmt.execute();
-                JOptionPane.showMessageDialog(this, "Trip cancelled successfully.");
-            }
-
-            // 3) Refresh your UI table
-            TripDAO dao = new TripDAO();
-            List<TripDisplay> trips = dao.getTripsByDriver(user.getPersonId(), conn);
-            populateTripTable(trips);
+            cs.setLong(1, tripId);
+            cs.execute();
+            JOptionPane.showMessageDialog(this, "Trip cancelled successfully.");
+            refreshTripTable();
 
         } catch (SQLException ex) {
             ex.printStackTrace();

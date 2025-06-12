@@ -145,4 +145,28 @@ DELIMITER ;
 --     GROUP BY month
 --     ORDER BY month;
 -- END $$
--- DELIMITER ; 
+-- DELIMITER ;
+-- 1) get_drivers_by_gender
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_drivers_by_gender    TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_pu.DRIVER                           TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_adm.PERSON                          TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_adm.GENDER                          TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_pu.INSTITUTION_PERSON               TO 'pu_user'@'%';
+
+-- 2) get_passengers_by_gender
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_passengers_by_gender TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_pu.PASSENGER                        TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_adm.PERSON                          TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_adm.GENDER                          TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_pu.INSTITUTION_PERSON               TO 'pu_user'@'%';
+
+-- 3) get_users_by_age_range
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_users_by_age_range TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_adm.PERSON                          TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_adm.GENDER                          TO 'pu_user'@'%';
+
+-- 4) get_total_trips_per_month
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_total_trips_per_month TO 'pu_user'@'%';
+GRANT SELECT  ON carpooling_pu.TRIP                            TO 'pu_user'@'%';
+
+FLUSH PRIVILEGES;
