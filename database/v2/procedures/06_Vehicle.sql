@@ -74,7 +74,7 @@ BEGIN
     
     IF rows_affected = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = CONCAT('Vehicle with ID ', p_vehicle_id, ' not found.');
+        SET MESSAGE_TEXT = 'Vehicle not found';
     END IF;
 END $$
 

@@ -68,7 +68,7 @@ BEGIN
 
     IF rows_affected = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = CONCAT('Waypoint with ID ', p_waypoint_id, ' not found.');
+        SET MESSAGE_TEXT = 'Waypoint not found.';
     END IF;
 END $$
 

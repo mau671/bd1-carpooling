@@ -67,7 +67,7 @@ BEGIN
 
     IF rows_affected = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = CONCAT('Route with ID ', p_route_id, ' not found.');
+        SET MESSAGE_TEXT = 'Route not found.';
     END IF;
 END $$
 

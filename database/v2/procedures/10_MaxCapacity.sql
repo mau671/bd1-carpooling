@@ -29,4 +29,5 @@ GRANT EXECUTE ON PROCEDURE carpooling_adm.get_all_max_capacity TO 'pu_user'@'%';
 GRANT SELECT ON carpooling_adm.MAXCAPACITY TO 'pu_user'@'%';
 GRANT INSERT, UPDATE, DELETE ON carpooling_adm.MAXCAPACITY TO 'adm_user'@'%';
 
-GRANT SELECT ON carpooling_adm.MAXCAPAC
+GRANT SELECT ON carpooling_adm.MAXCAPACITY TO 'pu_user'@'%';
+FLUSH PRIVILEGES;

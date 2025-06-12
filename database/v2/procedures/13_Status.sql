@@ -28,7 +28,7 @@ GRANT SELECT ON carpooling_adm.STATUS TO 'adm_user'@'%';
 GRANT SELECT ON carpooling_adm.STATUS TO 'pu_user'@'%';
 
 
-GRANT INSERT, UPDATE ON carpooling_adm.STATUS TO 'adm_user'@'localhost'; 
-GRANT DELETE ON carpooling_adm.STATUS TO 'adm_user'@'localhost' WITH GRANT OPTION; 
+GRANT INSERT, UPDATE ON carpooling_adm.STATUS TO 'adm_user'@'%'; 
+GRANT DELETE ON carpooling_adm.STATUS TO 'adm_user'@'%' WITH GRANT OPTION; 
 
 FLUSH PRIVILEGES;

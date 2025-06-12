@@ -130,7 +130,7 @@ BEGIN
 
     IF rows_affected = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = CONCAT('Trip with ID ', p_trip_id, ' not found.');
+        SET MESSAGE_TEXT = 'Trip not found.';
     END IF;
 END $$
 
