@@ -27,14 +27,14 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 /**
- * Ventana de inicio de sesión para usuarios
+ * Login window for users
  */
 public class UserLogIn extends javax.swing.JFrame {
     private final UserLoginService userLoginService;
     private final UserTypeService userTypeService;
     
     /**
-     * Constructor de la ventana de inicio de sesión
+     * Constructor for the login window
      */
     public UserLogIn() {
         initComponents();
@@ -267,35 +267,35 @@ public class UserLogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        // Validar campos requeridos
+        // Validate required fields
         if (textUsername.getText().trim().isEmpty() ||
             textPassword.getPassword().length == 0) {
             
             JOptionPane.showMessageDialog(this,
-                "Please fill out your username and password.",
-                "Places have not been filled in.",
+                "Please enter your username and password.",
+                "Incomplete Fields",
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
-            // Intentar iniciar sesión
+            // Attempt to login
             User user = userLoginService.login(
                 textUsername.getText().trim(),
                 new String(textPassword.getPassword()).trim()
             );
 
             if (user != null) {
-                // Verificar si el usuario es administrador
+                JOptionPane.showMessageDialog(this,
+                    "Login successful.",
+                    "Welcome",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // Check if user is administrator
                 boolean isAdmin = userTypeService.isAdmin(user.getId());
                 
                 if (isAdmin) {
-                    // Usuario administrador - redirigir a AdminFrame
-                    JOptionPane.showMessageDialog(this,
-                        "Bienvenido Administrador " + user.getUsername() + "!",
-                        "Acceso de Administrador",
-                        JOptionPane.INFORMATION_MESSAGE);
-                    
+                    // Redirect to admin interface
                     javax.swing.SwingUtilities.invokeLater(() -> {
                         AdminFrame adminFrame = new AdminFrame();
                         adminFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -303,12 +303,7 @@ public class UserLogIn extends javax.swing.JFrame {
                         this.dispose();
                     });
                 } else {
-                    // Usuario regular - redirigir a selección de tipo de usuario
-                    JOptionPane.showMessageDialog(this,
-                        "Inicio de sesión exitoso.",
-                        "Bienvenido",
-                        JOptionPane.INFORMATION_MESSAGE);
-                    
+                    // Redirect to user type selection window
                     javax.swing.SwingUtilities.invokeLater(() -> {
                         UserType userType = new UserType(user);
                         userType.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -318,18 +313,18 @@ public class UserLogIn extends javax.swing.JFrame {
                 }
             } else {
                 JOptionPane.showMessageDialog(this,
-                    "Username or password are incorrect",
-                    "Authentitication Error",
+                    "Incorrect username or password.",
+                    "Authentication Error",
                     JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Database Error: " + ex.getMessage(),
+                "Database error: " + ex.getMessage(),
                 "Connection Error",
                 JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "Unexpected Error: " + ex.getMessage(),
+                "Unexpected error: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
