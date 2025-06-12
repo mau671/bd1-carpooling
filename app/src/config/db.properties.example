@@ -1,15 +1,22 @@
 #
-# Oracle Database Connection Properties
+# MySQL Database Connection Properties  
 #
-# This file contains the configuration settings for establishing a connection to an Oracle database.
+# This file contains the configuration settings for establishing a connection to a MySQL database.
 #
 # Properties:
-# - db.url: JDBC connection URL for the Oracle database in the format
-#           jdbc:oracle:thin:@<host>:<port>:<SID>
+# - db.url: JDBC connection URL for the MySQL database in the format
+#           jdbc:mysql://<host>:<port>/<database>
 # - db.username: Username for database authentication
 # - db.password: Password for database authentication
+# - db.driver: MySQL JDBC driver
 ##
 #   config/db.properties
-db.url      = jdbc:oracle:thin:@localhost:1521:LIGHTNING
-db.username = pu
-db.password = passwordHere
+db.url      = jdbc:mysql://172.99.0.4:3306/carpooling_adm?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+db.username = adm_user
+db.password = adm_password
+db.driver   = com.mysql.cj.jdbc.Driver
+
+# Alternative configuration for PU database
+# db.url      = jdbc:mysql://172.99.0.4:3306/carpooling_pu?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC  
+# db.username = pu_user
+# db.password = pu_password
