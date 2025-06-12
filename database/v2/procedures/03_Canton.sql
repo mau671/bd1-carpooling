@@ -1,14 +1,20 @@
 USE carpooling_adm;
 
+-- Eliminar procedimientos existentes
 DROP PROCEDURE IF EXISTS create_canton;
 DROP PROCEDURE IF EXISTS get_all_cantons;
 DROP PROCEDURE IF EXISTS get_cantons_by_province;
 DROP PROCEDURE IF EXISTS update_canton_name;
 DROP PROCEDURE IF EXISTS delete_canton;
+DROP PROCEDURE IF EXISTS get_canton;
+DROP PROCEDURE IF EXISTS get_canton_by_name;
 
 DELIMITER $$
 
-
+-- ========================================
+-- PROCEDURE: create_canton (ORIGINAL - mantenido)
+-- Purpose: Insert a new canton
+-- ========================================
 CREATE PROCEDURE create_canton(
     IN p_name VARCHAR(50),
     IN p_province_id INT
@@ -47,6 +53,10 @@ BEGIN
 END $$
 
 
+-- ========================================
+-- PROCEDURE: get_all_cantons (ORIGINAL - mantenido)
+-- Purpose: Get all cantons
+-- ========================================
 CREATE PROCEDURE get_all_cantons()
 BEGIN
     SELECT 
@@ -64,6 +74,50 @@ BEGIN
     JOIN PROVINCE p ON c.province_id = p.id
     JOIN COUNTRY co ON p.country_id = co.id
     ORDER BY co.name, p.name, c.name;
+END $$
+
+-- ========================================
+-- PROCEDURE: get_canton (MIGRADO)
+-- Purpose: Get a specific canton by ID
+-- ========================================
+CREATE PROCEDURE get_canton(
+    IN p_id INT
+)
+BEGIN
+    SELECT 
+        c.id, 
+        c.province_id, 
+        p.name AS province_name,
+        c.name, 
+        c.creator, 
+        c.creation_date,
+        c.modifier, 
+        c.modification_date
+    FROM CANTON c
+    JOIN PROVINCE p ON c.province_id = p.id
+    WHERE c.id = p_id;
+END $$
+
+-- ========================================
+-- PROCEDURE: get_canton_by_name (MIGRADO)
+-- Purpose: Get a canton by name
+-- ========================================
+CREATE PROCEDURE get_canton_by_name(
+    IN p_name VARCHAR(50)
+)
+BEGIN
+    SELECT 
+        c.id, 
+        c.province_id, 
+        p.name AS province_name,
+        c.name, 
+        c.creator, 
+        c.creation_date,
+        c.modifier, 
+        c.modification_date
+    FROM CANTON c
+    JOIN PROVINCE p ON c.province_id = p.id
+    WHERE c.name = p_name;
 END $$
 
 
@@ -161,6 +215,8 @@ DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE carpooling_adm.create_canton TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.get_all_cantons TO 'pu_user'@'%';
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_canton TO 'pu_user'@'%';
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_canton_by_name TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.get_cantons_by_province TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.update_canton_name TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.delete_canton TO 'pu_user'@'%';

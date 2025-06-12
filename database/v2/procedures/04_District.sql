@@ -1,14 +1,19 @@
 USE carpooling_adm;
 
+-- Eliminar procedimientos existentes
 DROP PROCEDURE IF EXISTS create_district;
 DROP PROCEDURE IF EXISTS get_all_districts;
 DROP PROCEDURE IF EXISTS get_districts_by_canton;
 DROP PROCEDURE IF EXISTS update_district_name;
 DROP PROCEDURE IF EXISTS delete_district;
+DROP PROCEDURE IF EXISTS get_district;
 
 DELIMITER $$
 
-
+-- ========================================
+-- PROCEDURE: create_district (ORIGINAL - mantenido)
+-- Purpose: Insert a new district
+-- ========================================
 CREATE PROCEDURE create_district(
     IN p_name VARCHAR(50),
     IN p_canton_id INT
@@ -47,6 +52,10 @@ BEGIN
 END $$
 
 
+-- ========================================
+-- PROCEDURE: get_all_districts (ORIGINAL - mantenido)
+-- Purpose: Get all districts
+-- ========================================
 CREATE PROCEDURE get_all_districts()
 BEGIN
     SELECT 
@@ -67,6 +76,28 @@ BEGIN
     JOIN PROVINCE p ON c.province_id = p.id
     JOIN COUNTRY co ON p.country_id = co.id
     ORDER BY co.name, p.name, c.name, d.name;
+END $$
+
+-- ========================================
+-- PROCEDURE: get_district (MIGRADO)
+-- Purpose: Get a specific district by ID
+-- ========================================
+CREATE PROCEDURE get_district(
+    IN p_id INT
+)
+BEGIN
+    SELECT 
+        d.id, 
+        d.canton_id, 
+        c.name AS canton_name,
+        d.name, 
+        d.creator, 
+        d.creation_date,
+        d.modifier, 
+        d.modification_date
+    FROM DISTRICT d
+    JOIN CANTON c ON d.canton_id = c.id
+    WHERE d.id = p_id;
 END $$
 
 
@@ -164,6 +195,7 @@ DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE carpooling_adm.create_district TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.get_all_districts TO 'pu_user'@'%';
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_district TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.get_districts_by_canton TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.update_district_name TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.delete_district TO 'pu_user'@'%';

@@ -9,6 +9,10 @@ import com.tec.carpooling.business.service.impl.InstitutionServiceImpl;
 import com.tec.carpooling.dto.InstitutionDTO;
 import com.tec.carpooling.exception.InstitutionManagementException;
 import java.awt.Frame;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -62,13 +66,14 @@ public class Institutions extends javax.swing.JPanel {
     }
 
     private void loadInstitutions() {
-        try {
-            List<InstitutionDTO> institutions = institutionService.getAllInstitutions();
-            institutionTableModel.setRowCount(0); // Limpiar tabla antes de cargar
-            for (InstitutionDTO inst : institutions) {
-                institutionTableModel.addRow(new Object[]{inst.getId(), inst.getName()});
+        try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("CALL find_all_institutions()")) {
+            ResultSet rs = stmt.executeQuery();
+            institutionTableModel.setRowCount(0);
+            while (rs.next()) {
+                institutionTableModel.addRow(new Object[]{rs.getLong("id"), rs.getString("name")});
             }
-             clearSelectionAndFields();
+            clearSelectionAndFields();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, 
                 "Error al cargar instituciones: " + e.getMessage(), 
@@ -240,15 +245,21 @@ public class Institutions extends javax.swing.JPanel {
             return;
         }
 
-        try {
-            InstitutionDTO newInstitution = institutionService.registerInstitution(name);
-            JOptionPane.showMessageDialog(this, "Institución '" + newInstitution.getName() + "' registrada con ID: " + newInstitution.getId());
-            loadInstitutions(); // Recargar la tabla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error de Registro", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-            // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("CALL create_institution(?, ?)")) {
+            stmt.setString(1, name);
+            stmt.registerOutParameter(2, java.sql.Types.INTEGER);
+            stmt.execute();
+            int newId = stmt.getInt(2);
+            JOptionPane.showMessageDialog(this, "Institución '" + name + "' registrada con ID: " + newId);
+            loadInstitutions();
+        } catch (SQLException e) {
+            String msg = e.getMessage();
+            if (msg.contains("already exists")) {
+                JOptionPane.showMessageDialog(this, "La institución ya existe.", "Error de Registro", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error inesperado al guardar: " + msg, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_jButtonInstitutionSaveActionPerformed
 
@@ -263,18 +274,20 @@ public class Institutions extends javax.swing.JPanel {
             return;
         }
 
-        try {
-            boolean success = institutionService.updateInstitutionName(selectedInstitutionId, newName);
-             if (success) {
-                JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
-                loadInstitutions(); // Recargar tabla
+        try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("CALL update_institution_name(?, ?)")) {
+            stmt.setLong(1, selectedInstitutionId);
+            stmt.setString(2, newName);
+            stmt.execute();
+            JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
+            loadInstitutions();
+        } catch (SQLException e) {
+            String msg = e.getMessage();
+            if (msg.contains("already in use")) {
+                JOptionPane.showMessageDialog(this, "El nombre ya está en uso.", "Error de Actualización", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + msg, "Error", JOptionPane.ERROR_MESSAGE);
             }
-            // El servicio debería lanzar excepción si falla
-        } catch (InstitutionManagementException e) {
-             JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error de Actualización", JOptionPane.WARNING_MESSAGE);
-        } catch (Exception e) {
-             // Loggear
-             JOptionPane.showMessageDialog(this, "Error inesperado al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_jButtonInstitutionUpdateActionPerformed
@@ -285,26 +298,20 @@ public class Institutions extends javax.swing.JPanel {
             return;
         }
 
-        int confirmation = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar la institución seleccionada?\n(ID: " + selectedInstitutionId + " - Nombre: " + jTextFieldInstitutionName.getText() + ")\n¡Esta acción no se puede deshacer!",
-                "Confirmar Eliminación",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-
-        if (confirmation == JOptionPane.YES_OPTION) {
-             try {
-                boolean success = institutionService.deleteInstitution(selectedInstitutionId);
-                 if (success) {
-                    JOptionPane.showMessageDialog(this, "Institución eliminada.");
-                    loadInstitutions(); // Recargar tabla
-                }
-                // El servicio debería lanzar excepción si falla
-            } catch (InstitutionManagementException e) { // Capturar error específico si existe FK constraint
-                 JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage() + "\n(Posiblemente está asociada a usuarios u otros datos).", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
-            }
-             catch (Exception e) {
-                 // Loggear
-                 JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("CALL delete_institution(?)")) {
+            stmt.setLong(1, selectedInstitutionId);
+            stmt.execute();
+            JOptionPane.showMessageDialog(this, "Institución eliminada.");
+            loadInstitutions();
+        } catch (SQLException e) {
+            String msg = e.getMessage();
+            if (msg.contains("associated with users")) {
+                JOptionPane.showMessageDialog(this, "No se puede eliminar la institución porque está asociada a usuarios u otros datos.", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
+            } else if (msg.contains("not found")) {
+                JOptionPane.showMessageDialog(this, "No se encontró la institución.", "Error de Eliminación", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error inesperado al eliminar: " + msg, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButtonInstitutionDeleteActionPerformed
