@@ -564,6 +564,115 @@ BEGIN
 END$$
 
 -- ========================================
+-- PROCEDURE: is_driver
+-- Purpose: Checks if a user is registered as a driver
+-- ========================================
+DROP PROCEDURE IF EXISTS is_driver$$
+
+CREATE PROCEDURE is_driver(
+    IN p_user_id INT,
+    OUT o_is_driver BOOLEAN
+)
+BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_count INT DEFAULT 0;
+    
+    -- Get person_id from user
+    SELECT person_id INTO v_person_id
+    FROM carpooling_pu.PERSONUSER
+    WHERE id = p_user_id;
+    
+    IF v_person_id IS NULL THEN
+        SET o_is_driver = FALSE;
+    ELSE
+        -- Check if is driver
+        SELECT COUNT(*) INTO v_count
+        FROM carpooling_pu.DRIVER
+        WHERE person_id = v_person_id;
+        
+        SET o_is_driver = (v_count > 0);
+    END IF;
+END$$
+
+-- ========================================
+-- PROCEDURE: is_passenger
+-- Purpose: Checks if a user is registered as a passenger
+-- ========================================
+DROP PROCEDURE IF EXISTS is_passenger$$
+
+CREATE PROCEDURE is_passenger(
+    IN p_user_id INT,
+    OUT o_is_passenger BOOLEAN
+)
+BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_count INT DEFAULT 0;
+    
+    -- Get person_id from user
+    SELECT person_id INTO v_person_id
+    FROM carpooling_pu.PERSONUSER
+    WHERE id = p_user_id;
+    
+    IF v_person_id IS NULL THEN
+        SET o_is_passenger = FALSE;
+    ELSE
+        -- Check if is passenger
+        SELECT COUNT(*) INTO v_count
+        FROM carpooling_pu.PASSENGER
+        WHERE person_id = v_person_id;
+        
+        SET o_is_passenger = (v_count > 0);
+    END IF;
+END$$
+
+-- ========================================
+-- PROCEDURE: get_user_types_all
+-- Purpose: Gets all user types for a user (can be multiple)
+-- ========================================
+DROP PROCEDURE IF EXISTS get_user_types_all$$
+
+CREATE PROCEDURE get_user_types_all(
+    IN p_user_id INT,
+    OUT o_is_admin BOOLEAN,
+    OUT o_is_driver BOOLEAN,
+    OUT o_is_passenger BOOLEAN
+)
+BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_admin_count INT DEFAULT 0;
+    DECLARE v_driver_count INT DEFAULT 0;
+    DECLARE v_passenger_count INT DEFAULT 0;
+    
+    -- Get person_id from user
+    SELECT person_id INTO v_person_id
+    FROM carpooling_pu.PERSONUSER
+    WHERE id = p_user_id;
+    
+    IF v_person_id IS NULL THEN
+        SET o_is_admin = FALSE;
+        SET o_is_driver = FALSE;
+        SET o_is_passenger = FALSE;
+    ELSE
+        -- Check all types
+        SELECT COUNT(*) INTO v_admin_count
+        FROM ADMIN
+        WHERE person_id = v_person_id;
+        
+        SELECT COUNT(*) INTO v_driver_count
+        FROM carpooling_pu.DRIVER
+        WHERE person_id = v_person_id;
+        
+        SELECT COUNT(*) INTO v_passenger_count
+        FROM carpooling_pu.PASSENGER
+        WHERE person_id = v_person_id;
+        
+        SET o_is_admin = (v_admin_count > 0);
+        SET o_is_driver = (v_driver_count > 0);
+        SET o_is_passenger = (v_passenger_count > 0);
+    END IF;
+END$$
+
+-- ========================================
 -- SECTION 4: PHOTO MANAGEMENT
 -- ========================================
 
@@ -1152,8 +1261,15 @@ CALL register_as_passenger(@user_id);
 -- Check if user is admin
 CALL is_admin(@user_id, @is_admin);
 
--- Get user type
+-- Get user type (primary type)
 CALL get_user_type(@user_id, @user_type);
+
+-- Check specific user types
+CALL is_driver(@user_id, @is_driver);
+CALL is_passenger(@user_id, @is_passenger);
+
+-- Get all user types at once
+CALL get_user_types_all(@user_id, @is_admin, @is_driver, @is_passenger);
 
 -- ========================================
 -- SECTION 4: PHOTO MANAGEMENT

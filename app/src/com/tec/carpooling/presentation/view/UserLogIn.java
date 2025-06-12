@@ -6,7 +6,10 @@ package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.business.service.UserLoginService;
 import com.tec.carpooling.business.service.impl.UserLoginServiceImpl;
+import com.tec.carpooling.business.service.UserTypeService;
+import com.tec.carpooling.business.service.impl.UserTypeServiceImpl;
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.presentation.view.admin.AdminFrame;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
@@ -28,6 +31,7 @@ import java.sql.SQLException;
  */
 public class UserLogIn extends javax.swing.JFrame {
     private final UserLoginService userLoginService;
+    private final UserTypeService userTypeService;
     
     /**
      * Constructor de la ventana de inicio de sesión
@@ -35,6 +39,7 @@ public class UserLogIn extends javax.swing.JFrame {
     public UserLogIn() {
         initComponents();
         userLoginService = new UserLoginServiceImpl();
+        userTypeService = new UserTypeServiceImpl();
         
         // Load the image
         ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/calleCarro.png"));
@@ -281,18 +286,36 @@ public class UserLogIn extends javax.swing.JFrame {
             );
 
             if (user != null) {
-                JOptionPane.showMessageDialog(this,
-                    "Inicio de sesión exitoso.",
-                    "Bienvenido",
-                    JOptionPane.INFORMATION_MESSAGE);
+                // Verificar si el usuario es administrador
+                boolean isAdmin = userTypeService.isAdmin(user.getId());
                 
-                // Redirigir a la ventana de selección de tipo de usuario
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    UserType userType = new UserType(user);
-                    userType.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    userType.setVisible(true);
-                    this.dispose();
-                });
+                if (isAdmin) {
+                    // Usuario administrador - redirigir a AdminFrame
+                    JOptionPane.showMessageDialog(this,
+                        "Bienvenido Administrador " + user.getUsername() + "!",
+                        "Acceso de Administrador",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        AdminFrame adminFrame = new AdminFrame();
+                        adminFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        adminFrame.setVisible(true);
+                        this.dispose();
+                    });
+                } else {
+                    // Usuario regular - redirigir a selección de tipo de usuario
+                    JOptionPane.showMessageDialog(this,
+                        "Inicio de sesión exitoso.",
+                        "Bienvenido",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        UserType userType = new UserType(user);
+                        userType.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        userType.setVisible(true);
+                        this.dispose();
+                    });
+                }
             } else {
                 JOptionPane.showMessageDialog(this,
                     "Nombre de usuario o contraseña incorrectos.",

@@ -59,4 +59,30 @@ public class UserTypeDAOImpl implements UserTypeDAO {
             return stmt.getString(2);
         }
     }
+    
+    @Override
+    public boolean isDriver(long userId) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.is_driver(?, ?)}")) {
+            
+            stmt.setLong(1, userId);
+            stmt.registerOutParameter(2, Types.TINYINT);
+            stmt.execute();
+            
+            return stmt.getInt(2) == 1;
+        }
+    }
+    
+    @Override
+    public boolean isPassenger(long userId) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.is_passenger(?, ?)}")) {
+            
+            stmt.setLong(1, userId);
+            stmt.registerOutParameter(2, Types.TINYINT);
+            stmt.execute();
+            
+            return stmt.getInt(2) == 1;
+        }
+    }
 } 

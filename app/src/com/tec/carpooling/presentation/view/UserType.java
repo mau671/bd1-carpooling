@@ -58,23 +58,20 @@ public class UserType extends javax.swing.JFrame {
         try {
             boolean isAdmin = userTypeService.isAdmin(user.getId());
             if (isAdmin) {
-                System.out.println("🔒 ADMIN ACCESS: Usuario " + user.getUsername() + " tiene privilegios de administrador");
+                // Los administradores no deberían llegar aquí ya que se redirigen desde el login
+                // Pero por seguridad, si llegan aquí, los redirigimos
+                System.out.println("⚠️ WARNING: Administrador llegó a UserType, redirigiendo...");
                 
-                // Si es administrador, redirigir directamente al perfil de administrador
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     JOptionPane.showMessageDialog(this,
-                        "Bienvenido, Administrador " + user.getUsername() + "!\n" +
-                        "Redirigiendo al panel de administración...",
-                        "Acceso de Administrador",
-                        JOptionPane.INFORMATION_MESSAGE);
-                    
-                    UserProfile adminProfile = new UserProfile("Admin", user);
-                    adminProfile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    adminProfile.setVisible(true);
+                        "Los administradores no pueden acceder a la selección de tipos de usuario.\n" +
+                        "Cerrando ventana...",
+                        "Acceso Restringido",
+                        JOptionPane.WARNING_MESSAGE);
                     this.dispose();
                 });
                 
-                // Ocultar los paneles de selección ya que el admin va directo al panel
+                // Ocultar los paneles por seguridad
                 panelPassenger.setVisible(false);
                 panelDriver.setVisible(false);
             } else {
@@ -101,9 +98,11 @@ public class UserType extends javax.swing.JFrame {
 
     private void handlePassengerSelection() {
         try {
-            String currentType = userTypeService.getUserType(user.getId());
+            boolean isAdmin = userTypeService.isAdmin(user.getId());
+            boolean isDriver = userTypeService.isDriver(user.getId());
+            boolean isPassenger = userTypeService.isPassenger(user.getId());
             
-            if ("ADMIN".equals(currentType)) {
+            if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
                     "Los administradores no pueden registrarse como pasajeros.",
                     "Acceso Restringido",
@@ -111,10 +110,14 @@ public class UserType extends javax.swing.JFrame {
                 return;
             }
             
-            if ("DRIVER".equals(currentType)) {
+            if (isPassenger) {
+                // Ya es pasajero, ir directamente al perfil
+                openUserProfile("Passenger", user);
+            } else if (isDriver) {
+                // Es conductor pero no pasajero, preguntar si quiere ser también pasajero
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Te gustaría registrarte como pasajero? Ya estás registrado como conductor.",
+                    "¿Te gustaría registrarte también como pasajero? Ya estás registrado como conductor.",
                     "Registrarse como Pasajero",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
@@ -124,11 +127,8 @@ public class UserType extends javax.swing.JFrame {
                     userTypeService.registerAsPassenger(user.getId());
                     openUserProfile("Passenger", user);
                 }
-            } else if ("PASSENGER".equals(currentType)) {
-                // Ya es pasajero, ir directamente al perfil
-                openUserProfile("Passenger", user);
             } else {
-                // No tiene tipo definido, registrar como pasajero
+                // No es ni conductor ni pasajero, registrar como pasajero
                 userTypeService.registerAsPassenger(user.getId());
                 openUserProfile("Passenger", user);
             }
@@ -142,9 +142,11 @@ public class UserType extends javax.swing.JFrame {
 
     private void handleDriverSelection() {
         try {
-            String currentType = userTypeService.getUserType(user.getId());
+            boolean isAdmin = userTypeService.isAdmin(user.getId());
+            boolean isDriver = userTypeService.isDriver(user.getId());
+            boolean isPassenger = userTypeService.isPassenger(user.getId());
             
-            if ("ADMIN".equals(currentType)) {
+            if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
                     "Los administradores no pueden registrarse como conductores.",
                     "Acceso Restringido",
@@ -152,10 +154,14 @@ public class UserType extends javax.swing.JFrame {
                 return;
             }
             
-            if ("PASSENGER".equals(currentType)) {
+            if (isDriver) {
+                // Ya es conductor, ir directamente al perfil
+                openUserProfile("Driver", user);
+            } else if (isPassenger) {
+                // Es pasajero pero no conductor, preguntar si quiere ser también conductor
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Te gustaría registrarte como conductor? Ya estás registrado como pasajero.",
+                    "¿Te gustaría registrarte también como conductor? Ya estás registrado como pasajero.",
                     "Registrarse como Conductor",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
@@ -165,11 +171,8 @@ public class UserType extends javax.swing.JFrame {
                     userTypeService.registerAsDriver(user.getId());
                     openUserProfile("Driver", user);
                 }
-            } else if ("DRIVER".equals(currentType)) {
-                // Ya es conductor, ir directamente al perfil
-                openUserProfile("Driver", user);
             } else {
-                // No tiene tipo definido, registrar como conductor
+                // No es ni conductor ni pasajero, registrar como conductor
                 userTypeService.registerAsDriver(user.getId());
                 openUserProfile("Driver", user);
             }
