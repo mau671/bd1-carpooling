@@ -24,17 +24,15 @@ public class VehicleDAO {
         List<VehicleInfo> vehicles = new ArrayList<>();
 
         Connection conn = DatabaseConnection.getConnection();
-        CallableStatement stmt = conn.prepareCall("{ ? = call PU_VEHICLE_DRIVER_PKG.get_vehicles_by_driver(?) }");
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setLong(2, driverId);
-        stmt.execute();
+        CallableStatement stmt = conn.prepareCall("{CALL get_vehicles_by_driver(?)}");
+        stmt.setLong(1, driverId);
+        ResultSet rs = stmt.executeQuery();
 
-        ResultSet rs = (ResultSet) stmt.getObject(1);
         while (rs.next()) {
             long id = rs.getLong("vehicle_id");
             String plate = rs.getString("plate_number");
             int capacity = rs.getInt("max_capacity");
-            int trips = rs.getInt("trip_count"); // always 0 for now
+            int trips = rs.getInt("trip_count");
             vehicles.add(new VehicleInfo(id, plate, capacity, trips));
         }
 

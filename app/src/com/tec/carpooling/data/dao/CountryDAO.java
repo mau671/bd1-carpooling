@@ -19,22 +19,19 @@ import oracle.jdbc.OracleTypes;
 public class CountryDAO {
     public List<Country> getAllCountries() throws SQLException {
         List<Country> countries = new ArrayList<>();
-        String sql = "{ ? = call ADM.ADM_COUNTRY_PKG.get_all_countries }";
+        String sql = "{CALL carpooling_adm.get_all_countries()}";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(sql)) {
+             CallableStatement stmt = conn.prepareCall(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
-
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                while (rs.next()) {
-                    long id = rs.getLong("id");
-                    String name = rs.getString("name");
-                    countries.add(new Country(id, name));
-                }
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                String name = rs.getString("name");
+                countries.add(new Country(id, name));
             }
         }
+
         return countries;
     }
 }

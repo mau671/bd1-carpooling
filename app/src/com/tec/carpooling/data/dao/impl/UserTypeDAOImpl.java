@@ -6,6 +6,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * Implementation of DAO for user type operations using MySQL stored procedures

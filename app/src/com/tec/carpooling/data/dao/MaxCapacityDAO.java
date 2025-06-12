@@ -23,20 +23,15 @@ import oracle.jdbc.OracleTypes;
 public class MaxCapacityDAO {
     public List<MaxCapacity> getAllCapacities() throws SQLException {
         List<MaxCapacity> capacities = new ArrayList<>();
-        String sql = "{ ? = call ADM.ADM_MAXCAPACITY_PKG.get_all_max_capacity }";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(sql)) {
+             CallableStatement stmt = conn.prepareCall("{CALL carpooling_adm.get_all_max_capacity()}");
+             ResultSet rs = stmt.executeQuery()) {
 
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
-
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                while (rs.next()) {
-                    long id = rs.getLong("id");
-                    int number = rs.getInt("capacity_number");
-                    capacities.add(new MaxCapacity(id, number));
-                }
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                int number = rs.getInt("capacity_number");
+                capacities.add(new MaxCapacity(id, number));
             }
         }
 

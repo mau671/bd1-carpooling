@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import com.tec.carpooling.business.service.UserTypeService;
 import com.tec.carpooling.business.service.impl.UserTypeServiceImpl;
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.presentation.view.admin.AdminFrame;
 import java.sql.SQLException;
 
 /**
@@ -32,10 +33,11 @@ public class UserType extends javax.swing.JFrame {
         this.userTypeService = new UserTypeServiceImpl();
         this.user = user;
         
+        if (checkAdminStatusAndRedirectIfNeeded()) return;
+        
         initComponents();
         setupUI();
         setupEventListeners();
-        checkAdminStatus();
     }
 
     private void setupUI() {
@@ -54,7 +56,7 @@ public class UserType extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
-    private void checkAdminStatus() {
+    private boolean checkAdminStatusAndRedirectIfNeeded() {
         try {
             boolean isAdmin = userTypeService.isAdmin(user.getId());
             if (isAdmin) {
@@ -78,8 +80,10 @@ public class UserType extends javax.swing.JFrame {
                 System.out.println("👤 USER ACCESS: Usuario " + user.getUsername() + " es un usuario regular");
             }
         } catch (SQLException ex) {
-            System.err.println("Error verificando estado de administrador: " + ex.getMessage());
+            System.err.println("Error verifying Admin state: " + ex.getMessage());
         }
+
+        return false; // not admin → show user/passenger menu
     }
 
     private void setupEventListeners() {
@@ -103,9 +107,10 @@ public class UserType extends javax.swing.JFrame {
             boolean isPassenger = userTypeService.isPassenger(user.getId());
             
             if (isAdmin) {
+            if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
-                    "Los administradores no pueden registrarse como pasajeros.",
-                    "Acceso Restringido",
+                    "Admins can't register as passengers.",
+                    "Restricted Access",
                     JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -134,7 +139,7 @@ public class UserType extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registrándose como pasajero: " + ex.getMessage(),
+                "Error registering as passenger: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -147,9 +152,10 @@ public class UserType extends javax.swing.JFrame {
             boolean isPassenger = userTypeService.isPassenger(user.getId());
             
             if (isAdmin) {
+            if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
-                    "Los administradores no pueden registrarse como conductores.",
-                    "Acceso Restringido",
+                    "Admins can't register as drivers.",
+                    "Restricted Access",
                     JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -178,7 +184,7 @@ public class UserType extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registrándose como conductor: " + ex.getMessage(),
+                "Error registering as a driver: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }

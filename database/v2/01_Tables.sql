@@ -239,7 +239,7 @@ CREATE TABLE PERSON (
     INDEX idx_person_names (first_name, first_surname)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='Master table that stores all person information';
-
+    
 -- ============================================
 -- 13. ADMIN Table (Inherits from PERSON via shared key)
 -- ============================================
@@ -461,6 +461,7 @@ CREATE TABLE PERSONUSER (
     INDEX idx_user_person (person_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='Table that stores system users';
+    
 
 -- ============================================
 -- 26. ROUTE Table
