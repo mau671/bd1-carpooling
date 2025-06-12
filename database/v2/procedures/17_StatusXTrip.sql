@@ -55,70 +55,61 @@ END $$
 
 CREATE PROCEDURE auto_update_status(IN p_trip_id INT)
 BEGIN
-    DECLARE v_in_progress_id INT;
-    DECLARE v_completed_id INT;
-    DECLARE v_pending_id INT;
-    DECLARE v_trip_start TIMESTAMP;
-    DECLARE v_trip_end TIMESTAMP;
-    DECLARE v_programming_date DATE;
-    DECLARE v_current_status INT;
-    DECLARE v_current_date DATE;
-    DECLARE v_current_datetime DATETIME;
-    
+  DECLARE v_pending    INT;
+  DECLARE v_in_prog    INT;
+  DECLARE v_completed  INT;
+  DECLARE v_now        DATETIME;
+  DECLARE v_start      DATETIME;
+  DECLARE v_end        DATETIME;
+  DECLARE v_curr_status INT;
 
-    SELECT id INTO v_pending_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'PENDING';
-    SELECT id INTO v_in_progress_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'IN PROGRESS';
-    SELECT id INTO v_completed_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'COMPLETED';
-    
+  -- 1) Load the three status IDs once
+  SELECT id INTO v_pending
+    FROM carpooling_adm.STATUS
+   WHERE UPPER(name) = 'PENDING'
+   LIMIT 1;
+  
+  SELECT id INTO v_in_prog
+    FROM carpooling_adm.STATUS
+   WHERE UPPER(name) = 'IN PROGRESS'
+   LIMIT 1;
+  
+  SELECT id INTO v_completed
+    FROM carpooling_adm.STATUS
+   WHERE UPPER(name) = 'COMPLETED'
+   LIMIT 1;
 
-    SET v_current_date = CURDATE();
-    SET v_current_datetime = NOW();
-    
+  -- 2) Grab the current timestamp
+  SET v_now = NOW();
 
-    SELECT R.start_time, R.end_time, R.programming_date
-    INTO v_trip_start, v_trip_end, v_programming_date
-    FROM TRIP T
-    JOIN ROUTE R ON T.route_id = R.id
-    WHERE T.id = p_trip_id;
+  -- 3) Pull in the trip's exact start/end DATETIMEs
+  SELECT R.start_time, R.end_time
+    INTO v_start, v_end
+    FROM carpooling_pu.TRIP T
+    JOIN carpooling_pu.ROUTE R ON T.route_id = R.id
+   WHERE T.id = p_trip_id;
 
+  -- 4) What status is it *right now*?
+  SELECT status_id INTO v_curr_status
+    FROM carpooling_pu.STATUSXTRIP
+   WHERE trip_id = p_trip_id;
 
-    SELECT status_id INTO v_current_status
-    FROM STATUSXTRIP
-    WHERE trip_id = p_trip_id;
-    
+  -- 5) Only two cases to move forward:
+  IF v_curr_status = v_pending
+     AND v_now BETWEEN v_start AND v_end
+  THEN
+    UPDATE carpooling_pu.STATUSXTRIP
+       SET status_id = v_in_prog
+     WHERE trip_id = p_trip_id;
 
-    IF v_current_status = v_pending_id
-       AND v_current_date = v_programming_date
-       AND v_current_datetime >= v_trip_start 
-       AND v_current_datetime < v_trip_end THEN
-        
-        UPDATE STATUSXTRIP
-        SET status_id = v_in_progress_id
-        WHERE trip_id = p_trip_id;
-        
-    ELSEIF v_current_status = v_in_progress_id
-       AND v_current_date = v_programming_date
-       AND v_current_datetime >= v_trip_end THEN
-        
-        UPDATE STATUSXTRIP
-        SET status_id = v_completed_id
-        WHERE trip_id = p_trip_id;
-        
-    ELSEIF v_current_status = v_in_progress_id
-       AND v_current_date > v_programming_date THEN
-        
-        UPDATE STATUSXTRIP
-        SET status_id = v_completed_id
-        WHERE trip_id = p_trip_id;
-        
-    ELSEIF v_current_status = v_pending_id
-       AND v_current_date > v_programming_date THEN
-        
-        UPDATE STATUSXTRIP
-        SET status_id = v_completed_id
-        WHERE trip_id = p_trip_id;
-    END IF;
-END $$
+  ELSEIF v_curr_status IN (v_pending, v_in_prog)
+     AND v_now >= v_end
+  THEN
+    UPDATE carpooling_pu.STATUSXTRIP
+       SET status_id = v_completed
+     WHERE trip_id = p_trip_id;
+  END IF;
+END$$
 
 
 CREATE PROCEDURE update_all_trip_statuses()
