@@ -575,6 +575,8 @@ public class Users extends javax.swing.JPanel {
     private void loadPhonesEmails(long personId){
         phoneMap.clear();
         emailMap.clear();
+        // Primero cargar dominios permitidos para la(s) institución(es) de la persona
+        loadDomainsForPerson(personId);
         // Phones -> JTable
         try(Connection conn=DatabaseConnection.getConnection();
             CallableStatement cps=conn.prepareCall("{call carpooling_adm.get_person_phones(?)}")){
@@ -611,12 +613,69 @@ public class Users extends javax.swing.JPanel {
                     String domainName=rs.getString("domain_name");
                     emailMap.put(row,new EmailRecord(eid,name,did));
                     emailModel.addRow(new Object[]{name+"@"+domainName});
+                    // Poblar combo de dominios si aún no existe
+                    if(!domainMap.containsKey(domainName)){
+                        domainMap.put(domainName,did);
+                        jComboBoxDomainOfTheEmail.addItem(domainName);
+                    }
                     row++;
                 }
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(this,"Error cargando correos: "+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /** Carga la foto más reciente del perfil en el JLabel */
+    private void loadProfilePhoto(long personId){
+        try(Connection conn=DatabaseConnection.getConnection();
+            CallableStatement cps=conn.prepareCall("{call carpooling_adm.get_latest_photo(?)}")){
+            cps.setLong(1, personId);
+            try(ResultSet rs=cps.executeQuery()){
+                if(rs.next()){
+                    byte[] imgBytes = rs.getBytes("image");
+                    if(imgBytes!=null && imgBytes.length>0){
+                        ImageIcon icon = new ImageIcon(imgBytes);
+                        Image imgScaled = icon.getImage().getScaledInstance(jLabelPhotoOfTheUser.getWidth(), jLabelPhotoOfTheUser.getHeight(), Image.SCALE_SMOOTH);
+                        jLabelPhotoOfTheUser.setIcon(new ImageIcon(imgScaled));
+                    }else{
+                        jLabelPhotoOfTheUser.setIcon(null);
+                    }
+                }else{
+                    jLabelPhotoOfTheUser.setIcon(null);
+                }
+            }
+        }catch(SQLException ex){
+            // En caso de error limpiamos la imagen y avisamos
+            jLabelPhotoOfTheUser.setIcon(null);
+            JOptionPane.showMessageDialog(this, "Error cargando foto: "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /** Carga dominios asociados a la(s) institución(es) de la persona y llena el combo */
+    private void loadDomainsForPerson(long personId){
+        jComboBoxDomainOfTheEmail.removeAllItems();
+        domainMap.clear();
+        try(Connection conn=DatabaseConnection.getConnection();
+            CallableStatement cis=conn.prepareCall("{call carpooling_adm.get_person_institutions(?)}")){
+            cis.setLong(1, personId);
+            try(ResultSet rs=cis.executeQuery()){
+                CatalogDAOImpl catalogDAO = new CatalogDAOImpl();
+                while(rs.next()){
+                    long instId = rs.getLong("id");
+                    // Obtener dominios para esta institución
+                    catalogDAO.getDomainsByInstitution(instId).forEach(d->{
+                        if(!domainMap.containsKey(d.getName())){
+                            domainMap.put(d.getName(), d.getId());
+                            jComboBoxDomainOfTheEmail.addItem(d.getName());
+                        }
+                    });
+                }
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(this, "Error cargando dominios: "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // Si no se obtuvo ningún dominio, se podría mantener los ya existentes (emails) o dejar vacío
     }
 
     private void initListeners(){
@@ -742,6 +801,7 @@ public class Users extends javax.swing.JPanel {
                 clearFields();
                 loadUsers();
                 loadPhonesEmails(personId);
+                loadProfilePhoto(personId);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al crear usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -837,8 +897,9 @@ public class Users extends javax.swing.JPanel {
                         selectComboItemByValue(jComboBoxGender, rs.getString("gender_name"));
                         // other combos could be updated via additional queries if needed
 
-                        // Cargar teléfonos y correos asociados
+                        // Cargar teléfonos, correos y foto asociada
                         loadPhonesEmails(selectedUser.getPersonId());
+                        loadProfilePhoto(selectedUser.getPersonId());
                     }
                 }
             } catch (SQLException ex) {
