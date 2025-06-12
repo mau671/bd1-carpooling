@@ -813,33 +813,76 @@ public class Users extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Seleccione un usuario para actualizar", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.update_person(?,?,?,?,?,?,?,?,?)}")) {
-            // Recolectar datos
-            String firstName = jTextFieldUserFirstName.getText().trim();
-            String secondName = jTextFieldUserSecondName.getText().trim();
-            String firstSurname = jTextFieldUserFirstSurname.getText().trim();
-            String secondSurname = jTextFieldUserSecondSurname.getText().trim();
-            String idNumber = jTextFieldUserSecondSurname1.getText().trim();
-            java.time.LocalDate dob = datePickerUserDateOfBirth.getDate();
-            String idTypeName = (String) jComboBoxTypeOfId.getSelectedItem();
-            String genderName = (String) jComboBoxGender.getSelectedItem();
-            long idTypeId = idTypeMap.getOrDefault(idTypeName, 0L);
-            long genderId = genderMap.getOrDefault(genderName, 0L);
-            // Llenar parámetros
-            int idx = 1;
-            stmt.setLong(idx++, selectedUser.getPersonId());
-            stmt.setString(idx++, firstName);
-            stmt.setString(idx++, secondName.isEmpty() ? null : secondName);
-            stmt.setString(idx++, firstSurname);
-            stmt.setString(idx++, secondSurname.isEmpty() ? null : secondSurname);
-            stmt.setLong(idx++, idTypeId);
-            stmt.setString(idx++, idNumber);
-            stmt.setDate(idx++, java.sql.Date.valueOf(dob));
-            stmt.setLong(idx++, genderId);
-            stmt.execute();
-            JOptionPane.showMessageDialog(this, "Datos actualizados", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            loadUsers();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                // 1) Actualizar datos básicos de la persona
+                try (CallableStatement stmt = conn.prepareCall("{call carpooling_adm.update_person(?,?,?,?,?,?,?,?,?)}")) {
+                    String firstName = jTextFieldUserFirstName.getText().trim();
+                    String secondName = jTextFieldUserSecondName.getText().trim();
+                    String firstSurname = jTextFieldUserFirstSurname.getText().trim();
+                    String secondSurname = jTextFieldUserSecondSurname.getText().trim();
+                    String idNumber = jTextFieldUserSecondSurname1.getText().trim();
+                    java.time.LocalDate dob = datePickerUserDateOfBirth.getDate();
+                    String idTypeName = (String) jComboBoxTypeOfId.getSelectedItem();
+                    String genderName = (String) jComboBoxGender.getSelectedItem();
+                    long idTypeId = idTypeMap.getOrDefault(idTypeName, 0L);
+                    long genderId = genderMap.getOrDefault(genderName, 0L);
+                    int idx = 1;
+                    stmt.setLong(idx++, selectedUser.getPersonId());
+                    stmt.setString(idx++, firstName);
+                    stmt.setString(idx++, secondName.isEmpty() ? null : secondName);
+                    stmt.setString(idx++, firstSurname);
+                    stmt.setString(idx++, secondSurname.isEmpty() ? null : secondSurname);
+                    stmt.setLong(idx++, idTypeId);
+                    stmt.setString(idx++, idNumber);
+                    stmt.setDate(idx++, java.sql.Date.valueOf(dob));
+                    stmt.setLong(idx++, genderId);
+                    stmt.execute();
+                }
+
+                // 2) Actualizar teléfono seleccionado (si lo hay)
+                int phoneRow = jTablePhones.getSelectedRow();
+                if (phoneRow >= 0) {
+                    PhoneRecord pr = phoneMap.get(phoneRow);
+                    if (pr != null) {
+                        String newNumber = jTextFieldUserPhone.getText().trim();
+                        String newTypeName = (String) jComboBoxTypeOfPhone.getSelectedItem();
+                        long newTypeId = phoneTypeMap.getOrDefault(newTypeName, pr.typeId);
+                        try (CallableStatement css = conn.prepareCall("{call carpooling_adm.update_phone(?,?,?)}")) {
+                            css.setLong(1, pr.id);
+                            css.setString(2, newNumber);
+                            css.setLong(3, newTypeId);
+                            css.execute();
+                        }
+                    }
+                }
+
+                // 3) Actualizar email seleccionado (si lo hay)
+                int emailRow = jTableEmails.getSelectedRow();
+                if (emailRow >= 0) {
+                    EmailRecord er = emailMap.get(emailRow);
+                    if (er != null) {
+                        String newEmailName = jTextFieldUserEmail.getText().trim();
+                        String newDomainName = (String) jComboBoxDomainOfTheEmail.getSelectedItem();
+                        long newDomainId = domainMap.getOrDefault(newDomainName, er.domainId);
+                        try (CallableStatement ces = conn.prepareCall("{call carpooling_adm.update_email(?,?,?)}")) {
+                            ces.setLong(1, er.id);
+                            ces.setString(2, newEmailName);
+                            ces.setLong(3, newDomainId);
+                            ces.execute();
+                        }
+                    }
+                }
+
+                conn.commit();
+                JOptionPane.showMessageDialog(this, "Actualización completada", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                loadUsers();
+                loadPhonesEmails(selectedUser.getPersonId());
+            } catch (SQLException inner) {
+                conn.rollback();
+                throw inner;
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al actualizar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
