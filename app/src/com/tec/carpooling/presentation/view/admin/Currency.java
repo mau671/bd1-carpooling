@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import com.tec.carpooling.data.connection.DatabaseConnection;
-import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -58,27 +57,23 @@ public class Currency extends javax.swing.JPanel {
 
     private void loadCurrencies() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_CURRENCIES(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_currencies()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                currencyTableModel.setRowCount(0);
-                while (rs.next()) {
-                    currencyTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    });
-                }
+            currencyTableModel.setRowCount(0);
+            while (rs.next()) {
+                currencyTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("name")
+                });
             }
-             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading currencies: " + e.getMessage(), 
                 "Load Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
+        clearSelectionAndFields();
     }
     
    private void clearSelectionAndFields() {
@@ -229,9 +224,10 @@ public class Currency extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_CURRENCY(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.create_currency(?, ?)}")) {
             
             cstmt.setString(1, name);
+            cstmt.registerOutParameter(2, java.sql.Types.INTEGER);
             cstmt.execute();
             
             JOptionPane.showMessageDialog(this, "Currency '" + name + "' registered successfully.");
@@ -257,7 +253,7 @@ public class Currency extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_CURRENCY(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_currency_name(?, ?)}")) {
             
             cstmt.setLong(1, selectedCurrencyId);
             cstmt.setString(2, name);
@@ -287,7 +283,7 @@ public class Currency extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_CURRENCY(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_currency(?)}")) {
                 
                 cstmt.setLong(1, selectedCurrencyId);
                 cstmt.execute();

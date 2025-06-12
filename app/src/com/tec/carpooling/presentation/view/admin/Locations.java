@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import oracle.jdbc.OracleTypes;
 
 public class Locations extends javax.swing.JPanel {
     private DefaultTableModel countryTableModel;
@@ -191,19 +190,15 @@ public class Locations extends javax.swing.JPanel {
 
     private void loadCountries() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_COUNTRIES(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_countries()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                countryTableModel.setRowCount(0);
-                while (rs.next()) {
-                    countryTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    });
-                }
+            countryTableModel.setRowCount(0);
+            while (rs.next()) {
+                countryTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("name")
+                });
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -215,20 +210,16 @@ public class Locations extends javax.swing.JPanel {
 
     private void loadProvinces() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_PROVINCES(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_provinces()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                provinceTableModel.setRowCount(0);
-                while (rs.next()) {
-                    provinceTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("country_name"),
-                        rs.getString("name")
-                    });
-                }
+            provinceTableModel.setRowCount(0);
+            while (rs.next()) {
+                provinceTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("country_name"),
+                    rs.getString("name")
+                });
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -240,20 +231,16 @@ public class Locations extends javax.swing.JPanel {
 
     private void loadCantons() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_CANTONS(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_cantons()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                cantonTableModel.setRowCount(0);
-                while (rs.next()) {
-                    cantonTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("province_name"),
-                        rs.getString("name")
-                    });
-                }
+            cantonTableModel.setRowCount(0);
+            while (rs.next()) {
+                cantonTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("province_name"),
+                    rs.getString("name")
+                });
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -265,20 +252,16 @@ public class Locations extends javax.swing.JPanel {
 
     private void loadDistricts() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_DISTRICTS(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_districts()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                districtTableModel.setRowCount(0);
-                while (rs.next()) {
-                    districtTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("canton_name"),
-                        rs.getString("name")
-                    });
-                }
+            districtTableModel.setRowCount(0);
+            while (rs.next()) {
+                districtTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("canton_name"),
+                    rs.getString("name")
+                });
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -631,8 +614,11 @@ public class Locations extends javax.swing.JPanel {
         if (selectedRow >= 0) {
             selectedProvinceId = (Long) provinceTableModel.getValueAt(selectedRow, 0);
             String selectedName = (String) provinceTableModel.getValueAt(selectedRow, 2);
+            String countryName = (String) provinceTableModel.getValueAt(selectedRow, 1);
 
             jTextFieldProvinceName.setText(selectedName);
+
+            jComboBoxProvinceCountry.setSelectedItem(countryName);
 
             jButtonProvinceSave.setEnabled(false);
             jButtonProvinceUpdate.setEnabled(true);
@@ -647,8 +633,14 @@ public class Locations extends javax.swing.JPanel {
         if (selectedRow >= 0) {
             selectedCantonId = (Long) cantonTableModel.getValueAt(selectedRow, 0);
             String selectedName = (String) cantonTableModel.getValueAt(selectedRow, 2);
+            String provinceName = (String) cantonTableModel.getValueAt(selectedRow, 1);
 
             jTextFieldCantonName.setText(selectedName);
+
+            populateProvincesForCantonCombo();
+            jComboBoxCantonProvince.setSelectedItem(provinceName);
+
+            loadCantonComboBox();
 
             jButtonCantonSave.setEnabled(false);
             jButtonCantonUpdate.setEnabled(true);
@@ -663,8 +655,20 @@ public class Locations extends javax.swing.JPanel {
         if (selectedRow >= 0) {
             selectedDistrictId = (Long) districtTableModel.getValueAt(selectedRow, 0);
             String selectedName = (String) districtTableModel.getValueAt(selectedRow, 2);
+            String cantonName = (String) districtTableModel.getValueAt(selectedRow, 1);
 
             jTextFieldDistrictName.setText(selectedName);
+
+            String provinceName = getProvinceNameByCanton(cantonName);
+
+            populateProvincesForCantonCombo();
+            if (provinceName != null) {
+                jComboBoxCantonProvince.setSelectedItem(provinceName);
+            }
+
+            loadCantonComboBox();
+
+            jComboBoxDistrictCanton.setSelectedItem(cantonName);
 
             jButtonDistrictSave.setEnabled(false);
             jButtonDistrictUpdate.setEnabled(true);
@@ -682,7 +686,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_COUNTRY(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.create_country(?)}")) {
             
             cstmt.setString(1, name);
             cstmt.execute();
@@ -711,7 +715,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_COUNTRY(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_country_name(?, ?)}")) {
             
             cstmt.setLong(1, selectedCountryId);
             cstmt.setString(2, name);
@@ -742,7 +746,7 @@ public class Locations extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_COUNTRY(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_country(?)}")) {
                 
                 cstmt.setLong(1, selectedCountryId);
                 cstmt.execute();
@@ -787,7 +791,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_PROVINCE(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.create_province(?, ?)}")) {
             
             cstmt.setLong(1, countryId);
             cstmt.setString(2, name);
@@ -830,7 +834,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_PROVINCE(?, ?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_province_name(?, ?, ?)}")) {
             
             cstmt.setLong(1, selectedProvinceId);
             cstmt.setLong(2, countryId);
@@ -863,7 +867,7 @@ public class Locations extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_PROVINCE(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_province(?)}")) {
                 
                 cstmt.setLong(1, selectedProvinceId);
                 cstmt.execute();
@@ -908,7 +912,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_CANTON(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.create_canton(?, ?)}")) {
             
             cstmt.setLong(1, provinceId);
             cstmt.setString(2, name);
@@ -951,7 +955,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_CANTON(?, ?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_canton_name(?, ?, ?)}")) {
             
             cstmt.setLong(1, selectedCantonId);
             cstmt.setLong(2, provinceId);
@@ -984,7 +988,7 @@ public class Locations extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_CANTON(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_canton(?)}")) {
                 
                 cstmt.setLong(1, selectedCantonId);
                 cstmt.execute();
@@ -1029,7 +1033,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_DISTRICT(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.create_district(?, ?)}")) {
             
             cstmt.setLong(1, cantonId);
             cstmt.setString(2, name);
@@ -1071,7 +1075,7 @@ public class Locations extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_DISTRICT(?, ?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_district_name(?, ?, ?)}")) {
             
             cstmt.setLong(1, selectedDistrictId);
             cstmt.setLong(2, cantonId);
@@ -1103,7 +1107,7 @@ public class Locations extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_DISTRICT(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_district(?)}")) {
                 
                 cstmt.setLong(1, selectedDistrictId);
                 cstmt.execute();
@@ -1137,15 +1141,11 @@ public class Locations extends javax.swing.JPanel {
     private void loadCountryComboBox() {
         jComboBoxProvinceCountry.removeAllItems();
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_COUNTRIES(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_countries()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                while (rs.next()) {
-                    jComboBoxProvinceCountry.addItem(rs.getString("name"));
-                }
+            while (rs.next()) {
+                jComboBoxProvinceCountry.addItem(rs.getString("name"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -1161,16 +1161,17 @@ public class Locations extends javax.swing.JPanel {
         if (selectedCountry == null) return;
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_PROVINCES_BY_COUNTRY(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_provinces_by_country(?)}")) {
             
-            cstmt.setString(1, selectedCountry);
-            cstmt.registerOutParameter(2, OracleTypes.CURSOR);
-            cstmt.execute();
+            Long countryId = getCountryIdByName(selectedCountry);
+            if (countryId == null) {
+                return;
+            }
+            cstmt.setLong(1, countryId);
+            ResultSet rs = cstmt.executeQuery();
             
-            try (ResultSet rs = (ResultSet) cstmt.getObject(2)) {
-                while (rs.next()) {
-                    jComboBoxCantonProvince.addItem(rs.getString("name"));
-                }
+            while (rs.next()) {
+                jComboBoxCantonProvince.addItem(rs.getString("name"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -1186,16 +1187,13 @@ public class Locations extends javax.swing.JPanel {
         if (selectedProvince == null) return;
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_CANTONS_BY_PROVINCE(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_cantons_by_province(?)}")) {
             
-            cstmt.setString(1, selectedProvince);
-            cstmt.registerOutParameter(2, OracleTypes.CURSOR);
-            cstmt.execute();
+            cstmt.setLong(1, getProvinceIdByName(selectedProvince));
+            ResultSet rs = cstmt.executeQuery();
             
-            try (ResultSet rs = (ResultSet) cstmt.getObject(2)) {
-                while (rs.next()) {
-                    jComboBoxDistrictCanton.addItem(rs.getString("name"));
-                }
+            while (rs.next()) {
+                jComboBoxDistrictCanton.addItem(rs.getString("name"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -1207,16 +1205,13 @@ public class Locations extends javax.swing.JPanel {
 
     private Long getCountryIdByName(String name) {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.GET_COUNTRY_BY_NAME(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_country_by_name(?)}")) {
             
             cstmt.setString(1, name);
-            cstmt.registerOutParameter(2, OracleTypes.CURSOR);
-            cstmt.execute();
+            ResultSet rs = cstmt.executeQuery();
             
-            try (ResultSet rs = (ResultSet) cstmt.getObject(2)) {
-                if (rs.next()) {
-                    return rs.getLong("id");
-                }
+            if (rs.next()) {
+                return rs.getLong("id");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -1229,16 +1224,13 @@ public class Locations extends javax.swing.JPanel {
 
     private Long getProvinceIdByName(String name) {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.GET_PROVINCE_BY_NAME(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_province_by_name(?)}")) {
             
             cstmt.setString(1, name);
-            cstmt.registerOutParameter(2, OracleTypes.CURSOR);
-            cstmt.execute();
+            ResultSet rs = cstmt.executeQuery();
             
-            try (ResultSet rs = (ResultSet) cstmt.getObject(2)) {
-                if (rs.next()) {
-                    return rs.getLong("id");
-                }
+            if (rs.next()) {
+                return rs.getLong("id");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -1251,22 +1243,54 @@ public class Locations extends javax.swing.JPanel {
 
     private Long getCantonIdByName(String name) {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.GET_CANTON_BY_NAME(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_canton_by_name(?)}")) {
             
             cstmt.setString(1, name);
-            cstmt.registerOutParameter(2, OracleTypes.CURSOR);
-            cstmt.execute();
+            ResultSet rs = cstmt.executeQuery();
             
-            try (ResultSet rs = (ResultSet) cstmt.getObject(2)) {
-                if (rs.next()) {
-                    return rs.getLong("id");
-                }
+            if (rs.next()) {
+                return rs.getLong("id");
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error al obtener ID del cantón: " + e.getMessage(), 
                 "Error", 
                 JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
+    }
+
+    /**
+     * Llena el combo de provincias (panel Cantones) con todas las provincias existentes.
+     */
+    private void populateProvincesForCantonCombo() {
+        jComboBoxCantonProvince.removeAllItems();
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_provinces()}");
+             ResultSet rs = cstmt.executeQuery()) {
+
+            while (rs.next()) {
+                jComboBoxCantonProvince.addItem(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                "Error al cargar provincias: " + e.getMessage(),
+                "Error de Carga",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Busca en el modelo de cantones el nombre de la provincia a la que pertenece un cantón.
+     * @param cantonName Nombre del cantón
+     * @return Nombre de la provincia o null si no se encuentra
+     */
+    private String getProvinceNameByCanton(String cantonName) {
+        for (int i = 0; i < cantonTableModel.getRowCount(); i++) {
+            String name = (String) cantonTableModel.getValueAt(i, 2); // columna "Nombre"
+            if (cantonName.equals(name)) {
+                return (String) cantonTableModel.getValueAt(i, 1); // columna "Provincia"
+            }
         }
         return null;
     }

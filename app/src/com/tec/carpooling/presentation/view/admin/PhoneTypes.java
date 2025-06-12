@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import com.tec.carpooling.data.connection.DatabaseConnection;
-import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -58,27 +57,23 @@ public class PhoneTypes extends javax.swing.JPanel {
 
     private void loadPhoneTypes() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_TYPE_PHONES(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.list_type_phones()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                phoneTypeTableModel.setRowCount(0);
-                while (rs.next()) {
-                    phoneTypeTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    });
-                }
+            phoneTypeTableModel.setRowCount(0);
+            while (rs.next()) {
+                phoneTypeTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("name")
+                });
             }
-             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading phone types: " + e.getMessage(), 
                 "Load Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
+        clearSelectionAndFields();
     }
     
    private void clearSelectionAndFields() {
@@ -229,7 +224,7 @@ public class PhoneTypes extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_TYPE_PHONE(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.insert_type_phone(?)}")) {
             
             cstmt.setString(1, name);
             cstmt.execute();
@@ -257,7 +252,7 @@ public class PhoneTypes extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_TYPE_PHONE(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_type_phone(?, ?)}")) {
             
             cstmt.setLong(1, selectedPhoneTypeId);
             cstmt.setString(2, newName);
@@ -287,7 +282,7 @@ public class PhoneTypes extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_TYPE_PHONE(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_type_phone(?)}")) {
                 
                 cstmt.setLong(1, selectedPhoneTypeId);
                 cstmt.execute();

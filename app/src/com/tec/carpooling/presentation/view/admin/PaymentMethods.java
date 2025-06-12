@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import oracle.jdbc.OracleTypes;
 
 public class PaymentMethods extends javax.swing.JPanel {
     private DefaultTableModel paymentMethodTableModel;
@@ -23,15 +22,14 @@ public class PaymentMethods extends javax.swing.JPanel {
         paymentMethodTableModel = new DefaultTableModel(
             new Object [][] {},
             new String [] {
-                "ID", "Nombre", "Creador", "Fecha Creación", "Modificador", "Fecha Modificación"
+                "ID", "Nombre"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.String.class, java.lang.String.class,
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Long.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -47,23 +45,15 @@ public class PaymentMethods extends javax.swing.JPanel {
 
     private void loadPaymentMethods() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_PAYMENT_METHODS(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_payment_methods()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                paymentMethodTableModel.setRowCount(0);
-                while (rs.next()) {
-                    paymentMethodTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        rs.getString("creator"),
-                        rs.getString("creation_date"),
-                        rs.getString("modifier"),
-                        rs.getString("modification_date")
-                    });
-                }
+            paymentMethodTableModel.setRowCount(0);
+            while (rs.next()) {
+                paymentMethodTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("name")
+                });
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -97,7 +87,7 @@ public class PaymentMethods extends javax.swing.JPanel {
         jTablePaymentMethods.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {},
             new String [] {
-                "ID", "Nombre", "Creador", "Fecha Creación", "Modificador", "Fecha Modificación"
+                "ID", "Nombre"
             }
         ));
         jTablePaymentMethods.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -192,9 +182,10 @@ public class PaymentMethods extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_PAYMENT_METHOD(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.create_payment_method(?, ?)}")) {
             
             cstmt.setString(1, name);
+            cstmt.registerOutParameter(2, java.sql.Types.INTEGER);
             cstmt.execute();
             
             JOptionPane.showMessageDialog(this, "Método de pago registrado exitosamente.");
@@ -221,7 +212,7 @@ public class PaymentMethods extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_PAYMENT_METHOD(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_payment_method_name(?, ?)}")) {
             
             cstmt.setLong(1, selectedPaymentMethodId);
             cstmt.setString(2, name);
@@ -252,7 +243,7 @@ public class PaymentMethods extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_PAYMENT_METHOD(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_payment_method(?)}")) {
                 
                 cstmt.setLong(1, selectedPaymentMethodId);
                 cstmt.execute();
