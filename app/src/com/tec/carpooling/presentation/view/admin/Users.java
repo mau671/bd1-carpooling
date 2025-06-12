@@ -10,6 +10,20 @@ import javax.swing.table.DefaultTableModel;
 import com.github.lgooddatepicker.components.DatePicker;
 import java.time.LocalDate;
 import java.sql.Date;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.CallableStatement;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.HashMap;
+import com.tec.carpooling.data.dao.impl.CatalogDAOImpl;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import java.awt.Image;
+import java.net.URL;
+import java.util.Locale;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 /**
  *
@@ -24,6 +38,9 @@ public class Users extends javax.swing.JPanel {
      */
     public Users() {
         initComponents();
+        loadCatalogData();
+        loadUsers();
+        initListeners();
     }
     
     private void clearFields() {
@@ -34,13 +51,35 @@ public class Users extends javax.swing.JPanel {
         jTextFieldUserSecondSurname1.setText("");
         jTextFieldUserPhone.setText("");
         jTextFieldUserEmail.setText("");
-        datePickerUserDateOfBirth.clear();
+        customizeDatePicker();
         jComboBoxTypeOfId.setSelectedIndex(0);
         jComboBoxGender.setSelectedIndex(0);
         jComboBoxTypeOfPhone.setSelectedIndex(0);
         jComboBoxDomainOfTheEmail.setSelectedIndex(0);
         jComboBoxRole.setSelectedIndex(0);
         selectedUser = null;
+    }
+    
+        private void customizeDatePicker() {
+        URL dateImageURL = getClass().getResource("/Assets/datePickerIcon.png");
+        if (dateImageURL != null) {
+            Image dateImage = getToolkit().getImage(dateImageURL);
+            ImageIcon dateIcon = new ImageIcon(dateImage);
+
+            datePickerUserDateOfBirth.getComponentDateTextField().setEditable(false);
+            datePickerUserDateOfBirth.getComponentDateTextField().setEnabled(false);
+            datePickerUserDateOfBirth.setDateToToday();
+            datePickerUserDateOfBirth.setLocale(Locale.ENGLISH);
+
+            // ✅ Inline veto policy to block past dates
+            datePickerUserDateOfBirth.getSettings().setVetoPolicy(date -> !date.isAfter(LocalDate.now()));
+
+            JButton datePickerButton = datePickerUserDateOfBirth.getComponentToggleCalendarButton();
+            datePickerButton.setText("");
+            datePickerButton.setIcon(dateIcon);
+        } else {
+            System.err.println("Image for date picker button not found.");
+        }
     }
 
     /**
@@ -75,14 +114,8 @@ public class Users extends javax.swing.JPanel {
         jComboBoxGender = new javax.swing.JComboBox<>();
         jLabelIUserTypeOfPhone = new javax.swing.JLabel();
         jComboBoxTypeOfPhone = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jListPhones = new javax.swing.JList<>();
-        jLabelIUserPhones = new javax.swing.JLabel();
         jLabelIUserDomain = new javax.swing.JLabel();
         jComboBoxDomainOfTheEmail = new javax.swing.JComboBox<>();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jListEmails = new javax.swing.JList<>();
-        jLabelIUserPhones1 = new javax.swing.JLabel();
         jLabelPhotoOfTheUser = new javax.swing.JLabel();
         jLabelIUserGender1 = new javax.swing.JLabel();
         jComboBoxRole = new javax.swing.JComboBox<>();
@@ -90,6 +123,10 @@ public class Users extends javax.swing.JPanel {
         jTextFieldUserPhone = new javax.swing.JTextField();
         jTextFieldUserEmail = new javax.swing.JTextField();
         jLabelUserPhone1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableEmails = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTablePhones = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -198,29 +235,9 @@ public class Users extends javax.swing.JPanel {
 
         jComboBoxTypeOfPhone.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jListPhones.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jListPhones.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(jListPhones);
-
-        jLabelIUserPhones.setText("Phones");
-
         jLabelIUserDomain.setText("Domain of the email");
 
         jComboBoxDomainOfTheEmail.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jListEmails.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jListEmails.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(jListEmails);
-
-        jLabelIUserPhones1.setText("Emails");
 
         jLabelPhotoOfTheUser.setText("Photo");
 
@@ -244,65 +261,119 @@ public class Users extends javax.swing.JPanel {
 
         jLabelUserPhone1.setText("Email");
 
+        jTableEmails.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String [] {
+                "Emails"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTableEmails);
+        if (jTableEmails.getColumnModel().getColumnCount() > 0) {
+            jTableEmails.getColumnModel().getColumn(0).setResizable(false);
+        }
+
+        jTablePhones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String [] {
+                "Phones"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(jTablePhones);
+        if (jTablePhones.getColumnModel().getColumnCount() > 0) {
+            jTablePhones.getColumnModel().getColumn(0).setResizable(false);
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(119, 119, 119)
+                .addContainerGap(76, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelIUserPhones1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBoxDomainOfTheEmail, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(78, 78, 78))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabelIUserSecondName)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jTextFieldUserSecondName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabelIUserSecondSurname)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jTextFieldUserSecondSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabelIUserFirstSurname)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jTextFieldUserFirstSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabelIUserFirstName)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jTextFieldUserFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabelIUserFirstName1)
-                                            .addGap(46, 46, 46)
-                                            .addComponent(datePickerUserDateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jLabelIUserDomain))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(0, 0, Short.MAX_VALUE)
-                                                .addComponent(jLabelIUserGender1)
-                                                .addGap(92, 92, 92)
-                                                .addComponent(jComboBoxRole, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabelUserPhone1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jTextFieldUserEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(56, 56, 56)))
-                                .addGap(22, 22, 22)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelIUserPhones)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabelIUserSecondName)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldUserSecondName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabelIUserSecondSurname)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextFieldUserSecondSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabelIUserFirstSurname)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldUserFirstSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabelIUserFirstName)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldUserFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelIUserFirstName1)
+                                .addGap(51, 51, 51)
+                                .addComponent(datePickerUserDateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelIUserGender1)
+                                        .addGap(243, 243, 243))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelUserPhone1)
+                                            .addComponent(jLabelIUserDomain))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jTextFieldUserEmail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                                            .addComponent(jComboBoxRole, javax.swing.GroupLayout.Alignment.TRAILING, 0, 137, Short.MAX_VALUE)
+                                            .addComponent(jComboBoxDomainOfTheEmail, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabelIUserTypeofID)
                                             .addComponent(jLabelIUserSecondSurname1)
@@ -311,165 +382,583 @@ public class Users extends javax.swing.JPanel {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jComboBoxGender, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jComboBoxTypeOfId, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextFieldUserSecondSurname1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabelIUserTypeOfPhone)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jComboBoxTypeOfPhone, 0, 137, Short.MAX_VALUE)
-                                            .addComponent(jScrollPane1)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabelUserPhone)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextFieldUserPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(48, 48, 48)
+                                            .addComponent(jTextFieldUserSecondSurname1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(45, 45, 45)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jButtonUsersUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButtonUsersDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButtonUsersSave)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(134, 134, 134)
-                                .addComponent(jLabelPhotoOfTheUser, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabelIUserTypeOfPhone)
+                                        .addGap(39, 39, 39))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabelUserPhone)
+                                        .addGap(95, 95, 95)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jComboBoxTypeOfPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldUserPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabelPhotoOfTheUser, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(120, 120, 120)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(51, 51, 51)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelIUserFirstName)
+                            .addComponent(jTextFieldUserFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelIUserSecondName)
+                            .addComponent(jTextFieldUserSecondName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelIUserFirstSurname)
+                            .addComponent(jTextFieldUserFirstSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonUsersSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonUsersUpdate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonUsersDelete))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelIUserTypeofID)
+                            .addComponent(jComboBoxTypeOfId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelIUserSecondSurname1)
+                            .addComponent(jTextFieldUserSecondSurname1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabelIUserFirstName)
-                                    .addComponent(jTextFieldUserFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabelIUserSecondName)
-                                    .addComponent(jTextFieldUserSecondName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabelIUserFirstSurname)
-                                    .addComponent(jTextFieldUserFirstSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonUsersSave)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonUsersUpdate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonUsersDelete))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabelIUserTypeofID)
-                                    .addComponent(jComboBoxTypeOfId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabelIUserSecondSurname1)
-                                    .addComponent(jTextFieldUserSecondSurname1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelIUserGender))))
-                        .addGap(12, 12, 12)
+                            .addComponent(jComboBoxGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelIUserGender))))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelIUserSecondSurname)
-                            .addComponent(jTextFieldUserSecondSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelIUserTypeOfPhone)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jComboBoxTypeOfPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(jTextFieldUserSecondSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(datePickerUserDateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelIUserFirstName1)
-                            .addComponent(jLabelIUserPhones))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabelIUserFirstName1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelUserPhone1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelIUserGender1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldUserEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBoxRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBoxDomainOfTheEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelIUserDomain))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelIUserPhones1)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelUserPhone1)
-                            .addComponent(jTextFieldUserEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelIUserGender1)
-                            .addComponent(jComboBoxRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabelIUserDomain)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabelUserPhone)
-                            .addComponent(jTextFieldUserPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(52, 52, 52)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelUserPhone)
+                                .addGap(13, 13, 13)
+                                .addComponent(jLabelIUserTypeOfPhone))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextFieldUserPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jComboBoxTypeOfPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(24, 24, 24)
                         .addComponent(jLabelPhotoOfTheUser, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPaneInstitution, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         jComboBoxTypeOfId.getAccessibleContext().setAccessibleName("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonUsersSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsersSaveActionPerformed
+    /**
+     * Carga datos de catálogos (géneros, tipos de identificación, etc.)
+     */
+    private void loadCatalogData() {
         try {
-            JOptionPane.showMessageDialog(this, "Save functionality not implemented", "Information", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            CatalogDAOImpl catalogDAO = new CatalogDAOImpl();
+            // Géneros
+            jComboBoxGender.removeAllItems();
+            genderMap.clear();
+            catalogDAO.getAllGenders().forEach(g -> {
+                jComboBoxGender.addItem(g.getName());
+                genderMap.put(g.getName(), g.getId());
+            });
+            // Tipos de identificación
+            jComboBoxTypeOfId.removeAllItems();
+            idTypeMap.clear();
+            catalogDAO.getAllIdTypes().forEach(t -> {
+                jComboBoxTypeOfId.addItem(t.getName());
+                idTypeMap.put(t.getName(), t.getId());
+            });
+            // Tipos de teléfono
+            jComboBoxTypeOfPhone.removeAllItems();
+            phoneTypeMap.clear();
+            catalogDAO.getAllPhoneTypes().forEach(tp -> {
+                jComboBoxTypeOfPhone.addItem(tp.getName());
+                phoneTypeMap.put(tp.getName(), tp.getId());
+            });
+            // Instituciones y dominios
+            institutionMap.clear();
+            domainMap.clear();
+            jComboBoxDomainOfTheEmail.removeAllItems();
+            catalogDAO.getAllInstitutions().forEach(inst -> {
+                institutionMap.put(inst.getName(), inst.getId());
+            });
+            // Dominios se cargarán bajo demanda según institución
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error cargando catálogos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Carga todos los usuarios y los muestra en la tabla.
+     */
+    private void loadUsers() {
+        DefaultTableModel model = (DefaultTableModel) jTableInstitution.getModel();
+        model.setRowCount(0);
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement ps = conn.prepareCall("{call carpooling_adm.list_users_basic()}");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getLong("user_id"), rs.getString("full_name")});
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error cargando usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        initListeners();
+    }
+
+    // Mapas para relacionar nombre mostrado con IDs
+    private final Map<String, Long> genderMap = new HashMap<>();
+    private final Map<String, Long> idTypeMap = new HashMap<>();
+    private final Map<String, Long> phoneTypeMap = new HashMap<>();
+    private final Map<String, Long> institutionMap = new HashMap<>();
+    private final Map<String, Long> domainMap = new HashMap<>();
+
+    // Mapas de detalle seleccionados (key = row index)
+    private final Map<Integer, PhoneRecord> phoneMap = new HashMap<>();
+    private final Map<Integer, EmailRecord> emailMap = new HashMap<>();
+
+    private static class PhoneRecord {
+        long id;
+        String number;
+        long typeId;
+        PhoneRecord(long id, String number, long typeId) {this.id=id; this.number=number; this.typeId=typeId;}
+    }
+    private static class EmailRecord {
+        long id;
+        String name;
+        long domainId;
+        EmailRecord(long id,String name,long domainId){this.id=id;this.name=name;this.domainId=domainId;}
+    }
+
+    /** Carga teléfonos y correos del personId seleccionado */
+    private void loadPhonesEmails(long personId){
+        phoneMap.clear();
+        emailMap.clear();
+        // Primero cargar dominios permitidos para la(s) institución(es) de la persona
+        loadDomainsForPerson(personId);
+        // Phones -> JTable
+        try(Connection conn=DatabaseConnection.getConnection();
+            CallableStatement cps=conn.prepareCall("{call carpooling_adm.get_person_phones(?)}")){
+            cps.setLong(1, personId);
+            try(ResultSet rs=cps.executeQuery()){
+                javax.swing.table.DefaultTableModel phoneModel=(javax.swing.table.DefaultTableModel) jTablePhones.getModel();
+                phoneModel.setRowCount(0);
+                int row=0;
+                while(rs.next()){
+                    long pid=rs.getLong("id");
+                    String number=rs.getString("phone_number");
+                    long typeId=rs.getLong("type_phone_id");
+                    String typeName=rs.getString("type_phone_name");
+                    phoneMap.put(row,new PhoneRecord(pid,number,typeId));
+                    phoneModel.addRow(new Object[]{number,typeName});
+                    row++;
+                }
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(this,"Error cargando teléfonos: "+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+        // Emails -> JTable
+        try(Connection conn=DatabaseConnection.getConnection();
+            CallableStatement ces=conn.prepareCall("{call carpooling_adm.get_person_emails_detail(?)}")){
+            ces.setLong(1, personId);
+            try(ResultSet rs=ces.executeQuery()){
+                javax.swing.table.DefaultTableModel emailModel=(javax.swing.table.DefaultTableModel) jTableEmails.getModel();
+                emailModel.setRowCount(0);
+                int row=0;
+                while(rs.next()){
+                    long eid=rs.getLong("id");
+                    String name=rs.getString("email_name");
+                    long did=rs.getLong("domain_id");
+                    String domainName=rs.getString("domain_name");
+                    emailMap.put(row,new EmailRecord(eid,name,did));
+                    emailModel.addRow(new Object[]{name+"@"+domainName});
+                    // Poblar combo de dominios si aún no existe
+                    if(!domainMap.containsKey(domainName)){
+                        domainMap.put(domainName,did);
+                        jComboBoxDomainOfTheEmail.addItem(domainName);
+                    }
+                    row++;
+                }
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(this,"Error cargando correos: "+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /** Carga la foto más reciente del perfil en el JLabel */
+    private void loadProfilePhoto(long personId){
+        try(Connection conn=DatabaseConnection.getConnection();
+            CallableStatement cps=conn.prepareCall("{call carpooling_adm.get_latest_photo(?)}")){
+            cps.setLong(1, personId);
+            try(ResultSet rs=cps.executeQuery()){
+                if(rs.next()){
+                    byte[] imgBytes = rs.getBytes("image");
+                    if(imgBytes!=null && imgBytes.length>0){
+                        ImageIcon icon = new ImageIcon(imgBytes);
+                        Image imgScaled = icon.getImage().getScaledInstance(jLabelPhotoOfTheUser.getWidth(), jLabelPhotoOfTheUser.getHeight(), Image.SCALE_SMOOTH);
+                        jLabelPhotoOfTheUser.setIcon(new ImageIcon(imgScaled));
+                    }else{
+                        jLabelPhotoOfTheUser.setIcon(null);
+                    }
+                }else{
+                    jLabelPhotoOfTheUser.setIcon(null);
+                }
+            }
+        }catch(SQLException ex){
+            // En caso de error limpiamos la imagen y avisamos
+            jLabelPhotoOfTheUser.setIcon(null);
+            JOptionPane.showMessageDialog(this, "Error cargando foto: "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /** Carga dominios asociados a la(s) institución(es) de la persona y llena el combo */
+    private void loadDomainsForPerson(long personId){
+        jComboBoxDomainOfTheEmail.removeAllItems();
+        domainMap.clear();
+        try(Connection conn=DatabaseConnection.getConnection();
+            CallableStatement cis=conn.prepareCall("{call carpooling_adm.get_person_institutions(?)}")){
+            cis.setLong(1, personId);
+            try(ResultSet rs=cis.executeQuery()){
+                CatalogDAOImpl catalogDAO = new CatalogDAOImpl();
+                while(rs.next()){
+                    long instId = rs.getLong("id");
+                    // Obtener dominios para esta institución
+                    catalogDAO.getDomainsByInstitution(instId).forEach(d->{
+                        if(!domainMap.containsKey(d.getName())){
+                            domainMap.put(d.getName(), d.getId());
+                            jComboBoxDomainOfTheEmail.addItem(d.getName());
+                        }
+                    });
+                }
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(this, "Error cargando dominios: "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // Si no se obtuvo ningún dominio, se podría mantener los ya existentes (emails) o dejar vacío
+    }
+
+    private void initListeners(){
+        // selección simple ya configurada en JTable por default
+        jTablePhones.getSelectionModel().addListSelectionListener(e->{
+            if(!e.getValueIsAdjusting()){
+                int idx=jTablePhones.getSelectedRow();
+                if(idx>=0){
+                    PhoneRecord pr=phoneMap.get(idx);
+                    if(pr!=null){
+                        jTextFieldUserPhone.setText(pr.number);
+                        // seleccionar combo tipo
+                        for(int i=0;i<jComboBoxTypeOfPhone.getItemCount();i++){
+                            String name=jComboBoxTypeOfPhone.getItemAt(i);
+                            if(phoneTypeMap.get(name)!=null && phoneTypeMap.get(name)==pr.typeId){
+                                jComboBoxTypeOfPhone.setSelectedIndex(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        jTableEmails.getSelectionModel().addListSelectionListener(e->{
+            if(!e.getValueIsAdjusting()){
+                int idx=jTableEmails.getSelectedRow();
+                if(idx>=0){
+                    EmailRecord er=emailMap.get(idx);
+                    if(er!=null){
+                        jTextFieldUserEmail.setText(er.name);
+                        for(int i=0;i<jComboBoxDomainOfTheEmail.getItemCount();i++){
+                            String dname=jComboBoxDomainOfTheEmail.getItemAt(i);
+                            if(domainMap.get(dname)!=null && domainMap.get(dname)==er.domainId){
+                                jComboBoxDomainOfTheEmail.setSelectedIndex(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void jButtonUsersSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsersSaveActionPerformed
+        if (selectedUser != null) {
+            JOptionPane.showMessageDialog(this, "Ya se ha seleccionado un usuario. Pulse Actualizar para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        try {
+            // Recolectar datos del formulario
+            String firstName = jTextFieldUserFirstName.getText().trim();
+            String secondName = jTextFieldUserSecondName.getText().trim();
+            String firstSurname = jTextFieldUserFirstSurname.getText().trim();
+            String secondSurname = jTextFieldUserSecondSurname.getText().trim();
+            String idNumber = jTextFieldUserSecondSurname1.getText().trim();
+            java.time.LocalDate dob = datePickerUserDateOfBirth.getDate();
+            String phoneNumber = jTextFieldUserPhone.getText().trim();
+            String emailName = jTextFieldUserEmail.getText().trim();
+            String idTypeName = (String) jComboBoxTypeOfId.getSelectedItem();
+            String genderName = (String) jComboBoxGender.getSelectedItem();
+            String phoneTypeName = (String) jComboBoxTypeOfPhone.getSelectedItem();
+            String domainName = (String) jComboBoxDomainOfTheEmail.getSelectedItem();
+            String role = (String) jComboBoxRole.getSelectedItem();
+            // Validaciones básicas
+            if (firstName.isEmpty() || firstSurname.isEmpty() || idNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Nombre, Apellido e Identificación son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            // Obtener IDs
+            long idTypeId = idTypeMap.getOrDefault(idTypeName, 0L);
+            long genderId = genderMap.getOrDefault(genderName, 0L);
+            long phoneTypeId = phoneTypeMap.getOrDefault(phoneTypeName, 0L);
+            long domainId = domainMap.getOrDefault(domainName, 0L);
+            // Para simplificar seleccionamos la primera institución disponible
+            long institutionId = institutionMap.values().stream().findFirst().orElse(0L);
+            if (institutionId == 0L) {
+                JOptionPane.showMessageDialog(this, "No hay instituciones disponibles en catálogo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String username = JOptionPane.showInputDialog(this, "Ingrese nombre de usuario:");
+            String password = JOptionPane.showInputDialog(this, "Ingrese contraseña:");
+            if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Username y contraseña son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement stmt = conn.prepareCall("{call carpooling_adm.register_complete_user(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}")) {
+                int idx = 1;
+                stmt.setString(idx++, firstName);
+                stmt.setString(idx++, secondName.isEmpty() ? null : secondName);
+                stmt.setString(idx++, firstSurname);
+                stmt.setString(idx++, secondSurname.isEmpty() ? null : secondSurname);
+                stmt.setLong(idx++, idTypeId);
+                stmt.setString(idx++, idNumber);
+                stmt.setLong(idx++, phoneTypeId);
+                stmt.setString(idx++, phoneNumber);
+                stmt.setString(idx++, emailName);
+                stmt.setDate(idx++, java.sql.Date.valueOf(dob));
+                stmt.setLong(idx++, genderId);
+                stmt.setLong(idx++, institutionId);
+                stmt.setLong(idx++, domainId);
+                stmt.setString(idx++, username);
+                stmt.setString(idx++, password);
+                // OUT params (idx está en 16 después del password)
+                stmt.registerOutParameter(idx++, java.sql.Types.INTEGER); // o_person_id (16)
+                stmt.registerOutParameter(idx, java.sql.Types.INTEGER);   // o_user_id (17)
+                stmt.execute();
+                long personId = stmt.getLong(idx - 1);
+                long userId = stmt.getLong(idx);
+                // Asignar rol si aplica
+                if ("Driver".equalsIgnoreCase(role)) {
+                    try (CallableStatement cs = conn.prepareCall("{call carpooling_adm.register_as_driver(?)}")) {
+                        cs.setLong(1, userId);
+                        cs.execute();
+                    }
+                } else if ("Passenger".equalsIgnoreCase(role)) {
+                    try (CallableStatement cs = conn.prepareCall("{call carpooling_adm.register_as_passenger(?)}")) {
+                        cs.setLong(1, userId);
+                        cs.execute();
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Usuario creado con éxito (ID: " + userId + ")", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                clearFields();
+                loadUsers();
+                loadPhonesEmails(personId);
+                loadProfilePhoto(personId);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al crear usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonUsersSaveActionPerformed
 
     private void jButtonUsersUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsersUpdateActionPerformed
         if (selectedUser == null) {
-            JOptionPane.showMessageDialog(this, "Please select a user to update", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para actualizar", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
-        try {
-            JOptionPane.showMessageDialog(this, "Update functionality not implemented", "Information", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                // 1) Actualizar datos básicos de la persona
+                try (CallableStatement stmt = conn.prepareCall("{call carpooling_adm.update_person(?,?,?,?,?,?,?,?,?)}")) {
+                    String firstName = jTextFieldUserFirstName.getText().trim();
+                    String secondName = jTextFieldUserSecondName.getText().trim();
+                    String firstSurname = jTextFieldUserFirstSurname.getText().trim();
+                    String secondSurname = jTextFieldUserSecondSurname.getText().trim();
+                    String idNumber = jTextFieldUserSecondSurname1.getText().trim();
+                    java.time.LocalDate dob = datePickerUserDateOfBirth.getDate();
+                    String idTypeName = (String) jComboBoxTypeOfId.getSelectedItem();
+                    String genderName = (String) jComboBoxGender.getSelectedItem();
+                    long idTypeId = idTypeMap.getOrDefault(idTypeName, 0L);
+                    long genderId = genderMap.getOrDefault(genderName, 0L);
+                    int idx = 1;
+                    stmt.setLong(idx++, selectedUser.getPersonId());
+                    stmt.setString(idx++, firstName);
+                    stmt.setString(idx++, secondName.isEmpty() ? null : secondName);
+                    stmt.setString(idx++, firstSurname);
+                    stmt.setString(idx++, secondSurname.isEmpty() ? null : secondSurname);
+                    stmt.setLong(idx++, idTypeId);
+                    stmt.setString(idx++, idNumber);
+                    stmt.setDate(idx++, java.sql.Date.valueOf(dob));
+                    stmt.setLong(idx++, genderId);
+                    stmt.execute();
+                }
+
+                // 2) Actualizar teléfono seleccionado (si lo hay)
+                int phoneRow = jTablePhones.getSelectedRow();
+                if (phoneRow >= 0) {
+                    PhoneRecord pr = phoneMap.get(phoneRow);
+                    if (pr != null) {
+                        String newNumber = jTextFieldUserPhone.getText().trim();
+                        String newTypeName = (String) jComboBoxTypeOfPhone.getSelectedItem();
+                        long newTypeId = phoneTypeMap.getOrDefault(newTypeName, pr.typeId);
+                        try (CallableStatement css = conn.prepareCall("{call carpooling_adm.update_phone(?,?,?)}")) {
+                            css.setLong(1, pr.id);
+                            css.setString(2, newNumber);
+                            css.setLong(3, newTypeId);
+                            css.execute();
+                        }
+                    }
+                }
+
+                // 3) Actualizar email seleccionado (si lo hay)
+                int emailRow = jTableEmails.getSelectedRow();
+                if (emailRow >= 0) {
+                    EmailRecord er = emailMap.get(emailRow);
+                    if (er != null) {
+                        String newEmailName = jTextFieldUserEmail.getText().trim();
+                        String newDomainName = (String) jComboBoxDomainOfTheEmail.getSelectedItem();
+                        long newDomainId = domainMap.getOrDefault(newDomainName, er.domainId);
+                        try (CallableStatement ces = conn.prepareCall("{call carpooling_adm.update_email(?,?,?)}")) {
+                            ces.setLong(1, er.id);
+                            ces.setString(2, newEmailName);
+                            ces.setLong(3, newDomainId);
+                            ces.execute();
+                        }
+                    }
+                }
+
+                conn.commit();
+                JOptionPane.showMessageDialog(this, "Actualización completada", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                loadUsers();
+                loadPhonesEmails(selectedUser.getPersonId());
+            } catch (SQLException inner) {
+                conn.rollback();
+                throw inner;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonUsersUpdateActionPerformed
 
     private void jButtonUsersDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsersDeleteActionPerformed
         if (selectedUser == null) {
-            JOptionPane.showMessageDialog(this, "Please select a user to delete", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Are you sure you want to delete this user?", 
-            "Confirm Delete", 
-            JOptionPane.YES_NO_OPTION);
-            
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                JOptionPane.showMessageDialog(this, "Delete functionality not implemented", "Information", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Seguro que desea eliminar al usuario?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.delete_user(?)}")) {
+            stmt.setLong(1, selectedUser.getId());
+            stmt.execute();
+            JOptionPane.showMessageDialog(this, "Usuario eliminado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+            loadUsers();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonUsersDeleteActionPerformed
 
     private void jTableInstitutionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableInstitutionMouseClicked
         int row = jTableInstitution.getSelectedRow();
         if (row >= 0) {
-            try {
-                JOptionPane.showMessageDialog(this, "User selection functionality not implemented", "Information", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            long userId = (Long) jTableInstitution.getValueAt(row, 0);
+            try (Connection conn = DatabaseConnection.getConnection();
+                 CallableStatement stmt = conn.prepareCall("{call carpooling_adm.get_user_profile_data(?)}")) {
+                stmt.setLong(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        selectedUser = new User();
+                        selectedUser.setId(userId);
+                        selectedUser.setUsername(rs.getString("username"));
+                        // Obtener person_id con procedimiento
+                        try (CallableStatement cps = conn.prepareCall("{call carpooling_adm.get_person_id_by_user(?, ?)}")) {
+                            cps.setLong(1, userId);
+                            cps.registerOutParameter(2, java.sql.Types.INTEGER);
+                            cps.execute();
+                            selectedUser.setPersonId(cps.getLong(2));
+                        }
+                        // Poblar campos
+                        jTextFieldUserFirstName.setText(rs.getString("first_name"));
+                        jTextFieldUserSecondName.setText(rs.getString("second_name"));
+                        jTextFieldUserFirstSurname.setText(rs.getString("first_surname"));
+                        jTextFieldUserSecondSurname.setText(rs.getString("second_surname"));
+                        jTextFieldUserSecondSurname1.setText(rs.getString("identification_number"));
+                        java.sql.Date date = rs.getDate("date_of_birth");
+                        if (date != null) {
+                            datePickerUserDateOfBirth.setDate(date.toLocalDate());
+                        }
+                        // Combos
+                        selectComboItemByValue(jComboBoxGender, rs.getString("gender_name"));
+                        // other combos could be updated via additional queries if needed
+
+                        // Cargar teléfonos, correos y foto asociada
+                        loadPhonesEmails(selectedUser.getPersonId());
+                        loadProfilePhoto(selectedUser.getPersonId());
+                    }
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error cargando datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jTableInstitutionMouseClicked
+
+    private void selectComboItemByValue(javax.swing.JComboBox<String> combo, String value) {
+        for (int i = 0; i < combo.getItemCount(); i++) {
+            if (combo.getItemAt(i).equalsIgnoreCase(value)) {
+                combo.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
 
     private void jTextFieldUserFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldUserFirstNameActionPerformed
         // TODO add your handling code here:
@@ -516,8 +1005,6 @@ public class Users extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelIUserFirstSurname;
     private javax.swing.JLabel jLabelIUserGender;
     private javax.swing.JLabel jLabelIUserGender1;
-    private javax.swing.JLabel jLabelIUserPhones;
-    private javax.swing.JLabel jLabelIUserPhones1;
     private javax.swing.JLabel jLabelIUserSecondName;
     private javax.swing.JLabel jLabelIUserSecondSurname;
     private javax.swing.JLabel jLabelIUserSecondSurname1;
@@ -526,12 +1013,12 @@ public class Users extends javax.swing.JPanel {
     private javax.swing.JLabel jLabelPhotoOfTheUser;
     private javax.swing.JLabel jLabelUserPhone;
     private javax.swing.JLabel jLabelUserPhone1;
-    private javax.swing.JList<String> jListEmails;
-    private javax.swing.JList<String> jListPhones;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPaneInstitution;
+    private javax.swing.JTable jTableEmails;
     private javax.swing.JTable jTableInstitution;
+    private javax.swing.JTable jTablePhones;
     private javax.swing.JTextField jTextFieldUserEmail;
     private javax.swing.JTextField jTextFieldUserFirstName;
     private javax.swing.JTextField jTextFieldUserFirstSurname;

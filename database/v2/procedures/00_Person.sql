@@ -21,6 +21,7 @@
    4. Photo Management (Profile Pictures)
    5. Search & Query Functions
    6. Utility Functions
+   7. Update & Delete Operations
  
  Dependencies:
    - carpooling_adm database and tables (PERSON, ADMIN, GENDER, TYPE_IDENTIFICATION, etc.)
@@ -564,6 +565,115 @@ BEGIN
 END$$
 
 -- ========================================
+-- PROCEDURE: is_driver
+-- Purpose: Checks if a user is registered as a driver
+-- ========================================
+DROP PROCEDURE IF EXISTS is_driver$$
+
+CREATE PROCEDURE is_driver(
+    IN p_user_id INT,
+    OUT o_is_driver BOOLEAN
+)
+BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_count INT DEFAULT 0;
+    
+    -- Get person_id from user
+    SELECT person_id INTO v_person_id
+    FROM carpooling_pu.PERSONUSER
+    WHERE id = p_user_id;
+    
+    IF v_person_id IS NULL THEN
+        SET o_is_driver = FALSE;
+    ELSE
+        -- Check if is driver
+        SELECT COUNT(*) INTO v_count
+        FROM carpooling_pu.DRIVER
+        WHERE person_id = v_person_id;
+        
+        SET o_is_driver = (v_count > 0);
+    END IF;
+END$$
+
+-- ========================================
+-- PROCEDURE: is_passenger
+-- Purpose: Checks if a user is registered as a passenger
+-- ========================================
+DROP PROCEDURE IF EXISTS is_passenger$$
+
+CREATE PROCEDURE is_passenger(
+    IN p_user_id INT,
+    OUT o_is_passenger BOOLEAN
+)
+BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_count INT DEFAULT 0;
+    
+    -- Get person_id from user
+    SELECT person_id INTO v_person_id
+    FROM carpooling_pu.PERSONUSER
+    WHERE id = p_user_id;
+    
+    IF v_person_id IS NULL THEN
+        SET o_is_passenger = FALSE;
+    ELSE
+        -- Check if is passenger
+        SELECT COUNT(*) INTO v_count
+        FROM carpooling_pu.PASSENGER
+        WHERE person_id = v_person_id;
+        
+        SET o_is_passenger = (v_count > 0);
+    END IF;
+END$$
+
+-- ========================================
+-- PROCEDURE: get_user_types_all
+-- Purpose: Gets all user types for a user (can be multiple)
+-- ========================================
+DROP PROCEDURE IF EXISTS get_user_types_all$$
+
+CREATE PROCEDURE get_user_types_all(
+    IN p_user_id INT,
+    OUT o_is_admin BOOLEAN,
+    OUT o_is_driver BOOLEAN,
+    OUT o_is_passenger BOOLEAN
+)
+BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_admin_count INT DEFAULT 0;
+    DECLARE v_driver_count INT DEFAULT 0;
+    DECLARE v_passenger_count INT DEFAULT 0;
+    
+    -- Get person_id from user
+    SELECT person_id INTO v_person_id
+    FROM carpooling_pu.PERSONUSER
+    WHERE id = p_user_id;
+    
+    IF v_person_id IS NULL THEN
+        SET o_is_admin = FALSE;
+        SET o_is_driver = FALSE;
+        SET o_is_passenger = FALSE;
+    ELSE
+        -- Check all types
+        SELECT COUNT(*) INTO v_admin_count
+        FROM ADMIN
+        WHERE person_id = v_person_id;
+        
+        SELECT COUNT(*) INTO v_driver_count
+        FROM carpooling_pu.DRIVER
+        WHERE person_id = v_person_id;
+        
+        SELECT COUNT(*) INTO v_passenger_count
+        FROM carpooling_pu.PASSENGER
+        WHERE person_id = v_person_id;
+        
+        SET o_is_admin = (v_admin_count > 0);
+        SET o_is_driver = (v_driver_count > 0);
+        SET o_is_passenger = (v_passenger_count > 0);
+    END IF;
+END$$
+
+-- ========================================
 -- SECTION 4: PHOTO MANAGEMENT
 -- ========================================
 
@@ -993,6 +1103,29 @@ BEGIN
 END$$
 
 -- ========================================
+-- PROCEDURE: get_person_emails_detail
+-- Purpose: Obtiene emails con domain_id (para edición)
+-- ========================================
+DROP PROCEDURE IF EXISTS get_person_emails_detail$$
+
+CREATE PROCEDURE get_person_emails_detail(
+    IN p_person_id INT
+)
+BEGIN
+    SELECT 
+        e.id,
+        e.name           AS email_name,
+        d.id             AS domain_id,
+        d.name           AS domain_name,
+        CONCAT(e.name, '@', d.name) AS full_email,
+        e.creation_date
+    FROM carpooling_pu.EMAIL e
+    INNER JOIN carpooling_adm.DOMAIN d ON e.domain_id = d.id
+    WHERE e.person_id = p_person_id
+    ORDER BY e.creation_date DESC;
+END$$
+
+-- ========================================
 -- PROCEDURE: get_person_phones
 -- Purpose: Gets all phone numbers for a person with their types
 -- ========================================
@@ -1106,6 +1239,368 @@ BEGIN
     ORDER BY ip.creation_date DESC;
 END$$
 
+-- ========================================
+-- SECTION 8: UPDATE & DELETE OPERATIONS
+-- ========================================
+
+-- ========================================
+-- PROCEDURE: update_person
+-- Purpose: Updates an existing person record
+-- ========================================
+DROP PROCEDURE IF EXISTS update_person$$
+
+CREATE PROCEDURE update_person(
+    IN p_person_id INT,
+    IN p_first_name VARCHAR(50),
+    IN p_second_name VARCHAR(50),
+    IN p_first_surname VARCHAR(50),
+    IN p_second_surname VARCHAR(50),
+    IN p_id_type_id INT,
+    IN p_id_number VARCHAR(50),
+    IN p_date_of_birth DATE,
+    IN p_gender_id INT
+)
+BEGIN
+    DECLARE v_exists INT DEFAULT 0;
+    DECLARE v_dup_id INT DEFAULT 0;
+    DECLARE v_error_msg VARCHAR(255);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Check person exists
+    SELECT COUNT(*) INTO v_exists FROM PERSON WHERE id = p_person_id;
+    IF v_exists = 0 THEN
+        SET v_error_msg = CONCAT('Person with ID ', p_person_id, ' does not exist.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    -- Validate unique identification number (excluding current person)
+    IF p_id_number IS NOT NULL AND TRIM(p_id_number) <> '' THEN
+        SELECT COUNT(*) INTO v_dup_id FROM PERSON 
+        WHERE identification_number = p_id_number AND id <> p_person_id;
+        IF v_dup_id > 0 THEN
+            SET v_error_msg = 'Identification number already exists for another person.';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+        END IF;
+    END IF;
+
+    -- Validate referenced data exists
+    IF p_gender_id IS NOT NULL THEN
+        SELECT COUNT(*) INTO v_exists FROM GENDER WHERE id = p_gender_id;
+        IF v_exists = 0 THEN
+            SET v_error_msg = CONCAT('Gender with ID ', p_gender_id, ' does not exist.');
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+        END IF;
+    END IF;
+
+    IF p_id_type_id IS NOT NULL THEN
+        SELECT COUNT(*) INTO v_exists FROM TYPE_IDENTIFICATION WHERE id = p_id_type_id;
+        IF v_exists = 0 THEN
+            SET v_error_msg = CONCAT('Identification type with ID ', p_id_type_id, ' does not exist.');
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+        END IF;
+    END IF;
+
+    -- Perform update
+    UPDATE PERSON
+    SET first_name            = TRIM(p_first_name),
+        second_name           = CASE WHEN p_second_name IS NULL THEN NULL ELSE TRIM(p_second_name) END,
+        first_surname         = TRIM(p_first_surname),
+        second_surname        = CASE WHEN p_second_surname IS NULL THEN NULL ELSE TRIM(p_second_surname) END,
+        identification_number = p_id_number,
+        date_of_birth         = p_date_of_birth,
+        gender_id             = p_gender_id,
+        type_identification_id= p_id_type_id,
+        modification_date     = CURDATE(),
+        modifier              = COALESCE(@app_user, USER())
+    WHERE id = p_person_id;
+
+    COMMIT;
+END$$
+
+-- ========================================
+-- PROCEDURE: update_user_username
+-- Purpose: Updates username of an existing user (password handled separately)
+-- ========================================
+DROP PROCEDURE IF EXISTS update_user_username$$
+
+CREATE PROCEDURE update_user_username(
+    IN p_user_id INT,
+    IN p_new_username VARCHAR(50)
+)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_error_msg VARCHAR(255);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Validate new username
+    IF p_new_username IS NULL OR TRIM(p_new_username) = '' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'New username cannot be empty.';
+    END IF;
+
+    -- Check if user exists
+    SELECT COUNT(*) INTO v_count FROM carpooling_pu.PERSONUSER WHERE id = p_user_id;
+    IF v_count = 0 THEN
+        SET v_error_msg = CONCAT('User with ID ', p_user_id, ' does not exist.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    -- Check if new username already exists
+    SELECT COUNT(*) INTO v_count FROM carpooling_pu.PERSONUSER WHERE username = p_new_username AND id <> p_user_id;
+    IF v_count > 0 THEN
+        SET v_error_msg = 'Username already taken.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    -- Update username
+    UPDATE carpooling_pu.PERSONUSER
+    SET username = p_new_username,
+        modification_date = CURDATE(),
+        modifier = COALESCE(@app_user, USER())
+    WHERE id = p_user_id;
+
+    COMMIT;
+END$$
+
+-- ========================================
+-- PROCEDURE: update_email
+-- Purpose: Updates an email record (name and/or domain)
+-- ========================================
+DROP PROCEDURE IF EXISTS update_email$$
+
+CREATE PROCEDURE update_email(
+    IN p_email_id INT,
+    IN p_new_name VARCHAR(100),
+    IN p_new_domain_id INT
+)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_error_msg VARCHAR(255);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Validate email exists
+    SELECT COUNT(*) INTO v_count FROM carpooling_pu.EMAIL WHERE id = p_email_id;
+    IF v_count = 0 THEN
+        SET v_error_msg = CONCAT('Email with ID ', p_email_id, ' does not exist.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    -- Validate domain exists
+    SELECT COUNT(*) INTO v_count FROM carpooling_adm.DOMAIN WHERE id = p_new_domain_id;
+    IF v_count = 0 THEN
+        SET v_error_msg = CONCAT('Domain with ID ', p_new_domain_id, ' does not exist.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    UPDATE carpooling_pu.EMAIL
+    SET name = TRIM(p_new_name),
+        domain_id = p_new_domain_id,
+        modification_date = CURDATE(),
+        modifier = COALESCE(@app_user, USER())
+    WHERE id = p_email_id;
+
+    COMMIT;
+END$$
+
+-- ========================================
+-- PROCEDURE: update_phone
+-- Purpose: Updates a phone record (number and/or type)
+-- ========================================
+DROP PROCEDURE IF EXISTS update_phone$$
+
+CREATE PROCEDURE update_phone(
+    IN p_phone_id INT,
+    IN p_new_number VARCHAR(20),
+    IN p_new_type_phone_id INT
+)
+BEGIN
+    DECLARE v_count INT DEFAULT 0;
+    DECLARE v_error_msg VARCHAR(255);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Validate phone exists
+    SELECT COUNT(*) INTO v_count FROM carpooling_pu.PHONE WHERE id = p_phone_id;
+    IF v_count = 0 THEN
+        SET v_error_msg = CONCAT('Phone with ID ', p_phone_id, ' does not exist.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    -- Validate phone type exists
+    SELECT COUNT(*) INTO v_count FROM carpooling_adm.TYPE_PHONE WHERE id = p_new_type_phone_id;
+    IF v_count = 0 THEN
+        SET v_error_msg = CONCAT('Type phone with ID ', p_new_type_phone_id, ' does not exist.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    UPDATE carpooling_pu.PHONE
+    SET phone_number = p_new_number,
+        type_phone_id = p_new_type_phone_id,
+        modification_date = CURDATE(),
+        modifier = COALESCE(@app_user, USER())
+    WHERE id = p_phone_id;
+
+    COMMIT;
+END$$
+
+-- ========================================
+-- PROCEDURE: delete_user
+-- Purpose: Deletes a user account (PERSONUSER) if not admin, driver or passenger
+-- ========================================
+DROP PROCEDURE IF EXISTS delete_user$$
+
+CREATE PROCEDURE delete_user(
+    IN p_user_id INT
+)
+BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_admin_cnt INT DEFAULT 0;
+    DECLARE v_driver_cnt INT DEFAULT 0;
+    DECLARE v_passenger_cnt INT DEFAULT 0;
+    DECLARE v_error_msg VARCHAR(255);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Get person_id
+    SELECT person_id INTO v_person_id FROM carpooling_pu.PERSONUSER WHERE id = p_user_id;
+    IF v_person_id IS NULL THEN
+        SET v_error_msg = CONCAT('User with ID ', p_user_id, ' does not exist.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    -- Cannot delete if admin/driver/passenger
+    SELECT COUNT(*) INTO v_admin_cnt FROM ADMIN WHERE person_id = v_person_id;
+    SELECT COUNT(*) INTO v_driver_cnt FROM carpooling_pu.DRIVER WHERE person_id = v_person_id;
+    SELECT COUNT(*) INTO v_passenger_cnt FROM carpooling_pu.PASSENGER WHERE person_id = v_person_id;
+
+    IF v_admin_cnt > 0 OR v_driver_cnt > 0 OR v_passenger_cnt > 0 THEN
+        SET v_error_msg = 'Cannot delete user because person has role assignments.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+
+    DELETE FROM carpooling_pu.PERSONUSER WHERE id = p_user_id;
+
+    COMMIT;
+END$$
+
+-- ========================================
+-- PROCEDURE: delete_email
+-- Purpose: Deletes a single email record
+-- ========================================
+DROP PROCEDURE IF EXISTS delete_email$$
+
+CREATE PROCEDURE delete_email(
+    IN p_email_id INT
+)
+BEGIN
+    DECLARE v_rows INT DEFAULT 0;
+    DECLARE v_error_msg VARCHAR(255);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+    DELETE FROM carpooling_pu.EMAIL WHERE id = p_email_id;
+    SET v_rows = ROW_COUNT();
+    IF v_rows = 0 THEN
+        SET v_error_msg = CONCAT('Email with ID ', p_email_id, ' not found for deletion.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+    COMMIT;
+END$$
+
+-- ========================================
+-- PROCEDURE: delete_phone
+-- Purpose: Deletes a single phone record (and relationship)
+-- ========================================
+DROP PROCEDURE IF EXISTS delete_phone$$
+
+CREATE PROCEDURE delete_phone(
+    IN p_phone_id INT
+)
+BEGIN
+    DECLARE v_rows INT DEFAULT 0;
+    DECLARE v_error_msg VARCHAR(255);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+    -- Delete relationship first
+    DELETE FROM carpooling_pu.PHONE_PERSON WHERE phone_id = p_phone_id;
+    -- Delete phone itself
+    DELETE FROM carpooling_pu.PHONE WHERE id = p_phone_id;
+    SET v_rows = ROW_COUNT();
+    IF v_rows = 0 THEN
+        SET v_error_msg = CONCAT('Phone with ID ', p_phone_id, ' not found for deletion.');
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = v_error_msg;
+    END IF;
+    COMMIT;
+END$$
+
+-- ========================================
+-- PROCEDURE: list_users_basic
+-- Purpose: Devuelve ID de usuario y nombre completo (para listados rápidos)
+-- ========================================
+DROP PROCEDURE IF EXISTS list_users_basic$$
+
+CREATE PROCEDURE list_users_basic()
+BEGIN
+    SELECT 
+        u.id          AS user_id,
+        CONCAT(p.first_name, ' ', p.first_surname) AS full_name
+    FROM carpooling_pu.PERSONUSER u
+    INNER JOIN PERSON p ON p.id = u.person_id
+    ORDER BY full_name;
+END$$
+
+-- ========================================
+-- PROCEDURE: get_person_id_by_user
+-- Purpose: Obtiene el person_id a partir del user_id (OUT)
+-- ========================================
+DROP PROCEDURE IF EXISTS get_person_id_by_user$$
+
+CREATE PROCEDURE get_person_id_by_user(
+    IN p_user_id INT,
+    OUT o_person_id INT
+)
+BEGIN
+    SELECT person_id INTO o_person_id
+    FROM carpooling_pu.PERSONUSER
+    WHERE id = p_user_id;
+END$$
+
 -- Reset delimiter
 DELIMITER ;
 
@@ -1152,8 +1647,15 @@ CALL register_as_passenger(@user_id);
 -- Check if user is admin
 CALL is_admin(@user_id, @is_admin);
 
--- Get user type
+-- Get user type (primary type)
 CALL get_user_type(@user_id, @user_type);
+
+-- Check specific user types
+CALL is_driver(@user_id, @is_driver);
+CALL is_passenger(@user_id, @is_passenger);
+
+-- Get all user types at once
+CALL get_user_types_all(@user_id, @is_admin, @is_driver, @is_passenger);
 
 -- ========================================
 -- SECTION 4: PHOTO MANAGEMENT

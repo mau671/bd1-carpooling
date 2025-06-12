@@ -1,37 +1,39 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.tec.carpooling.presentation.view.admin;
 
-import java.awt.BorderLayout;
-import javax.swing.JComboBox;
-import java.awt.CardLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JToolBar;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Types;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
- * @author hidal
+ * @author mauricio
  */
-public class Queries extends javax.swing.JFrame {
-
+public class Queries extends javax.swing.JPanel {
+    private Connection connection;
+    
     /**
-     * Creates new form ConsultasAdmi
+     * Creates new form NewQueries
      */
     public Queries() {
         initComponents();
-        
-        // Para el panel con card layout
-        cardPanel.add(scrollConductores, "Top 5 drivers with the most trips done");
-        cardPanel.add(scrollPuntos, "First 5 most concurrent points");
-        cardPanel.add(scrollUsuarios, "Top 5 most active users");
-        cardPanel.add(scrollViajes, "All the trips that have been done");
-        cardPanel.add(montoCobrado, "Average amount of charged by drivers");
-        cardPanel.add(cantidadUsuarios, "Amount of new users in the last 3 months");
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setupListeners();
+        setupValidations();
+        updateDatePickersVisibility();
+        try {
+            connection = DatabaseConnection.getConnection();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + e.getMessage());
+        }
     }
 
     /**
@@ -42,237 +44,250 @@ public class Queries extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
-        boxConsultas = new javax.swing.JComboBox<>();
-        labelIngresar = new javax.swing.JLabel();
-        cardPanel = new javax.swing.JPanel();
-        montoCobrado = new javax.swing.JLabel();
-        cantidadUsuarios = new javax.swing.JLabel();
-        scrollViajes = new javax.swing.JScrollPane();
-        viajes = new javax.swing.JTable();
-        scrollConductores = new javax.swing.JScrollPane();
-        conductores = new javax.swing.JTable();
-        scrollPuntos = new javax.swing.JScrollPane();
-        puntosConcurrentes = new javax.swing.JTable();
-        scrollUsuarios = new javax.swing.JScrollPane();
-        usuarios = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabelQuery = new javax.swing.JLabel();
+        jComboBoxQuery = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jTextFieldLimitOfQuerysToShow = new javax.swing.JTextField();
+        jLabelAmountOfQueryRecords = new javax.swing.JLabel();
+        jLabelAmountOfQueryRecordsValue = new javax.swing.JLabel();
+        datePickerFrom = new com.github.lgooddatepicker.components.DatePicker();
+        jLabelFrom = new javax.swing.JLabel();
+        jLabelTo = new javax.swing.JLabel();
+        datePickerTo = new com.github.lgooddatepicker.components.DatePicker();
+        jButtonQuery = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
-        boxConsultas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Top 5 drivers with the most trips done", "First 5 most concurrent points", "Top 5 most active users", "All the trips that have been done", "Average amount of charged by drivers", "Amount of new users in the last 3 months" }));
-        boxConsultas.addActionListener(new java.awt.event.ActionListener() {
+        jLabelQuery.setText("Query");
+
+        jComboBoxQuery.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Top drivers by service count", "Top waypoints within selected date range", "Top active users", "Complete trip details", "Average driver revenue", "New users in the last three months" }));
+
+        jLabel1.setText("Limit");
+
+        jLabelAmountOfQueryRecords.setText("Amount of queried records:");
+
+        jLabelFrom.setText("From");
+
+        jLabelTo.setText("To");
+
+        jButtonQuery.setText("Query");
+        jButtonQuery.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boxConsultasActionPerformed(evt);
+                jButtonQueryActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
-        jPanel1.add(boxConsultas, gridBagConstraints);
 
-        labelIngresar.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 40)); // NOI18N
-        labelIngresar.setForeground(new java.awt.Color(18, 102, 160));
-        labelIngresar.setText("QUERIES");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(60, 0, 60, 0);
-        jPanel1.add(labelIngresar, gridBagConstraints);
-
-        cardPanel.setPreferredSize(new java.awt.Dimension(200, 200));
-        cardPanel.setLayout(new java.awt.CardLayout());
-
-        montoCobrado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        montoCobrado.setText("Average Amount Paid");
-        montoCobrado.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        cardPanel.add(montoCobrado, "card7");
-
-        cantidadUsuarios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cantidadUsuarios.setText("Amount of Users");
-        cantidadUsuarios.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        cardPanel.add(cantidadUsuarios, "card6");
-
-        viajes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Trip", "Route", "Driver", "Vehicle", "Passangers"
-            }
-        ));
-        scrollViajes.setViewportView(viajes);
-
-        cardPanel.add(scrollViajes, "card2");
-
-        conductores.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID number", "First Name", "Second Name", "First Surname", "Second Surname", "Trips completed"
-            }
-        ));
-        scrollConductores.setViewportView(conductores);
-
-        cardPanel.add(scrollConductores, "card8");
-
-        puntosConcurrentes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Point", "Date Start", "Date End"
-            }
-        ));
-        scrollPuntos.setViewportView(puntosConcurrentes);
-
-        cardPanel.add(scrollPuntos, "card8");
-
-        usuarios.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID number", "First Name", "Second Name", "First Surname", "Second Surname", "Trips taken"
-            }
-        ));
-        scrollUsuarios.setViewportView(usuarios);
-
-        cardPanel.add(scrollUsuarios, "card8");
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.ipadx = 600;
-        gridBagConstraints.ipady = 300;
-        jPanel1.add(cardPanel, gridBagConstraints);
-
-        jLabel1.setText("Inquire about:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
-        jPanel1.add(jLabel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.weighty = 0.1;
-        jPanel1.add(filler1, gridBagConstraints);
-
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-
-        jLabel2.setText("jLabel2");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        jPanel2.add(jLabel2, gridBagConstraints);
-
-        jLabel3.setText("Amount of queried records: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        jPanel2.add(jLabel3, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
-        jPanel1.add(jPanel2, gridBagConstraints);
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        pack();
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(156, 156, 156)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabelQuery)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jComboBoxQuery, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabelFrom)
+                                    .addComponent(jLabelTo))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(datePickerFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldLimitOfQuerysToShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(datePickerTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonQuery))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelAmountOfQueryRecords)
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabelAmountOfQueryRecordsValue, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(185, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelQuery)
+                    .addComponent(jComboBoxQuery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextFieldLimitOfQuerysToShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(datePickerFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelFrom))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(datePickerTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelTo)
+                    .addComponent(jButtonQuery))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelAmountOfQueryRecords)
+                    .addComponent(jLabelAmountOfQueryRecordsValue, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void boxConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxConsultasActionPerformed
-        CardLayout layout = (CardLayout) cardPanel.getLayout();
-        String selected = (String) boxConsultas.getSelectedItem();
-        layout.show(cardPanel, selected);
-    }//GEN-LAST:event_boxConsultasActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+    private void setupListeners() {
+        jComboBoxQuery.addActionListener(e -> updateDatePickersVisibility());
+        jTextFieldLimitOfQuerysToShow.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    evt.consume();
                 }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Queries.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Queries().setVisible(true);
             }
         });
     }
+    
+    private void setupValidations() {
+        jTextFieldLimitOfQuerysToShow.setText("5"); // Valor por defecto
+    }
+    
+    private void updateDatePickersVisibility() {
+        boolean showDatePickers = jComboBoxQuery.getSelectedIndex() == 1; // Top waypoints
+        datePickerFrom.setVisible(showDatePickers);
+        datePickerTo.setVisible(showDatePickers);
+        jLabelFrom.setVisible(showDatePickers);
+        jLabelTo.setVisible(showDatePickers);
+    }
+    
+    private void jButtonQueryActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            int limit = Integer.parseInt(jTextFieldLimitOfQuerysToShow.getText());
+            if (limit <= 0) {
+                JOptionPane.showMessageDialog(this, "El límite debe ser mayor a 0");
+                return;
+            }
+            
+            DefaultTableModel model = new DefaultTableModel();
+            CallableStatement cstmt = null;
+            ResultSet rs = null;
+            
+            switch (jComboBoxQuery.getSelectedIndex()) {
+                case 0: // Top drivers
+                    cstmt = connection.prepareCall("{call carpooling_adm.get_top_drivers(?)}");
+                    cstmt.setInt(1, limit);
+                    model.addColumn("Rank");
+                    model.addColumn("Driver");
+                    model.addColumn("Services");
+                    break;
+                    
+                case 1: // Top waypoints
+                    if (datePickerFrom.getDate() == null || datePickerTo.getDate() == null) {
+                        JOptionPane.showMessageDialog(this, "Seleccione ambas fechas");
+                        return;
+                    }
+                    LocalDate fromDate = datePickerFrom.getDate();
+                    LocalDate toDate = datePickerTo.getDate();
+                    cstmt = connection.prepareCall("{call carpooling_adm.get_top_waypoints(?, ?, ?)}");
+                    cstmt.setDate(1, java.sql.Date.valueOf(fromDate));
+                    cstmt.setDate(2, java.sql.Date.valueOf(toDate));
+                    cstmt.setInt(3, limit);
+                    model.addColumn("Rank");
+                    model.addColumn("District");
+                    model.addColumn("Passengers");
+                    break;
+                    
+                case 2: // Top active users
+                    cstmt = connection.prepareCall("{call carpooling_adm.get_top_active_users(?)}");
+                    cstmt.setInt(1, limit);
+                    model.addColumn("Rank");
+                    model.addColumn("User");
+                    model.addColumn("Trips");
+                    break;
+                    
+                case 3: // Complete trip details
+                    cstmt = connection.prepareCall("{call carpooling_adm.get_complete_trips(?)}");
+                    cstmt.setInt(1, limit);
+                    model.addColumn("Trip ID");
+                    model.addColumn("Driver");
+                    model.addColumn("Vehicle");
+                    model.addColumn("Passenger");
+                    model.addColumn("Start");
+                    model.addColumn("End");
+                    model.addColumn("Price");
+                    model.addColumn("Currency");
+                    break;
+                    
+                case 4: // Average driver revenue
+                    cstmt = connection.prepareCall("{call carpooling_adm.get_average_driver_revenue(?)}");
+                    cstmt.setInt(1, limit);
+                    model.addColumn("Rank");
+                    model.addColumn("Driver");
+                    model.addColumn("Average Revenue");
+                    model.addColumn("Currency");
+                    break;
+                    
+                case 5: // New users last 3 months
+                    cstmt = connection.prepareCall("{call carpooling_adm.get_new_users_last_3_months()}");
+                    model.addColumn("Month");
+                    model.addColumn("New Users");
+                    break;
+            }
+            
+            rs = cstmt.executeQuery();
+            
+            int rowCount = 0;
+            while (rs.next()) {
+                Object[] row = new Object[model.getColumnCount()];
+                for (int i = 0; i < model.getColumnCount(); i++) {
+                    row[i] = rs.getObject(i + 1);
+                }
+                model.addRow(row);
+                rowCount++;
+            }
+            
+            jTable1.setModel(model);
+            jLabelAmountOfQueryRecordsValue.setText(String.valueOf(rowCount));
+            
+            rs.close();
+            cstmt.close();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al ejecutar la consulta: " + e.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> boxConsultas;
-    private javax.swing.JLabel cantidadUsuarios;
-    private javax.swing.JPanel cardPanel;
-    private javax.swing.JTable conductores;
-    private javax.swing.Box.Filler filler1;
+    private com.github.lgooddatepicker.components.DatePicker datePickerFrom;
+    private com.github.lgooddatepicker.components.DatePicker datePickerTo;
+    private javax.swing.JButton jButtonQuery;
+    private javax.swing.JComboBox<String> jComboBoxQuery;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel labelIngresar;
-    private javax.swing.JLabel montoCobrado;
-    private javax.swing.JTable puntosConcurrentes;
-    private javax.swing.JScrollPane scrollConductores;
-    private javax.swing.JScrollPane scrollPuntos;
-    private javax.swing.JScrollPane scrollUsuarios;
-    private javax.swing.JScrollPane scrollViajes;
-    private javax.swing.JTable usuarios;
-    private javax.swing.JTable viajes;
+    private javax.swing.JLabel jLabelAmountOfQueryRecords;
+    private javax.swing.JLabel jLabelAmountOfQueryRecordsValue;
+    private javax.swing.JLabel jLabelFrom;
+    private javax.swing.JLabel jLabelQuery;
+    private javax.swing.JLabel jLabelTo;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextFieldLimitOfQuerysToShow;
     // End of variables declaration//GEN-END:variables
 }

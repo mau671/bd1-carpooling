@@ -32,7 +32,7 @@ public interface UserTypeDAO {
     boolean isAdmin(long userId) throws SQLException;
     
     /**
-     * Obtiene el tipo de usuario actual
+     * Obtiene el tipo de usuario actual (tipo principal)
      * 
      * @param userId ID del usuario
      * @return "ADMIN" si es administrador, "DRIVER" si es conductor, "PASSENGER" si es pasajero, null si no está definido
@@ -40,6 +40,21 @@ public interface UserTypeDAO {
      */
     String getUserType(long userId) throws SQLException;
     
-    boolean isPassenger(long userId) throws SQLException;
+    /**
+     * Verifica si un usuario es conductor
+     * 
+     * @param userId ID del usuario
+     * @return true si es conductor, false si no lo es
+     * @throws SQLException Si ocurre un error de base de datos
+     */
     boolean isDriver(long userId) throws SQLException;
+    
+    /**
+     * Verifica si un usuario es pasajero
+     * 
+     * @param userId ID del usuario
+     * @return true si es pasajero, false si no lo es
+     * @throws SQLException Si ocurre un error de base de datos
+     */
+    boolean isPassenger(long userId) throws SQLException;
 } 

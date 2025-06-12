@@ -6,7 +6,10 @@ package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.business.service.UserLoginService;
 import com.tec.carpooling.business.service.impl.UserLoginServiceImpl;
+import com.tec.carpooling.business.service.UserTypeService;
+import com.tec.carpooling.business.service.impl.UserTypeServiceImpl;
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.presentation.view.admin.AdminFrame;
 
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
@@ -24,17 +27,19 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 /**
- * Ventana de inicio de sesión para usuarios
+ * Login window for users
  */
 public class UserLogIn extends javax.swing.JFrame {
     private final UserLoginService userLoginService;
+    private final UserTypeService userTypeService;
     
     /**
-     * Constructor de la ventana de inicio de sesión
+     * Constructor for the login window
      */
     public UserLogIn() {
         initComponents();
         userLoginService = new UserLoginServiceImpl();
+        userTypeService = new UserTypeServiceImpl();
         
         // Load the image
         ImageIcon icon = new ImageIcon(getClass().getResource("/Assets/calleCarro.png"));
@@ -262,19 +267,19 @@ public class UserLogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        // Validar campos requeridos
+        // Validate required fields
         if (textUsername.getText().trim().isEmpty() ||
             textPassword.getPassword().length == 0) {
             
             JOptionPane.showMessageDialog(this,
-                "Please fill out your username and password.",
-                "Places have not been filled in.",
+                "Please enter your username and password.",
+                "Incomplete Fields",
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
-            // Intentar iniciar sesión
+            // Attempt to login
             User user = userLoginService.login(
                 textUsername.getText().trim(),
                 new String(textPassword.getPassword()).trim()
@@ -282,31 +287,44 @@ public class UserLogIn extends javax.swing.JFrame {
 
             if (user != null) {
                 JOptionPane.showMessageDialog(this,
-                    "You have successfully logged in!",
+                    "Login successful.",
                     "Welcome",
                     JOptionPane.INFORMATION_MESSAGE);
                 
-                // Redirigir a la ventana de selección de tipo de usuario
+                // Check if user is administrator
+                boolean isAdmin = userTypeService.isAdmin(user.getId());
+                
+                if (isAdmin) {
+                    // Redirect to admin interface
+                    javax.swing.SwingUtilities.invokeLater(() -> {
+                        AdminFrame adminFrame = new AdminFrame();
+                        adminFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                        adminFrame.setVisible(true);
+                        this.dispose();
+                    });
+                } else {
+                    // Redirect to user type selection window
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     UserType userType = new UserType(user);
                     userType.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     userType.setVisible(true);
                     this.dispose();
                 });
+                }
             } else {
                 JOptionPane.showMessageDialog(this,
-                    "Username or password are incorrect",
-                    "Authentitication Error",
+                    "Incorrect username or password.",
+                    "Authentication Error",
                     JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Database Error: " + ex.getMessage(),
+                "Database error: " + ex.getMessage(),
                 "Connection Error",
                 JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "Unexpected Error: " + ex.getMessage(),
+                "Unexpected error: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }

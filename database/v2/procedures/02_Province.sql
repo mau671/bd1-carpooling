@@ -1,14 +1,20 @@
 USE carpooling_adm;
 
+-- Eliminar procedimientos existentes
 DROP PROCEDURE IF EXISTS create_province;
 DROP PROCEDURE IF EXISTS get_all_provinces;
 DROP PROCEDURE IF EXISTS get_provinces_by_country;
 DROP PROCEDURE IF EXISTS update_province_name;
 DROP PROCEDURE IF EXISTS delete_province;
+DROP PROCEDURE IF EXISTS get_province;
+DROP PROCEDURE IF EXISTS get_province_by_name;
 
 DELIMITER $$
 
-
+-- ========================================
+-- PROCEDURE: create_province (ORIGINAL - mantenido)
+-- Purpose: Insert a new province
+-- ========================================
 CREATE PROCEDURE create_province(
     IN p_name VARCHAR(50),
     IN p_country_id INT
@@ -47,6 +53,10 @@ BEGIN
 END $$
 
 
+-- ========================================
+-- PROCEDURE: get_all_provinces (ORIGINAL - mantenido)
+-- Purpose: Get all provinces
+-- ========================================
 CREATE PROCEDURE get_all_provinces()
 BEGIN
     SELECT 
@@ -63,7 +73,55 @@ BEGIN
     ORDER BY c.name, p.name;
 END $$
 
+-- ========================================
+-- PROCEDURE: get_province (MIGRADO)
+-- Purpose: Get a specific province by ID
+-- ========================================
+CREATE PROCEDURE get_province(
+    IN p_id INT
+)
+BEGIN
+    SELECT 
+        p.id, 
+        p.country_id, 
+        c.name AS country_name, 
+        p.name, 
+        p.creator, 
+        p.creation_date, 
+        p.modifier, 
+        p.modification_date
+    FROM PROVINCE p
+    JOIN COUNTRY c ON p.country_id = c.id
+    WHERE p.id = p_id;
+END $$
 
+-- ========================================
+-- PROCEDURE: get_province_by_name (MIGRADO)
+-- Purpose: Get a province by name
+-- ========================================
+CREATE PROCEDURE get_province_by_name(
+    IN p_name VARCHAR(50)
+)
+BEGIN
+    SELECT 
+        p.id, 
+        p.country_id, 
+        c.name AS country_name, 
+        p.name, 
+        p.creator, 
+        p.creation_date, 
+        p.modifier, 
+        p.modification_date
+    FROM PROVINCE p
+    JOIN COUNTRY c ON p.country_id = c.id
+    WHERE p.name = p_name;
+END $$
+
+
+-- ========================================
+-- PROCEDURE: get_provinces_by_country (ORIGINAL - mantenido)
+-- Purpose: Get provinces by country
+-- ========================================
 CREATE PROCEDURE get_provinces_by_country(
     IN p_country_id INT
 )
@@ -156,6 +214,8 @@ DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE carpooling_adm.create_province TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.get_all_provinces TO 'pu_user'@'%';
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_province TO 'pu_user'@'%';
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_province_by_name TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.get_provinces_by_country TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.update_province_name TO 'pu_user'@'%';
 GRANT EXECUTE ON PROCEDURE carpooling_adm.delete_province TO 'pu_user'@'%';

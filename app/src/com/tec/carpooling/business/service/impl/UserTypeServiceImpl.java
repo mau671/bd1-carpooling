@@ -36,13 +36,12 @@ public class UserTypeServiceImpl implements UserTypeService {
     }
     
     @Override
-    public boolean isPassenger(long userId) throws SQLException {
-        return userTypeDAO.isPassenger(userId);
-    }
-
-    @Override
     public boolean isDriver(long userId) throws SQLException {
         return userTypeDAO.isDriver(userId);
     }
     
+    @Override
+    public boolean isPassenger(long userId) throws SQLException {
+        return userTypeDAO.isPassenger(userId);
+    }
 } 

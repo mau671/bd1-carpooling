@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import com.tec.carpooling.data.connection.DatabaseConnection;
-import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -54,27 +53,23 @@ public class Genres extends javax.swing.JPanel {
 
     private void loadGenders() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_GENDERS(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.list_genders()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                genderTableModel.setRowCount(0);
-                while (rs.next()) {
-                    genderTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    });
-                }
+            genderTableModel.setRowCount(0);
+            while (rs.next()) {
+                genderTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("name")
+                });
             }
-             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading genders: " + e.getMessage(), 
                 "Load Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
+        clearSelectionAndFields();
     }
     
    private void clearSelectionAndFields() {
@@ -225,7 +220,7 @@ public class Genres extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_GENDER(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.insert_gender(?)}")) {
             
             cstmt.setString(1, name);
             cstmt.execute();
@@ -253,7 +248,7 @@ public class Genres extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_GENDER(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_gender(?, ?)}")) {
             
             cstmt.setLong(1, selectedGenderId);
             cstmt.setString(2, newName);
@@ -283,7 +278,7 @@ public class Genres extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_GENDER(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_gender(?)}")) {
                 
                 cstmt.setLong(1, selectedGenderId);
                 cstmt.execute();

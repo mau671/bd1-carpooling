@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import com.tec.carpooling.data.connection.DatabaseConnection;
-import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -59,27 +58,23 @@ public class IDTypes extends javax.swing.JPanel {
 
     private void loadIdTypes() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_TYPE_IDENTIFICATIONS(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.list_type_identifications()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                idTypeTableModel.setRowCount(0);
-                while (rs.next()) {
-                    idTypeTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    });
-                }
+            idTypeTableModel.setRowCount(0);
+            while (rs.next()) {
+                idTypeTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("name")
+                });
             }
-             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading identification types: " + e.getMessage(), 
                 "Load Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
+        clearSelectionAndFields();
     }
     
    private void clearSelectionAndFields() {
@@ -230,7 +225,7 @@ public class IDTypes extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_TYPE_IDENTIFICATION(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.insert_type_identification(?)}")) {
             
             cstmt.setString(1, name);
             cstmt.execute();
@@ -258,7 +253,7 @@ public class IDTypes extends javax.swing.JPanel {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_TYPE_IDENTIFICATION(?, ?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_type_identification(?, ?)}")) {
             
             cstmt.setLong(1, selectedIdTypeId);
             cstmt.setString(2, newName);
@@ -288,7 +283,7 @@ public class IDTypes extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_TYPE_IDENTIFICATION(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_type_identification(?)}")) {
                 
                 cstmt.setLong(1, selectedIdTypeId);
                 cstmt.execute();

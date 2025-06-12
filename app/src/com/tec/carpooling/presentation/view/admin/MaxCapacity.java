@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import com.tec.carpooling.data.connection.DatabaseConnection;
-import oracle.jdbc.OracleTypes;
 
 /**
  *
@@ -64,27 +63,23 @@ public class MaxCapacity extends javax.swing.JPanel {
 
     private void loadMaxCapacities() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_MAX_CAPACITIES(?) }")) {
+             CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.get_all_max_capacity()}");
+             ResultSet rs = cstmt.executeQuery()) {
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                maxCapacityTableModel.setRowCount(0);
-                while (rs.next()) {
-                    maxCapacityTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getInt("capacity_number")
-                    });
-                }
+            maxCapacityTableModel.setRowCount(0);
+            while (rs.next()) {
+                maxCapacityTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getInt("capacity_number")
+                });
             }
-             clearSelectionAndFields();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error al cargar las capacidades máximas: " + e.getMessage(), 
                 "Error de Carga", 
                 JOptionPane.ERROR_MESSAGE);
         }
+        clearSelectionAndFields();
     }
     
    private void clearSelectionAndFields() {
@@ -242,9 +237,10 @@ public class MaxCapacity extends javax.swing.JPanel {
             }
 
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_MAX_CAPACITY(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.create_max_capacity(?, ?)}")) {
                 
                 cstmt.setInt(1, capacity);
+                cstmt.registerOutParameter(2, java.sql.Types.INTEGER);
                 cstmt.execute();
                 
                 JOptionPane.showMessageDialog(this, "Capacidad máxima '" + capacity + "' registrada exitosamente.");
@@ -288,7 +284,7 @@ public class MaxCapacity extends javax.swing.JPanel {
             }
 
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_MAX_CAPACITY(?, ?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.update_max_capacity(?, ?)}")) {
                 
                 cstmt.setLong(1, selectedMaxCapacityId);
                 cstmt.setInt(2, capacity);
@@ -334,7 +330,7 @@ public class MaxCapacity extends javax.swing.JPanel {
 
         if (confirmation == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_MAX_CAPACITY(?) }")) {
+                 CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.delete_max_capacity(?)}")) {
                 
                 cstmt.setLong(1, selectedMaxCapacityId);
                 cstmt.execute();
@@ -363,8 +359,8 @@ public class MaxCapacity extends javax.swing.JPanel {
                         "Error al eliminar la capacidad máxima: " + errorMessage, 
                         "Error de Eliminación", 
                         JOptionPane.ERROR_MESSAGE);
+                }
             }
-        }
         }
     }
 

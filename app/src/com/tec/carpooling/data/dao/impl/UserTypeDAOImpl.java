@@ -6,8 +6,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * Implementation of DAO for user type operations using MySQL stored procedures
@@ -63,24 +61,28 @@ public class UserTypeDAOImpl implements UserTypeDAO {
     }
     
     @Override
-    public boolean isPassenger(long userId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM PASSENGER WHERE person_id = ?";
+    public boolean isDriver(long userId) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.is_driver(?, ?)}")) {
+            
             stmt.setLong(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next() && rs.getInt(1) > 0;
+            stmt.registerOutParameter(2, Types.TINYINT);
+            stmt.execute();
+            
+            return stmt.getInt(2) == 1;
         }
     }
-
+    
     @Override
-    public boolean isDriver(long userId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM DRIVER WHERE person_id = ?";
+    public boolean isPassenger(long userId) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.is_passenger(?, ?)}")) {
+            
             stmt.setLong(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next() && rs.getInt(1) > 0;
+            stmt.registerOutParameter(2, Types.TINYINT);
+            stmt.execute();
+            
+            return stmt.getInt(2) == 1;
         }
     }
 } 
