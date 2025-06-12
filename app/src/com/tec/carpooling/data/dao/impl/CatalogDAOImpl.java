@@ -35,12 +35,12 @@ public class CatalogDAOImpl implements CatalogDAO {
              CallableStatement stmt = conn.prepareCall(GET_ALL_GENDERS);
              ResultSet rs = stmt.executeQuery()) {
             
-            while (rs.next()) {
-                Gender gender = new Gender(
-                    rs.getLong("id"),
-                    rs.getString("name")
-                );
-                genders.add(gender);
+                while (rs.next()) {
+                    Gender gender = new Gender(
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    );
+                    genders.add(gender);
             }
         }
         return genders;
@@ -53,12 +53,12 @@ public class CatalogDAOImpl implements CatalogDAO {
              CallableStatement stmt = conn.prepareCall(GET_ALL_INSTITUTIONS);
              ResultSet rs = stmt.executeQuery()) {
             
-            while (rs.next()) {
-                Institution institution = new Institution(
-                    rs.getLong("id"),
-                    rs.getString("name")
-                );
-                institutions.add(institution);
+                while (rs.next()) {
+                    Institution institution = new Institution(
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    );
+                    institutions.add(institution);
             }
         }
         return institutions;
@@ -71,12 +71,12 @@ public class CatalogDAOImpl implements CatalogDAO {
              CallableStatement stmt = conn.prepareCall(GET_ALL_ID_TYPES);
              ResultSet rs = stmt.executeQuery()) {
             
-            while (rs.next()) {
-                IdType idType = new IdType(
-                    rs.getLong("id"),
-                    rs.getString("name")
-                );
-                idTypes.add(idType);
+                while (rs.next()) {
+                    IdType idType = new IdType(
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    );
+                    idTypes.add(idType);
             }
         }
         return idTypes;
@@ -89,12 +89,12 @@ public class CatalogDAOImpl implements CatalogDAO {
              CallableStatement stmt = conn.prepareCall(GET_ALL_PHONE_TYPES);
              ResultSet rs = stmt.executeQuery()) {
             
-            while (rs.next()) {
-                PhoneType phoneType = new PhoneType(
-                    rs.getLong("id"),
-                    rs.getString("name")
-                );
-                phoneTypes.add(phoneType);
+                while (rs.next()) {
+                    PhoneType phoneType = new PhoneType(
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    );
+                    phoneTypes.add(phoneType);
             }
         }
         return phoneTypes;

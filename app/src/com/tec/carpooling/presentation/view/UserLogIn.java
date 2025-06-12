@@ -304,12 +304,12 @@ public class UserLogIn extends javax.swing.JFrame {
                     });
                 } else {
                     // Redirect to user type selection window
-                    javax.swing.SwingUtilities.invokeLater(() -> {
-                        UserType userType = new UserType(user);
-                        userType.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                        userType.setVisible(true);
-                        this.dispose();
-                    });
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    UserType userType = new UserType(user);
+                    userType.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    userType.setVisible(true);
+                    this.dispose();
+                });
                 }
             } else {
                 JOptionPane.showMessageDialog(this,

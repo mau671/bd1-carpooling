@@ -73,7 +73,7 @@ public class Institutions extends javax.swing.JPanel {
             while (rs.next()) {
                 institutionTableModel.addRow(new Object[]{rs.getLong("id"), rs.getString("name")});
             }
-            clearSelectionAndFields();
+             clearSelectionAndFields();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, 
                 "Error al cargar instituciones: " + e.getMessage(), 
@@ -279,7 +279,7 @@ public class Institutions extends javax.swing.JPanel {
             stmt.setLong(1, selectedInstitutionId);
             stmt.setString(2, newName);
             stmt.execute();
-            JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
+                JOptionPane.showMessageDialog(this, "Nombre de la institución actualizado.");
             loadInstitutions();
         } catch (SQLException e) {
             String msg = e.getMessage();
@@ -302,7 +302,7 @@ public class Institutions extends javax.swing.JPanel {
              CallableStatement stmt = conn.prepareCall("CALL delete_institution(?)")) {
             stmt.setLong(1, selectedInstitutionId);
             stmt.execute();
-            JOptionPane.showMessageDialog(this, "Institución eliminada.");
+                    JOptionPane.showMessageDialog(this, "Institución eliminada.");
             loadInstitutions();
         } catch (SQLException e) {
             String msg = e.getMessage();

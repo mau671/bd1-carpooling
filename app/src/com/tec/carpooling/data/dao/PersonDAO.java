@@ -23,7 +23,7 @@ public class PersonDAO {
             // Execute and get result set
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    person = new Person();
+            person = new Person();
                     person.setId(rs.getLong("id"));
                     person.setFirstName(rs.getString("first_name"));
                     person.setSecondName(rs.getString("second_name"));

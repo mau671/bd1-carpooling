@@ -271,13 +271,13 @@ public class Domains extends javax.swing.JDialog {
             sb.append("]");
             String jsonDomainIds = sb.toString();
             try (CallableStatement stmt = conn.prepareCall("CALL update_institution_domains(?, ?)")) {
-                stmt.setInt(1, institutionId);
+                    stmt.setInt(1, institutionId);
                 stmt.setString(2, jsonDomainIds);
-                stmt.execute();
-                JOptionPane.showMessageDialog(this,
-                    "Asociaciones de dominios actualizadas exitosamente.",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    stmt.execute();
+            JOptionPane.showMessageDialog(this,
+                "Asociaciones de dominios actualizadas exitosamente.",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
@@ -317,10 +317,10 @@ public class Domains extends javax.swing.JDialog {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(this,
                     "Error al agregar dominio: " + errorMessage,
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -415,10 +415,10 @@ public class Domains extends javax.swing.JDialog {
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(this,
+                JOptionPane.showMessageDialog(this,
                         "Error al eliminar dominio: " + errorMessage,
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
