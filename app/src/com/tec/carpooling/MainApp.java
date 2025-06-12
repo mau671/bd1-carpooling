@@ -66,6 +66,7 @@ public class MainApp {
             homePageFrame.pack();
             homePageFrame.setVisible(true);*/
             
+            //AdminFrame homePageFrame = new AdminFrame();
             InitialPage homePageFrame = new InitialPage();
             homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             homePageFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Start maximized

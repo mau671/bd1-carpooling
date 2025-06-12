@@ -4,27 +4,30 @@
  */
 package com.tec.carpooling.data.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
- * @author hidal
+ * DAO for Type Identification information using MySQL stored procedures
  */
 public class TypeIdInfoDAO {
 
     public String getTypeName(long typeId, Connection conn) throws SQLException {
-        String sql = "SELECT name FROM ADM.TYPE_IDENTIFICATION WHERE id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String typeName = null;
+        String sql = "{call carpooling_adm.get_type_identification(?)}";
+        
+        try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, typeId);
+            
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getString("name");
+                    typeName = rs.getString("name");
                 }
             }
         }
-        return null; // or "Unknown"
+        
+        return typeName;
     }
 }

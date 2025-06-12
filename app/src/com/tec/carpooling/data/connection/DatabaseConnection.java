@@ -22,7 +22,7 @@ public class DatabaseConnection {
             // Load the driver (optional in JDBC 4.0+, but good for compatibility)
             Class.forName(DatabaseConfig.getDbDriver());
         } catch (ClassNotFoundException e) {
-            throw new SQLException("Error: Oracle JDBC driver not found.", e);
+            throw new SQLException("Error: MySQL JDBC driver not found.", e);
         }
         
         // Return connection using configuration parameters

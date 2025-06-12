@@ -4,27 +4,30 @@
  */
 package com.tec.carpooling.data.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
- * @author hidal
+ * DAO for Gender information using MySQL stored procedures
  */
 public class GenderInfoDAO {
 
     public String getGenderName(long genderId, Connection conn) throws SQLException {
-        String sql = "SELECT name FROM ADM.GENDER WHERE id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String genderName = null;
+        String sql = "{call carpooling_adm.get_gender(?)}";
+        
+        try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, genderId);
+            
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getString("name");
+                    genderName = rs.getString("name");
                 }
             }
         }
-        return null; // or "Unknown"
+        
+        return genderName;
     }
 }

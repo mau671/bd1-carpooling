@@ -6,41 +6,37 @@ package com.tec.carpooling.data.dao;
 
 import java.sql.*;
 import com.tec.carpooling.domain.entity.Person;
-import oracle.jdbc.OracleTypes;
 
 /**
- *
- * @author hidal
+ * DAO for Person operations using MySQL stored procedures
  */
 public class PersonDAO {
 
     public Person getPersonProfile(long personId, Connection conn) throws SQLException {
         Person person = null;
 
-        String sql = "{ call ADM.ADM_PERSON_PKG.get_person_profile(?, ?, ?, ?, ?, ?, ?, ?, ?) }";
+        String sql = "{call carpooling_adm.find_person_by_id(?)}";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
 
             stmt.setLong(1, personId);
-            stmt.registerOutParameter(2, Types.VARCHAR); // first_name
-            stmt.registerOutParameter(3, Types.VARCHAR); // second_name
-            stmt.registerOutParameter(4, Types.VARCHAR); // first_surname
-            stmt.registerOutParameter(5, Types.VARCHAR); // second_surname
-            stmt.registerOutParameter(6, Types.VARCHAR); // identification_number
-            stmt.registerOutParameter(7, Types.DATE);    // date_of_birth
-            stmt.registerOutParameter(8, Types.NUMERIC); // gender_id
-            stmt.registerOutParameter(9, Types.NUMERIC); // type_identification_id
-
-            stmt.execute();
             
-            person = new Person();
-            person.setFirstName(stmt.getString(2));
-            person.setSecondName(stmt.getString(3));
-            person.setFirstSurname(stmt.getString(4));
-            person.setSecondSurname(stmt.getString(5));
-            person.setIdentificationNumber(stmt.getString(6));
-            person.setDateOfBirth(stmt.getDate(7));
-            person.setGenderId(stmt.getLong(8));
-            person.setTypeIdentificationId(stmt.getLong(9));
+            // Execute and get result set
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    person = new Person();
+                    person.setId(rs.getLong("id"));
+                    person.setFirstName(rs.getString("first_name"));
+                    person.setSecondName(rs.getString("second_name"));
+                    person.setFirstSurname(rs.getString("first_surname"));
+                    person.setSecondSurname(rs.getString("second_surname"));
+                    person.setIdentificationNumber(rs.getString("identification_number"));
+                    person.setDateOfBirth(rs.getDate("date_of_birth"));
+                    
+                    // Set IDs using the original field types
+                    person.setGenderId(rs.getLong("gender_id"));
+                    person.setTypeIdentificationId(rs.getLong("type_identification_id"));
+                }
+            }
         }
 
         return person;

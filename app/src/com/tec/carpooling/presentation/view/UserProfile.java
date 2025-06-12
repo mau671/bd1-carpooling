@@ -7,10 +7,17 @@ package com.tec.carpooling.presentation.view;
 import com.tec.carpooling.presentation.view.InitialPage;
 import com.tec.carpooling.data.connection.DatabaseConnection;
 import com.tec.carpooling.domain.entity.User;
-import com.tec.carpooling.data.dao.PersonDAO;
-import com.tec.carpooling.data.dao.GenderInfoDAO;
-import com.tec.carpooling.data.dao.TypeIdInfoDAO;
+import com.tec.carpooling.data.dao.PersonCompleteDAO;
+import com.tec.carpooling.data.dao.PhotoDAO;
 import com.tec.carpooling.domain.entity.Person;
+import com.tec.carpooling.domain.entity.Photo;
+import com.tec.carpooling.domain.entity.Institution;
+
+import javax.swing.ImageIcon;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Image;
+import java.util.List;
 
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -38,23 +45,76 @@ public class UserProfile extends javax.swing.JFrame {
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         
         try (Connection conn = DatabaseConnection.getConnection()) {
-            PersonDAO personDAO = new PersonDAO();
-            GenderInfoDAO genderDAO = new GenderInfoDAO();
-            TypeIdInfoDAO typeDAO = new TypeIdInfoDAO();
+            PersonCompleteDAO personCompleteDAO = new PersonCompleteDAO();
+            PhotoDAO photoDAO = new PhotoDAO();
 
-            Person person = personDAO.getPersonProfile(user.getPersonId(), conn);
-            if (person != null) {
-                String genderName = genderDAO.getGenderName(person.getGenderId(), conn);
-                String typeIdName = typeDAO.getTypeName(person.getTypeIdentificationId(), conn);
-
-                jLabelFirstName.setText(person.getFirstName());
-                jLabelSecondName.setText(person.getSecondName());
-                jLabelFirstSurname.setText(person.getFirstSurname());
-                jLabelSecondSurname.setText(person.getSecondSurname());
-                jLabelIDNumber.setText(person.getIdentificationNumber());
-                jLabelDateOfBirth.setText(person.getDateOfBirth().toString());
-                jLabelGender.setText(genderName);
-                jLabelTypeofID.setText(typeIdName);
+            // Get complete profile information in a single procedure call
+            PersonCompleteDAO.CompleteProfile profile = personCompleteDAO.getCompleteProfile(user.getPersonId(), conn);
+            
+            if (profile.getPerson() != null) {
+                Person person = profile.getPerson();
+                
+                // Load basic person information
+                jLabelFirstName.setText(person.getFirstName() != null ? person.getFirstName() : "");
+                jLabelSecondName.setText(person.getSecondName() != null ? person.getSecondName() : "");
+                jLabelFirstSurname.setText(person.getFirstSurname() != null ? person.getFirstSurname() : "");
+                jLabelSecondSurname.setText(person.getSecondSurname() != null ? person.getSecondSurname() : "");
+                jLabelIDNumber.setText(person.getIdentificationNumber() != null ? person.getIdentificationNumber() : "");
+                jLabelDateOfBirth.setText(person.getDateOfBirth() != null ? person.getDateOfBirth().toString() : "");
+                
+                // Display actual names instead of IDs
+                jLabelGender.setText(profile.getGenderName() != null ? profile.getGenderName() : "Unknown");
+                jLabelTypeofID.setText(profile.getTypeIdentificationName() != null ? profile.getTypeIdentificationName() : "Unknown");
+                
+                // Load and display profile photo
+                Photo profilePhoto = photoDAO.getLatestPhoto(user.getPersonId(), conn);
+                if (profilePhoto != null && profilePhoto.getImage() != null) {
+                    try {
+                        // Convert byte array to ImageIcon
+                        ImageIcon imageIcon = new ImageIcon(profilePhoto.getImage());
+                        
+                        // Scale the image to fit the label
+                        Image image = imageIcon.getImage();
+                        Image scaledImage = image.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                        
+                        jLabelPhoto.setIcon(scaledIcon);
+                        jLabelPhoto.setText(""); // Clear any text
+                    } catch (Exception e) {
+                        System.err.println("Error loading profile photo: " + e.getMessage());
+                        jLabelPhoto.setText("Photo Error");
+                        jLabelPhoto.setIcon(null);
+                    }
+                } else {
+                    jLabelPhoto.setText("No Photo");
+                    jLabelPhoto.setIcon(null);
+                }
+                
+                // Load institutions from profile
+                DefaultListModel<String> institutionModel = new DefaultListModel<>();
+                for (Institution institution : profile.getInstitutions()) {
+                    institutionModel.addElement(institution.getName());
+                }
+                jListInstitutionsYouBelongs.setModel(institutionModel);
+                
+                // Load emails from profile
+                DefaultListModel<String> emailModel = new DefaultListModel<>();
+                for (String email : profile.getEmails()) {
+                    emailModel.addElement(email);
+                }
+                jListEmails.setModel(emailModel);
+                
+                // Load phone numbers into table from profile
+                DefaultTableModel phoneTableModel = new DefaultTableModel(
+                    new String[]{"Phone Number", "Type"}, 0
+                );
+                for (PersonCompleteDAO.PhoneInfo phone : profile.getPhones()) {
+                    phoneTableModel.addRow(new Object[]{
+                        phone.getPhoneNumber(), 
+                        phone.getPhoneType()
+                    });
+                }
+                jTablePhoneNumbers.setModel(phoneTableModel);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

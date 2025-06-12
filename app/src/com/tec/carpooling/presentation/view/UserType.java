@@ -35,6 +35,7 @@ public class UserType extends javax.swing.JFrame {
         initComponents();
         setupUI();
         setupEventListeners();
+        checkAdminStatus();
     }
 
     private void setupUI() {
@@ -51,6 +52,37 @@ public class UserType extends javax.swing.JFrame {
         photoDriver.setIcon(new ImageIcon(scaledDriver));
         
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    private void checkAdminStatus() {
+        try {
+            boolean isAdmin = userTypeService.isAdmin(user.getId());
+            if (isAdmin) {
+                System.out.println("🔒 ADMIN ACCESS: Usuario " + user.getUsername() + " tiene privilegios de administrador");
+                
+                // Si es administrador, redirigir directamente al perfil de administrador
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(this,
+                        "Bienvenido, Administrador " + user.getUsername() + "!\n" +
+                        "Redirigiendo al panel de administración...",
+                        "Acceso de Administrador",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    
+                    UserProfile adminProfile = new UserProfile("Admin", user);
+                    adminProfile.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    adminProfile.setVisible(true);
+                    this.dispose();
+                });
+                
+                // Ocultar los paneles de selección ya que el admin va directo al panel
+                panelPassenger.setVisible(false);
+                panelDriver.setVisible(false);
+            } else {
+                System.out.println("👤 USER ACCESS: Usuario " + user.getUsername() + " es un usuario regular");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error verificando estado de administrador: " + ex.getMessage());
+        }
     }
 
     private void setupEventListeners() {
@@ -71,11 +103,19 @@ public class UserType extends javax.swing.JFrame {
         try {
             String currentType = userTypeService.getUserType(user.getId());
             
+            if ("ADMIN".equals(currentType)) {
+                JOptionPane.showMessageDialog(this,
+                    "Los administradores no pueden registrarse como pasajeros.",
+                    "Acceso Restringido",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
             if ("DRIVER".equals(currentType)) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "Would you like to register as a passenger? You are already registered as a driver.",
-                    "Register as Passenger",
+                    "¿Te gustaría registrarte como pasajero? Ya estás registrado como conductor.",
+                    "Registrarse como Pasajero",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );
@@ -84,13 +124,17 @@ public class UserType extends javax.swing.JFrame {
                     userTypeService.registerAsPassenger(user.getId());
                     openUserProfile("Passenger", user);
                 }
+            } else if ("PASSENGER".equals(currentType)) {
+                // Ya es pasajero, ir directamente al perfil
+                openUserProfile("Passenger", user);
             } else {
+                // No tiene tipo definido, registrar como pasajero
                 userTypeService.registerAsPassenger(user.getId());
                 openUserProfile("Passenger", user);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registering as passenger: " + ex.getMessage(),
+                "Error registrándose como pasajero: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -100,11 +144,19 @@ public class UserType extends javax.swing.JFrame {
         try {
             String currentType = userTypeService.getUserType(user.getId());
             
+            if ("ADMIN".equals(currentType)) {
+                JOptionPane.showMessageDialog(this,
+                    "Los administradores no pueden registrarse como conductores.",
+                    "Acceso Restringido",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
             if ("PASSENGER".equals(currentType)) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "Would you like to register as a driver? You are already registered as a passenger.",
-                    "Register as Driver",
+                    "¿Te gustaría registrarte como conductor? Ya estás registrado como pasajero.",
+                    "Registrarse como Conductor",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );
@@ -113,13 +165,17 @@ public class UserType extends javax.swing.JFrame {
                     userTypeService.registerAsDriver(user.getId());
                     openUserProfile("Driver", user);
                 }
+            } else if ("DRIVER".equals(currentType)) {
+                // Ya es conductor, ir directamente al perfil
+                openUserProfile("Driver", user);
             } else {
+                // No tiene tipo definido, registrar como conductor
                 userTypeService.registerAsDriver(user.getId());
                 openUserProfile("Driver", user);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registering as driver: " + ex.getMessage(),
+                "Error registrándose como conductor: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }

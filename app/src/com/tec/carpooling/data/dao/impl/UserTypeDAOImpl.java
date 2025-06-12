@@ -5,16 +5,17 @@ import com.tec.carpooling.data.dao.UserTypeDAO;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
- * Implementación del DAO para operaciones de tipo de usuario
+ * Implementation of DAO for user type operations using MySQL stored procedures
  */
 public class UserTypeDAOImpl implements UserTypeDAO {
     
     @Override
     public void registerAsDriver(long userId) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("{call ADM.ADM_USER_TYPE_PKG.register_as_driver(?)}")) {
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.register_as_driver(?)}")) {
             
             stmt.setLong(1, userId);
             stmt.execute();
@@ -24,7 +25,7 @@ public class UserTypeDAOImpl implements UserTypeDAO {
     @Override
     public void registerAsPassenger(long userId) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("{call ADM.ADM_USER_TYPE_PKG.register_as_passenger(?)}")) {
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.register_as_passenger(?)}")) {
             
             stmt.setLong(1, userId);
             stmt.execute();
@@ -34,12 +35,14 @@ public class UserTypeDAOImpl implements UserTypeDAO {
     @Override
     public boolean isAdmin(long userId) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("{call ADM.ADM_USER_TYPE_PKG.is_admin(?, ?)}")) {
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.is_admin(?, ?)}")) {
             
             stmt.setLong(1, userId);
-            stmt.registerOutParameter(2, java.sql.Types.NUMERIC);
+            // Usar TINYINT en lugar de BOOLEAN para mejor compatibilidad con MySQL JDBC
+            stmt.registerOutParameter(2, Types.TINYINT);
             stmt.execute();
             
+            // MySQL BOOLEAN se mapea a TINYINT: 1 = true, 0 = false
             return stmt.getInt(2) == 1;
         }
     }
@@ -47,10 +50,10 @@ public class UserTypeDAOImpl implements UserTypeDAO {
     @Override
     public String getUserType(long userId) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("{call ADM.ADM_USER_TYPE_PKG.get_user_type(?, ?)}")) {
+             CallableStatement stmt = conn.prepareCall("{call carpooling_adm.get_user_type(?, ?)}")) {
             
             stmt.setLong(1, userId);
-            stmt.registerOutParameter(2, java.sql.Types.VARCHAR);
+            stmt.registerOutParameter(2, Types.VARCHAR);
             stmt.execute();
             
             return stmt.getString(2);

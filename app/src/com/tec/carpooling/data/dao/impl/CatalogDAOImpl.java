@@ -14,37 +14,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import oracle.jdbc.OracleTypes;
 
 /**
  * Implementation of the CatalogDAO interface.
- * Handles database operations for catalog data using Oracle stored procedures.
+ * Handles database operations for catalog data using MySQL stored procedures.
  */
 public class CatalogDAOImpl implements CatalogDAO {
     
-    private static final String GET_ALL_GENDERS = "{? = call ADM.ADM_CATALOG_MGMT_PKG.find_all_genders_cursor}";
-    private static final String GET_ALL_INSTITUTIONS = "{? = call ADM.ADM_CATALOG_MGMT_PKG.find_all_institutions_cursor}";
-    private static final String GET_ALL_ID_TYPES = "{? = call ADM.ADM_CATALOG_MGMT_PKG.find_all_id_types_cursor}";
-    private static final String GET_ALL_PHONE_TYPES = "{? = call ADM.ADM_CATALOG_MGMT_PKG.find_all_phone_types_cursor}";
-    private static final String GET_DOMAINS_BY_INSTITUTION = "{? = call ADM.ADM_CATALOG_MGMT_PKG.find_domains_by_inst_cursor(?)}";
+    // MySQL stored procedures for catalog operations
+    private static final String GET_ALL_GENDERS = "{call carpooling_adm.list_genders()}";
+    private static final String GET_ALL_INSTITUTIONS = "{call carpooling_adm.find_all_institutions()}";
+    private static final String GET_ALL_ID_TYPES = "{call carpooling_adm.list_type_identifications()}";
+    private static final String GET_ALL_PHONE_TYPES = "{call carpooling_adm.list_type_phones()}";
+    private static final String GET_DOMAINS_BY_INSTITUTION = "{call carpooling_adm.find_domains_by_institution(?)}";
     
     @Override
     public List<Gender> getAllGenders() throws SQLException {
         List<Gender> genders = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(GET_ALL_GENDERS)) {
+             CallableStatement stmt = conn.prepareCall(GET_ALL_GENDERS);
+             ResultSet rs = stmt.executeQuery()) {
             
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
-            
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                while (rs.next()) {
-                    Gender gender = new Gender(
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    );
-                    genders.add(gender);
-                }
+            while (rs.next()) {
+                Gender gender = new Gender(
+                    rs.getLong("id"),
+                    rs.getString("name")
+                );
+                genders.add(gender);
             }
         }
         return genders;
@@ -54,19 +50,15 @@ public class CatalogDAOImpl implements CatalogDAO {
     public List<Institution> getAllInstitutions() throws SQLException {
         List<Institution> institutions = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(GET_ALL_INSTITUTIONS)) {
+             CallableStatement stmt = conn.prepareCall(GET_ALL_INSTITUTIONS);
+             ResultSet rs = stmt.executeQuery()) {
             
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
-            
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                while (rs.next()) {
-                    Institution institution = new Institution(
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    );
-                    institutions.add(institution);
-                }
+            while (rs.next()) {
+                Institution institution = new Institution(
+                    rs.getLong("id"),
+                    rs.getString("name")
+                );
+                institutions.add(institution);
             }
         }
         return institutions;
@@ -76,19 +68,15 @@ public class CatalogDAOImpl implements CatalogDAO {
     public List<IdType> getAllIdTypes() throws SQLException {
         List<IdType> idTypes = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(GET_ALL_ID_TYPES)) {
+             CallableStatement stmt = conn.prepareCall(GET_ALL_ID_TYPES);
+             ResultSet rs = stmt.executeQuery()) {
             
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
-            
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                while (rs.next()) {
-                    IdType idType = new IdType(
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    );
-                    idTypes.add(idType);
-                }
+            while (rs.next()) {
+                IdType idType = new IdType(
+                    rs.getLong("id"),
+                    rs.getString("name")
+                );
+                idTypes.add(idType);
             }
         }
         return idTypes;
@@ -98,19 +86,15 @@ public class CatalogDAOImpl implements CatalogDAO {
     public List<PhoneType> getAllPhoneTypes() throws SQLException {
         List<PhoneType> phoneTypes = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(GET_ALL_PHONE_TYPES)) {
+             CallableStatement stmt = conn.prepareCall(GET_ALL_PHONE_TYPES);
+             ResultSet rs = stmt.executeQuery()) {
             
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.execute();
-            
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                while (rs.next()) {
-                    PhoneType phoneType = new PhoneType(
-                        rs.getLong("id"),
-                        rs.getString("name")
-                    );
-                    phoneTypes.add(phoneType);
-                }
+            while (rs.next()) {
+                PhoneType phoneType = new PhoneType(
+                    rs.getLong("id"),
+                    rs.getString("name")
+                );
+                phoneTypes.add(phoneType);
             }
         }
         return phoneTypes;
@@ -122,11 +106,8 @@ public class CatalogDAOImpl implements CatalogDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(GET_DOMAINS_BY_INSTITUTION)) {
             
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.setLong(2, institutionId);
-            stmt.execute();
-            
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+            stmt.setLong(1, institutionId);
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Domain domain = new Domain(
                         rs.getLong("id"),

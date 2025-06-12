@@ -15,6 +15,10 @@ import java.sql.SQLException;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import com.tec.carpooling.business.service.CatalogService;
 import com.tec.carpooling.business.service.impl.CatalogServiceImpl;
@@ -39,6 +43,7 @@ public class UserSignUp extends javax.swing.JFrame {
     
     private final CatalogService catalogService;
     private final UserRegistrationService userRegistrationService;
+    private byte[] selectedPhotoData;
 
     /**
      * Creates new form UserSignUp
@@ -50,6 +55,7 @@ public class UserSignUp extends javax.swing.JFrame {
         userRegistrationService = new UserRegistrationServiceImpl();
         setupWindow();
         loadCatalogs();
+        setupPhotoButton();
         
         textNumber.addKeyListener(new KeyAdapter() {
             @Override
@@ -96,7 +102,7 @@ public class UserSignUp extends javax.swing.JFrame {
 
                 Passengers:
                 - Be on time and courteous.
-                - Respect the driver’s vehicle and rules.
+                - Respect the driver's vehicle and rules.
 
                 4. Trip Scheduling and Booking
                 - Trips must include accurate details (time, location, price, etc).
@@ -967,7 +973,8 @@ public class UserSignUp extends javax.swing.JFrame {
                 selectedInstitution.getId(),
                 selectedDomain.getId(),
                 textUsername.getText().trim(),
-                new String(textPassword.getPassword()).trim()
+                new String(textPassword.getPassword()).trim(),
+                selectedPhotoData // Incluir datos de la foto
             );
 
             if (success) {
@@ -1207,5 +1214,29 @@ public class UserSignUp extends javax.swing.JFrame {
                 TITLE_ERROR,
                 JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void setupPhotoButton() {
+        buttonPhoto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Select Photo");
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png"));
+                int result = fileChooser.showOpenDialog(UserSignUp.this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    try {
+                        selectedPhotoData = Files.readAllBytes(selectedFile.toPath());
+                        // Handle the selected photo data
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(UserSignUp.this,
+                            "Error reading the selected photo: " + ex.getMessage(),
+                            "Photo Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
     }
 }
