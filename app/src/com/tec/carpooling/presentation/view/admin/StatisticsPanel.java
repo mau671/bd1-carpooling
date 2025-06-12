@@ -32,6 +32,11 @@ public class StatisticsPanel extends javax.swing.JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error DB: " + e.getMessage());
         }
+
+        // Crear gráfico inicial vacío para que el layout reserve espacio
+        DefaultCategoryDataset emptyDs = new DefaultCategoryDataset();
+        JFreeChart emptyChart = ChartFactory.createBarChart("Statistics", "", "", emptyDs);
+        chartContainer.add(new ChartPanel(emptyChart), BorderLayout.CENTER);
     }
 
     private void initComponents() {
@@ -120,6 +125,9 @@ public class StatisticsPanel extends javax.swing.JPanel {
     private void updateChart(JFreeChart chart) {
         chartContainer.removeAll();
         chartContainer.add(new ChartPanel(chart), BorderLayout.CENTER);
-        chartContainer.validate();
+        chartContainer.revalidate();
+        chartContainer.repaint();
+        this.revalidate();
+        this.repaint();
     }
 } 
