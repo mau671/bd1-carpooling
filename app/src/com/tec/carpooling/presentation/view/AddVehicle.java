@@ -186,6 +186,11 @@ public class AddVehicle extends javax.swing.JFrame {
         panelCapacity.setPreferredSize(new java.awt.Dimension(201, 60));
         panelCapacity.setLayout(new java.awt.GridBagLayout());
 
+        boxCapacity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boxCapacityActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -273,6 +278,10 @@ public class AddVehicle extends javax.swing.JFrame {
     private void textPlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPlateActionPerformed
 
     }//GEN-LAST:event_textPlateActionPerformed
+
+    private void boxCapacityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxCapacityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boxCapacityActionPerformed
 
     /**
      * @param args the command line arguments
