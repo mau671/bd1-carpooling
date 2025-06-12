@@ -46,6 +46,7 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenuItemLogs = new javax.swing.JMenuItem();
         jMenuItemStadistics = new javax.swing.JMenuItem();
         jMenuItemQuerys = new javax.swing.JMenuItem();
+        jMenuItemJobs = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -174,6 +175,14 @@ public class AdminFrame extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItemQuerys);
 
+        jMenuItemJobs.setText("Jobs");
+        jMenuItemJobs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemJobsActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItemJobs);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -245,6 +254,10 @@ public class AdminFrame extends javax.swing.JFrame {
     private void jMenuItemStadisticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemStadisticsActionPerformed
         showPanel(new StatisticsPanel());
     }//GEN-LAST:event_jMenuItemStadisticsActionPerformed
+
+    private void jMenuItemJobsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemJobsActionPerformed
+        showPanel(new ReportsPanel());
+    }//GEN-LAST:event_jMenuItemJobsActionPerformed
     
     
 
@@ -310,6 +323,7 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItemJobs;
     private javax.swing.JMenuItem jMenuItemLogs;
     private javax.swing.JMenuItem jMenuItemManageCurrencys;
     private javax.swing.JMenuItem jMenuItemManageGenres;
