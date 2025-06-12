@@ -267,8 +267,8 @@ public class UserLogIn extends javax.swing.JFrame {
             textPassword.getPassword().length == 0) {
             
             JOptionPane.showMessageDialog(this,
-                "Por favor ingrese su nombre de usuario y contraseña.",
-                "Campos Incompletos",
+                "Please fill out your username and password.",
+                "Places have not been filled in.",
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -282,8 +282,8 @@ public class UserLogIn extends javax.swing.JFrame {
 
             if (user != null) {
                 JOptionPane.showMessageDialog(this,
-                    "Inicio de sesión exitoso.",
-                    "Bienvenido",
+                    "You have successfully logged in!",
+                    "Welcome",
                     JOptionPane.INFORMATION_MESSAGE);
                 
                 // Redirigir a la ventana de selección de tipo de usuario
@@ -295,18 +295,18 @@ public class UserLogIn extends javax.swing.JFrame {
                 });
             } else {
                 JOptionPane.showMessageDialog(this,
-                    "Nombre de usuario o contraseña incorrectos.",
-                    "Error de Autenticación",
+                    "Username or password are incorrect",
+                    "Authentitication Error",
                     JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error de base de datos: " + ex.getMessage(),
-                "Error de Conexión",
+                "Database Error: " + ex.getMessage(),
+                "Connection Error",
                 JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                "Error inesperado: " + ex.getMessage(),
+                "Unexpected Error: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }

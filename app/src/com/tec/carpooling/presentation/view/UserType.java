@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import com.tec.carpooling.business.service.UserTypeService;
 import com.tec.carpooling.business.service.impl.UserTypeServiceImpl;
 import com.tec.carpooling.domain.entity.User;
+import com.tec.carpooling.presentation.view.admin.AdminFrame;
 import java.sql.SQLException;
 
 /**
@@ -32,10 +33,11 @@ public class UserType extends javax.swing.JFrame {
         this.userTypeService = new UserTypeServiceImpl();
         this.user = user;
         
+        if (checkAdminStatusAndRedirectIfNeeded()) return;
+        
         initComponents();
         setupUI();
         setupEventListeners();
-        checkAdminStatus();
     }
 
     private void setupUI() {
@@ -54,35 +56,30 @@ public class UserType extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
-    private void checkAdminStatus() {
+    private boolean checkAdminStatusAndRedirectIfNeeded() {
         try {
             boolean isAdmin = userTypeService.isAdmin(user.getId());
             if (isAdmin) {
-                System.out.println("🔒 ADMIN ACCESS: Usuario " + user.getUsername() + " tiene privilegios de administrador");
-                
-                // Si es administrador, redirigir directamente al perfil de administrador
+                System.out.println("🔒 ADMIN ACCESS: User " + user.getUsername() + " tiene privilegios de administrador");
+
                 javax.swing.SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(this,
-                        "Bienvenido, Administrador " + user.getUsername() + "!\n" +
-                        "Redirigiendo al panel de administración...",
-                        "Acceso de Administrador",
+                    JOptionPane.showMessageDialog(null,
+                        "Welcome, Admin " + user.getUsername() + "!\nRedirecting to admin panel...",
+                        "Admin Access",
                         JOptionPane.INFORMATION_MESSAGE);
-                    
-                    UserProfile adminProfile = new UserProfile("Admin", user);
-                    adminProfile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    adminProfile.setVisible(true);
-                    this.dispose();
+
+                    AdminFrame adminFrame = new AdminFrame();
+                    adminFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    adminFrame.setVisible(true);
                 });
-                
-                // Ocultar los paneles de selección ya que el admin va directo al panel
-                panelPassenger.setVisible(false);
-                panelDriver.setVisible(false);
-            } else {
-                System.out.println("👤 USER ACCESS: Usuario " + user.getUsername() + " es un usuario regular");
+
+                return true; // ✅ prevent JFrame from showing this frame
             }
         } catch (SQLException ex) {
-            System.err.println("Error verificando estado de administrador: " + ex.getMessage());
+            System.err.println("Error verifying Admin state: " + ex.getMessage());
         }
+
+        return false; // not admin → show user/passenger menu
     }
 
     private void setupEventListeners() {
@@ -105,8 +102,8 @@ public class UserType extends javax.swing.JFrame {
             
             if ("ADMIN".equals(currentType)) {
                 JOptionPane.showMessageDialog(this,
-                    "Los administradores no pueden registrarse como pasajeros.",
-                    "Acceso Restringido",
+                    "Admins can't register as passengers.",
+                    "Restricted Access",
                     JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -114,8 +111,8 @@ public class UserType extends javax.swing.JFrame {
             if ("DRIVER".equals(currentType)) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Te gustaría registrarte como pasajero? Ya estás registrado como conductor.",
-                    "Registrarse como Pasajero",
+                    "Would you like to register as a passenger? You're already registered as a driver.",
+                    "Register as Passenger",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );
@@ -134,7 +131,7 @@ public class UserType extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registrándose como pasajero: " + ex.getMessage(),
+                "Error registering as passenger: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -146,8 +143,8 @@ public class UserType extends javax.swing.JFrame {
             
             if ("ADMIN".equals(currentType)) {
                 JOptionPane.showMessageDialog(this,
-                    "Los administradores no pueden registrarse como conductores.",
-                    "Acceso Restringido",
+                    "Admins can't register as drivers.",
+                    "Restricted Access",
                     JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -155,8 +152,8 @@ public class UserType extends javax.swing.JFrame {
             if ("PASSENGER".equals(currentType)) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Te gustaría registrarte como conductor? Ya estás registrado como pasajero.",
-                    "Registrarse como Conductor",
+                    "Would you like to register as a driver? You're already registered as a passenger.",
+                    "Register as Driver",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );
@@ -175,7 +172,7 @@ public class UserType extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registrándose como conductor: " + ex.getMessage(),
+                "Error registering as a driver: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
