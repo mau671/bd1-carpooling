@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class WaypointDAO {
 
     public void createWaypointWithDistrict(long routeId, long districtId, Connection conn) throws SQLException {
-        String sql = "{ call PU.PU_WAYPOINT_MGMT_PKG.create_waypoint_with_district(?, ?) }";
+        String sql = "{CALL create_waypoint_with_district(?, ?)}";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, routeId);
             stmt.setLong(2, districtId);
@@ -24,7 +24,7 @@ public class WaypointDAO {
     }
 
     public void createWaypointWithCoords(long routeId, double latitude, double longitude, Connection conn) throws SQLException {
-        String sql = "{ call PU.PU_WAYPOINT_MGMT_PKG.create_waypoint_with_coords(?, ?, ?) }";
+        String sql = "{CALL create_waypoint_with_coords(?, ?, ?)}";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, routeId);
             stmt.setDouble(2, latitude);
@@ -33,3 +33,4 @@ public class WaypointDAO {
         }
     }
 }
+

@@ -22,17 +22,20 @@ import java.sql.Date;
  */
 public class TripDAO {
     public long createTrip(long vehicleId, long routeId, BigDecimal price, Long currencyId, Connection conn) throws SQLException {
-        String sql = "{ call PU_TRIP_MGMT_PKG.create_trip(?, ?, ?, ?, ?) }";
+        String sql = "{CALL create_trip(?, ?, ?, ?, ?)}";
+
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, vehicleId);
             stmt.setLong(2, routeId);
             stmt.setBigDecimal(3, price);
+
             if (currencyId != null) {
                 stmt.setLong(4, currencyId);
             } else {
-                stmt.setNull(4, Types.NUMERIC);
+                stmt.setNull(4, Types.INTEGER);
             }
-            stmt.registerOutParameter(5, Types.NUMERIC); // OUT parameter for trip ID
+
+            stmt.registerOutParameter(5, Types.BIGINT); // trip ID (OUT)
             stmt.execute();
             return stmt.getLong(5);
         }
@@ -40,22 +43,19 @@ public class TripDAO {
 
     public List<TripDisplay> getTripsByDriver(long userId, Connection conn) throws SQLException {
         List<TripDisplay> trips = new ArrayList<>();
-        String sql = "{ ? = call PU_TRIP_MGMT_PKG.get_trips_by_driver(?) }";
+
+        String sql = "{CALL get_trips_by_driver(?)}";
 
         try (CallableStatement stmt = conn.prepareCall(sql)) {
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.setLong(2, userId);
-            stmt.execute();
+            stmt.setLong(1, userId);
 
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
-                int count = 0;
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    count++;
-                    Date date = rs.getDate(1);
-                    String start = rs.getString(2);
-                    String end = rs.getString(3);
-                    String plate = rs.getString(4);
-                    String status = rs.getString(5);
+                    Date date = rs.getDate("trip_date");
+                    String start = rs.getString("start_point");
+                    String end = rs.getString("destination_point");
+                    String plate = rs.getString("plate");
+                    String status = rs.getString("status");
 
                     trips.add(new TripDisplay(date, start, end, plate, status));
                 }
@@ -76,44 +76,48 @@ public class TripDAO {
             "    VEH.plate, " +
             "    MC.capacity_number AS max_capacity, " +
             "    CC.chosen_number, " +
-            "    P.first_name || ' ' || P.first_surname AS driver_name, " +
+            "    CONCAT(P.first_name, ' ', P.first_surname) AS driver_name, " +
             "    G.name AS gender, " +
-            "    TRUNC(MONTHS_BETWEEN(SYSDATE, P.date_of_birth) / 12) AS age, " +
+            "    TIMESTAMPDIFF(YEAR, P.date_of_birth, CURDATE()) AS age, " +
             "    S.name AS status, " +
             "    WP.latitude, " +
             "    WP.longitude, " +
-            "    P1.name || ', ' || C1.name || ', ' || D1.name AS start_point, " +
-            "    P2.name || ', ' || C2.name || ', ' || D2.name AS end_point, " +
+            "    CONCAT(P1.name, ', ', C1.name, ', ', D1.name) AS start_point, " +
+            "    CONCAT(P2.name, ', ', C2.name, ', ', D2.name) AS end_point, " +
             "    P.id AS person_id " +
-            "FROM PU.TRIP T " +
-            "JOIN PU.ROUTE R ON T.route_id = R.id " +
-            "JOIN PU.VEHICLEXROUTE VR ON VR.route_id = R.id " +
-            "JOIN PU.VEHICLE VEH ON VEH.id = VR.vehicle_id " +
-            "JOIN PU.MAXCAPACITYXVEHICLE MCV ON MCV.vehicle_id = VEH.id " +
-            "JOIN ADM.MAXCAPACITY MC ON MC.id = MCV.max_capacity_id " +
-            "JOIN PU.STATUSXTRIP SX ON SX.trip_id = T.id " +
-            "JOIN ADM.STATUS S ON S.id = SX.status_id " +
-            "LEFT JOIN ADM.CHOSENCAPACITY CC ON CC.vehicle_X_route_id = VR.id " +
-            "LEFT JOIN ADM.CURRENCY CUR ON CUR.id = T.id_currency " +
-            "JOIN PU.DRIVERXVEHICLE DV ON DV.vehicle_id = VEH.id " +
-            "JOIN PU.DRIVER D ON D.person_id = DV.driver_id " +
-            "JOIN ADM.PERSON P ON P.id = D.person_id " +
-            "JOIN ADM.GENDER G ON G.id = P.gender_id " +
-            "LEFT JOIN PU.WAYPOINT WP ON WP.route_id = R.id " +
+            "FROM carpooling_pu.TRIP T " +
+            "JOIN carpooling_pu.ROUTE R ON T.route_id = R.id " +
+            "JOIN carpooling_pu.VEHICLEXROUTE VR ON VR.route_id = R.id " +
+            "JOIN carpooling_pu.VEHICLE VEH ON VEH.id = VR.vehicle_id " +
+            "JOIN carpooling_pu.MAXCAPACITYXVEHICLE MCV ON MCV.vehicle_id = VEH.id " +
+            "JOIN carpooling_adm.MAXCAPACITY MC ON MC.id = MCV.max_capacity_id " +
+            "JOIN carpooling_pu.STATUSXTRIP SX ON SX.trip_id = T.id " +
+            "JOIN carpooling_adm.STATUS S ON S.id = SX.status_id " +
+            "LEFT JOIN carpooling_adm.CHOSENCAPACITY CC ON CC.vehicle_x_route_id = VR.id " +
+            "LEFT JOIN carpooling_adm.CURRENCY CUR ON CUR.id = T.id_currency " +
+            "JOIN carpooling_pu.DRIVERXVEHICLE DV ON DV.vehicle_id = VEH.id " +
+            "JOIN carpooling_pu.DRIVER D ON D.person_id = DV.driver_id " +
+            "JOIN carpooling_adm.PERSON P ON P.id = D.person_id " +
+            "JOIN carpooling_adm.GENDER G ON G.id = P.gender_id " +
+            "LEFT JOIN carpooling_pu.WAYPOINT WP ON WP.route_id = R.id " +
             "JOIN ( " +
             "    SELECT route_id, district_id FROM ( " +
-            "        SELECT route_id, district_id, ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id) rn FROM PU.WAYPOINT WHERE district_id IS NOT NULL) WHERE rn = 1 " +
+            "        SELECT route_id, district_id, ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id) AS rn " +
+            "        FROM carpooling_pu.WAYPOINT WHERE district_id IS NOT NULL " +
+            "    ) AS t WHERE rn = 1 " +
             ") WP1 ON WP1.route_id = R.id " +
-            "JOIN ADM.DISTRICT D1 ON D1.id = WP1.district_id " +
-            "JOIN ADM.CANTON C1 ON C1.id = D1.canton_id " +
-            "JOIN ADM.PROVINCE P1 ON P1.id = C1.province_id " +
+            "JOIN carpooling_adm.DISTRICT D1 ON D1.id = WP1.district_id " +
+            "JOIN carpooling_adm.CANTON C1 ON C1.id = D1.canton_id " +
+            "JOIN carpooling_adm.PROVINCE P1 ON P1.id = C1.province_id " +
             "JOIN ( " +
             "    SELECT route_id, district_id FROM ( " +
-            "        SELECT route_id, district_id, ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id DESC) rn FROM PU.WAYPOINT WHERE district_id IS NOT NULL) WHERE rn = 1 " +
+            "        SELECT route_id, district_id, ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id DESC) AS rn " +
+            "        FROM carpooling_pu.WAYPOINT WHERE district_id IS NOT NULL " +
+            "    ) AS t WHERE rn = 1 " +
             ") WP2 ON WP2.route_id = R.id " +
-            "JOIN ADM.DISTRICT D2 ON D2.id = WP2.district_id " +
-            "JOIN ADM.CANTON C2 ON C2.id = D2.canton_id " +
-            "JOIN ADM.PROVINCE P2 ON P2.id = C2.province_id " +
+            "JOIN carpooling_adm.DISTRICT D2 ON D2.id = WP2.district_id " +
+            "JOIN carpooling_adm.CANTON C2 ON C2.id = D2.canton_id " +
+            "JOIN carpooling_adm.PROVINCE P2 ON P2.id = C2.province_id " +
             "WHERE T.id = ?";
 
         TripDetails trip = null;
@@ -156,9 +160,9 @@ public class TripDAO {
 
                     // Load phone numbers for the driver
                     List<String> phoneNumbers = new ArrayList<>();
-                    String phoneSQL = "SELECT PH.phone_number FROM ADM.PERSON P " +
-                                      "JOIN PU.PHONE_PERSON PP ON PP.person_id = P.id " +
-                                      "JOIN PU.PHONE PH ON PH.id = PP.phone_id " +
+                    String phoneSQL = "SELECT PH.phone_number FROM carpooling_adm.PERSON P " +
+                                      "JOIN carpooling_pu.PHONE_PERSON PP ON PP.person_id = P.id " +
+                                      "JOIN carpooling_pu.PHONE PH ON PH.id = PP.phone_id " +
                                       "WHERE P.id = ?";
                     try (PreparedStatement phoneStmt = conn.prepareStatement(phoneSQL)) {
                         phoneStmt.setLong(1, personId);

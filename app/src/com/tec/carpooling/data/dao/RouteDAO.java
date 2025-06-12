@@ -20,12 +20,13 @@ import java.sql.Date;
  */
 public class RouteDAO {
     public long createRoute(Timestamp startTime, Timestamp endTime, Date programmingDate, Connection conn) throws SQLException {
-        String sql = "{ call PU_ROUTE_MGMT_PKG.create_route(?, ?, ?, ?) }";
+        String sql = "{CALL create_route(?, ?, ?, ?)}";
+
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setTimestamp(1, startTime);
             stmt.setTimestamp(2, endTime);
             stmt.setDate(3, programmingDate);
-            stmt.registerOutParameter(4, Types.BIGINT);
+            stmt.registerOutParameter(4, Types.BIGINT); // OUT: o_route_id
             stmt.execute();
             return stmt.getLong(4);
         }

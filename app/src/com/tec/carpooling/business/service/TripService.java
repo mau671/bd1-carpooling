@@ -64,12 +64,14 @@ public class TripService {
 
             // 4. Create Trip
             long tripId = tripDAO.createTrip(vehicleId, routeId, pricePerPassenger, currencyId, conn);
-            String sql = "{ call PU_TRIP_STATUS_PKG.assign_initial_status(?) }";
+
+            // ✅ MySQL version of initial status assignment
+            String sql = "{CALL assign_initial_status(?)}";
             try (CallableStatement stmt = conn.prepareCall(sql)) {
                 stmt.setLong(1, tripId);
                 stmt.execute();
             }
-            
+
             // 5. Add Waypoints: Start and End Districts
             waypointDAO.createWaypointWithDistrict(routeId, startDistrictId, conn);
             waypointDAO.createWaypointWithDistrict(routeId, endDistrictId, conn);
@@ -87,4 +89,4 @@ public class TripService {
             conn.setAutoCommit(true);
         }
     }
-} 
+}

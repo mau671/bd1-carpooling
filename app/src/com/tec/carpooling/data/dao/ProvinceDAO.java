@@ -18,16 +18,13 @@ import oracle.jdbc.OracleTypes;
 public class ProvinceDAO {
     public List<Province> getProvincesByCountry(long countryId) throws SQLException {
         List<Province> provinces = new ArrayList<>();
-        String sql = "{ ? = call ADM.ADM_PROVINCE_PKG.get_provinces_by_country(?) }";
+        String sql = "{CALL carpooling_adm.get_provinces_by_country(?)}";
 
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(sql)) {
 
-            stmt.registerOutParameter(1, OracleTypes.CURSOR);
-            stmt.setLong(2, countryId);
-            stmt.execute();
-
-            try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+            stmt.setLong(1, countryId);
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     long id = rs.getLong("id");
                     String name = rs.getString("name");
@@ -35,6 +32,7 @@ public class ProvinceDAO {
                 }
             }
         }
+
         return provinces;
     }
 }

@@ -16,12 +16,17 @@ import oracle.jdbc.OracleTypes;
  * @author hidal
  */
 public class ChosenCapacityDAO {
-    public void saveChosenCapacity(long vehicleRouteId, int chosenNumber, Connection conn) throws SQLException {
-        String sql = "{ call ADM.ADM_CHOSENCAPACITY_PKG.create_chosen_capacity(?, ?) }";
+    public long saveChosenCapacity(long vehicleRouteId, int chosenNumber, Connection conn) throws SQLException {
+        String sql = "{CALL carpooling_adm.create_chosen_capacity(?, ?, ?)}";
+
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, vehicleRouteId);
             stmt.setInt(2, chosenNumber);
+            stmt.registerOutParameter(3, Types.BIGINT); // or Types.INTEGER
+
             stmt.execute();
+
+            return stmt.getLong(3); // return new ID
         }
     }
 }
