@@ -127,36 +127,40 @@ public class ViewTrip extends javax.swing.JFrame {
         String plate = (String) tableTrips.getValueAt(row, 3);
         Date tripDate = (Date) tableTrips.getValueAt(row, 0);
 
+        String findTripIdSQL =
+            "SELECT T.id " +
+            "FROM carpooling_pu.TRIP T " +
+            "JOIN carpooling_pu.ROUTE R ON T.route_id = R.id " +
+            "JOIN carpooling_pu.VEHICLEXROUTE VR ON VR.route_id = R.id " +
+            "JOIN carpooling_pu.VEHICLE V ON V.id = VR.vehicle_id " +
+            "WHERE V.plate = ? AND R.programming_date = ?";
+
         try (Connection conn = DatabaseConnection.getConnection()) {
-            // Get trip ID based on plate and date
-            String findTripIdSQL = "SELECT T.id FROM PU.TRIP T " +
-                       "JOIN PU.ROUTE R ON T.route_id = R.id " +
-                       "JOIN PU.VEHICLEXROUTE VR ON VR.route_id = R.id " +
-                       "JOIN PU.VEHICLE VEH ON VEH.id = VR.vehicle_id " +
-                       "WHERE VEH.plate = ? AND R.programming_date = ?";
+            // 1) Look up the trip ID
+            long tripId;
             try (PreparedStatement stmt = conn.prepareStatement(findTripIdSQL)) {
                 stmt.setString(1, plate);
                 stmt.setDate(2, new java.sql.Date(tripDate.getTime()));
                 try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        long tripId = rs.getLong(1);
-
-                        // Call the cancel_trip procedure
-                        try (CallableStatement callStmt = conn.prepareCall("{ call PU_TRIP_STATUS_PKG.cancel_trip(?) }")) {
-                            callStmt.setLong(1, tripId);
-                            callStmt.execute();
-                            JOptionPane.showMessageDialog(this, "Trip cancelled successfully.");
-                        }
-
-                        // Refresh table
-                        TripDAO dao = new TripDAO();
-                        List<TripDisplay> trips = dao.getTripsByDriver(user.getPersonId(), conn);
-                        populateTripTable(trips);
-                    } else {
+                    if (!rs.next()) {
                         JOptionPane.showMessageDialog(this, "Trip ID not found for selected row.");
+                        return;
                     }
+                    tripId = rs.getLong("id");
                 }
             }
+
+            // 2) Call the MySQL cancel_trip procedure
+            try (CallableStatement callStmt = conn.prepareCall("{ CALL carpooling_pu.cancel_trip(?) }")) {
+                callStmt.setInt(1, (int) tripId);
+                callStmt.execute();
+                JOptionPane.showMessageDialog(this, "Trip cancelled successfully.");
+            }
+
+            // 3) Refresh your UI table
+            TripDAO dao = new TripDAO();
+            List<TripDisplay> trips = dao.getTripsByDriver(user.getPersonId(), conn);
+            populateTripTable(trips);
 
         } catch (SQLException ex) {
             ex.printStackTrace();
