@@ -98,9 +98,11 @@ public class UserType extends javax.swing.JFrame {
 
     private void handlePassengerSelection() {
         try {
-            String currentType = userTypeService.getUserType(user.getId());
+            boolean isPassenger = userTypeService.isPassenger(user.getId());
+            boolean isDriver = userTypeService.isDriver(user.getId());
+            boolean isAdmin = userTypeService.isAdmin(user.getId());
             
-            if ("ADMIN".equals(currentType)) {
+            if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
                     "Admins can't register as passengers.",
                     "Restricted Access",
@@ -108,7 +110,10 @@ public class UserType extends javax.swing.JFrame {
                 return;
             }
             
-            if ("DRIVER".equals(currentType)) {
+            if (isPassenger) {
+                // Ya es pasajero, ir directamente al perfil
+                openUserProfile("Passenger", user);
+            } else if (isDriver) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
                     "Would you like to register as a passenger? You're already registered as a driver.",
@@ -121,9 +126,6 @@ public class UserType extends javax.swing.JFrame {
                     userTypeService.registerAsPassenger(user.getId());
                     openUserProfile("Passenger", user);
                 }
-            } else if ("PASSENGER".equals(currentType)) {
-                // Ya es pasajero, ir directamente al perfil
-                openUserProfile("Passenger", user);
             } else {
                 // No tiene tipo definido, registrar como pasajero
                 userTypeService.registerAsPassenger(user.getId());
@@ -139,9 +141,11 @@ public class UserType extends javax.swing.JFrame {
 
     private void handleDriverSelection() {
         try {
-            String currentType = userTypeService.getUserType(user.getId());
+            boolean isPassenger = userTypeService.isPassenger(user.getId());
+            boolean isDriver = userTypeService.isDriver(user.getId());
+            boolean isAdmin = userTypeService.isAdmin(user.getId());
             
-            if ("ADMIN".equals(currentType)) {
+            if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
                     "Admins can't register as drivers.",
                     "Restricted Access",
@@ -149,7 +153,10 @@ public class UserType extends javax.swing.JFrame {
                 return;
             }
             
-            if ("PASSENGER".equals(currentType)) {
+            if (isDriver) {
+                // Ya es conductor, ir directamente al perfil
+                openUserProfile("Driver", user);
+            } else if (isPassenger) {
                 int response = JOptionPane.showConfirmDialog(
                     this,
                     "Would you like to register as a driver? You're already registered as a passenger.",
@@ -162,9 +169,6 @@ public class UserType extends javax.swing.JFrame {
                     userTypeService.registerAsDriver(user.getId());
                     openUserProfile("Driver", user);
                 }
-            } else if ("DRIVER".equals(currentType)) {
-                // Ya es conductor, ir directamente al perfil
-                openUserProfile("Driver", user);
             } else {
                 // No tiene tipo definido, registrar como conductor
                 userTypeService.registerAsDriver(user.getId());

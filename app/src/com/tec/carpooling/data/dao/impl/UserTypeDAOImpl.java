@@ -6,6 +6,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * Implementation of DAO for user type operations using MySQL stored procedures
@@ -57,6 +59,28 @@ public class UserTypeDAOImpl implements UserTypeDAO {
             stmt.execute();
             
             return stmt.getString(2);
+        }
+    }
+    
+    @Override
+    public boolean isPassenger(long userId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM PASSENGER WHERE person_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+        }
+    }
+
+    @Override
+    public boolean isDriver(long userId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM DRIVER WHERE person_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
         }
     }
 } 

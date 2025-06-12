@@ -39,4 +39,7 @@ public interface UserTypeService {
      * @throws SQLException Si ocurre un error de base de datos
      */
     String getUserType(long userId) throws SQLException;
+    
+    boolean isPassenger(long userId) throws SQLException;
+    boolean isDriver(long userId) throws SQLException;
 } 
