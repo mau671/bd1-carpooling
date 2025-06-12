@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import oracle.jdbc.OracleTypes;
 
 public class Parameters extends javax.swing.JPanel {
     private DefaultTableModel parameterTableModel;
@@ -45,21 +44,17 @@ public class Parameters extends javax.swing.JPanel {
     }
 
     private void loadParameters() {
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.LIST_PARAMETERS(?) }")) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            CallableStatement cstmt = conn.prepareCall("{ call carpooling_adm.get_all_parameters() }");
+            ResultSet rs = cstmt.executeQuery();
             
-            cstmt.registerOutParameter(1, OracleTypes.CURSOR);
-            cstmt.execute();
-            
-            try (ResultSet rs = (ResultSet) cstmt.getObject(1)) {
-                parameterTableModel.setRowCount(0);
-                while (rs.next()) {
-                    parameterTableModel.addRow(new Object[]{
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        rs.getString("value")
-                    });
-                }
+            parameterTableModel.setRowCount(0);
+            while (rs.next()) {
+                parameterTableModel.addRow(new Object[]{
+                    rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getString("value")
+                });
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
@@ -207,11 +202,12 @@ public class Parameters extends javax.swing.JPanel {
             return;
         }
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.INSERT_PARAMETER(?, ?) }")) {
-            
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            CallableStatement cstmt = conn.prepareCall("{ call carpooling_adm.create_parameter(?, ?, ?) }");
+
             cstmt.setString(1, name);
             cstmt.setString(2, value);
+            cstmt.registerOutParameter(3, java.sql.Types.BIGINT);
             cstmt.execute();
             
             JOptionPane.showMessageDialog(this, "Parámetro registrado exitosamente.");
@@ -244,8 +240,8 @@ public class Parameters extends javax.swing.JPanel {
             return;
         }
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement cstmt = conn.prepareCall("{ call ADM.UPDATE_PARAMETER(?, ?, ?) }")) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            CallableStatement cstmt = conn.prepareCall("{ call carpooling_adm.update_parameter(?, ?, ?) }");
             
             cstmt.setLong(1, selectedParameterId);
             cstmt.setString(2, name);
@@ -276,8 +272,8 @@ public class Parameters extends javax.swing.JPanel {
                 JOptionPane.WARNING_MESSAGE);
 
         if (confirmation == JOptionPane.YES_OPTION) {
-            try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement cstmt = conn.prepareCall("{ call ADM.DELETE_PARAMETER(?) }")) {
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                CallableStatement cstmt = conn.prepareCall("{ call carpooling_adm.delete_parameter(?) }");
                 
                 cstmt.setLong(1, selectedParameterId);
                 cstmt.execute();

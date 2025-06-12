@@ -151,6 +151,11 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenu2.add(jMenuItemParameters);
 
         jMenuItemLogs.setText("Logs");
+        jMenuItemLogs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLogsActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemLogs);
 
         jMenuItemStadistics.setText("Stadistics");
@@ -188,7 +193,7 @@ public class AdminFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemManagementInstitutionsActionPerformed
 
     private void jMenuItemQuerysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuerysActionPerformed
-        NewQueries newQueryPanel = new NewQueries();
+        Queries newQueryPanel = new Queries();
         showPanel(newQueryPanel);
     }//GEN-LAST:event_jMenuItemQuerysActionPerformed
 
@@ -227,6 +232,10 @@ public class AdminFrame extends javax.swing.JFrame {
     private void jMenuItemManagePaymentMethodsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagePaymentMethodsActionPerformed
         showPanel(new PaymentMethods());
     }//GEN-LAST:event_jMenuItemManagePaymentMethodsActionPerformed
+
+    private void jMenuItemLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogsActionPerformed
+        showPanel(new Logs());
+    }//GEN-LAST:event_jMenuItemLogsActionPerformed
     
     
 
