@@ -159,6 +159,11 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenu2.add(jMenuItemLogs);
 
         jMenuItemStadistics.setText("Stadistics");
+        jMenuItemStadistics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemStadisticsActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemStadistics);
 
         jMenuItemQuerys.setText("Querys");
@@ -236,6 +241,10 @@ public class AdminFrame extends javax.swing.JFrame {
     private void jMenuItemLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogsActionPerformed
         showPanel(new Logs());
     }//GEN-LAST:event_jMenuItemLogsActionPerformed
+
+    private void jMenuItemStadisticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemStadisticsActionPerformed
+        showPanel(new StatisticsPanel());
+    }//GEN-LAST:event_jMenuItemStadisticsActionPerformed
     
     
 
