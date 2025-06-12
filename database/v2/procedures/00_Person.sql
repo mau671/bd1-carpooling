@@ -963,6 +963,149 @@ BEGIN
     COMMIT;
 END$$
 
+-- ========================================
+-- SECTION 7: PERSON RELATIONSHIP DATA
+-- ========================================
+
+-- ========================================
+-- PROCEDURE: get_person_emails
+-- Purpose: Gets all email addresses for a person with their domains
+-- ========================================
+DROP PROCEDURE IF EXISTS get_person_emails$$
+
+CREATE PROCEDURE get_person_emails(
+    IN p_person_id INT
+)
+BEGIN
+    SELECT 
+        e.id,
+        e.name as email_name,
+        d.name as domain_name,
+        CONCAT(e.name, '@', d.name) as full_email,
+        e.creation_date,
+        e.creator,
+        e.modification_date,
+        e.modifier
+    FROM carpooling_pu.EMAIL e
+    INNER JOIN carpooling_adm.DOMAIN d ON e.domain_id = d.id
+    WHERE e.person_id = p_person_id
+    ORDER BY e.creation_date DESC;
+END$$
+
+-- ========================================
+-- PROCEDURE: get_person_phones
+-- Purpose: Gets all phone numbers for a person with their types
+-- ========================================
+DROP PROCEDURE IF EXISTS get_person_phones$$
+
+CREATE PROCEDURE get_person_phones(
+    IN p_person_id INT
+)
+BEGIN
+    SELECT 
+        p.id,
+        p.phone_number,
+        tp.id as type_phone_id,
+        tp.name as type_phone_name,
+        p.creation_date,
+        p.creator,
+        p.modification_date,
+        p.modifier
+    FROM carpooling_pu.PHONE p
+    INNER JOIN carpooling_adm.TYPE_PHONE tp ON p.type_phone_id = tp.id
+    INNER JOIN carpooling_pu.PHONE_PERSON pp ON p.id = pp.phone_id
+    WHERE pp.person_id = p_person_id
+    ORDER BY p.creation_date DESC;
+END$$
+
+-- ========================================
+-- PROCEDURE: get_person_institutions
+-- Purpose: Gets all institutions associated with a person
+-- ========================================
+DROP PROCEDURE IF EXISTS get_person_institutions$$
+
+CREATE PROCEDURE get_person_institutions(
+    IN p_person_id INT
+)
+BEGIN
+    SELECT 
+        i.id,
+        i.name,
+        i.creation_date,
+        i.creator,
+        i.modification_date,
+        i.modifier,
+        ip.creation_date as association_date
+    FROM carpooling_adm.INSTITUTION i
+    INNER JOIN carpooling_pu.INSTITUTION_PERSON ip ON i.id = ip.institution_id
+    WHERE ip.person_id = p_person_id
+    ORDER BY ip.creation_date DESC;
+END$$
+
+-- ========================================
+-- PROCEDURE: get_person_complete_profile
+-- Purpose: Gets complete profile information for a person including related data
+-- ========================================
+DROP PROCEDURE IF EXISTS get_person_complete_profile$$
+
+CREATE PROCEDURE get_person_complete_profile(
+    IN p_person_id INT
+)
+BEGIN
+    -- First result set: Basic person information
+    SELECT 
+        p.id,
+        p.first_name,
+        p.second_name,
+        p.first_surname,
+        p.second_surname,
+        p.identification_number,
+        p.date_of_birth,
+        p.creation_date,
+        p.creator,
+        p.modification_date,
+        p.modifier,
+        g.id as gender_id,
+        g.name as gender_name,
+        ti.id as type_identification_id,
+        ti.name as type_identification_name
+    FROM PERSON p
+    INNER JOIN GENDER g ON p.gender_id = g.id
+    INNER JOIN TYPE_IDENTIFICATION ti ON p.type_identification_id = ti.id
+    WHERE p.id = p_person_id;
+    
+    -- Second result set: Emails
+    SELECT 
+        e.id,
+        e.name as email_name,
+        d.name as domain_name,
+        CONCAT(e.name, '@', d.name) as full_email
+    FROM carpooling_pu.EMAIL e
+    INNER JOIN carpooling_adm.DOMAIN d ON e.domain_id = d.id
+    WHERE e.person_id = p_person_id
+    ORDER BY e.creation_date DESC;
+    
+    -- Third result set: Phones
+    SELECT 
+        p.id,
+        p.phone_number,
+        tp.name as type_phone_name
+    FROM carpooling_pu.PHONE p
+    INNER JOIN carpooling_adm.TYPE_PHONE tp ON p.type_phone_id = tp.id
+    INNER JOIN carpooling_pu.PHONE_PERSON pp ON p.id = pp.phone_id
+    WHERE pp.person_id = p_person_id
+    ORDER BY p.creation_date DESC;
+    
+    -- Fourth result set: Institutions
+    SELECT 
+        i.id,
+        i.name
+    FROM carpooling_adm.INSTITUTION i
+    INNER JOIN carpooling_pu.INSTITUTION_PERSON ip ON i.id = ip.institution_id
+    WHERE ip.person_id = p_person_id
+    ORDER BY ip.creation_date DESC;
+END$$
+
 -- Reset delimiter
 DELIMITER ;
 
@@ -1047,6 +1190,22 @@ CALL check_username_available('newusername', @available);
 
 -- Delete person completely (only if no dependencies)
 CALL delete_person_complete(@person_id);
+
+-- ========================================
+-- SECTION 6: PERSON RELATIONSHIP DATA
+-- ========================================
+
+-- Get person emails
+CALL get_person_emails(@person_id);
+
+-- Get person phones
+CALL get_person_phones(@person_id);
+
+-- Get person institutions
+CALL get_person_institutions(@person_id);
+
+-- Get complete profile with all related data
+CALL get_person_complete_profile(@person_id);
 
 ================================================================================
 */ 
