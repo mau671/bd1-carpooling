@@ -5,6 +5,7 @@
 package com.tec.carpooling.presentation.view;
 
 import com.tec.carpooling.data.connection.DatabaseConnection;
+import com.tec.carpooling.data.dao.EmailDAO;
 import com.tec.carpooling.domain.entity.User;
 import com.tec.carpooling.domain.entity.Gender;
 import com.tec.carpooling.domain.entity.IdType;
@@ -1060,6 +1061,14 @@ public class ModifyProfile extends javax.swing.JFrame {
         int index = listEmails.getSelectedIndex();
         if (index != -1) {
             ListModel model = listEmails.getModel();
+            String email = listEmails.getSelectedValue();
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                EmailDAO emailPerson = new EmailDAO();
+                emailPerson.deleteEmailByAddress(conn, email);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+            }
             if (model instanceof javax.swing.DefaultListModel) {  // Verificamos que sea un DefaultListModel, común
                 javax.swing.DefaultListModel defaultListModel = (javax.swing.DefaultListModel) model;
                 defaultListModel.removeElementAt(index); // Eliminar el elemento
