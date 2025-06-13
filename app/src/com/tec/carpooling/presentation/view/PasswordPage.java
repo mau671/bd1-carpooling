@@ -4,6 +4,7 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,6 +18,8 @@ public class PasswordPage extends javax.swing.JFrame {
      */
     public PasswordPage() {
         initComponents();
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**

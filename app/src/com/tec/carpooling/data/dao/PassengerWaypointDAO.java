@@ -14,8 +14,14 @@ import java.sql.SQLException;
  */
 public class PassengerWaypointDAO {
 
-    public void addPassengerWaypoint(long passengerId, long waypointId, Connection conn) throws SQLException {
-        String sql = "{ call PU_PASSENGERXWAYPOINT_PKG.add_passenger_waypoint(?, ?) }";
+    /**
+     * Adds a waypoint to a passenger by calling:
+     *   CALL carpooling_adm.add_passenger_waypoint(p_passenger_id, p_waypoint_id)
+     */
+    public void addPassengerWaypoint(long passengerId,
+                                     long waypointId,
+                                     Connection conn) throws SQLException {
+        String sql = "{ CALL carpooling_adm.add_passenger_waypoint(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, waypointId);
@@ -23,8 +29,17 @@ public class PassengerWaypointDAO {
         }
     }
 
-    public void updatePassengerWaypoint(long passengerId, long oldWaypointId, long newWaypointId, Connection conn) throws SQLException {
-        String sql = "{ call PU_PASSENGERXWAYPOINT_PKG.update_passenger_waypoint(?, ?, ?) }";
+    /**
+     * Updates an existing passenger-waypoint relation by calling:
+     *   CALL carpooling_adm.update_passenger_waypoint(p_passenger_id,
+     *                                                  p_old_waypoint_id,
+     *                                                  p_new_waypoint_id)
+     */
+    public void updatePassengerWaypoint(long passengerId,
+                                         long oldWaypointId,
+                                         long newWaypointId,
+                                         Connection conn) throws SQLException {
+        String sql = "{ CALL carpooling_adm.update_passenger_waypoint(?, ?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, oldWaypointId);
@@ -33,12 +48,19 @@ public class PassengerWaypointDAO {
         }
     }
 
-    public void deletePassengerWaypoint(long passengerId, long waypointId, Connection conn) throws SQLException {
-        String sql = "{ call PU_PASSENGERXWAYPOINT_PKG.delete_passenger_waypoint(?, ?) }";
+    /**
+     * Deletes a passenger-waypoint relation by calling:
+     *   CALL carpooling_adm.delete_passenger_waypoint(p_passenger_id, p_waypoint_id)
+     */
+    public void deletePassengerWaypoint(long passengerId,
+                                         long waypointId,
+                                         Connection conn) throws SQLException {
+        String sql = "{ CALL carpooling_adm.delete_passenger_waypoint(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, waypointId);
             stmt.execute();
         }
     }
+
 }

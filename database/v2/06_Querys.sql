@@ -135,3 +135,51 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- 1) get_top_drivers
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_top_drivers TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.DRIVER         TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.PERSON        TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.DRIVERXVEHICLE TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.VEHICLE        TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.TRIP           TO 'pu_user'@'%';
+
+-- 2) get_top_waypoints
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_top_waypoints TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.WAYPOINT           TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.DISTRICT         TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.PASSENGERXWAYPOINT TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.PASSENGERXTRIP    TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.TRIP              TO 'pu_user'@'%';
+
+-- 3) get_top_active_users
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_top_active_users TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.PERSON        TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.PASSENGER      TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.PASSENGERXTRIP TO 'pu_user'@'%';
+
+-- 4) get_complete_trips
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_complete_trips TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.TRIP           TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.VEHICLE        TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.DRIVERXVEHICLE TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.PERSON        TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.PASSENGERXTRIP TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.PASSENGER      TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.ROUTE          TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.CURRENCY      TO 'pu_user'@'%';
+
+-- 5) get_average_driver_revenue
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_average_driver_revenue TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.DRIVER         TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.PERSON        TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.DRIVERXVEHICLE TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.VEHICLE        TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_pu.TRIP           TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.CURRENCY      TO 'pu_user'@'%';
+
+-- 6) get_new_users_last_3_months
+GRANT EXECUTE ON PROCEDURE carpooling_adm.get_new_users_last_3_months TO 'pu_user'@'%';
+GRANT SELECT ON carpooling_adm.PERSON        TO 'pu_user'@'%';
+
+FLUSH PRIVILEGES;

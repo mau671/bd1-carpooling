@@ -15,8 +15,14 @@ import java.sql.SQLException;
  */
 public class PassengerTripPaymentDAO {
 
-    public void assignPaymentMethod(long passengerXTripId, long paymentMethodId, Connection conn) throws SQLException {
-        String sql = "{ call PU_PASSENGERXTRIPXPAYMENT_PKG.assign_payment_method(?, ?) }";
+    /**
+     * Assigns a payment method to a passenger-trip by calling:
+     *   CALL carpooling_adm.assign_payment_method(p_passenger_x_trip_id, p_payment_method_id)
+     */
+    public void assignPaymentMethod(long passengerXTripId,
+                                    long paymentMethodId,
+                                    Connection conn) throws SQLException {
+        String sql = "{ CALL carpooling_adm.assign_payment_method(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerXTripId);
             stmt.setLong(2, paymentMethodId);
@@ -24,8 +30,14 @@ public class PassengerTripPaymentDAO {
         }
     }
 
-    public void updatePaymentMethod(long passengerXTripId, long newPaymentMethodId, Connection conn) throws SQLException {
-        String sql = "{ call PU_PASSENGERXTRIPXPAYMENT_PKG.update_payment_method(?, ?) }";
+    /**
+     * Updates the payment method on a passenger-trip by calling:
+     *   CALL carpooling_adm.update_payment_method(p_passenger_x_trip_id, p_new_payment_method_id)
+     */
+    public void updatePaymentMethod(long passengerXTripId,
+                                    long newPaymentMethodId,
+                                    Connection conn) throws SQLException {
+        String sql = "{ CALL carpooling_adm.update_payment_method(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerXTripId);
             stmt.setLong(2, newPaymentMethodId);
@@ -33,11 +45,18 @@ public class PassengerTripPaymentDAO {
         }
     }
 
-    public void deletePaymentMethod(long passengerXTripId, Connection conn) throws SQLException {
-        String sql = "{ call PU_PASSENGERXTRIPXPAYMENT_PKG.delete_payment_method(?) }";
+    /**
+     * Deletes the payment method from a passenger-trip by calling:
+     *   CALL carpooling_adm.delete_payment_method(p_passenger_x_trip_id)
+     */
+    public void deletePaymentMethod(long passengerXTripId,
+                                    Connection conn) throws SQLException {
+        String sql = "{ CALL carpooling_adm.delete_payment_method(?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerXTripId);
             stmt.execute();
         }
     }
+
 }
+

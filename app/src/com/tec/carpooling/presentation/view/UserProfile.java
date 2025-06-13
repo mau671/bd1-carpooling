@@ -75,7 +75,7 @@ public class UserProfile extends javax.swing.JFrame {
                         
                         // Scale the image to fit the label
                         Image image = imageIcon.getImage();
-                        Image scaledImage = image.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                        Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
                         ImageIcon scaledIcon = new ImageIcon(scaledImage);
                         
                         jLabelPhoto.setIcon(scaledIcon);
@@ -139,10 +139,6 @@ public class UserProfile extends javax.swing.JFrame {
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabelPhoto = new javax.swing.JLabel();
-        jPanel29 = new javax.swing.JPanel();
-        buttonAddNumber = new javax.swing.JButton();
-        buttonAddInstitution = new javax.swing.JButton();
-        buttonAddEmail = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         buttonEliminate = new javax.swing.JButton();
         jPanel34 = new javax.swing.JPanel();
@@ -251,83 +247,6 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
         jPanel1.add(jLabelPhoto, gridBagConstraints);
 
-        jPanel29.setBackground(new java.awt.Color(225, 239, 255));
-        jPanel29.setLayout(new java.awt.GridBagLayout());
-
-        buttonAddNumber.setBackground(new java.awt.Color(18, 102, 160));
-        buttonAddNumber.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonAddNumber.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAddNumber.setText("Add Phone Number");
-        buttonAddNumber.setMaximumSize(new java.awt.Dimension(85, 23));
-        buttonAddNumber.setMinimumSize(new java.awt.Dimension(85, 23));
-        buttonAddNumber.setPreferredSize(new java.awt.Dimension(140, 40));
-        buttonAddNumber.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddNumberActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.ipady = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel29.add(buttonAddNumber, gridBagConstraints);
-
-        buttonAddInstitution.setBackground(new java.awt.Color(18, 102, 160));
-        buttonAddInstitution.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonAddInstitution.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAddInstitution.setText("Add Institution");
-        buttonAddInstitution.setMaximumSize(new java.awt.Dimension(85, 23));
-        buttonAddInstitution.setMinimumSize(new java.awt.Dimension(85, 23));
-        buttonAddInstitution.setPreferredSize(new java.awt.Dimension(90, 40));
-        buttonAddInstitution.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddInstitutionActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 65;
-        gridBagConstraints.ipady = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel29.add(buttonAddInstitution, gridBagConstraints);
-
-        buttonAddEmail.setBackground(new java.awt.Color(18, 102, 160));
-        buttonAddEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonAddEmail.setForeground(new java.awt.Color(255, 255, 255));
-        buttonAddEmail.setText("Add Email");
-        buttonAddEmail.setMaximumSize(new java.awt.Dimension(85, 23));
-        buttonAddEmail.setMinimumSize(new java.awt.Dimension(85, 23));
-        buttonAddEmail.setPreferredSize(new java.awt.Dimension(90, 40));
-        buttonAddEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddEmailActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 65;
-        gridBagConstraints.ipady = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        jPanel29.add(buttonAddEmail, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        jPanel1.add(jPanel29, gridBagConstraints);
-
         jPanel6.setBackground(new java.awt.Color(225, 239, 255));
         jPanel6.setLayout(new java.awt.GridBagLayout());
 
@@ -349,7 +268,7 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 65;
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         jPanel6.add(buttonEliminate, gridBagConstraints);
 
         jPanel34.setBackground(new java.awt.Color(225, 239, 255));
@@ -373,7 +292,7 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 65;
         gridBagConstraints.ipady = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         jPanel34.add(buttonModifyProfile, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -386,7 +305,7 @@ public class UserProfile extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 80, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 80, 50, 0);
         jPanel1.add(jPanel6, gridBagConstraints);
 
         jPanel5.setBackground(new java.awt.Color(225, 239, 255));
@@ -907,22 +826,6 @@ public class UserProfile extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonAddInstitutionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddInstitutionActionPerformed
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            InstitutionPage institution = new InstitutionPage();
-            institution.setVisible(true);
-            institution.setLocationRelativeTo(null); // center on screen
-        });
-    }//GEN-LAST:event_buttonAddInstitutionActionPerformed
-
-    private void buttonAddNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddNumberActionPerformed
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            PhonePage phone = new PhonePage();
-            phone.setVisible(true);
-            phone.setLocationRelativeTo(null); // center on screen
-        });
-    }//GEN-LAST:event_buttonAddNumberActionPerformed
-
     private void buttonModifyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyProfileActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
             ModifyProfile modify = new ModifyProfile(userRole, user);
@@ -960,14 +863,6 @@ public class UserProfile extends javax.swing.JFrame {
             });
         }
     }//GEN-LAST:event_buttonEliminateActionPerformed
-
-    private void buttonAddEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddEmailActionPerformed
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            EmailPage email = new EmailPage();
-            email.setVisible(true);
-            email.setLocationRelativeTo(null); // center on screen
-        });
-    }//GEN-LAST:event_buttonAddEmailActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1010,9 +905,6 @@ public class UserProfile extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonAddEmail;
-    private javax.swing.JButton buttonAddInstitution;
-    private javax.swing.JButton buttonAddNumber;
     private javax.swing.JButton buttonEliminate;
     private javax.swing.JButton buttonModifyProfile;
     private javax.swing.Box.Filler filler1;
@@ -1048,7 +940,6 @@ public class UserProfile extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
-    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;

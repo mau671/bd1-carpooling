@@ -221,7 +221,7 @@ public class SearchTrip extends javax.swing.JFrame {
     
     private void loadInstitutions() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT id, name FROM ADM.INSTITUTION ORDER BY name";
+            String sql = "SELECT id, name FROM carpooling_adm.INSTITUTION ORDER BY name";
             try (PreparedStatement stmt = conn.prepareStatement(sql);
                  ResultSet rs = stmt.executeQuery()) {
 
@@ -240,11 +240,10 @@ public class SearchTrip extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error loading institutions: " + e.getMessage());
         }
     }
-    
+
     private void loadPaymentMethods() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT id, name FROM ADM.PAYMENTMETHOD ORDER BY name";
-
+            String sql = "SELECT id, name FROM carpooling_adm.PAYMENTMETHOD ORDER BY name";
             try (PreparedStatement stmt = conn.prepareStatement(sql);
                  ResultSet rs = stmt.executeQuery()) {
 
@@ -257,7 +256,6 @@ public class SearchTrip extends javax.swing.JFrame {
                     boxMethod.addItem(new PaymentMethod(id, name));
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading payment methods: " + e.getMessage());

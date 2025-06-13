@@ -193,6 +193,8 @@ public class ModifyProfile extends javax.swing.JFrame {
         buttonModify = new javax.swing.JButton();
         buttonPassword = new javax.swing.JButton();
         buttonPhoto = new javax.swing.JButton();
+        buttonAddNumber = new javax.swing.JButton();
+        buttonAddEmail = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -777,7 +779,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         buttonModify.setForeground(new java.awt.Color(255, 255, 255));
         buttonModify.setMaximumSize(new java.awt.Dimension(85, 23));
         buttonModify.setMinimumSize(new java.awt.Dimension(85, 23));
-        buttonModify.setPreferredSize(new java.awt.Dimension(90, 40));
+        buttonModify.setPreferredSize(new java.awt.Dimension(85, 23));
         buttonModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonModifyActionPerformed(evt);
@@ -785,17 +787,19 @@ public class ModifyProfile extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.ipadx = 65;
         gridBagConstraints.ipady = 27;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 120, 31, 0);
+        gridBagConstraints.insets = new java.awt.Insets(40, 120, 30, 0);
         jPanel9.add(buttonModify, gridBagConstraints);
 
         buttonPassword.setText("Change Password");
         buttonPassword.setBackground(new java.awt.Color(255, 90, 90));
         buttonPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonPassword.setForeground(new java.awt.Color(255, 255, 255));
+        buttonPassword.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonPassword.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonPassword.setPreferredSize(new java.awt.Dimension(85, 23));
         buttonPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonPasswordActionPerformed(evt);
@@ -803,24 +807,70 @@ public class ModifyProfile extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipadx = 80;
         gridBagConstraints.ipady = 15;
-        gridBagConstraints.insets = new java.awt.Insets(6, 120, 40, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 120, 30, 0);
         jPanel9.add(buttonPassword, gridBagConstraints);
 
         buttonPhoto.setText("Change Photo");
         buttonPhoto.setBackground(new java.awt.Color(18, 102, 160));
         buttonPhoto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         buttonPhoto.setForeground(new java.awt.Color(255, 255, 255));
-        buttonPhoto.setPreferredSize(new java.awt.Dimension(107, 40));
+        buttonPhoto.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonPhoto.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonPhoto.setPreferredSize(new java.awt.Dimension(85, 23));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.ipady = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 120, 30, 0);
+        jPanel9.add(buttonPhoto, gridBagConstraints);
+
+        buttonAddNumber.setBackground(new java.awt.Color(18, 102, 160));
+        buttonAddNumber.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonAddNumber.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAddNumber.setText("Add Phone Number");
+        buttonAddNumber.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonAddNumber.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonAddNumber.setPreferredSize(new java.awt.Dimension(140, 40));
+        buttonAddNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddNumberActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.insets = new java.awt.Insets(60, 120, 80, 0);
-        jPanel9.add(buttonPhoto, gridBagConstraints);
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.ipady = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 120, 30, 0);
+        jPanel9.add(buttonAddNumber, gridBagConstraints);
+
+        buttonAddEmail.setBackground(new java.awt.Color(18, 102, 160));
+        buttonAddEmail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonAddEmail.setForeground(new java.awt.Color(255, 255, 255));
+        buttonAddEmail.setText("Add Email");
+        buttonAddEmail.setMaximumSize(new java.awt.Dimension(85, 23));
+        buttonAddEmail.setMinimumSize(new java.awt.Dimension(85, 23));
+        buttonAddEmail.setPreferredSize(new java.awt.Dimension(140, 40));
+        buttonAddEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddEmailActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.ipady = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(40, 120, 30, 0);
+        jPanel9.add(buttonAddEmail, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -936,6 +986,22 @@ public class ModifyProfile extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_buttonPasswordActionPerformed
 
+    private void buttonAddNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddNumberActionPerformed
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            PhonePage phone = new PhonePage();
+            phone.setVisible(true);
+            phone.setLocationRelativeTo(null); // center on screen
+        });
+    }//GEN-LAST:event_buttonAddNumberActionPerformed
+
+    private void buttonAddEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddEmailActionPerformed
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            EmailPage email = new EmailPage();
+            email.setVisible(true);
+            email.setLocationRelativeTo(null); // center on screen
+        });
+    }//GEN-LAST:event_buttonAddEmailActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -980,6 +1046,8 @@ public class ModifyProfile extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxGender;
     private javax.swing.JComboBox<String> boxID;
+    private javax.swing.JButton buttonAddEmail;
+    private javax.swing.JButton buttonAddNumber;
     private javax.swing.JButton buttonEditE;
     private javax.swing.JButton buttonEditI;
     private javax.swing.JButton buttonEditP;
