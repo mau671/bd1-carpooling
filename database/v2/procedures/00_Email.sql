@@ -8,7 +8,7 @@ CREATE PROCEDURE DELETE_EMAIL_BY_ADDRESS(
     IN p_email_address VARCHAR(100)
 )
 BEGIN
-    DELETE FROM carpooling_adm.EMAIL 
+    DELETE FROM carpooling_pu.EMAIL 
     WHERE name = p_email_address;
     
     -- Opcional: Retornar el número de filas afectadas

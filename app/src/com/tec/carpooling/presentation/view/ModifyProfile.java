@@ -20,6 +20,7 @@ import com.tec.carpooling.data.dao.impl.PersonUpdateDAOImpl;
 import com.tec.carpooling.data.impl.GenderDAOImpl;
 import com.tec.carpooling.domain.entity.Institution;
 import com.tec.carpooling.domain.entity.Person;
+import com.tec.carpooling.data.dao.impl.CatalogDAOImpl;
 
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -82,8 +83,9 @@ public class ModifyProfile extends javax.swing.JFrame {
             TypeIdInfoDAO typeDAO = new TypeIdInfoDAO();
 
             Person person = personDAO.getPersonProfile(user.getPersonId(), conn);
+            String genderName = null;
             if (person != null) {
-                String genderName = genderDAO.getGenderName(person.getGenderId(), conn);
+                genderName = new GenderInfoDAO().getGenderName(person.getGenderId(), conn);
                 String typeIdName = typeDAO.getTypeName(person.getTypeIdentificationId(), conn);
 
                 textName1.setText(person.getFirstName());
@@ -139,6 +141,7 @@ public class ModifyProfile extends javax.swing.JFrame {
                 boxID.addItem(type.getName());
             }
             loadGenders();
+            boxGender.setSelectedItem(genderName);
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
@@ -148,17 +151,23 @@ public class ModifyProfile extends javax.swing.JFrame {
     }
     
     private void loadGenders() {
+        boxGender.removeAllItems();          // clear any old entries
+
         try {
-            GenderDAOImpl genderDAO = new GenderDAOImpl();
-            List<Gender> genders = genderDAO.findAll();
-            // Agregar todos los géneros al ComboBox
-            for (Gender gender : genders) {
-                boxGender.addItem(gender.getName());
+            CatalogDAOImpl catalogDAO = new CatalogDAOImpl();
+            List<Gender> genders = catalogDAO.getAllGenders();
+
+            // add every gender, no "Select ..." placeholder
+            for (Gender g : genders) {
+                boxGender.addItem(g.getName());
             }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error loading genders: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this,
+                "Error loading genders: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
     private void customizeDatePicker() {

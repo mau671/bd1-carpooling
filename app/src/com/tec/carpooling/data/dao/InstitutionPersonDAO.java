@@ -42,7 +42,7 @@ public class InstitutionPersonDAO {
     }
     
     public void deleteInstitution(Connection conn, String institutionName) throws SQLException {
-        String sql = "{call carpooling_pu.DELETE_INSTITUTION_BY_NAME(?)}";
+        String sql = "{call carpooling_adm.DELETE_INSTITUTION_BY_NAME(?)}";
 
         try (CallableStatement cs = conn.prepareCall(sql)) {
             cs.setString(1, institutionName);  // Parámetro: nombre de la institución

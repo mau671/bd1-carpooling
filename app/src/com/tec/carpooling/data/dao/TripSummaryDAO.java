@@ -10,6 +10,8 @@ import com.tec.carpooling.domain.entity.Waypoint;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  *
@@ -124,5 +126,115 @@ public class TripSummaryDAO {
 
         return stops;
     }
+    public List<TripSummary> searchAvailableTripsByCriteria(
+            long institutionId,
+            long currentUserId,
+            LocalDate tripDate,
+            LocalTime arrivalTime,
+            long countryId,
+            long provinceId,
+            long cantonId,
+            long districtId,
+            Connection conn
+    ) throws SQLException {
+        List<TripSummary> trips = new ArrayList<>();
 
+        // 1) Build the base query (added C1/P1/CT joins)
+        StringBuilder sql = new StringBuilder()
+            .append("SELECT ")
+            .append("  T.id                 AS trip_id, ")
+            .append("  R.programming_date, ")
+            .append("  D1.name              AS start_point ")
+            .append("FROM carpooling_pu.TRIP T ")
+            .append("JOIN carpooling_pu.ROUTE R        ON T.route_id = R.id ")
+            .append("JOIN carpooling_pu.STATUSXTRIP SX ON SX.trip_id = T.id ")
+            .append("JOIN carpooling_adm.STATUS S      ON S.id = SX.status_id ")
+            .append("JOIN carpooling_pu.VEHICLEXROUTE VR ON VR.route_id = R.id ")
+            .append("JOIN carpooling_pu.VEHICLE VEH    ON VEH.id = VR.vehicle_id ")
+            .append("JOIN carpooling_pu.DRIVERXVEHICLE DV ON DV.vehicle_id = VEH.id ")
+            .append("JOIN carpooling_pu.DRIVER D       ON D.person_id = DV.driver_id ")
+            .append("JOIN carpooling_adm.PERSON P      ON P.id = D.person_id ")
+            .append("JOIN carpooling_pu.INSTITUTION_PERSON PI ON PI.person_id = P.id ")
+            .append("JOIN carpooling_pu.MAXCAPACITYXVEHICLE MCV ON MCV.vehicle_id = VEH.id ")
+            .append("JOIN carpooling_adm.MAXCAPACITY MC ON MC.id = MCV.max_capacity_id ")
+            .append("LEFT JOIN carpooling_pu.PASSENGERXTRIP px ON px.trip_id = T.id ")
+            .append("JOIN ( ")
+            .append("  SELECT route_id, district_id FROM ( ")
+            .append("    SELECT route_id, district_id, ROW_NUMBER() OVER (")
+            .append("         PARTITION BY route_id ORDER BY id) rn ")
+            .append("    FROM carpooling_pu.WAYPOINT WHERE district_id IS NOT NULL ")
+            .append("  ) sub WHERE rn = 1 ")
+            .append(") WP1 ON WP1.route_id = R.id ")
+            // join up from district → canton → province → country
+            .append("JOIN carpooling_adm.DISTRICT D1 ON D1.id = WP1.district_id ")
+            .append("JOIN carpooling_adm.CANTON  C1 ON C1.id = D1.canton_id ")
+            .append("JOIN carpooling_adm.PROVINCE P1 ON P1.id = C1.province_id ")
+            .append("JOIN carpooling_adm.COUNTRY CT  ON CT.id = P1.country_id ")
+            .append("WHERE S.name = 'Pending' ")
+            .append("  AND PI.institution_id = ? ")
+            .append("  AND P.id <> ? ");
+
+        // 2) Append optional filters
+        if (tripDate != null) {
+            sql.append(" AND DATE(R.programming_date) = ? ");
+        }
+        if (arrivalTime != null) {
+            sql.append(" AND TIME(R.start_time) >= ? ");
+        }
+        if (countryId  != 0) {
+            sql.append(" AND CT.id = ? ");
+        }
+        if (provinceId != 0) {
+            sql.append(" AND P1.id = ? ");
+        }
+        if (cantonId   != 0) {
+            sql.append(" AND C1.id = ? ");
+        }
+        if (districtId != 0) {
+            sql.append(" AND D1.id = ? ");
+        }
+
+        // 3) Group/Having to filter out full trips, then order
+        sql.append("GROUP BY T.id, R.programming_date, D1.name, MC.capacity_number ")
+           .append("HAVING (MC.capacity_number - COUNT(px.id)) > 0 ")
+           .append("ORDER BY R.programming_date, R.start_time");
+
+        // 4) Prepare and bind
+        PreparedStatement ps = conn.prepareStatement(sql.toString());
+        int idx = 1;
+        ps.setLong(idx++, institutionId);
+        ps.setLong(idx++, currentUserId);
+
+        if (tripDate != null) {
+            ps.setDate(idx++, Date.valueOf(tripDate));
+        }
+        if (arrivalTime != null) {
+            ps.setTime(idx++, Time.valueOf(arrivalTime));
+        }
+        if (countryId  != 0) {
+            ps.setLong(idx++, countryId);
+        }
+        if (provinceId != 0) {
+            ps.setLong(idx++, provinceId);
+        }
+        if (cantonId   != 0) {
+            ps.setLong(idx++, cantonId);
+        }
+        if (districtId != 0) {
+            ps.setLong(idx++, districtId);
+        }
+
+        // 5) Execute and collect
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                trips.add(new TripSummary(
+                    rs.getLong("trip_id"),
+                    rs.getDate("programming_date"),
+                    rs.getString("start_point")
+                ));
+            }
+        }
+
+        return trips;
+    }
 }
