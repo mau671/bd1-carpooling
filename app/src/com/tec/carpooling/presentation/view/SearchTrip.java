@@ -341,23 +341,34 @@ public class SearchTrip extends javax.swing.JFrame {
     
     private void loadInstitutions() {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT id, name FROM carpooling_adm.INSTITUTION ORDER BY name";
-            try (PreparedStatement stmt = conn.prepareStatement(sql);
-                 ResultSet rs = stmt.executeQuery()) {
+            String sql =
+                "SELECT i.id, i.name                                      " +
+                "  FROM carpooling_adm.INSTITUTION i                      " +
+                "  JOIN carpooling_pu.institution_person ip               " +
+                "    ON ip.institution_id = i.id                          " +
+                " WHERE ip.person_id = ?                                  " +
+                " ORDER BY i.name";
 
-                boxInstitutions.removeAllItems(); // Clear previous entries
-                boxInstitutions.addItem(new Institution(0, "Select Institution"));
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setLong(1, user.getPersonId());
 
-                while (rs.next()) {
-                    long id = rs.getLong("id");
-                    String name = rs.getString("name");
-                    boxInstitutions.addItem(new Institution(id, name));
+                try (ResultSet rs = stmt.executeQuery()) {
+                    boxInstitutions.removeAllItems();
+                    boxInstitutions.addItem(new Institution(0, "Select Institution"));
+
+                    while (rs.next()) {
+                        long id   = rs.getLong("id");
+                        String nm = rs.getString("name");
+                        boxInstitutions.addItem(new Institution(id, nm));
+                    }
                 }
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error loading institutions: " + e.getMessage());
+            JOptionPane.showMessageDialog(this,
+                "Error loading institutions: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
