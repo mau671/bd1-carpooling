@@ -77,6 +77,12 @@ public class ModifyProfile extends javax.swing.JFrame {
             GenderInfoDAO genderDAO = new GenderInfoDAO();
             TypeIdInfoDAO typeDAO = new TypeIdInfoDAO();
 
+            List<IdType> idTypes = typeDAO.getAllIdTypes(conn);
+            boxID.removeAllItems();
+            for (IdType type : idTypes) {
+                boxID.addItem(type.getName());
+            }
+
             Person person = personDAO.getPersonProfile(user.getPersonId(), conn);
             if (person != null) {
                 String genderName = genderDAO.getGenderName(person.getGenderId(), conn);

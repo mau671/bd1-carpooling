@@ -4,10 +4,13 @@
  */
 package com.tec.carpooling.data.dao;
 
+import com.tec.carpooling.domain.entity.IdType;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DAO for Type Identification information using MySQL stored procedures
@@ -29,5 +32,24 @@ public class TypeIdInfoDAO {
         }
         
         return typeName;
+    }
+    
+    public List<IdType> getAllIdTypes(Connection conn) throws SQLException {
+        List<IdType> types = new ArrayList<>();
+        
+        String sql = "{call carpooling_adm.list_type_identifications()}";
+        
+        try (CallableStatement stmt = conn.prepareCall(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                IdType type = new IdType();
+                type.setId(rs.getLong("id"));
+                type.setName(rs.getString("name"));
+                types.add(type);
+            }
+        }
+        
+        return types;
     }
 }
