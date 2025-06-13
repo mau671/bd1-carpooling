@@ -4,6 +4,9 @@
  */
 package com.tec.carpooling.presentation.view.admin;
 
+import com.tec.carpooling.presentation.view.InitialPage;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -33,6 +36,7 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItemManagementInstitutions = new javax.swing.JMenuItem();
         jMenuItemManagementUsers = new javax.swing.JMenuItem();
+        jMenuItemLogOut = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItemManageGenres = new javax.swing.JMenuItem();
         jMenuItemManageIdentificationTypes = new javax.swing.JMenuItem();
@@ -78,6 +82,14 @@ public class AdminFrame extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItemManagementUsers);
+
+        jMenuItemLogOut.setText("Log Out");
+        jMenuItemLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLogOutActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemLogOut);
 
         jMenuBar1.add(jMenu1);
 
@@ -258,6 +270,20 @@ public class AdminFrame extends javax.swing.JFrame {
     private void jMenuItemJobsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemJobsActionPerformed
         showPanel(new ReportsPanel());
     }//GEN-LAST:event_jMenuItemJobsActionPerformed
+
+    private void jMenuItemLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogOutActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(null,
+            "Are you sure you want to log out?", "Log Out",
+            JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Go back to the login screen
+                InitialPage home = new InitialPage();
+                home.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                home.setVisible(true);
+                this.dispose();
+            }
+    }//GEN-LAST:event_jMenuItemLogOutActionPerformed
     
     
 
@@ -324,6 +350,7 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemJobs;
+    private javax.swing.JMenuItem jMenuItemLogOut;
     private javax.swing.JMenuItem jMenuItemLogs;
     private javax.swing.JMenuItem jMenuItemManageCurrencys;
     private javax.swing.JMenuItem jMenuItemManageGenres;
