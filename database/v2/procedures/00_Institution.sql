@@ -81,6 +81,16 @@ BEGIN
     COMMIT;
 END$$
 
+DROP PROCEDURE IF EXISTS DELETE_INSTITUTION_BY_NAME$$
+
+CREATE PROCEDURE DELETE_INSTITUTION_BY_NAME(
+    IN p_institution_name VARCHAR(100)
+)
+BEGIN
+    DELETE FROM carpooling_adm.INSTITUTION 
+    WHERE name = p_institution_name;
+END $$
+
 -- ========================================
 -- PROCEDURE: update_institution_name
 -- Purpose: Updates an existing institution name

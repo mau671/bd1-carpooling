@@ -4,6 +4,14 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import com.tec.carpooling.data.dao.PersonCompleteDAO;
+import com.tec.carpooling.domain.entity.Institution;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 /**
@@ -11,12 +19,26 @@ import javax.swing.JOptionPane;
  * @author hidal
  */
 public class InstitutionPage extends javax.swing.JFrame {
-
+    private int id;
     /**
      * Creates new form InstitutionPage
      */
-    public InstitutionPage() {
+    public InstitutionPage(int id) throws SQLException {
+        this.id = id;
         initComponents();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PersonCompleteDAO personCompleteDAO = new PersonCompleteDAO();
+            PersonCompleteDAO.CompleteProfile profile = personCompleteDAO.getCompleteProfile(this.id, conn);
+
+            if (profile.getPerson() != null) {     
+                // Load institutions from profile
+                DefaultListModel<String> institutionModel = new DefaultListModel<>();
+                comboBoxNumber.removeAllItems();
+                for (Institution institution : profile.getInstitutions()) {
+                    comboBoxNumber.addItem(institution.getName());
+                }
+            }
+        }
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
@@ -149,7 +171,11 @@ public class InstitutionPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InstitutionPage().setVisible(true);
+                try {
+                    new InstitutionPage(0).setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(InstitutionPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
