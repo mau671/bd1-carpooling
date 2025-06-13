@@ -15,6 +15,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import java.awt.Dimension;
 
 /**
  * StatisticsPanel - muestra gráficas basadas en los procedimientos de 07_Statistics.sql
@@ -45,11 +46,15 @@ public class StatisticsPanel extends javax.swing.JPanel {
             "Drivers by gender", "Passengers by gender", "Users by age range", "Trips per month"});
         btn = new JButton("Generate");
         btn.addActionListener(e -> generateChart());
+
         JPanel top = new JPanel();
         top.add(combo);
         top.add(btn);
         add(top, BorderLayout.NORTH);
+
         chartContainer = new JPanel(new BorderLayout());
+        // reserve at least 600×400px for the chart
+        chartContainer.setPreferredSize(new Dimension(600, 400));
         add(chartContainer, BorderLayout.CENTER);
     }
 
@@ -124,10 +129,12 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
     private void updateChart(JFreeChart chart) {
         chartContainer.removeAll();
-        chartContainer.add(new ChartPanel(chart), BorderLayout.CENTER);
+
+        ChartPanel cp = new ChartPanel(chart);
+        cp.setPreferredSize(new Dimension(600, 400));  // match the container
+        chartContainer.add(cp, BorderLayout.CENTER);
+
         chartContainer.revalidate();
         chartContainer.repaint();
-        this.revalidate();
-        this.repaint();
     }
 } 
