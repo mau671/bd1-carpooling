@@ -4,8 +4,14 @@
  */
 package com.tec.carpooling.presentation.view;
 
+import com.tec.carpooling.data.connection.DatabaseConnection;
+import java.sql.SQLException;
+import java.sql.Connection;
+import com.tec.carpooling.data.dao.PhoneDAO;
+import com.tec.carpooling.domain.entity.IdType;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -32,6 +38,18 @@ public class PhonePage extends javax.swing.JFrame {
             }
         });
         
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PhoneDAO phoneDAO = new PhoneDAO();
+
+            List<IdType> idTypes = phoneDAO.getAllPhoneTypes(conn);
+            comboBoxNumber.removeAllItems();
+            for (IdType type : idTypes) {
+                comboBoxNumber.addItem(type.getName());
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+        }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
