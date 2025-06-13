@@ -21,15 +21,23 @@ DELIMITER $$
 -- ============================================
 CREATE PROCEDURE get_top_drivers (IN p_limit INT)
 BEGIN
+    -- Sub-consulta para calcular servicios por conductor
+    WITH driver_stats AS (
+        SELECT 
+            CONCAT(per.first_name,' ', per.first_surname) AS driver_name,
+            COUNT(DISTINCT t.id)                         AS service_count
+        FROM carpooling_pu.DRIVER d
+        JOIN carpooling_adm.PERSON per          ON d.person_id = per.id
+        JOIN carpooling_pu.DRIVERXVEHICLE dv    ON d.person_id = dv.driver_id
+        JOIN carpooling_pu.VEHICLE v            ON dv.vehicle_id = v.id
+        JOIN carpooling_pu.TRIP t               ON v.id = t.vehicle_id
+        GROUP BY driver_name
+    )
     SELECT 
-        CONCAT(per.first_name,' ', per.first_surname)  AS driver_name,
-        COUNT(DISTINCT t.id)                          AS service_count
-    FROM carpooling_pu.DRIVER d
-    JOIN carpooling_adm.PERSON per          ON d.person_id = per.id
-    JOIN carpooling_pu.DRIVERXVEHICLE dv    ON d.person_id = dv.driver_id
-    JOIN carpooling_pu.VEHICLE v            ON dv.vehicle_id = v.id
-    JOIN carpooling_pu.TRIP t               ON v.id = t.vehicle_id
-    GROUP BY driver_name
+        ROW_NUMBER() OVER (ORDER BY service_count DESC) AS ranking,
+        driver_name,
+        service_count
+    FROM driver_stats
     ORDER BY service_count DESC
     LIMIT p_limit;
 END $$
@@ -43,16 +51,23 @@ CREATE PROCEDURE get_top_waypoints (
     IN p_limit      INT
 )
 BEGIN
+    WITH waypoint_stats AS (
+        SELECT 
+            dist.name                                   AS district_name,
+            COUNT(DISTINCT pxt.passenger_id)            AS passenger_count
+        FROM carpooling_pu.WAYPOINT w
+        JOIN carpooling_adm.DISTRICT dist          ON w.district_id = dist.id
+        JOIN carpooling_pu.PASSENGERXWAYPOINT pwx  ON w.id = pwx.waypoint_id
+        JOIN carpooling_pu.PASSENGERXTRIP pxt      ON pwx.passenger_id = pxt.passenger_id
+        JOIN carpooling_pu.TRIP t                  ON pxt.trip_id = t.id
+        WHERE DATE(t.creation_date) BETWEEN p_start_date AND p_end_date
+        GROUP BY district_name
+    )
     SELECT 
-        dist.name                                                      AS district_name,
-        COUNT(DISTINCT pxt.passenger_id)                               AS passenger_count
-    FROM carpooling_pu.WAYPOINT w
-    JOIN carpooling_adm.DISTRICT dist          ON w.district_id = dist.id
-    JOIN carpooling_pu.PASSENGERXWAYPOINT pwx  ON w.id = pwx.waypoint_id
-    JOIN carpooling_pu.PASSENGERXTRIP pxt      ON pwx.passenger_id = pxt.passenger_id
-    JOIN carpooling_pu.TRIP t                  ON pxt.trip_id = t.id
-    WHERE DATE(t.creation_date) BETWEEN p_start_date AND p_end_date
-    GROUP BY district_name
+        ROW_NUMBER() OVER (ORDER BY passenger_count DESC) AS ranking,
+        district_name,
+        passenger_count
+    FROM waypoint_stats
     ORDER BY passenger_count DESC
     LIMIT p_limit;
 END $$
@@ -62,13 +77,20 @@ END $$
 -- ============================================
 CREATE PROCEDURE get_top_active_users (IN p_limit INT)
 BEGIN
+    WITH user_stats AS (
+        SELECT 
+            CONCAT(per.first_name,' ', per.first_surname) AS user_name,
+            COUNT(DISTINCT pxt.trip_id)                  AS trip_count
+        FROM carpooling_adm.PERSON per
+        JOIN carpooling_pu.PASSENGER pass    ON per.id = pass.person_id
+        JOIN carpooling_pu.PASSENGERXTRIP pxt ON pass.person_id = pxt.passenger_id
+        GROUP BY user_name
+    )
     SELECT 
-        CONCAT(per.first_name,' ', per.first_surname) AS user_name,
-        COUNT(DISTINCT pxt.trip_id)                  AS trip_count
-    FROM carpooling_adm.PERSON per
-    JOIN carpooling_pu.PASSENGER pass    ON per.id = pass.person_id
-    JOIN carpooling_pu.PASSENGERXTRIP pxt ON pass.person_id = pxt.passenger_id
-    GROUP BY user_name
+        ROW_NUMBER() OVER (ORDER BY trip_count DESC) AS ranking,
+        user_name,
+        trip_count
+    FROM user_stats
     ORDER BY trip_count DESC
     LIMIT p_limit;
 END $$
@@ -105,17 +127,25 @@ END $$
 -- ============================================
 CREATE PROCEDURE get_average_driver_revenue (IN p_limit INT)
 BEGIN
+    WITH revenue_stats AS (
+        SELECT 
+            CONCAT(per.first_name,' ', per.first_surname) AS driver_name,
+            ROUND(AVG(t.price_per_passenger),2)          AS avg_revenue,
+            cur.name                                     AS currency
+        FROM carpooling_pu.DRIVER d
+        JOIN carpooling_adm.PERSON per          ON d.person_id = per.id
+        JOIN carpooling_pu.DRIVERXVEHICLE dv    ON d.person_id = dv.driver_id
+        JOIN carpooling_pu.VEHICLE v            ON dv.vehicle_id = v.id
+        JOIN carpooling_pu.TRIP t               ON v.id = t.vehicle_id
+        LEFT JOIN carpooling_adm.CURRENCY cur   ON t.id_currency = cur.id
+        GROUP BY driver_name, currency
+    )
     SELECT 
-        CONCAT(per.first_name,' ', per.first_surname) AS driver_name,
-        ROUND(AVG(t.price_per_passenger),2)          AS avg_revenue,
-        cur.name                                     AS currency
-    FROM carpooling_pu.DRIVER d
-    JOIN carpooling_adm.PERSON per          ON d.person_id = per.id
-    JOIN carpooling_pu.DRIVERXVEHICLE dv    ON d.person_id = dv.driver_id
-    JOIN carpooling_pu.VEHICLE v            ON dv.vehicle_id = v.id
-    JOIN carpooling_pu.TRIP t               ON v.id = t.vehicle_id
-    LEFT JOIN carpooling_adm.CURRENCY cur   ON t.id_currency = cur.id
-    GROUP BY driver_name, currency
+        ROW_NUMBER() OVER (ORDER BY avg_revenue DESC) AS ranking,
+        driver_name,
+        avg_revenue,
+        currency
+    FROM revenue_stats
     ORDER BY avg_revenue DESC
     LIMIT p_limit;
 END $$

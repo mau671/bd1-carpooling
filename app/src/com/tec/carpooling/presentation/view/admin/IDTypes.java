@@ -61,13 +61,13 @@ public class IDTypes extends javax.swing.JPanel {
              CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.list_type_identifications()}");
              ResultSet rs = cstmt.executeQuery()) {
             
-            idTypeTableModel.setRowCount(0);
-            while (rs.next()) {
-                idTypeTableModel.addRow(new Object[]{
-                    rs.getLong("id"),
-                    rs.getString("name")
-                });
-            }
+                idTypeTableModel.setRowCount(0);
+                while (rs.next()) {
+                    idTypeTableModel.addRow(new Object[]{
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    });
+                }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading identification types: " + e.getMessage(), 
