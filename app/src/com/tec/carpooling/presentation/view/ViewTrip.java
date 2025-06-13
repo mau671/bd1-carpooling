@@ -51,7 +51,7 @@ public class ViewTrip extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel(cols, 0);
         tableTrips.setModel(model);
 
-        // 2) Hide the ID column
+        // 2) Hide the ID column (so it's in the model but not visible)
         tableTrips.removeColumn(tableTrips.getColumnModel().getColumn(0));
 
         // 3) Load rows
@@ -69,21 +69,18 @@ public class ViewTrip extends javax.swing.JFrame {
         tableTrips.setRowSorter(sorter);
         tableTrips.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        boxOrder.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                String selected = (String) boxOrder.getSelectedItem();
-                int colIndex = getColumnIndexFromLabel(selected);
-                if (colIndex >= 0) {
-                    sorter.setSortKeys(
-                        List.of(new RowSorter.SortKey(colIndex + 1, SortOrder.ASCENDING))
-                        // +1 because column 0 is hidden ID
-                    );
-                }
+        boxOrder.addActionListener(e -> {
+            String selected = (String) boxOrder.getSelectedItem();
+            int colIndex = getColumnIndexFromLabel(selected);
+            if (colIndex >= 0) {
+                // +1 because column 0 is the hidden ID
+                sorter.setSortKeys(List.of(
+                    new RowSorter.SortKey(colIndex + 1, SortOrder.ASCENDING)
+                ));
             }
         });
 
-        // Add sidebar, maximize, etc.
+        // 6) Add sidebar, maximize
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -133,6 +130,7 @@ public class ViewTrip extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a trip to cancel.");
             return;
         }
+        // Convert to model index so we read from the hidden-ID model
         int modelRow = tableTrips.convertRowIndexToModel(viewRow);
 
         long tripId  = (Long) tableTrips.getModel().getValueAt(modelRow, 0);
@@ -146,11 +144,12 @@ public class ViewTrip extends javax.swing.JFrame {
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement cs = conn.prepareCall("{CALL carpooling_pu.cancel_trip(?)}")) {
 
+            // MySQL proc signature: CANCEL_TRIP(IN p_trip_id)
             cs.setLong(1, tripId);
             cs.execute();
+
             JOptionPane.showMessageDialog(this, "Trip cancelled successfully.");
             refreshTripTable();
-
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error cancelling trip: " + ex.getMessage());

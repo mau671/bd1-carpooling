@@ -24,16 +24,15 @@ import java.sql.ResultSet;
  * @author hidal
  */
 public class ButtonEditor extends DefaultCellEditor {
-    protected final JButton button;
-    private boolean isPushed;
+    private final JButton button = new JButton("More Info");
     private final JTable table;
+    private boolean isPushed;
 
     public ButtonEditor(JCheckBox checkBox, JTable table) {
         super(checkBox);
         this.table = table;
-        button = new JButton("More Info");
         button.setOpaque(true);
-        button.addActionListener(e -> fireEditingStopped());
+        button.addActionListener((ActionEvent e) -> fireEditingStopped());
     }
 
     @Override
@@ -46,22 +45,27 @@ public class ButtonEditor extends DefaultCellEditor {
     @Override
     public Object getCellEditorValue() {
         if (isPushed) {
-            int row = table.getSelectedRow();
-            // NOW read the hidden trip_id column, not plate+date
-            long tripId = (Long) table.getValueAt(row, 0);
+            // 1) Grab the selected row in view, convert to model
+            int viewRow = table.getSelectedRow();
+            int modelRow = table.convertRowIndexToModel(viewRow);
+
+            // 2) Read the trip_id from the HIDDEN column 0
+            long tripId = (Long) table.getModel().getValueAt(modelRow, 0);
 
             try (Connection conn = DatabaseConnection.getConnection()) {
+                // 3) Fetch full details via your DAO
                 TripDAO dao = new TripDAO();
                 TripDetails details = dao.getFullTripDetails(tripId, conn);
                 if (details == null) {
                     JOptionPane.showMessageDialog(button, 
                         "Trip details not found for ID: " + tripId);
                 } else {
+                    // 4) Open your details window
                     TripInfo frame = new TripInfo(details);
-                    frame.setVisible(true);
                     frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
                 }
-            } catch (Exception ex) {
+            } catch (SQLException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(button, 
                     "Error loading trip details: " + ex.getMessage());
@@ -71,4 +75,3 @@ public class ButtonEditor extends DefaultCellEditor {
         return "More Info";
     }
 }
-
