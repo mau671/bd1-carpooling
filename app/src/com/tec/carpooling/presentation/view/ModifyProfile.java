@@ -10,6 +10,7 @@ import com.tec.carpooling.domain.entity.Gender;
 import com.tec.carpooling.domain.entity.IdType;
 import com.tec.carpooling.data.dao.PersonDAO;
 import com.tec.carpooling.data.dao.GenderInfoDAO;
+import com.tec.carpooling.data.dao.InstitutionPersonDAO;
 import com.tec.carpooling.data.dao.PersonCompleteDAO;
 import com.tec.carpooling.data.dao.PersonUpdateDAO;
 import com.tec.carpooling.data.dao.PhoneDAO;
@@ -35,6 +36,8 @@ import java.net.URL;
 import java.util.Locale;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
 import javax.swing.ImageIcon;
@@ -1014,9 +1017,17 @@ public class ModifyProfile extends javax.swing.JFrame {
         int index = listInstitutions.getSelectedIndex();
         if (index != -1) {
             ListModel model = listInstitutions.getModel();
-            if (model instanceof javax.swing.DefaultListModel) {  // Verificamos que sea un DefaultListModel, común
+            String institution = listInstitutions.getSelectedValue();
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                InstitutionPersonDAO institutionPerson = new InstitutionPersonDAO();
+                institutionPerson.deleteInstitution(conn, institution);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+            }
+            if (model instanceof javax.swing.DefaultListModel) {
                 javax.swing.DefaultListModel defaultListModel = (javax.swing.DefaultListModel) model;
-                defaultListModel.removeElementAt(index); // Eliminar el elemento
+                defaultListModel.removeElementAt(index);
             }
             listInstitutions.updateUI();
             JOptionPane.showMessageDialog(this, "Item erased successfully!");
@@ -1030,9 +1041,15 @@ public class ModifyProfile extends javax.swing.JFrame {
         if (index != -1) {
             //Object selectedValue = listInstitutions.getSelectedValue();
             javax.swing.SwingUtilities.invokeLater(() -> {
-                InstitutionPage institution = new InstitutionPage();
-                institution.setVisible(true);
-                institution.setLocationRelativeTo(null); // center on screen
+                InstitutionPage institution;
+                try {
+                    institution = new InstitutionPage((int) user.getId());
+                    institution.setVisible(true);
+                    institution.setLocationRelativeTo(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ModifyProfile.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             });
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");

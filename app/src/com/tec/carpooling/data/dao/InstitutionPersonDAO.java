@@ -40,4 +40,20 @@ public class InstitutionPersonDAO {
         
         return institutions;
     }
+    
+    public void deleteInstitution(Connection conn, String institutionName) throws SQLException {
+        String sql = "{call carpooling_pu.DELETE_INSTITUTION_BY_NAME(?)}";
+
+        try (CallableStatement cs = conn.prepareCall(sql)) {
+            cs.setString(1, institutionName);  // Parámetro: nombre de la institución
+
+            // Ejecutar el procedimiento
+            cs.execute();
+
+            // Opcional: Verificar si se eliminó algún registro
+            if (cs.getUpdateCount() == 0) {
+                throw new SQLException("No se encontró la institución para eliminar");
+            }
+        }
+    }
 } 
