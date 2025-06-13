@@ -10,7 +10,9 @@ import com.tec.carpooling.domain.entity.Gender;
 import com.tec.carpooling.domain.entity.IdType;
 import com.tec.carpooling.data.dao.PersonDAO;
 import com.tec.carpooling.data.dao.GenderInfoDAO;
+import com.tec.carpooling.data.dao.PersonUpdateDAO;
 import com.tec.carpooling.data.dao.TypeIdInfoDAO;
+import com.tec.carpooling.data.dao.impl.PersonUpdateDAOImpl;
 import com.tec.carpooling.domain.entity.Person;
 
 import java.awt.BorderLayout;
@@ -885,23 +887,56 @@ public class ModifyProfile extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyActionPerformed
-        String name = textName1.getText().trim();
+        String fst_name = textName1.getText().trim();
+        String scnd_name = textName2.getText().trim();
         String surname = textSurname1.getText().trim();
+        String scnd_surname = textSurname2.getText().trim();
         String id = textID.getText().trim();
+        int gender_id = boxGender.getSelectedIndex() + 1; // +1 porque los índices en MySQL empiezan en 1
+        int id_type_id = boxID.getSelectedIndex() + 1;
+        LocalDate selectedDate = dateOfBirthPicker.getDate();
 
-        // Check if any field is empty
-        if (name.isEmpty() || surname.isEmpty() || id.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
+        if (fst_name.isEmpty() || surname.isEmpty() || id.isEmpty() || 
+            gender_id == 0 || id_type_id == 0 || selectedDate == null) {
+            JOptionPane.showMessageDialog(this, "Please fill in all required fields.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        JOptionPane.showMessageDialog(null, "Changes applied successfully!");
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            UserProfile profile = new UserProfile(userRole, user);
-            profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            profile.setVisible(true);
 
-            ModifyProfile.this.dispose();
-        });
+        // Crear objeto Person con los datos
+        Person updatedPerson = new Person();
+        updatedPerson.setId(user.getPersonId());
+        updatedPerson.setFirstName(fst_name);
+        updatedPerson.setSecondName(scnd_name.isEmpty() ? null : scnd_name);
+        updatedPerson.setFirstSurname(surname);
+        updatedPerson.setSecondSurname(scnd_surname.isEmpty() ? null : scnd_surname);
+        updatedPerson.setIdentificationNumber(id);
+        updatedPerson.setDateOfBirth(java.sql.Date.valueOf(selectedDate));
+        updatedPerson.setGenderId(gender_id);
+        updatedPerson.setTypeIdentificationId(id_type_id);
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Actualizar la persona
+            PersonUpdateDAO personUpdateDAO = new PersonUpdateDAOImpl();
+            personUpdateDAO.updatePerson(updatedPerson, conn);
+
+            JOptionPane.showMessageDialog(this, "Changes applied successfully!", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            // Regresar al perfil del usuario
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                UserProfile profile = new UserProfile(userRole, user);
+                profile.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                profile.setVisible(true);
+                ModifyProfile.this.dispose();
+            });
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Error al actualizar el perfil: " + ex.getMessage(), 
+                "Error de base de datos", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_buttonModifyActionPerformed
 
     private void buttonEditPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditPActionPerformed
