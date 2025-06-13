@@ -20,4 +20,14 @@ BEGIN
     );
 END $$
 
+CREATE PROCEDURE DELETE_PHONE_BY_TYPE_AND_NUMBER(
+    IN p_phone_number VARCHAR(20),
+    IN p_type_phone_id INT
+)
+BEGIN
+    DELETE FROM carpooling_adm.PHONE 
+    WHERE phone_number = p_phone_number 
+    AND type_phone_id = p_type_phone_id;
+END $$
+
 DELIMITER ;

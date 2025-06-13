@@ -107,4 +107,22 @@ public class PhoneDAO {
             }
         }
     }
+    
+    public void deletePhone(Connection conn, String phoneNumber, int typePhoneId) throws SQLException {
+        String sql = "{call carpooling_pu.DELETE_PHONE_BY_TYPE_AND_NUMBER(?, ?)}";
+
+        try (CallableStatement cs = conn.prepareCall(sql)) {
+            cs.setString(1, phoneNumber);  // Primer parámetro: número de teléfono
+            cs.setInt(2, typePhoneId);     // Segundo parámetro: ID del tipo de teléfono
+
+            // Ejecutar el procedimiento
+            cs.execute();
+
+            // Opcional: Verificar si se eliminó algún registro
+            if (cs.getUpdateCount() == 0) {
+                throw new SQLException("No se encontró el teléfono para eliminar");
+            }
+        }
+    }
+    
 } 

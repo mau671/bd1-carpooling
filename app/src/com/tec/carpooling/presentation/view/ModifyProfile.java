@@ -12,6 +12,7 @@ import com.tec.carpooling.data.dao.PersonDAO;
 import com.tec.carpooling.data.dao.GenderInfoDAO;
 import com.tec.carpooling.data.dao.PersonCompleteDAO;
 import com.tec.carpooling.data.dao.PersonUpdateDAO;
+import com.tec.carpooling.data.dao.PhoneDAO;
 import com.tec.carpooling.data.dao.TypeIdInfoDAO;
 import com.tec.carpooling.data.dao.impl.PersonUpdateDAOImpl;
 import com.tec.carpooling.data.impl.GenderDAOImpl;
@@ -992,6 +993,16 @@ public class ModifyProfile extends javax.swing.JFrame {
         int row = tablePhones.getSelectedRow();
         if (row != -1) {
             DefaultTableModel model = (DefaultTableModel) tablePhones.getModel();
+            String number = (String) model.getValueAt(row, 1);
+            int type = (int) model.getValueAt(row, 0);
+            try (Connection conn = DatabaseConnection.getConnection()) {
+                PhoneDAO phoneDAO = new PhoneDAO();
+
+                phoneDAO.deletePhone(conn, number, type);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+            }
             model.removeRow(row);
             JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
@@ -1019,9 +1030,9 @@ public class ModifyProfile extends javax.swing.JFrame {
         if (index != -1) {
             //Object selectedValue = listInstitutions.getSelectedValue();
             javax.swing.SwingUtilities.invokeLater(() -> {
-            InstitutionPage institution = new InstitutionPage();
-            institution.setVisible(true);
-            institution.setLocationRelativeTo(null); // center on screen
+                InstitutionPage institution = new InstitutionPage();
+                institution.setVisible(true);
+                institution.setLocationRelativeTo(null); // center on screen
             });
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");
