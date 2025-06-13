@@ -189,6 +189,18 @@ public class PhonePage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
             return;
         }
+        
+        int typeID = comboBoxNumber.getSelectedIndex();
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PhoneDAO phoneDAO = new PhoneDAO();
+
+            phoneDAO.insertPhone(conn, number, typeID);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+        }
+        
         JOptionPane.showMessageDialog(null, "Changes saved successfully!");
         // Go back to User Profile screen
         this.dispose();

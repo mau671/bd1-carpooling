@@ -1,6 +1,15 @@
 package com.tec.carpooling.data.dao;
 
 import com.tec.carpooling.domain.entity.IdType;
+import com.tec.carpooling.domain.entity.Phone;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.tec.carpooling.domain.entity.IdType;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -79,5 +88,23 @@ public class PhoneDAO {
         }
         
         return types;
+    }
+    
+    public void insertPhone(Connection conn, String phoneNumber, int typePhoneId) throws SQLException {
+        
+        String sql = "{call carpooling_pu.INSERT_PHONE_SIMPLE(?, ?)}";
+        
+        try (CallableStatement cs = conn.prepareCall(sql)) {
+            cs.setString(1, phoneNumber);  // Primer parámetro: número de teléfono (VARCHAR)
+            cs.setInt(2, typePhoneId);     // Segundo parámetro: ID del tipo de teléfono (INT)
+
+            // Ejecutar el procedimiento
+            cs.execute();
+
+            // Opcional: Verificar si se insertó correctamente
+            if (cs.getUpdateCount() == 0) {
+                throw new SQLException("No se pudo insertar el teléfono");
+            }
+        }
     }
 } 
