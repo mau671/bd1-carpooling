@@ -58,14 +58,14 @@ public class UserType extends javax.swing.JFrame {
         try {
             boolean isAdmin = userTypeService.isAdmin(user.getId());
             if (isAdmin) {
-                System.out.println("🔒 ADMIN ACCESS: Usuario " + user.getUsername() + " tiene privilegios de administrador");
+                System.out.println("🔒 ADMIN ACCESS: User " + user.getUsername() + " tiene privilegios de administrador");
                 
                 // Si es administrador, redirigir directamente al perfil de administrador
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     JOptionPane.showMessageDialog(this,
-                        "Bienvenido, Administrador " + user.getUsername() + "!\n" +
-                        "Redirigiendo al panel de administración...",
-                        "Acceso de Administrador",
+                        "Welcome, Admin " + user.getUsername() + "!\n" +
+                        "Redirecting to admin panel...",
+                        "Admin Access",
                         JOptionPane.INFORMATION_MESSAGE);
                     
                     UserProfile adminProfile = new UserProfile("Admin", user);
@@ -78,10 +78,10 @@ public class UserType extends javax.swing.JFrame {
                 panelPassenger.setVisible(false);
                 panelDriver.setVisible(false);
             } else {
-                System.out.println("👤 USER ACCESS: Usuario " + user.getUsername() + " es un usuario regular");
+                System.out.println("👤 USER ACCESS: User " + user.getUsername() + " es un usuario regular");
             }
         } catch (SQLException ex) {
-            System.err.println("Error verificando estado de administrador: " + ex.getMessage());
+            System.err.println("Error verifying admin state: " + ex.getMessage());
         }
     }
 
@@ -107,8 +107,8 @@ public class UserType extends javax.swing.JFrame {
             
             if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
-                    "Los administradores no pueden registrarse como pasajeros.",
-                    "Acceso Restringido",
+                    "Admins can't register as passengers.",
+                    "Restricted Access",
                     JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -120,8 +120,8 @@ public class UserType extends javax.swing.JFrame {
                 // Es conductor pero no pasajero, preguntar si quiere ser también pasajero
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Te gustaría registrarte también como pasajero? Ya estás registrado como conductor.",
-                    "Registrarse como Pasajero",
+                    "Would you like to register as a passenger as well? You're already registered as a driver.",
+                    "Register as Passenger.",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );
@@ -137,7 +137,7 @@ public class UserType extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registrándose como pasajero: " + ex.getMessage(),
+                "Error registering as passenger: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -151,8 +151,8 @@ public class UserType extends javax.swing.JFrame {
             
             if (isAdmin) {
                 JOptionPane.showMessageDialog(this,
-                    "Los administradores no pueden registrarse como conductores.",
-                    "Acceso Restringido",
+                    "Admins can't register as drivers",
+                    "Restricted Access",
                     JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -164,8 +164,8 @@ public class UserType extends javax.swing.JFrame {
                 // Es pasajero pero no conductor, preguntar si quiere ser también conductor
                 int response = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Te gustaría registrarte también como conductor? Ya estás registrado como pasajero.",
-                    "Registrarse como Conductor",
+                    "Would you like to register as a driver as well? You're already registered as a passenger.",
+                    "Register as Driver",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
                 );
@@ -181,7 +181,7 @@ public class UserType extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this,
-                "Error registrándose como conductor: " + ex.getMessage(),
+                "Error registering as driver: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }

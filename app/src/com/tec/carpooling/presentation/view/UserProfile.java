@@ -17,6 +17,8 @@ import javax.swing.ImageIcon;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Image;
+import java.awt.Dimension;
+import javax.swing.BorderFactory;
 import java.util.List;
 
 import java.awt.BorderLayout;
@@ -69,25 +71,32 @@ public class UserProfile extends javax.swing.JFrame {
                 // Load and display profile photo
                 Photo profilePhoto = photoDAO.getLatestPhoto(user.getPersonId(), conn);
                 if (profilePhoto != null && profilePhoto.getImage() != null) {
-                    try {
-                        // Convert byte array to ImageIcon
-                        ImageIcon imageIcon = new ImageIcon(profilePhoto.getImage());
-                        
-                        // Scale the image to fit the label
-                        Image image = imageIcon.getImage();
-                        Image scaledImage = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-                        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-                        
-                        jLabelPhoto.setIcon(scaledIcon);
-                        jLabelPhoto.setText(""); // Clear any text
-                    } catch (Exception e) {
-                        System.err.println("Error loading profile photo: " + e.getMessage());
-                        jLabelPhoto.setText("Photo Error");
-                        jLabelPhoto.setIcon(null);
-                    }
-                } else {
-                    jLabelPhoto.setText("No Photo");
+                    byte[] imgBytes = profilePhoto.getImage();
+                    ImageIcon rawIcon = new ImageIcon(imgBytes);
+                    Image raw = rawIcon.getImage();
+
+                    // 1) compute a scale that fits within maxW×maxH but keeps aspect ratio
+                    int maxW = 200, maxH = 150;
+                    int w = raw.getWidth(null), h = raw.getHeight(null);
+                    double scale = Math.min((double)maxW / w, (double)maxH / h);
+                    int newW = (int)(w * scale);
+                    int newH = (int)(h * scale);
+
+                    Image scaled = raw.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+                    jLabelPhoto.setIcon(new ImageIcon(scaled));
+                    jLabelPhoto.setText("");             // no text
+
+                    // 2) force your label to occupy the “full box” so it won’t collapse smaller
+                    jLabelPhoto.setPreferredSize(new Dimension(maxW, maxH));
+
+                    // 3) add a left‐padding so it shifts right a bit
+                    jLabelPhoto.setBorder(
+                      BorderFactory.createEmptyBorder(0, 120, 0, 0)
+                    );
+                }
+                else {
                     jLabelPhoto.setIcon(null);
+                    jLabelPhoto.setText("No Photo");
                 }
                 
                 // Load institutions from profile
@@ -140,7 +149,6 @@ public class UserProfile extends javax.swing.JFrame {
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabelPhoto = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        buttonEliminate = new javax.swing.JButton();
         jPanel34 = new javax.swing.JPanel();
         buttonModifyProfile = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
@@ -235,7 +243,6 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel1.add(filler4, gridBagConstraints);
 
         jLabelPhoto.setToolTipText("");
-        jLabelPhoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabelPhoto.setPreferredSize(new java.awt.Dimension(200, 200));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -249,27 +256,6 @@ public class UserProfile extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(225, 239, 255));
         jPanel6.setLayout(new java.awt.GridBagLayout());
-
-        buttonEliminate.setBackground(new java.awt.Color(255, 90, 90));
-        buttonEliminate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonEliminate.setForeground(new java.awt.Color(255, 255, 255));
-        buttonEliminate.setText("Eliminate Account");
-        buttonEliminate.setMaximumSize(new java.awt.Dimension(85, 23));
-        buttonEliminate.setMinimumSize(new java.awt.Dimension(85, 23));
-        buttonEliminate.setPreferredSize(new java.awt.Dimension(90, 40));
-        buttonEliminate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonEliminateActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 65;
-        gridBagConstraints.ipady = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
-        jPanel6.add(buttonEliminate, gridBagConstraints);
 
         jPanel34.setBackground(new java.awt.Color(225, 239, 255));
         jPanel34.setLayout(new java.awt.GridBagLayout());
@@ -799,6 +785,9 @@ public class UserProfile extends javax.swing.JFrame {
         jPanel16.add(jPanel2, gridBagConstraints);
 
         jLabelTypeofID.setText("jLabel7");
+        jLabelTypeofID.setMaximumSize(new java.awt.Dimension(110, 16));
+        jLabelTypeofID.setMinimumSize(new java.awt.Dimension(110, 16));
+        jLabelTypeofID.setPreferredSize(new java.awt.Dimension(110, 16));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -835,34 +824,6 @@ public class UserProfile extends javax.swing.JFrame {
             UserProfile.this.dispose();
         });
     }//GEN-LAST:event_buttonModifyProfileActionPerformed
-
-    private void buttonEliminateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEliminateActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to delete your account?",
-            "Confirm Deletion",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
-        );
-
-        if (confirm == JOptionPane.YES_OPTION) {
-
-            JOptionPane.showMessageDialog(
-                this,
-                "Your account was successfully deleted.",
-                "Account Deleted",
-                JOptionPane.INFORMATION_MESSAGE
-            );
-
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                InitialPage start = new InitialPage();
-                start.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                start.setVisible(true);
-
-                UserProfile.this.dispose();
-            });
-        }
-    }//GEN-LAST:event_buttonEliminateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -905,7 +866,6 @@ public class UserProfile extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonEliminate;
     private javax.swing.JButton buttonModifyProfile;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;

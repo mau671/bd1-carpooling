@@ -255,7 +255,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         boxID = new javax.swing.JComboBox<>();
         jPanel9 = new javax.swing.JPanel();
         buttonModify = new javax.swing.JButton();
-        buttonPassword = new javax.swing.JButton();
         buttonPhoto = new javax.swing.JButton();
         buttonAddNumber = new javax.swing.JButton();
         buttonAddEmail = new javax.swing.JButton();
@@ -857,27 +856,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(40, 120, 30, 0);
         jPanel9.add(buttonModify, gridBagConstraints);
 
-        buttonPassword.setText("Change Password");
-        buttonPassword.setBackground(new java.awt.Color(255, 90, 90));
-        buttonPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonPassword.setForeground(new java.awt.Color(255, 255, 255));
-        buttonPassword.setMaximumSize(new java.awt.Dimension(85, 23));
-        buttonPassword.setMinimumSize(new java.awt.Dimension(85, 23));
-        buttonPassword.setPreferredSize(new java.awt.Dimension(85, 23));
-        buttonPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonPasswordActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.ipadx = 80;
-        gridBagConstraints.ipady = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(40, 120, 30, 0);
-        jPanel9.add(buttonPassword, gridBagConstraints);
-
         buttonPhoto.setText("Change Photo");
         buttonPhoto.setBackground(new java.awt.Color(18, 102, 160));
         buttonPhoto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -1085,14 +1063,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buttonEditEActionPerformed
 
-    private void buttonPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPasswordActionPerformed
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            PasswordPage password = new PasswordPage();
-            password.setVisible(true);
-            password.setLocationRelativeTo(null); // center on screen
-        });
-    }//GEN-LAST:event_buttonPasswordActionPerformed
-
     private void buttonAddNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddNumberActionPerformed
         javax.swing.SwingUtilities.invokeLater(() -> {
             PhonePage phone = new PhonePage();
@@ -1162,7 +1132,6 @@ public class ModifyProfile extends javax.swing.JFrame {
     private javax.swing.JButton buttonEraseI;
     private javax.swing.JButton buttonEraseP;
     private javax.swing.JButton buttonModify;
-    private javax.swing.JButton buttonPassword;
     private javax.swing.JButton buttonPhoto;
     private com.github.lgooddatepicker.components.DatePicker dateOfBirthPicker;
     private javax.swing.Box.Filler filler1;
