@@ -60,13 +60,13 @@ public class PhoneTypes extends javax.swing.JPanel {
              CallableStatement cstmt = conn.prepareCall("{call carpooling_adm.list_type_phones()}");
              ResultSet rs = cstmt.executeQuery()) {
             
-            phoneTypeTableModel.setRowCount(0);
-            while (rs.next()) {
-                phoneTypeTableModel.addRow(new Object[]{
-                    rs.getLong("id"),
-                    rs.getString("name")
-                });
-            }
+                phoneTypeTableModel.setRowCount(0);
+                while (rs.next()) {
+                    phoneTypeTableModel.addRow(new Object[]{
+                        rs.getLong("id"),
+                        rs.getString("name")
+                    });
+                }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, 
                 "Error loading phone types: " + e.getMessage(), 

@@ -45,7 +45,7 @@ public class AdminFrame extends javax.swing.JFrame {
         jMenuItemParameters = new javax.swing.JMenuItem();
         jMenuItemLogs = new javax.swing.JMenuItem();
         jMenuItemStadistics = new javax.swing.JMenuItem();
-        jMenuItemQuerys = new javax.swing.JMenuItem();
+        jMenuItemQueries = new javax.swing.JMenuItem();
         jMenuItemJobs = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -167,13 +167,13 @@ public class AdminFrame extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItemStadistics);
 
-        jMenuItemQuerys.setText("Querys");
-        jMenuItemQuerys.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemQueries.setText("Queries");
+        jMenuItemQueries.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemQuerysActionPerformed(evt);
+                jMenuItemQueriesActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItemQuerys);
+        jMenu2.add(jMenuItemQueries);
 
         jMenuItemJobs.setText("Jobs");
         jMenuItemJobs.addActionListener(new java.awt.event.ActionListener() {
@@ -206,10 +206,10 @@ public class AdminFrame extends javax.swing.JFrame {
         showPanel(institutionsPanel);
     }//GEN-LAST:event_jMenuItemManagementInstitutionsActionPerformed
 
-    private void jMenuItemQuerysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuerysActionPerformed
+    private void jMenuItemQueriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQueriesActionPerformed
         Queries newQueryPanel = new Queries();
         showPanel(newQueryPanel);
-    }//GEN-LAST:event_jMenuItemQuerysActionPerformed
+    }//GEN-LAST:event_jMenuItemQueriesActionPerformed
 
     private void jMenuItemManagementUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemManagementUsersActionPerformed
        showPanel(new Users());
@@ -335,7 +335,7 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemManagementInstitutions;
     private javax.swing.JMenuItem jMenuItemManagementUsers;
     private javax.swing.JMenuItem jMenuItemParameters;
-    private javax.swing.JMenuItem jMenuItemQuerys;
+    private javax.swing.JMenuItem jMenuItemQueries;
     private javax.swing.JMenuItem jMenuItemStadistics;
     private javax.swing.JPanel jPanelMain;
     // End of variables declaration//GEN-END:variables
