@@ -10,9 +10,12 @@ import com.tec.carpooling.domain.entity.Gender;
 import com.tec.carpooling.domain.entity.IdType;
 import com.tec.carpooling.data.dao.PersonDAO;
 import com.tec.carpooling.data.dao.GenderInfoDAO;
+import com.tec.carpooling.data.dao.PersonCompleteDAO;
 import com.tec.carpooling.data.dao.PersonUpdateDAO;
 import com.tec.carpooling.data.dao.TypeIdInfoDAO;
 import com.tec.carpooling.data.dao.impl.PersonUpdateDAOImpl;
+import com.tec.carpooling.data.impl.GenderDAOImpl;
+import com.tec.carpooling.domain.entity.Institution;
 import com.tec.carpooling.domain.entity.Person;
 
 import java.awt.BorderLayout;
@@ -30,12 +33,16 @@ import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.Locale;
 import java.time.LocalDate;
+import java.util.List;
+import javax.swing.DefaultListModel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
+import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -51,6 +58,7 @@ public class ModifyProfile extends javax.swing.JFrame {
         this.user = user;
         this.userRole = role;
         initComponents();
+        loadGenders();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         customizeDatePicker();
         
@@ -92,6 +100,36 @@ public class ModifyProfile extends javax.swing.JFrame {
                 boxGender.setSelectedItem(genderName);
                 boxID.setSelectedItem(typeIdName);
             }
+            PersonCompleteDAO personCompleteDAO = new PersonCompleteDAO();
+            PersonCompleteDAO.CompleteProfile profile = personCompleteDAO.getCompleteProfile(user.getPersonId(), conn);
+            
+            if (profile.getPerson() != null) {     
+                // Load institutions from profile
+                DefaultListModel<String> institutionModel = new DefaultListModel<>();
+                for (Institution institution : profile.getInstitutions()) {
+                    institutionModel.addElement(institution.getName());
+                }
+                listInstitutions.setModel(institutionModel);
+                
+                // Load emails from profile
+                DefaultListModel<String> emailModel = new DefaultListModel<>();
+                for (String email : profile.getEmails()) {
+                    emailModel.addElement(email);
+                }
+                listEmails.setModel(emailModel);
+                
+                // Load phone numbers into table from profile
+                DefaultTableModel phoneTableModel = new DefaultTableModel(
+                    new String[]{"Phone Number", "Type"}, 0
+                );
+                for (PersonCompleteDAO.PhoneInfo phone : profile.getPhones()) {
+                    phoneTableModel.addRow(new Object[]{
+                        phone.getPhoneNumber(), 
+                        phone.getPhoneType()
+                    });
+                }
+                tablePhones.setModel(phoneTableModel);
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
@@ -100,6 +138,24 @@ public class ModifyProfile extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
+    private void loadGenders() {
+        try {
+            GenderDAOImpl genderDAO = new GenderDAOImpl();
+            List<Gender> genders = genderDAO.findAll();
+
+            // Limpiar el ComboBox primero 
+            boxGender.removeAllItems();
+
+            // Agregar todos los géneros al ComboBox
+            for (Gender gender : genders) {
+                boxGender.addItem(gender.getName());
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading genders: " + ex.getMessage());
+        }
+    }
     private void customizeDatePicker() {
         URL dateImageURL = getClass().getResource("/Assets/datePickerIcon.png");
         if (dateImageURL != null) {
@@ -957,8 +1013,8 @@ public class ModifyProfile extends javax.swing.JFrame {
     private void buttonErasePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonErasePActionPerformed
         int row = tablePhones.getSelectedRow();
         if (row != -1) {
-            //Object valorColumna1 = tablePhones.getValueAt(row, 0); // Columna 0
-            //Object valorColumna2 = tablePhones.getValueAt(row, 1); // Columna 1
+            DefaultTableModel model = (DefaultTableModel) tablePhones.getModel();
+            model.removeRow(row);
             JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "A row must be selected.");
@@ -968,7 +1024,12 @@ public class ModifyProfile extends javax.swing.JFrame {
     private void buttonEraseIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEraseIActionPerformed
         int index = listInstitutions.getSelectedIndex();
         if (index != -1) {
-            //Object selectedValue = listInstitutions.getSelectedValue();
+            ListModel model = listInstitutions.getModel();
+            if (model instanceof javax.swing.DefaultListModel) {  // Verificamos que sea un DefaultListModel, común
+                javax.swing.DefaultListModel defaultListModel = (javax.swing.DefaultListModel) model;
+                defaultListModel.removeElementAt(index); // Eliminar el elemento
+            }
+            listInstitutions.updateUI();
             JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");
@@ -980,9 +1041,9 @@ public class ModifyProfile extends javax.swing.JFrame {
         if (index != -1) {
             //Object selectedValue = listInstitutions.getSelectedValue();
             javax.swing.SwingUtilities.invokeLater(() -> {
-                InstitutionPage institution = new InstitutionPage();
-                institution.setVisible(true);
-                institution.setLocationRelativeTo(null); // center on screen
+            InstitutionPage institution = new InstitutionPage();
+            institution.setVisible(true);
+            institution.setLocationRelativeTo(null); // center on screen
             });
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");
@@ -992,7 +1053,12 @@ public class ModifyProfile extends javax.swing.JFrame {
     private void buttonEraseEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEraseEActionPerformed
         int index = listEmails.getSelectedIndex();
         if (index != -1) {
-            //Object selectedValue = listInstitutions.getSelectedValue();
+            ListModel model = listEmails.getModel();
+            if (model instanceof javax.swing.DefaultListModel) {  // Verificamos que sea un DefaultListModel, común
+                javax.swing.DefaultListModel defaultListModel = (javax.swing.DefaultListModel) model;
+                defaultListModel.removeElementAt(index); // Eliminar el elemento
+            }
+            listEmails.updateUI();
             JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
             JOptionPane.showMessageDialog(this, "An item must be selected.");
