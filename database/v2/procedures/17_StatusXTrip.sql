@@ -25,33 +25,39 @@ END $$
 
 CREATE PROCEDURE cancel_trip(IN p_trip_id INT)
 BEGIN
-    DECLARE v_pending_id INT;
-    DECLARE v_cancelled_id INT;
-    DECLARE v_current_id INT;
-    DECLARE rows_affected INT;
-    
+  DECLARE v_pending   INT;
+  DECLARE v_cancelled INT;
+  DECLARE v_curr      INT;
 
-    SELECT id INTO v_pending_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'PENDING';
-    SELECT id INTO v_cancelled_id FROM carpooling_adm.STATUS WHERE UPPER(name) = 'CANCELLED';
-    
+  -- look up the status IDs using UPPER()
+  SELECT id INTO v_pending
+    FROM carpooling_adm.STATUS
+   WHERE UPPER(name) = 'PENDING'
+   LIMIT 1;
 
-    SELECT status_id INTO v_current_id
-    FROM STATUSXTRIP
-    WHERE trip_id = p_trip_id;
-    
+  SELECT id INTO v_cancelled
+    FROM carpooling_adm.STATUS
+   WHERE UPPER(name) = 'CANCELLED'
+   LIMIT 1;
 
-    IF v_current_id = v_pending_id THEN
-        UPDATE STATUSXTRIP
-        SET status_id = v_cancelled_id
-        WHERE trip_id = p_trip_id;
-        
-        SET rows_affected = ROW_COUNT();
-    ELSE
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Trip cannot be cancelled. Not in PENDING state.';
-    END IF;
-END $$
+  -- read current status_id
+  SELECT status_id
+    INTO v_curr
+    FROM carpooling_pu.STATUSXTRIP
+   WHERE trip_id = p_trip_id
+   LIMIT 1;
 
+  -- only flip if it really is PENDING
+  IF v_curr = v_pending THEN
+    UPDATE carpooling_pu.STATUSXTRIP
+       SET status_id = v_cancelled
+     WHERE trip_id = p_trip_id
+       AND status_id = v_pending;
+  ELSE
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Trip cannot be cancelled: not in PENDING state.';
+  END IF;
+END$$
 
 CREATE PROCEDURE auto_update_status(IN p_trip_id INT)
 BEGIN

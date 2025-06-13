@@ -216,7 +216,7 @@ public class Domains extends javax.swing.JDialog {
 
     private void loadDomains() {
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("CALL find_all_domains()")) {
+             CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.find_all_domains()")) {
             ResultSet rs = stmt.executeQuery();
             tableModel.setRowCount(0);
             while (rs.next()) {
@@ -227,7 +227,7 @@ public class Domains extends javax.swing.JDialog {
                 });
             }
             // Obtener dominios habilitados para la institución
-            try (CallableStatement stmt2 = conn.prepareCall("CALL get_associated_domain_ids(?)")) {
+            try (CallableStatement stmt2 = conn.prepareCall("CALL carpooling_adm.get_associated_domain_ids(?)")) {
                 stmt2.setInt(1, institutionId);
                 ResultSet rs2 = stmt2.executeQuery();
                 while (rs2.next()) {
@@ -270,7 +270,7 @@ public class Domains extends javax.swing.JDialog {
             }
             sb.append("]");
             String jsonDomainIds = sb.toString();
-            try (CallableStatement stmt = conn.prepareCall("CALL update_institution_domains(?, ?)")) {
+            try (CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.update_institution_domains(?, ?)")) {
                     stmt.setInt(1, institutionId);
                 stmt.setString(2, jsonDomainIds);
                     stmt.execute();
@@ -298,7 +298,7 @@ public class Domains extends javax.swing.JDialog {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("CALL register_domain(?, ?)")) {
+             CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.register_domain(?, ?)")) {
             stmt.setString(1, domainName);
             stmt.registerOutParameter(2, java.sql.Types.INTEGER);
             stmt.execute();
@@ -344,7 +344,7 @@ public class Domains extends javax.swing.JDialog {
         }
 
         try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("CALL update_domain(?, ?)")) {
+             CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.update_domain(?, ?)")) {
             stmt.setInt(1, selectedDomainId);
             stmt.setString(2, newName);
             stmt.execute();
@@ -386,7 +386,7 @@ public class Domains extends javax.swing.JDialog {
 
         if (confirm == JOptionPane.YES_OPTION) {
             try (Connection conn = DatabaseConnection.getConnection();
-                 CallableStatement stmt = conn.prepareCall("CALL delete_domain(?)")) {
+                 CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.delete_domain(?)")) {
                 stmt.setInt(1, selectedDomainId);
                 stmt.execute();
                 for (int i = 0; i < tableModel.getRowCount(); i++) {

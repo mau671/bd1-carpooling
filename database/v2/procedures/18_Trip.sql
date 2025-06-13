@@ -45,47 +45,49 @@ CREATE PROCEDURE get_trips_by_driver(
 )
 BEGIN
     SELECT
-        T.id AS trip_id,
+        T.id              AS trip_id,
         R.programming_date AS trip_date,
-        D1.name AS start_point,
-        D2.name AS destination_point,
+        D1.name           AS start_point,
+        D2.name           AS destination_point,
         VEH.plate,
-        S.name AS status,
+        S.name            AS status,
         T.price_per_passenger,
-        C.name AS currency
+        C.name            AS currency
     FROM TRIP T
-    JOIN ROUTE R ON T.route_id = R.id
+    JOIN ROUTE R    ON T.route_id = R.id
     JOIN VEHICLEXROUTE VR ON VR.route_id = R.id
-    JOIN VEHICLE VEH ON VEH.id = VR.vehicle_id
+    JOIN VEHICLE VEH      ON VEH.id = VR.vehicle_id
     JOIN DRIVERXVEHICLE VD ON VD.vehicle_id = VEH.id
-    JOIN STATUSXTRIP SX ON SX.trip_id = T.id
-    JOIN carpooling_adm.STATUS S ON S.id = SX.status_id
-    JOIN carpooling_adm.CURRENCY C ON C.id = T.id_currency
+    JOIN STATUSXTRIP SX   ON SX.trip_id = T.id
+    JOIN carpooling_adm.STATUS S  ON S.id = SX.status_id
+
+    -- <— make this LEFT JOIN
+    LEFT JOIN carpooling_adm.CURRENCY C ON C.id = T.id_currency
 
     JOIN (
-        SELECT route_id, district_id
-        FROM (
-            SELECT route_id, district_id,
-                   ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id) rn
-            FROM WAYPOINT
-            WHERE district_id IS NOT NULL
-        ) t WHERE rn = 1
+      SELECT route_id, district_id
+      FROM (
+        SELECT route_id, district_id,
+               ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id) rn
+        FROM WAYPOINT
+        WHERE district_id IS NOT NULL
+      ) t WHERE rn = 1
     ) WP1 ON WP1.route_id = R.id
     JOIN carpooling_adm.DISTRICT D1 ON D1.id = WP1.district_id
 
     JOIN (
-        SELECT route_id, district_id
-        FROM (
-            SELECT route_id, district_id,
-                   ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id DESC) rn
-            FROM WAYPOINT
-            WHERE district_id IS NOT NULL
-        ) t WHERE rn = 1
+      SELECT route_id, district_id
+      FROM (
+        SELECT route_id, district_id,
+               ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id DESC) rn
+        FROM WAYPOINT
+        WHERE district_id IS NOT NULL
+      ) t WHERE rn = 1
     ) WP2 ON WP2.route_id = R.id
     JOIN carpooling_adm.DISTRICT D2 ON D2.id = WP2.district_id
-    WHERE VD.driver_id = p_driver_id;
 
-END $$
+    WHERE VD.driver_id = p_driver_id;
+END$$
 
 CREATE PROCEDURE update_trip(
     IN p_trip_id INT,

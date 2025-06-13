@@ -43,25 +43,21 @@ public class TripDAO {
 
     public List<TripDisplay> getTripsByDriver(long userId, Connection conn) throws SQLException {
         List<TripDisplay> trips = new ArrayList<>();
-
         String sql = "{CALL get_trips_by_driver(?)}";
-
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, userId);
-
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Date date = rs.getDate("trip_date");
-                    String start = rs.getString("start_point");
-                    String end = rs.getString("destination_point");
-                    String plate = rs.getString("plate");
+                    long   id     = rs.getLong("trip_id");
+                    Date   date   = rs.getDate("trip_date");
+                    String start  = rs.getString("start_point");
+                    String end    = rs.getString("destination_point");
+                    String plate  = rs.getString("plate");
                     String status = rs.getString("status");
-
-                    trips.add(new TripDisplay(date, start, end, plate, status));
+                    trips.add(new TripDisplay(id, date, start, end, plate, status));
                 }
             }
         }
-
         return trips;
     }
 

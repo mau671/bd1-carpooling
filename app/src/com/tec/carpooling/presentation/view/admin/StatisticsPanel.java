@@ -15,6 +15,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import java.awt.Dimension;
 
 /**
  * StatisticsPanel - muestra gráficas basadas en los procedimientos de 07_Statistics.sql
@@ -45,11 +46,15 @@ public class StatisticsPanel extends javax.swing.JPanel {
             "Drivers by gender", "Passengers by gender", "Users by age range", "Trips per month"});
         btn = new JButton("Generate");
         btn.addActionListener(e -> generateChart());
+
         JPanel top = new JPanel();
         top.add(combo);
         top.add(btn);
         add(top, BorderLayout.NORTH);
+
         chartContainer = new JPanel(new BorderLayout());
+        // reserve at least 600×400px for the chart
+        chartContainer.setPreferredSize(new Dimension(600, 400));
         add(chartContainer, BorderLayout.CENTER);
     }
 
@@ -72,7 +77,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
 
     private void showPieChart(String title, String procedure) {
-        try (CallableStatement cs = connection.prepareCall("{call " + procedure + "(?,?,?)}")) {
+        try (CallableStatement cs = connection.prepareCall("{call carpooling_adm." + procedure + "(?,?,?)}")) {
             cs.setInt(1, 1); // institution_id hard-coded ejemplo
             cs.setNull(2, Types.DATE);
             cs.setNull(3, Types.DATE);
@@ -89,7 +94,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
 
     private void showBarChartAge() {
-        try (CallableStatement cs = connection.prepareCall("{call get_users_by_age_range(?)}")) {
+        try (CallableStatement cs = connection.prepareCall("{call carpooling_adm.get_users_by_age_range(?)}")) {
             cs.setNull(1, Types.INTEGER);
             ResultSet rs = cs.executeQuery();
             DefaultCategoryDataset ds = new DefaultCategoryDataset();
@@ -107,7 +112,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
 
     private void showBarChartTrips() {
-        try (CallableStatement cs = connection.prepareCall("{call get_total_trips_per_month()}")) {
+        try (CallableStatement cs = connection.prepareCall("{call carpooling_adm.get_total_trips_per_month()}")) {
             ResultSet rs = cs.executeQuery();
             DefaultCategoryDataset ds = new DefaultCategoryDataset();
             while (rs.next()) {
@@ -124,10 +129,12 @@ public class StatisticsPanel extends javax.swing.JPanel {
 
     private void updateChart(JFreeChart chart) {
         chartContainer.removeAll();
-        chartContainer.add(new ChartPanel(chart), BorderLayout.CENTER);
+
+        ChartPanel cp = new ChartPanel(chart);
+        cp.setPreferredSize(new Dimension(600, 400));  // match the container
+        chartContainer.add(cp, BorderLayout.CENTER);
+
         chartContainer.revalidate();
         chartContainer.repaint();
-        this.revalidate();
-        this.repaint();
     }
 } 
