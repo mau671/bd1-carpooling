@@ -1,5 +1,6 @@
 package com.tec.carpooling.data.dao;
 
+import com.tec.carpooling.domain.entity.IdType;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -58,5 +59,25 @@ public class PhoneDAO {
         }
         
         return phones;
+    }
+    
+    // Sí, estoy usanod IdType para cargar telefonos, todo bien
+    public List<IdType> getAllPhoneTypes(Connection conn) throws SQLException {
+        List<IdType> types = new ArrayList<>();
+        
+        String sql = "{call carpooling_adm.list_type_phones()}";
+        
+        try (CallableStatement stmt = conn.prepareCall(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                IdType type = new IdType();
+                type.setId(rs.getLong("id"));
+                type.setName(rs.getString("name"));
+                types.add(type);
+            }
+        }
+        
+        return types;
     }
 } 
