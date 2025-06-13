@@ -2,6 +2,8 @@ USE carpooling_pu;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS delete_email_by_address$$
+
 CREATE PROCEDURE DELETE_EMAIL_BY_ADDRESS(
     IN p_email_address VARCHAR(100)
 )
