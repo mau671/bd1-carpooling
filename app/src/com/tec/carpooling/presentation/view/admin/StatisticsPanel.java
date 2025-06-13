@@ -72,7 +72,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
 
     private void showPieChart(String title, String procedure) {
-        try (CallableStatement cs = connection.prepareCall("{call " + procedure + "(?,?,?)}")) {
+        try (CallableStatement cs = connection.prepareCall("{call carpooling_adm." + procedure + "(?,?,?)}")) {
             cs.setInt(1, 1); // institution_id hard-coded ejemplo
             cs.setNull(2, Types.DATE);
             cs.setNull(3, Types.DATE);
@@ -89,7 +89,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
 
     private void showBarChartAge() {
-        try (CallableStatement cs = connection.prepareCall("{call get_users_by_age_range(?)}")) {
+        try (CallableStatement cs = connection.prepareCall("{call carpooling_adm.get_users_by_age_range(?)}")) {
             cs.setNull(1, Types.INTEGER);
             ResultSet rs = cs.executeQuery();
             DefaultCategoryDataset ds = new DefaultCategoryDataset();
@@ -107,7 +107,7 @@ public class StatisticsPanel extends javax.swing.JPanel {
     }
 
     private void showBarChartTrips() {
-        try (CallableStatement cs = connection.prepareCall("{call get_total_trips_per_month()}")) {
+        try (CallableStatement cs = connection.prepareCall("{call carpooling_adm.get_total_trips_per_month()}")) {
             ResultSet rs = cs.executeQuery();
             DefaultCategoryDataset ds = new DefaultCategoryDataset();
             while (rs.next()) {

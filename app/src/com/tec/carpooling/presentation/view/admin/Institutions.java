@@ -67,7 +67,7 @@ public class Institutions extends javax.swing.JPanel {
 
     private void loadInstitutions() {
         try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("CALL find_all_institutions()")) {
+             CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.find_all_institutions()")) {
             ResultSet rs = stmt.executeQuery();
             institutionTableModel.setRowCount(0);
             while (rs.next()) {
@@ -246,7 +246,7 @@ public class Institutions extends javax.swing.JPanel {
         }
 
         try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("CALL create_institution(?, ?)")) {
+             CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.create_institution(?, ?)")) {
             stmt.setString(1, name);
             stmt.registerOutParameter(2, java.sql.Types.INTEGER);
             stmt.execute();
@@ -275,7 +275,7 @@ public class Institutions extends javax.swing.JPanel {
         }
 
         try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("CALL update_institution_name(?, ?)")) {
+             CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.update_institution_name(?, ?)")) {
             stmt.setLong(1, selectedInstitutionId);
             stmt.setString(2, newName);
             stmt.execute();
@@ -299,7 +299,7 @@ public class Institutions extends javax.swing.JPanel {
         }
 
         try (Connection conn = com.tec.carpooling.data.connection.DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall("CALL delete_institution(?)")) {
+             CallableStatement stmt = conn.prepareCall("CALL carpooling_adm.delete_institution(?)")) {
             stmt.setLong(1, selectedInstitutionId);
             stmt.execute();
                     JOptionPane.showMessageDialog(this, "Institución eliminada.");
