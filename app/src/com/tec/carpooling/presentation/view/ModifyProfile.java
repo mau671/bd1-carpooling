@@ -58,7 +58,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         this.user = user;
         this.userRole = role;
         initComponents();
-        loadGenders();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
         customizeDatePicker();
         
@@ -76,12 +75,6 @@ public class ModifyProfile extends javax.swing.JFrame {
             PersonDAO personDAO = new PersonDAO();
             GenderInfoDAO genderDAO = new GenderInfoDAO();
             TypeIdInfoDAO typeDAO = new TypeIdInfoDAO();
-
-            List<IdType> idTypes = typeDAO.getAllIdTypes(conn);
-            boxID.removeAllItems();
-            for (IdType type : idTypes) {
-                boxID.addItem(type.getName());
-            }
 
             Person person = personDAO.getPersonProfile(user.getPersonId(), conn);
             if (person != null) {
@@ -136,6 +129,11 @@ public class ModifyProfile extends javax.swing.JFrame {
                 }
                 tablePhones.setModel(phoneTableModel);
             }
+            List<IdType> idTypes = typeDAO.getAllIdTypes(conn);
+            for (IdType type : idTypes) {
+                boxID.addItem(type.getName());
+            }
+            loadGenders();
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
@@ -148,10 +146,6 @@ public class ModifyProfile extends javax.swing.JFrame {
         try {
             GenderDAOImpl genderDAO = new GenderDAOImpl();
             List<Gender> genders = genderDAO.findAll();
-
-            // Limpiar el ComboBox primero 
-            boxGender.removeAllItems();
-
             // Agregar todos los géneros al ComboBox
             for (Gender gender : genders) {
                 boxGender.addItem(gender.getName());
