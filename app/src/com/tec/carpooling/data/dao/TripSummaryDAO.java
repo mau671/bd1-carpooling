@@ -23,48 +23,54 @@ public class TripSummaryDAO {
      * if there are still available seats (>0).
      */
     public List<TripSummary> getAvailableTripsByInstitution(
-            long institutionId,
-            long currentUserId,
-            Connection conn
+        long institutionId,
+        long currentUserId,
+        Connection conn
     ) throws SQLException {
         List<TripSummary> trips = new ArrayList<>();
 
         String sql =
             "SELECT T.id AS trip_id, R.programming_date, D1.name AS start_point " +
             "FROM carpooling_pu.TRIP T " +
-            "JOIN carpooling_pu.ROUTE R ON T.route_id = R.id " +
-            "JOIN carpooling_pu.STATUSXTRIP SX ON SX.trip_id = T.id " +
-            "JOIN carpooling_adm.STATUS S ON S.id = SX.status_id " +
-            "JOIN carpooling_pu.VEHICLEXROUTE VR ON VR.route_id = R.id " +
-            "JOIN carpooling_pu.VEHICLE VEH ON VEH.id = VR.vehicle_id " +
-            "JOIN carpooling_pu.DRIVERXVEHICLE DV ON DV.vehicle_id = VEH.id " +
-            "JOIN carpooling_pu.DRIVER D ON D.person_id = DV.driver_id " +
-            "JOIN carpooling_adm.PERSON P ON P.id = D.person_id " +
-            "JOIN carpooling_pu.INSTITUTION_PERSON PI ON PI.person_id = P.id " +
-            // join capacity info and passenger count
-            "JOIN carpooling_pu.MAXCAPACITYXVEHICLE mcv ON mcv.vehicle_id = VEH.id " +
-            "JOIN carpooling_adm.MAXCAPACITY mc ON mc.id = mcv.max_capacity_id " +
-            "LEFT JOIN carpooling_pu.PASSENGERXTRIP px ON px.trip_id = T.id " +
-            // get first waypoint as start point
-            "JOIN ( " +
-            "  SELECT route_id, district_id FROM ( " +
-            "    SELECT route_id, district_id, ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id) rn " +
-            "    FROM carpooling_pu.WAYPOINT WHERE district_id IS NOT NULL " +
-            "  ) sub WHERE rn = 1 " +
-            ") WP1 ON WP1.route_id = R.id " +
-            "JOIN carpooling_adm.DISTRICT D1 ON D1.id = WP1.district_id " +
-            // filters
-            "WHERE S.name = 'Pending' " +
-            "  AND PI.institution_id = ? " +
-            "  AND P.id != ? " +
-            // group by trip and capacity, then filter out full trips
+            "  JOIN carpooling_pu.ROUTE R             ON T.route_id = R.id " +
+            "  JOIN carpooling_pu.STATUSXTRIP SX      ON SX.trip_id = T.id " +
+            "  JOIN carpooling_adm.STATUS S           ON S.id = SX.status_id " +
+            "  JOIN carpooling_pu.VEHICLEXROUTE VR    ON VR.route_id = R.id " +
+            "  JOIN carpooling_pu.VEHICLE VEH         ON VEH.id = VR.vehicle_id " +
+            "  JOIN carpooling_pu.DRIVERXVEHICLE DV   ON DV.vehicle_id = VEH.id " +
+            "  JOIN carpooling_pu.DRIVER D            ON D.person_id = DV.driver_id " +
+            "  JOIN carpooling_adm.PERSON P           ON P.id = D.person_id " +
+            "  JOIN carpooling_pu.INSTITUTION_PERSON PI ON PI.person_id = P.id " +
+            "  JOIN carpooling_pu.MAXCAPACITYXVEHICLE mcv ON mcv.vehicle_id = VEH.id " +
+            "  JOIN carpooling_adm.MAXCAPACITY mc     ON mc.id = mcv.max_capacity_id " +
+            "  LEFT JOIN carpooling_pu.PASSENGERXTRIP px ON px.trip_id = T.id " +
+            "  JOIN (                                " +
+            "    SELECT route_id, district_id       " +
+            "    FROM (                             " +
+            "      SELECT route_id, district_id,    " +
+            "             ROW_NUMBER() OVER (PARTITION BY route_id ORDER BY id) rn " +
+            "      FROM carpooling_pu.WAYPOINT WHERE district_id IS NOT NULL" +
+            "    ) sub WHERE rn = 1                 " +
+            "  ) WP1 ON WP1.route_id = R.id        " +
+            "  JOIN carpooling_adm.DISTRICT D1     ON D1.id = WP1.district_id    " +
+            "WHERE S.name = 'Pending'              " +
+            "  AND PI.institution_id = ?           " +   // only this institution
+            "  AND P.id <> ?                        " +   // not driven by current user
+            "  AND NOT EXISTS (                     " +   // not already booked by them
+            "      SELECT 1                         " +
+            "      FROM carpooling_pu.PASSENGERXTRIP pxt " +
+            "      WHERE pxt.trip_id = T.id        " +
+            "        AND pxt.passenger_id = ?      " +
+            "  )                                    " +
             "GROUP BY T.id, R.programming_date, D1.name, mc.capacity_number " +
-            "HAVING (mc.capacity_number - COUNT(px.id)) > 0 " +
+            "HAVING (mc.capacity_number - COUNT(px.id)) > 0  " +   // has seats
             "ORDER BY R.programming_date";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, institutionId);
             stmt.setLong(2, currentUserId);
+            stmt.setLong(3, currentUserId);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     trips.add(new TripSummary(

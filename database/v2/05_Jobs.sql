@@ -13,7 +13,7 @@ USE carpooling_adm;
 -- ===============================
 -- Si no existe el parámetro lo insertamos por defecto 00:00
 INSERT INTO PARAMETER(name,value)
-SELECT 'REPORT_GENERATION_TIME','00:00'
+SELECT 'REPORT_GENERATION_TIME','15:00'
 WHERE NOT EXISTS (SELECT 1 FROM PARAMETER WHERE name='REPORT_GENERATION_TIME');
 
 -- ===============================
@@ -73,3 +73,4 @@ DO
 
 -- Activar scheduler (solo necesita hacerse una vez a nivel server)
 -- SET GLOBAL event_scheduler = ON;
+CALL generate_institution_reports(NULL);
