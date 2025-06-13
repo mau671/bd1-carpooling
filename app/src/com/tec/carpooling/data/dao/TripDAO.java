@@ -142,6 +142,7 @@ public class TripDAO {
                         trip.setStartLocation(rs.getString("start_point"));
                         trip.setEndLocation(rs.getString("end_point"));
                         personId = rs.getLong("person_id");
+                        trip.setDriverPersonId(personId);
                     }
 
                     double lat = rs.getDouble("latitude");

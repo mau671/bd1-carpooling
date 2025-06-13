@@ -2,6 +2,9 @@ USE carpooling_pu;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS insert_phone_simple$$
+DROP PROCEDURE IF EXISTS delete_phone_by_type_and_number$$
+
 CREATE PROCEDURE INSERT_PHONE_SIMPLE(
     IN p_phone_number VARCHAR(20),
     IN p_type_phone_id INT

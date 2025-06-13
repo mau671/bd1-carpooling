@@ -32,6 +32,9 @@ public class TripDetails {
     private String startLocation;
     private String endLocation;
     private List<String> driverPhones;
+    
+    // Added field for photo lookup
+    private long driverPersonId;
 
     // Getters and setters
     public Timestamp getStartTime() { return startTime; }
@@ -81,4 +84,9 @@ public class TripDetails {
 
     public List<String> getDriverPhones() { return driverPhones; }
     public void setDriverPhones(List<String> driverPhones) { this.driverPhones = driverPhones; }
+
+    // Getter/setter for driverPersonId (used to fetch driver photo)
+    public long getDriverPersonId() { return driverPersonId; }
+    public void setDriverPersonId(long driverPersonId) { this.driverPersonId = driverPersonId; }
 }
+

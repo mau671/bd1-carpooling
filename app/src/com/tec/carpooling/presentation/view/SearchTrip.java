@@ -20,6 +20,8 @@ import com.tec.carpooling.data.dao.TripSummaryDAO;
 import com.tec.carpooling.data.dao.PassengerXTripDAO;
 import com.tec.carpooling.data.dao.PassengerTripPaymentDAO;
 import com.tec.carpooling.data.dao.PassengerWaypointDAO;
+import com.tec.carpooling.data.dao.PhotoDAO;
+import com.tec.carpooling.domain.entity.Photo;
 
 import com.tec.carpooling.data.connection.DatabaseConnection;
 import com.tec.carpooling.data.dao.CountryDAO;
@@ -165,25 +167,59 @@ public class SearchTrip extends javax.swing.JFrame {
     //     showCoordinatesList, loadWaypointsForTrip, filterAvailableTimes, etc.)
 
     private void showTripDetails(TripDetails d) {
-        // Driver panel
-        labelName.setText(   d.getDriverName());
-        labelGender.setText( d.getGender());
-        labelAge.setText(    String.valueOf(d.getAge()));
+        // —— Driver photo —— 
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PhotoDAO photoDAO = new PhotoDAO();
+            Photo driverPhoto = photoDAO.getLatestPhoto(d.getDriverPersonId(), conn);
+
+            if (driverPhoto != null && driverPhoto.getImage() != null) {
+                byte[] imgBytes = driverPhoto.getImage();
+                Image raw = new ImageIcon(imgBytes).getImage();
+
+                // scale to fit max 200×150, preserving aspect ratio
+                int maxW = 120, maxH = 80;
+                int w = raw.getWidth(null), h = raw.getHeight(null);
+                double scale = Math.min((double)maxW / w, (double)maxH / h);
+                int newW = (int)(w * scale), newH = (int)(h * scale);
+
+                Image scaled = raw.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+                photoDriver.setIcon(new ImageIcon(scaled));
+                photoDriver.setText("");  // remove any placeholder text
+                photoDriver.setPreferredSize(new Dimension(maxW, maxH));
+                photoDriver.setBorder(
+                    BorderFactory.createEmptyBorder(0, 60, 0, 0)
+                );
+            } else {
+                photoDriver.setIcon(null);
+                photoDriver.setText("No Photo");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            photoDriver.setIcon(null);
+            photoDriver.setText("No Photo");
+        }
+
+        // —— Driver info —— 
+        labelName.setText(d.getDriverName());
+        labelGender.setText(d.getGender());
+        labelAge.setText(String.valueOf(d.getAge()));
         DefaultListModel<String> phoneModel = new DefaultListModel<>();
-        for (String phone : d.getDriverPhones()) phoneModel.addElement(phone);
+        for (String phone : d.getDriverPhones()) {
+            phoneModel.addElement(phone);
+        }
         listNumbers.setModel(phoneModel);
 
-        // Vehicle panel
-        labelPlate.setText(          d.getPlate());
-        labelChosenCapacity.setText( String.valueOf(d.getMaxSeats()));
-        labelSeatsLeft.setText(      String.valueOf(d.getChosenSeats()));
+        // —— Vehicle panel —— 
+        labelPlate.setText(d.getPlate());
+        labelChosenCapacity.setText(String.valueOf(d.getMaxSeats()));
+        labelSeatsLeft.setText(String.valueOf(d.getChosenSeats()));
 
-        // Stops panel
-        labelStart.setText( d.getStartLocation());
-        labelEnd.setText(   d.getEndLocation());
+        // —— Stops panel —— 
+        labelStart.setText(d.getStartLocation());
+        labelEnd.setText(d.getEndLocation());
         showCoordinatesList(d.getCoordinates());
 
-        // Time & Cost panel
+        // —— Time & Cost panel —— 
         labelStartTime.setText(d.getStartTime().toString());
         labelEndTime  .setText(d.getEndTime().toString());
         labelCost     .setText(String.valueOf(d.getPricePerPassenger()));
@@ -614,19 +650,12 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(15, 0, 20, 5);
         panelDriver.add(jLabel2, gridBagConstraints);
-
-        labelName.setText("jLabel3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         panelDriver.add(labelName, gridBagConstraints);
 
-        listNumbers.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         scrollNumbers.setViewportView(listNumbers);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -645,8 +674,6 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 5);
         panelDriver.add(jLabel4, gridBagConstraints);
-
-        labelGender.setText("jLabel5");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -660,8 +687,6 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 5);
         panelDriver.add(jLabel6, gridBagConstraints);
-
-        labelAge.setText("jLabel7");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
@@ -685,8 +710,6 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelVehicle.add(jLabel9, gridBagConstraints);
-
-        labelPlate.setText("jLabel10");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelVehicle.add(labelPlate, gridBagConstraints);
@@ -696,8 +719,6 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelVehicle.add(jLabel11, gridBagConstraints);
-
-        labelChosenCapacity.setText("jLabel12");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
@@ -709,8 +730,6 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelVehicle.add(jLabel13, gridBagConstraints);
-
-        labelSeatsLeft.setText("jLabel14");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
@@ -723,38 +742,36 @@ public class SearchTrip extends javax.swing.JFrame {
 
         jLabel3.setText("Start Time: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 5);
         panelTimeCost.add(jLabel3, gridBagConstraints);
-
-        labelStartTime.setText("jLabel5");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelTimeCost.add(labelStartTime, gridBagConstraints);
 
         jLabel7.setText("Time of Arrival: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 5);
         panelTimeCost.add(jLabel7, gridBagConstraints);
-
-        labelEndTime.setText("jLabel10");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelTimeCost.add(labelEndTime, gridBagConstraints);
 
         jLabel12.setText("Cost: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 5);
         panelTimeCost.add(jLabel12, gridBagConstraints);
-
-        labelCost.setText("jLabel14");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         panelTimeCost.add(labelCost, gridBagConstraints);
 
@@ -788,11 +805,9 @@ public class SearchTrip extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(225, 239, 255));
         jPanel3.setLayout(new java.awt.GridBagLayout());
-
-        labelStart.setText("jLabel18");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
         jPanel3.add(labelStart, gridBagConstraints);
@@ -801,7 +816,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 20, 0);
         jPanel3.add(jLabel17, gridBagConstraints);
 
@@ -812,11 +827,9 @@ public class SearchTrip extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(225, 239, 255));
         jPanel4.setLayout(new java.awt.GridBagLayout());
-
-        labelEnd.setText("jLabel21");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
         jPanel4.add(labelEnd, gridBagConstraints);
@@ -825,7 +838,7 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
         jPanel4.add(jLabel20, gridBagConstraints);
 
@@ -985,8 +998,8 @@ public class SearchTrip extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 7;
-        gridBagConstraints.insets = new java.awt.Insets(0, 33, 0, 0);
+        gridBagConstraints.ipadx = 90;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panelChooseStop.add(jLabel26, gridBagConstraints);
 
         boxStops.addActionListener(new java.awt.event.ActionListener() {
@@ -995,8 +1008,8 @@ public class SearchTrip extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         panelChooseStop.add(boxStops, gridBagConstraints);
 
         panelPayment.setBackground(new java.awt.Color(225, 239, 255));
@@ -1023,7 +1036,7 @@ public class SearchTrip extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(20, 0, 20, 0);
         panelChooseStop.add(panelPayment, gridBagConstraints);
