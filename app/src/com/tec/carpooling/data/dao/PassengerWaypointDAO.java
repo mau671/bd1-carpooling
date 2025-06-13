@@ -21,7 +21,7 @@ public class PassengerWaypointDAO {
     public void addPassengerWaypoint(long passengerId,
                                      long waypointId,
                                      Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.add_passenger_waypoint(?, ?) }";
+        String sql = "{ CALL add_passenger_waypoint(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, waypointId);
@@ -39,7 +39,7 @@ public class PassengerWaypointDAO {
                                          long oldWaypointId,
                                          long newWaypointId,
                                          Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.update_passenger_waypoint(?, ?, ?) }";
+        String sql = "{ CALL update_passenger_waypoint(?, ?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, oldWaypointId);
@@ -55,7 +55,7 @@ public class PassengerWaypointDAO {
     public void deletePassengerWaypoint(long passengerId,
                                          long waypointId,
                                          Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.delete_passenger_waypoint(?, ?) }";
+        String sql = "{ CALL delete_passenger_waypoint(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, waypointId);

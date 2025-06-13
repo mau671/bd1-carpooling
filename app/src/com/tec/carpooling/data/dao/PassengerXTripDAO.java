@@ -28,7 +28,7 @@ public class PassengerXTripDAO {
      * @return the generated booking ID
      */
     public long bookTrip(long passengerId, long tripId, Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.book_trip(?, ?, ?) }";
+        String sql = "{ CALL book_trip(?, ?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, tripId);
@@ -44,7 +44,7 @@ public class PassengerXTripDAO {
      *   IN p_trip_id
      */
     public void cancelTrip(long passengerId, long tripId, Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.cancel_trip_booking(?, ?) }";
+        String sql = "{ CALL cancel_trip_booking(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerId);
             stmt.setLong(2, tripId);

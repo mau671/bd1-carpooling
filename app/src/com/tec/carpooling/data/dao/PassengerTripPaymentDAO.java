@@ -22,7 +22,7 @@ public class PassengerTripPaymentDAO {
     public void assignPaymentMethod(long passengerXTripId,
                                     long paymentMethodId,
                                     Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.assign_payment_method(?, ?) }";
+        String sql = "{ CALL assign_payment_method(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerXTripId);
             stmt.setLong(2, paymentMethodId);
@@ -37,7 +37,7 @@ public class PassengerTripPaymentDAO {
     public void updatePaymentMethod(long passengerXTripId,
                                     long newPaymentMethodId,
                                     Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.update_payment_method(?, ?) }";
+        String sql = "{ CALL update_payment_method(?, ?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerXTripId);
             stmt.setLong(2, newPaymentMethodId);
@@ -51,7 +51,7 @@ public class PassengerTripPaymentDAO {
      */
     public void deletePaymentMethod(long passengerXTripId,
                                     Connection conn) throws SQLException {
-        String sql = "{ CALL carpooling_adm.delete_payment_method(?) }";
+        String sql = "{ CALL delete_payment_method(?) }";
         try (CallableStatement stmt = conn.prepareCall(sql)) {
             stmt.setLong(1, passengerXTripId);
             stmt.execute();
