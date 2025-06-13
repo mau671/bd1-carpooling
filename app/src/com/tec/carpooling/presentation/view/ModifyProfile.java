@@ -1025,24 +1025,29 @@ public class ModifyProfile extends javax.swing.JFrame {
 
     private void buttonEraseIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEraseIActionPerformed
         int index = listInstitutions.getSelectedIndex();
-        if (index != -1) {
-            ListModel model = listInstitutions.getModel();
-            String institution = listInstitutions.getSelectedValue();
-            try (Connection conn = DatabaseConnection.getConnection()) {
-                InstitutionPersonDAO institutionPerson = new InstitutionPersonDAO();
-                institutionPerson.deleteInstitution(conn, institution);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+        int cantidad = listInstitutions.getVisibleRowCount();
+        if(cantidad > 1) {
+            if (index != -1) {
+                ListModel model = listInstitutions.getModel();
+                String institution = listInstitutions.getSelectedValue();
+                try (Connection conn = DatabaseConnection.getConnection()) {
+                    InstitutionPersonDAO institutionPerson = new InstitutionPersonDAO();
+                    institutionPerson.deleteInstitution(conn, institution);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error loading profile: " + ex.getMessage());
+                }
+                if (model instanceof javax.swing.DefaultListModel) {
+                    javax.swing.DefaultListModel defaultListModel = (javax.swing.DefaultListModel) model;
+                    defaultListModel.removeElementAt(index);
+                }
+                listInstitutions.updateUI();
+                JOptionPane.showMessageDialog(this, "Item erased successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this, "An item must be selected.");
             }
-            if (model instanceof javax.swing.DefaultListModel) {
-                javax.swing.DefaultListModel defaultListModel = (javax.swing.DefaultListModel) model;
-                defaultListModel.removeElementAt(index);
-            }
-            listInstitutions.updateUI();
-            JOptionPane.showMessageDialog(this, "Item erased successfully!");
         } else {
-            JOptionPane.showMessageDialog(this, "An item must be selected.");
+            JOptionPane.showMessageDialog(this, "You can't delete the last institution");
         }
     }//GEN-LAST:event_buttonEraseIActionPerformed
 

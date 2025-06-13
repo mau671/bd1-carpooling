@@ -87,8 +87,45 @@ CREATE PROCEDURE DELETE_INSTITUTION_BY_NAME(
     IN p_institution_name VARCHAR(100)
 )
 BEGIN
-    DELETE FROM carpooling_adm.INSTITUTION 
+    DECLARE v_institution_id INT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    -- Obtener el ID de la institución
+    SELECT id INTO v_institution_id 
+    FROM carpooling_adm.INSTITUTION 
     WHERE name = p_institution_name;
+    
+    IF v_institution_id IS NOT NULL THEN
+        -- eliminar relaciones en INSTITUTION_DOMAIN (ADM)
+        DELETE FROM carpooling_adm.INSTITUTION_DOMAIN 
+        WHERE institution_id = v_institution_id;
+        
+        -- eliminar relaciones en INSTITUTION_PERSON (PU)
+        -- eliminamos las relaciones persona-institución
+        DELETE FROM carpooling_pu.INSTITUTION_PERSON 
+        WHERE institution_id = v_institution_id;
+        
+        -- eliminar reportes de la institución (ADM)
+        DELETE FROM carpooling_adm.INSTITUTION_REPORT 
+        WHERE institution_id = v_institution_id;
+        
+        -- eliminamos la institución (ADM)
+        DELETE FROM carpooling_adm.INSTITUTION 
+        WHERE id = v_institution_id;
+        
+        COMMIT;
+        SELECT CONCAT('Institución "', p_institution_name, '" eliminada con éxito con todos sus datos relacionados') AS message;
+    ELSE
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = CONCAT('No se encontró la institución con nombre: ', p_institution_name);
+    END IF;
 END $$
 
 -- ========================================
