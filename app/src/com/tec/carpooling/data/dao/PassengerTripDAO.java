@@ -22,20 +22,30 @@ public class PassengerTripDAO {
     public List<PassengerTripDisplay> getBookedTrips(long passengerId, Connection conn) throws SQLException {
         List<PassengerTripDisplay> list = new ArrayList<>();
 
-        String call = "{CALL get_booked_trips(?)}";
+        // If you’re not already `USE carpooling_pu`, qualify it:
+        String call = "{ CALL carpooling_pu.get_booked_trips(?) }";
 
         try (CallableStatement stmt = conn.prepareCall(call)) {
             stmt.setLong(1, passengerId);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Date date = rs.getDate("programming_date");
-                    String start = rs.getString("start_point");
-                    String end = rs.getString("destination_point"); // note new alias
-                    String plate = rs.getString("plate");
+                    long   id     = rs.getLong("trip_id");           // <<< new!
+                    Date   date   = rs.getDate("programming_date");
+                    String start  = rs.getString("start_point");
+                    String end    = rs.getString("destination_point");
+                    String plate  = rs.getString("plate");
                     String status = rs.getString("status");
 
-                    list.add(new PassengerTripDisplay(date, start, end, plate, status));
+                    // pass the ID into the constructor
+                    list.add(new PassengerTripDisplay(
+                        id,
+                        date,
+                        start,
+                        end,
+                        plate,
+                        status
+                    ));
                 }
             }
         }

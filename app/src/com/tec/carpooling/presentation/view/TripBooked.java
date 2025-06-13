@@ -25,6 +25,8 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -41,7 +43,55 @@ public class TripBooked extends javax.swing.JFrame {
         this.userRole = role;
         initComponents();
         getContentPane().add(SideMenu.createToolbar(this, userRole, user), BorderLayout.WEST);
-        
+
+        // 1) Replace default model with one that includes a hidden ID column
+        String[] cols = { "ID", "Date of Trip", "Start Point", "Destination Point", "Vehicle Plate", "Status", "More Info" };
+        DefaultTableModel model = new DefaultTableModel(cols, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Only the "More Info" button is editable
+                return column == getColumnCount() - 1;
+            }
+        };
+        tableTrips.setModel(model);
+
+        // 2) Hide the ID column by zeroing its width
+        TableColumnModel colModel = tableTrips.getColumnModel();
+        TableColumn idCol = colModel.getColumn(0);
+        idCol.setMinWidth(0);
+        idCol.setMaxWidth(0);
+        idCol.setPreferredWidth(0);
+
+        // 3) Load data into table (includes hidden ID)
+        loadBookedTrips();
+
+        // 4) Assign custom renderer/editor to the "More Info" column
+        int infoColumn = tableTrips.getColumnCount() - 1;
+        tableTrips.getColumnModel().getColumn(infoColumn).setCellRenderer(new ButtonRenderer());
+        tableTrips.getColumnModel().getColumn(infoColumn).setCellEditor(new ButtonEditor(new javax.swing.JCheckBox(), tableTrips));
+
+        // 5) Enable sorting, skipping the hidden ID (offset by one)
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableTrips.getModel());
+        tableTrips.setRowSorter(sorter);
+        tableTrips.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        boxOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                String selected = (String) boxOrder.getSelectedItem();
+                int visibleIndex = getColumnIndexFromLabel(selected);
+                if (visibleIndex >= 0) {
+                    // +1 offset for hidden ID column
+                    sorter.setSortKeys(List.of(
+                        new RowSorter.SortKey(visibleIndex + 1, SortOrder.ASCENDING)
+                    ));
+                }
+            }
+        });
+
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    private void loadBookedTrips() {
         try (Connection conn = DatabaseConnection.getConnection()) {
             PassengerTripDAO dao = new PassengerTripDAO();
             List<PassengerTripDisplay> trips = dao.getBookedTrips(user.getPersonId(), conn);
@@ -50,40 +100,14 @@ public class TripBooked extends javax.swing.JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading booked trips: " + ex.getMessage());
         }
-        
-        // Assign custom renderer/editor to the "More Info" column
-        int infoColumn = tableTrips.getColumnCount() - 1;
-        tableTrips.getColumnModel().getColumn(infoColumn).setCellRenderer(new ButtonRenderer());
-        tableTrips.getColumnModel().getColumn(infoColumn).setCellEditor(new ButtonEditor(new JCheckBox(), tableTrips));
-        
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableTrips.getModel());
-        tableTrips.setRowSorter(sorter);
-        tableTrips.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        boxOrder.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                String selected = (String) boxOrder.getSelectedItem();
-                TableRowSorter<? extends TableModel> sorter = (TableRowSorter<? extends TableModel>) tableTrips.getRowSorter();
-
-                if (sorter != null) {
-                    int columnIndex = getColumnIndexFromLabel(selected);
-                    if (columnIndex != -1) {
-                        sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING)));
-                        sorter.sort();
-                    }
-                }
-            }
-        });
-        
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-    
+
     private void populateBookedTripTable(List<PassengerTripDisplay> trips) {
         DefaultTableModel model = (DefaultTableModel) tableTrips.getModel();
         model.setRowCount(0);
-
         for (PassengerTripDisplay trip : trips) {
             model.addRow(new Object[]{
+                trip.getTripId(),          // hidden ID
                 trip.getTripDate(),
                 trip.getStartPoint(),
                 trip.getEndPoint(),
@@ -93,14 +117,14 @@ public class TripBooked extends javax.swing.JFrame {
             });
         }
     }
-    
+
     private int getColumnIndexFromLabel(String label) {
         switch (label) {
-            case "Date of Trip": return 0;
-            case "Start Point": return 1;
-            case "Destination Point": return 2;
-            case "Vehicle Plate": return 3;
-            case "Status": return 4;
+            case "Date of Trip":       return 0;
+            case "Start Point":        return 1;
+            case "Destination Point":  return 2;
+            case "Vehicle Plate":      return 3;
+            case "Status":             return 4;
             default: return -1;
         }
     }
