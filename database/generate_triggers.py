@@ -42,7 +42,7 @@ class TriggerGenerator:
     def __init__(self):
         self.current_dir = Path(__file__).parent
         self.tables_file = self.current_dir / "01_Tables.sql"
-        self.output_file = self.current_dir / "output" / "Triggers.sql"
+        self.output_file = self.current_dir / "Triggers.sql"
         
         # Tables that need audit triggers (have audit columns)
         self.adm_tables = []

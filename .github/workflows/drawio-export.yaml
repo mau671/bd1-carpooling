@@ -40,7 +40,7 @@ jobs:
       - name: Export draw.io to PNG
         uses: rlespinasse/drawio-export-action@v2
         with:
-          path: modelos/IC-4301-Proyecto#1.drawio
+          path: models/diagrams.drawio
           format: png
           transparent: false
           output: export
@@ -51,7 +51,7 @@ jobs:
       - name: Export draw.io to PDF
         uses: rlespinasse/drawio-export-action@v2
         with:
-          path: modelos/IC-4301-Proyecto#1.drawio
+          path: models/diagrams.drawio
           format: pdf
           transparent: true
           output: export
@@ -62,7 +62,7 @@ jobs:
       # Commit the export folder
       - name: Commit export folder
         run: |
-          git add modelos/export
+          git add models/export
           git commit -m "Update draw.io export" || echo "No changes to commit"
           git push origin ${{ github.ref }}
 
@@ -71,4 +71,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: export
-          path: modelos/export
+          path: models/export
